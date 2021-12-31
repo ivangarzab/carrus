@@ -4,15 +4,19 @@
     <!-- General -->
     <string name="make">Make</string>
     <string name="model">Model</string>
+    <string name="nickname">Nickname</string>
     <string name="year">Year</string>
+    <string name="license_no">License No.</string>
     <string name="color">Color</string>
     <string name="details">Details</string>
 
     <!-- Overview -->
     <string name="car_name">Car Name</string>
 
+    <!-- Create/Edit -->
+    <string name="create_title">Add a new Car</string>
+    <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
+
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
