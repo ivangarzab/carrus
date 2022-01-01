@@ -13,6 +13,8 @@
 
     <!-- Overview -->
     <string name="car_name">Car Name</string>
+    <string name="add_new_car">Add New Car</string>
+    <string name="add_new_car_capitalized">ADD NEW CAR</string>
 
     <!-- Create/Edit -->
     <string name="create_title">Add a new Car</string>

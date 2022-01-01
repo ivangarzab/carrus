@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentCreateBinding
 import com.ivangarzab.carbud.delegates.viewBinding
@@ -20,6 +21,10 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.onSubmit.observe(viewLifecycleOwner, { success ->
+            if (success) findNavController().popBackStack()
+        })
+
         binding.setSubmitClickListener {
             viewModel.verifyData(
                 make = binding.createMakeInput.text.toString(),

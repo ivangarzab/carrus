@@ -22,16 +22,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (viewModel.hasDefaultCar()) {
-            Log.v("IGB", "No Default car found!")
-            findNavController().navigate(
-                OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
-            )
-        } else {
-            Log.v("IGB", "A default car was found!")
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchDefaultCar()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,5 +32,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         viewModel.state.observe(viewLifecycleOwner, { state ->
             binding.car = state.car
         })
+
+        binding.setAddCarClickListener {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+            )
+        }
     }
 }

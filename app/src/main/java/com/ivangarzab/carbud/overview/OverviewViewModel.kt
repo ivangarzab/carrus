@@ -26,15 +26,11 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         OverviewState()
     )
 
-    init {
-        carRepository.getDefaultCar().let {
-            setState(state, savedState, STATE) {
-                copy(car = it)
-            }
+    fun fetchDefaultCar() = carRepository.getDefaultCar().let {
+        setState(state, savedState, STATE) {
+            copy(car = it)
         }
     }
-
-    fun hasDefaultCar(): Boolean = state.value?.car == null
 
     companion object {
         private const val STATE: String = "OverviewViewModel.STATE"

@@ -1,6 +1,7 @@
 package com.ivangarzab.carbud.create
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.repositories.CarRepository
@@ -12,6 +13,8 @@ import java.util.*
 class CreateViewModel : ViewModel() {
 
     private val carRepository = CarRepository()
+
+    val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun submitData(
         nickname: String = "",
@@ -31,6 +34,7 @@ class CreateViewModel : ViewModel() {
             licenseNo,
             0
         ))
+        onSubmit.postValue(true)
     }
 
     fun verifyData(
