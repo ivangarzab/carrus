@@ -24,20 +24,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (viewModel.hasDefaultCar()) {
-            Log.v("TAG", "No Default car found!")
+            Log.v("IGB", "No Default car found!")
             findNavController().navigate(
                 OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
             )
         } else {
-            Log.v("TAG", "A default car was found!")
+            Log.v("IGB", "A default car was found!")
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_overview, container, false)
     }
 }

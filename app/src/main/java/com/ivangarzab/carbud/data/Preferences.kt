@@ -16,7 +16,7 @@ class Preferences(context: Context) {
 
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
-            true -> sharedPreferences.get(KEY_DEFAULT_CAR, null) as Car
+            true -> sharedPreferences.get(KEY_DEFAULT_CAR, Car.emptyCar)
             false -> null
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)

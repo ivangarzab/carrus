@@ -1,5 +1,6 @@
 package com.ivangarzab.carbud.repositories
 
+import android.util.Log
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.prefs
 
@@ -11,7 +12,8 @@ class CarRepository {
     fun getDefaultCar(): Car? = prefs.defaultCar
 
     fun saveCar(car: Car) {
-        //TODO
+        prefs.defaultCar = car
+        Log.d("IGB", "Default car was saved: $car")
     }
 
     fun deleteDefaultCar() {
