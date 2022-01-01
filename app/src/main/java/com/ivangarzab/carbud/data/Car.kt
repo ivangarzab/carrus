@@ -3,8 +3,7 @@ package com.ivangarzab.carbud.data
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.google.gson.Gson
-import kotlinx.android.parcel.Parcelize
-import java.util.*
+import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.
@@ -21,7 +20,7 @@ data class Car(
     @DrawableRes val profileImage: Int
 ) : Parcelable {
 
-    fun convertToJson(): String = Gson().toJson(this)
+    fun toJson(): String = Gson().toJson(this)
 
     override fun toString(): String {
         return "Car(" +
@@ -35,8 +34,8 @@ data class Car(
 
 
     companion object {
-        val emptyCar: Car = Car(
-            uid = UUID.randomUUID().toString(),
+        val empty: Car = Car(
+            uid = "",
             default = false,
             nickname = "",
             make = "",

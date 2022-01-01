@@ -16,7 +16,7 @@ class Preferences(context: Context) {
 
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
-            true -> sharedPreferences.get(KEY_DEFAULT_CAR, Car.emptyCar)
+            true -> sharedPreferences.get(KEY_DEFAULT_CAR, Car.empty)
             false -> null
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)
@@ -49,7 +49,7 @@ operator fun SharedPreferences.set(
     is Boolean -> edit { it.putBoolean(key, value) }
     is Float -> edit { it.putFloat(key, value) }
     is Long -> edit { it.putLong(key, value) }
-    is Car -> edit { it.putString(key, value.convertToJson()) }
+    is Car -> edit { it.putString(key, value.toJson()) }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
 

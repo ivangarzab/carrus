@@ -17,10 +17,7 @@ class CarRepository {
     }
 
     fun deleteDefaultCar() {
-        //TODO
-    }
-
-    fun deleteCar(car: Car) {
-        //TODO
+        prefs.defaultCar = null
+        Log.d("IGB", "Default car was removed")
     }
 }

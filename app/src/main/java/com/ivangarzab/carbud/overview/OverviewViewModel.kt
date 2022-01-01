@@ -1,14 +1,42 @@
 package com.ivangarzab.carbud.overview
 
+import android.os.Parcelable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.ivangarzab.carbud.data.Car
+import com.ivangarzab.carbud.extensions.setState
 import com.ivangarzab.carbud.repositories.CarRepository
+import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() {
 
     private val carRepository = CarRepository()
 
-    fun hasDefaultCar(): Boolean = carRepository.getDefaultCar() == null
+    @Parcelize
+    data class OverviewState(
+        val car: Car? = null
+    ) : Parcelable
+
+    val state: LiveData<OverviewState> = savedState.getLiveData(
+        STATE,
+        OverviewState()
+    )
+
+    init {
+        carRepository.getDefaultCar().let {
+            setState(state, savedState, STATE) {
+                copy(car = it)
+            }
+        }
+    }
+
+    fun hasDefaultCar(): Boolean = state.value?.car == null
+
+    companion object {
+        private const val STATE: String = "OverviewViewModel.STATE"
+    }
 }
