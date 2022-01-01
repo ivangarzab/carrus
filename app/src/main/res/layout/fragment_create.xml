@@ -19,46 +19,50 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/create_title"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textColor="@color/black"
             android:padding="8dp"
             android:gravity="center_horizontal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/createPreviewImage"/>
 
         <ImageView
             android:id="@+id/createPreviewImage"
             android:layout_width="0dp"
-            android:layout_height="125dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
             android:contentDescription="@string/label_artwork"
             android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@id/createTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/createNicknameInput"/>
 
         <ImageView
             android:id="@+id/createUploadImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/label_artwork"
-            android:background="@color/silver"
+            android:src="@drawable/ic_image_upload"
+            app:tint="@color/silver"
             app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
-            app:layout_constraintBottom_toBottomOf="@id/createPreviewImage"/>
+            app:layout_constraintBottom_toBottomOf="@id/createPreviewImage" />
 
         <EditText
             android:id="@+id/createNicknameInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/nickname"
             android:inputType="text"
             android:autofillHints="false"
-            app:layout_constraintTop_toBottomOf="@id/createPreviewImage"
+            app:layout_constraintBottom_toTopOf="@id/createMakeInput"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -66,13 +70,13 @@
             android:id="@+id/createMakeInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/make"
             android:inputType="text"
             android:autofillHints="false"
-            app:layout_constraintTop_toBottomOf="@id/createNicknameInput"
+            app:layout_constraintBottom_toTopOf="@id/createModelInput"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -80,13 +84,13 @@
             android:id="@+id/createModelInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/model"
             android:inputType="text"
             android:autofillHints="false"
-            app:layout_constraintTop_toBottomOf="@id/createMakeInput"
+            app:layout_constraintBottom_toTopOf="@id/createYearInput"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -94,13 +98,13 @@
             android:id="@+id/createYearInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/year"
             android:inputType="text"
             android:autofillHints="false"
-            app:layout_constraintTop_toBottomOf="@id/createModelInput"
+            app:layout_constraintBottom_toTopOf="@id/createLicenseInput"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -108,13 +112,13 @@
             android:id="@+id/createLicenseInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/license_no"
             android:inputType="text"
             android:autofillHints="false"
-            app:layout_constraintTop_toBottomOf="@id/createYearInput"
+            app:layout_constraintBottom_toTopOf="@id/createUploadButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -122,13 +126,13 @@
             android:id="@+id/createUploadButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/create_upload_docs"
-            app:layout_constraintTop_toBottomOf="@id/createLicenseInput"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/createSubmitButton"/>
 
         <Button
             android:id="@+id/createSubmitButton"
