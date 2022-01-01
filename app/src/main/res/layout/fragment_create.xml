@@ -32,95 +32,137 @@
             android:id="@+id/createPreviewImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/label_artwork"
             android:background="@color/black"
             app:layout_constraintTop_toBottomOf="@id/createTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/createNicknameInput"/>
+            app:layout_constraintBottom_toTopOf="@id/createNicknameInputLayout"/>
 
         <ImageView
             android:id="@+id/createUploadImage"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:contentDescription="@string/label_artwork"
             android:src="@drawable/ic_image_upload"
             app:tint="@color/silver"
             app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
             app:layout_constraintBottom_toBottomOf="@id/createPreviewImage" />
 
-        <EditText
-            android:id="@+id/createNicknameInput"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createNicknameInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/nickname"
-            android:inputType="text"
-            android:autofillHints="false"
-            app:layout_constraintBottom_toTopOf="@id/createMakeInput"
+            app:boxBackgroundColor="@color/bridal_heath"
+            app:placeholderText="@string/nickname"
+            app:layout_constraintBottom_toTopOf="@id/createMakeInputLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/createMakeInput"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createNicknameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="false"
+                android:hint="@string/nickname"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createMakeInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/make"
-            android:inputType="text"
-            android:autofillHints="false"
-            app:layout_constraintBottom_toTopOf="@id/createModelInput"
+            app:boxBackgroundColor="@color/bridal_heath"
+            app:placeholderText="@string/make"
+            app:layout_constraintBottom_toTopOf="@id/createModelInputLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/createModelInput"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createMakeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="false"
+                android:hint="@string/make"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createModelInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/model"
-            android:inputType="text"
-            android:autofillHints="false"
-            app:layout_constraintBottom_toTopOf="@id/createYearInput"
+            app:boxBackgroundColor="@color/bridal_heath"
+            app:placeholderText="@string/model"
+            app:layout_constraintBottom_toTopOf="@id/createYearInputLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/createYearInput"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createModelInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="false"
+                android:hint="@string/model"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createYearInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/year"
-            android:inputType="text"
-            android:autofillHints="false"
-            app:layout_constraintBottom_toTopOf="@id/createLicenseInput"
+            app:boxBackgroundColor="@color/bridal_heath"
+            app:placeholderText="@string/year"
+            app:layout_constraintBottom_toTopOf="@id/createLicenseInputLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/createLicenseInput"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createYearInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="false"
+                android:hint="@string/year"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/createLicenseInput"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createLicenseInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/license_no"
-            android:inputType="text"
-            android:autofillHints="false"
+            app:boxBackgroundColor="@color/bridal_heath"
+            app:placeholderText="@string/license_no"
             app:layout_constraintBottom_toTopOf="@id/createUploadButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createLicenseInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:autofillHints="false"
+                android:hint="@string/license_no"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/createUploadButton"
