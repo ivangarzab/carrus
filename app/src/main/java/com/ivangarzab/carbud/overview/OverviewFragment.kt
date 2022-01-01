@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
+import com.ivangarzab.carbud.delegates.viewBinding
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewFragment : Fragment() {
+class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
-    val viewModel: OverviewViewModel by viewModels()
+    private val viewModel: OverviewViewModel by viewModels()
+
+    private val binding: FragmentOverviewBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,8 @@ class OverviewFragment : Fragment() {
             findNavController().navigate(
                 OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
             )
+        } else {
+            Log.v("TAG", "A default car was found!")
         }
     }
 

@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Car(
-    val uid: Int,
+    val uid: String,
     val default: Boolean,
     val nickname: String,
     val make: String,

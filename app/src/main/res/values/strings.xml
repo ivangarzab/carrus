@@ -9,6 +9,7 @@
     <string name="license_no">License No.</string>
     <string name="color">Color</string>
     <string name="details">Details</string>
+    <string name="submit">Submit</string>
 
     <!-- Overview -->
     <string name="car_name">Car Name</string>
