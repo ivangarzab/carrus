@@ -6,7 +6,20 @@
     app:startDestination="@id/overviewFragment">
     <fragment
         android:id="@+id/overviewFragment"
-        android:name="com.ivangarzab.carbud.OverviewFragment"
+        android:name="com.ivangarzab.carbud.overview.OverviewFragment"
         android:label="fragment_overview"
-        tools:layout="@layout/fragment_overview" />
+        tools:layout="@layout/fragment_overview" >
+        <action
+            android:id="@+id/action_overviewFragment_to_createFragment"
+            app:destination="@id/createFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.ivangarzab.carbud.create.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create"/>
 </navigation>
