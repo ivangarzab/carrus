@@ -1,12 +1,13 @@
 package com.ivangarzab.carbud.overview
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.delegates.viewBinding
@@ -31,12 +32,31 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
+            state.car?.let {
+                binding.overviewComponentList.apply {
+                    layoutManager = LinearLayoutManager(requireContext()).apply {
+                        orientation = RecyclerView.VERTICAL
+                    }
+                    adapter = PartListAdapter(
+                        parts = it.parts,
+                        onItemClicked = {
+                            // TODO: onItemClicked()
+                        },
+                        onEditClicked = {
+                            // TODO: onEditClicked()
+                        }
+                    )
+                }
+            }
+
         }
 
-        binding.setAddCarClickListener {
-            findNavController().navigate(
-                OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
-            )
+        binding.apply {
+            setAddCarClickListener {
+                findNavController().navigate(
+                    OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+                )
+            }
         }
     }
 }
