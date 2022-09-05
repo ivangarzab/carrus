@@ -37,8 +37,6 @@ class PartListAdapter(
         with(holder) {
             with(parts[position]) {
                 binding.componentItemName.text = this.name
-                val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
-                Log.d("IGB", "lastDate=${format.format(lastDate.time)} : dueDate=${format.format(dueDate.time)}")
                 val today = Calendar.getInstance().timeInMillis
                 binding.componentItemContentText.text = when (
                     this.dueDate.timeInMillis > today

@@ -1,7 +1,12 @@
 package com.ivangarzab.carbud.extensions
 
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.ivangarzab.carbud.MainActivity
+import com.ivangarzab.carbud.data.Part
 
 /**
  * Created by Ivan Garza Bermea.
@@ -12,3 +17,13 @@ fun Fragment.toast(message: String) = Toast.makeText(
     message,
     Toast.LENGTH_SHORT
 ).show()
+
+fun Fragment.showBottomSheet(onReturn: (Part) -> Unit) =
+    (requireActivity() as MainActivity).showBottomSheet { onReturn(it) }
+
+fun Fragment.hideBottomSheet() = (requireActivity() as MainActivity).hideBottomSheet()
+
+fun Fragment.dismissKeyboard(view: View) =
+    (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+        hideSoftInputFromWindow(view.windowToken, 0)
+    }

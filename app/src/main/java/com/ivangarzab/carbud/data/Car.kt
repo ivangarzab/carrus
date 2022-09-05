@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -18,7 +19,7 @@ data class Car(
     val model: String,
     val year: String,
     val licenseNo: String,
-    val parts: List<Part>,
+    var parts: List<Part>,
     @DrawableRes val profileImage: Int
 ) : Parcelable {
 
@@ -31,6 +32,7 @@ data class Car(
                 "\nmodel='$model'" +
                 "\nyear='$year'" +
                 "\nlicenseNo='$licenseNo'" +
+                "\nparts='$parts'" +
                 "\nprofileImage=$profileImage)"
     }
 
@@ -88,9 +90,10 @@ data class Part(
     val dueDate: Calendar
 ): Parcelable {
     override fun toString(): String {
+        val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
         return "Part(" +
                 "\nname='$name'" +
-                "\nlastDate='$lastDate'" +
-                "\ndueDate='$dueDate'"
+                "\nlastDate='${format.format(lastDate.time)}'" +
+                "\ndueDate='${format.format(dueDate.time)}'"
     }
 }
