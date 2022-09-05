@@ -10,6 +10,13 @@
     <string name="color">Color</string>
     <string name="details">Details</string>
     <string name="submit">Submit</string>
+    <string name="save">Save</string>
+
+    <!-- Component -->
+    <string name="new_component">New Component</string>
+    <string name="due_date">Due date</string>
+    <string name="last_repair_date">Last repair date</string>
+    <string name="component_name">Component name</string>
 
     <!-- Overview -->
     <string name="car_name">Car Name</string>
