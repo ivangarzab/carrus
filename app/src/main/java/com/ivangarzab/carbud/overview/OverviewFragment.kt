@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.delegates.viewBinding
+import com.ivangarzab.carbud.extensions.toast
 
 /**
  * Created by Ivan Garza Bermea.
@@ -23,20 +24,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchDefaultCar()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
             state.car?.let {
                 binding.overviewComponentList.apply {
-                    layoutManager = LinearLayoutManager(requireContext()).apply {
-                        orientation = RecyclerView.VERTICAL
-                    }
                     adapter = PartListAdapter(
                         parts = it.parts,
                         onItemClicked = {
@@ -52,11 +45,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
 
         binding.apply {
-            setAddCarClickListener {
-                findNavController().navigate(
-                    OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
-                )
+            overviewComponentList.apply {
+                layoutManager = LinearLayoutManager(requireContext()).apply {
+                    orientation = RecyclerView.VERTICAL
+                }
+            }
+            setAddCarClickListener { navigateToCreateFragment() }
+            setAddComponentClickListener {
+                toast("Add a new component")
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchDefaultCar()
+    }
+
+    private fun navigateToCreateFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
 }

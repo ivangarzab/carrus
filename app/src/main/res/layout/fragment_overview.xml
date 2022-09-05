@@ -15,6 +15,9 @@
         <variable
             name="addCarClickListener"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="addComponentClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,6 +106,7 @@
             tools:listitem="@layout/item_component"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/overviewAddWallLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/bridal_heath"
@@ -131,8 +135,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/overviewAddFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/label_button"
+            android:src="@android:drawable/ic_menu_add"
+            android:tint="@color/black"
+            android:onClickListener="@{addComponentClickListener}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
