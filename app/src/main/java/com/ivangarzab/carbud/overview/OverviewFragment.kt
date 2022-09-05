@@ -29,9 +29,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.state.observe(viewLifecycleOwner, { state ->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
-        })
+        }
 
         binding.setAddCarClickListener {
             findNavController().navigate(
