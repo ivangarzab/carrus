@@ -41,7 +41,7 @@
             android:id="@+id/componentItemContentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:text="169 days"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -51,15 +51,18 @@
 
         <ImageView
             android:id="@+id/componentItemContentImage"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/black"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/label_icon"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_more"
+            app:tint="@android:color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

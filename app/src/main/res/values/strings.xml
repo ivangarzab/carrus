@@ -22,4 +22,5 @@
 
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>
+    <string name="label_icon">Icon</string>
 </resources>
