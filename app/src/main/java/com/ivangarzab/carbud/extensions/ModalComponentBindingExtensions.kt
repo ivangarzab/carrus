@@ -15,9 +15,14 @@ fun ModalComponentBinding.bind(
     onSave: (Part) -> Unit
 ) {
     this.title = resources.getString(R.string.new_component)
-    this.setSaveClickListener { onSave(Part(
-        name = this.componentModalNameField.text.toString(),
-        lastDate = Calendar.getInstance(),
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1667286420000 }
-    )) }
+    this.setSaveClickListener {
+        with(Part(
+            name = this.componentModalNameField.text.toString(),
+            lastDate = Calendar.getInstance(),
+            dueDate = Calendar.getInstance().apply { timeInMillis = 1667286420000 }
+        )) {
+            componentModalNameField.text.clear()
+            onSave(this)
+        }
+    }
 }

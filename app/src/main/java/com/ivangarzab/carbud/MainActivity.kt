@@ -20,7 +20,12 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupViews()
         setupBottomSheet()
+    }
+
+    private fun setupViews() {
+        binding.mainActivityNavHost.setOnClickListener { setBottomSheetVisibility(false) }
     }
 
     private fun setupBottomSheet() {
