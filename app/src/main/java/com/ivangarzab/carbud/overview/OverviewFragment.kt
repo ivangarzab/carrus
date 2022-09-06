@@ -50,6 +50,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
 
         binding.apply {
+            overviewTopImage.clipToOutline = true
             overviewComponentList.apply {
                 layoutManager = LinearLayoutManager(requireContext()).apply {
                     orientation = RecyclerView.VERTICAL
