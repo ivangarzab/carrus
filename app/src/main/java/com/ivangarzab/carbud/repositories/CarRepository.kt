@@ -9,7 +9,7 @@ import com.ivangarzab.carbud.prefs
  */
 class CarRepository {
 
-    fun getDefaultCar(): Car? = prefs.defaultCar
+    fun getDefaultCar(): Car? = Car.default//prefs.defaultCar
 
     fun saveCar(car: Car) {
         prefs.defaultCar = car

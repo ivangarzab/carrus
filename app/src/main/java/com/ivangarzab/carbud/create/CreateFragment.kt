@@ -21,9 +21,9 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.onSubmit.observe(viewLifecycleOwner, { success ->
+        viewModel.onSubmit.observe(viewLifecycleOwner) { success ->
             if (success) findNavController().popBackStack()
-        })
+        }
 
         binding.setSubmitClickListener {
             viewModel.verifyData(

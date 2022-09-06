@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="mark_color">@color/indigo</color>
+    <color name="modal_component">@color/purple_500</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -10,4 +13,5 @@
 
     <color name="bridal_heath">#F8E9DC</color>
     <color name="silver">#B6B6B6</color>
+    <color name="indigo">#3F00FF</color>
 </resources>
