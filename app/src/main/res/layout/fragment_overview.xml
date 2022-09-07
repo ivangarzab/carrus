@@ -146,11 +146,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:contentDescription="@string/label_button"
+            android:backgroundTint="@color/mark_color"
             android:src="@android:drawable/ic_menu_add"
-            android:tint="@color/black"
             android:onClickListener="@{addComponentClickListener}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/overviewComponentList"
+            app:layout_constraintEnd_toEndOf="@id/overviewComponentList" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

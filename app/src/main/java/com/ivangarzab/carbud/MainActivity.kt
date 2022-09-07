@@ -2,8 +2,13 @@ package com.ivangarzab.carbud
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ivangarzab.carbud.data.Part
 import com.ivangarzab.carbud.databinding.ActivityMainBinding
@@ -20,8 +25,22 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupWindow()
         setupViews()
         setupBottomSheet()
+    }
+
+    private fun setupWindow() {
+        WindowCompat.setDecorFitsSystemWindows(window, FULL_SCREEN)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = insets.bottom
+                }
+            }
+            // Return the insets in order for this to keep being passed down to descendant views
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setupViews() {
@@ -51,4 +70,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideBottomSheet() = setBottomSheetVisibility(false)
+
+    companion object {
+        private const val FULL_SCREEN: Boolean = false
+    }
 }
