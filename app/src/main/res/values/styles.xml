@@ -6,6 +6,10 @@
         <item name="postSplashScreenTheme">@style/Theme.CarBud</item>
     </style>
 
+    <style name="Theme.CarBud.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.CarBud.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="ComponentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ComponentBottomSheetStyle</item>
     </style>

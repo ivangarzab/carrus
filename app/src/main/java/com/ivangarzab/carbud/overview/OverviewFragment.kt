@@ -3,6 +3,10 @@ package com.ivangarzab.carbud.overview
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -30,11 +34,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupWindow()
+        setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
             Log.d("IGB", "Got new Car state: ${state.car}")
             binding.car = state.car
             state.car?.let {
-                binding.overviewComponentList.apply {
+                binding.overviewContent.overviewComponentList.apply {
                     adapter = PartListAdapter(
                         parts = it.parts,
                         onItemClicked = {
@@ -46,12 +52,36 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                     )
                 }
             }
-
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchDefaultCar()
+    }
+
+    private fun setupWindow() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin = insets.top
+                }
+            }
+            // Return the insets in order for this to keep being passed down to descendant views
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun setupViews() {
         binding.apply {
-            overviewTopImage.clipToOutline = true
-            overviewComponentList.apply {
+            overviewAppBar.addOnOffsetChangedListener { _, verticalOffset ->
+                binding.overviewToolbarLayout.clipToOutline =
+                    when (binding.overviewAppBar.totalScrollRange + verticalOffset) {
+                        0 -> false
+                        else -> true
+                    }
+            }
+            overviewContent.overviewComponentList.apply {
                 layoutManager = LinearLayoutManager(requireContext()).apply {
                     orientation = RecyclerView.VERTICAL
                 }
@@ -66,11 +96,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchDefaultCar()
     }
 
     private fun navigateToCreateFragment() = findNavController().navigate(
