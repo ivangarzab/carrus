@@ -3,16 +3,16 @@ package com.ivangarzab.carbud.overview
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.delegates.viewBinding
@@ -61,13 +61,14 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     }
 
     private fun setupWindow() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(
+            (requireActivity() as MainActivity).getBindingRoot()
+        ) { _, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    topMargin = insets.top
+                binding.overviewToolbar.apply {
+                    updatePadding(top = insets.top)
                 }
             }
-            // Return the insets in order for this to keep being passed down to descendant views
             WindowInsetsCompat.CONSUMED
         }
     }

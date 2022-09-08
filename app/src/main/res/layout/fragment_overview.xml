@@ -56,27 +56,57 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="65dp">
 
-                    <!-- TODO: Add more content -->
+                    <TextView
+                        android:id="@+id/overviewCarPlates"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:text="@{car.licenseNo}"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        tools:text="ABC DEF"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/overviewCarDetails" />
+
+                    <TextView
+                        android:id="@+id/overviewCarDetails"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:visibility="@{car.nickname.isEmpty() ? View.GONE : View.VISIBLE}"
+                        android:text="@{car.year + ' ' + car.make + ' ' + car.model}"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:text="Year Make Model" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/overviewToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?android:attr/actionBarSize"
-                    app:title="Car Name"
-                    app:subtitle="Year Make Model"
+                    android:layout_height="75dp"
+                    app:title="@{car.nickname.isEmpty() ? car.make + ' ' + car.model : car.nickname}"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Theme.CarBud.PopupOverlay"
-                    tools:title="Car Name"/>
+                    tools:title="Car Name"
+                    tools:subtitle="Year Make Model"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <include layout="@layout/fragment_overview_content"
-            android:id="@+id/overviewContent"/>
+            android:id="@+id/overviewContent"
+            tools:visibility="invisible"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/overviewAddFab"
@@ -119,31 +149,3 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
-
-    <!--
-       <TextView
-            android:id="@+id/overviewCarPlates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@{car.licenseNo}"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/overviewCarName"
-            tools:text="ABC DEF"/>
-
-        <TextView
-            android:id="@+id/overviewCarDetails"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{car.year + ' ' + car.make + ' ' + car.model}"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/overviewTopGuideline"
-            tools:text="Year Make Model"/>
--->

@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             // Return the insets in order for this to keep being passed down to descendant views
-            WindowInsetsCompat.CONSUMED
+            windowInsets
         }
     }
 
@@ -60,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             false -> BottomSheetBehavior.STATE_COLLAPSED
         }
     }
+
+    fun getBindingRoot() = binding.root
 
     fun showBottomSheet(onPartCreated: (Part) -> Unit) {
         binding.mainActivityBottomSheet.bind(
