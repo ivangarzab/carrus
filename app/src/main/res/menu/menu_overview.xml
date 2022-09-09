@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ivangarzab.carbud.overview.OverviewFragment">
+    <item
+        android:id="@+id/action_details"
+        android:orderInCategory="99"
+        android:title="Details"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_component"
+        android:orderInCategory="200"
+        android:title="Add Component"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_add"/>
+</menu>

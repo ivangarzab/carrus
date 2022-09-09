@@ -23,8 +23,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="24dp"
+            android:clickable="true"
             android:background="@drawable/bg_round_corners_top"
-            android:backgroundTint="@color/modal_component"
+            android:backgroundTint="@color/mark_color"
             app:behavior_peekHeight="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -122,7 +123,7 @@
             android:layout_marginTop="16dp"
             app:rippleColor="@color/modal_component"
             android:text="@string/save"
-            android:textColor="@color/modal_component"
+            android:textColor="@color/mark_color"
             android:background="@drawable/bg_round_corners"
             app:backgroundTint="@color/silver"
             android:onClick="@{saveClickListener}"

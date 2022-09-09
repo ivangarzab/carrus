@@ -94,8 +94,9 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/overviewToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="80dp"
                     app:title="@{car.nickname.isEmpty() ? car.make + ' ' + car.model : car.nickname}"
+                    app:titleMargin="16dp"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Theme.CarBud.PopupOverlay"
                     tools:title="Car Name"
@@ -115,6 +116,10 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/label_button"
             android:src="@android:drawable/ic_menu_add"
+            android:backgroundTint="@color/mark_color"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:backgroundTintMode="src_atop"
             android:onClickListener="@{addComponentClickListener}"
             app:layout_anchor="@id/overviewAppBar"
             app:layout_anchorGravity="bottom|end" />

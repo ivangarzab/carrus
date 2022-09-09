@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ivangarzab.carbud.data.Part
 import com.ivangarzab.carbud.databinding.ActivityMainBinding
@@ -45,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViews() {
         binding.mainActivityNavHost.setOnClickListener { setBottomSheetVisibility(false) }
+        binding.mainActivityBottomSheet.root.updatePadding(bottom = PADDING_BOTTOM_SHEET)
     }
 
     private fun setupBottomSheet() {
@@ -75,5 +73,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val FULL_SCREEN: Boolean = false
+        private const val PADDING_BOTTOM_SHEET: Int = 150
     }
 }

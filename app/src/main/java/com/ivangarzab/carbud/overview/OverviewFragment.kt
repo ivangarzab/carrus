@@ -19,6 +19,7 @@ import com.ivangarzab.carbud.delegates.viewBinding
 import com.ivangarzab.carbud.extensions.dismissKeyboard
 import com.ivangarzab.carbud.extensions.hideBottomSheet
 import com.ivangarzab.carbud.extensions.showBottomSheet
+import com.ivangarzab.carbud.extensions.toast
 
 
 /**
@@ -78,8 +79,14 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             overviewAppBar.addOnOffsetChangedListener { _, verticalOffset ->
                 binding.overviewToolbarLayout.clipToOutline =
                     when (binding.overviewAppBar.totalScrollRange + verticalOffset) {
-                        0 -> false
-                        else -> true
+                        0 -> {
+                            showMenuOption(R.id.action_add_component)
+                            false
+                        }
+                        else -> {
+                            hideMenuOption(R.id.action_add_component)
+                            true
+                        }
                     }
             }
             overviewContent.overviewComponentList.apply {
@@ -87,16 +94,51 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                     orientation = RecyclerView.VERTICAL
                 }
             }
-            setAddCarClickListener { navigateToCreateFragment() }
-            setAddComponentClickListener {
-                showBottomSheet {
-                    dismissKeyboard(binding.root)
-                    viewModel.onNewPartCreated(it)
-                    // Got to give the keyboard a little bit of time to hide.. TODO: Fix
-                    hideBottomSheet()
+            overviewToolbar.inflateMenu(R.menu.menu_overview)
+            overviewToolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_details -> {
+                        toast("Details!")
+                        // TODO: Display a Dialog with the details found in #14
+                        true
+                    }
+                    R.id.action_settings -> {
+                        toast("Settings!") // TODO: Implement when ready
+                        true
+                    }
+                    R.id.action_add_component -> {
+                        showCreateComponentBottomSheet()
+                        true
+                    }
+                    else -> false
                 }
             }
+            setAddCarClickListener { navigateToCreateFragment() }
+            setAddComponentClickListener { showCreateComponentBottomSheet() }
         }
+    }
+
+    private fun showMenuOption(id: Int) = binding
+        .overviewToolbar
+        .menu
+        .findItem(id)
+        .apply {
+            isVisible = true
+        }
+
+    private fun hideMenuOption(id: Int) = binding
+        .overviewToolbar
+        .menu
+        .findItem(id)
+        .apply {
+            isVisible = false
+        }
+
+    private fun showCreateComponentBottomSheet() = showBottomSheet {
+        dismissKeyboard(binding.root)
+        viewModel.onNewPartCreated(it)
+        // Got to give the keyboard a little bit of time to hide.. TODO: Fix
+        hideBottomSheet()
     }
 
     private fun navigateToCreateFragment() = findNavController().navigate(
