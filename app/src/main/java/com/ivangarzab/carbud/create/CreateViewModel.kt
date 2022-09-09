@@ -27,12 +27,14 @@ class CreateViewModel : ViewModel() {
         Log.v("IGB", "Saving default car")
         carRepository.saveCar(Car(
             uid = UUID.randomUUID().toString(),
-            default = true,
             nickname = nickname,
             make = make,
             model = model,
             year = year,
             licenseNo = licenseNo,
+            tirePressure = "",
+            totalMiles = "",
+            milesPerGallon = "",
             parts = listOf(
                 Part("Oil Change", Calendar.getInstance().apply { timeInMillis = 1639120980000 }, Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
                 Part("Window Wipes", Calendar.getInstance().apply { timeInMillis = 1662358975427 }, Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
