@@ -1,11 +1,14 @@
 package com.ivangarzab.carbud.overview
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.core.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
+import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.delegates.viewBinding
 import com.ivangarzab.carbud.extensions.dismissKeyboard
 import com.ivangarzab.carbud.extensions.hideBottomSheet
@@ -98,8 +102,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             overviewToolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.action_details -> {
-                        toast("Details!")
-                        // TODO: Display a Dialog with the details found in #14
+                        showCarDetailsDialog()
                         true
                     }
                     R.id.action_settings -> {
@@ -134,6 +137,35 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             isVisible = false
         }
 
+    private fun showCarDetailsDialog() {
+        val car = viewModel.state.value?.car
+        car ?: return
+        val bindingDialog: ModalDetailsBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.modal_details,
+            null,
+            false
+        )
+        val dialog = AlertDialog.Builder(requireContext()).apply {
+            setView(bindingDialog.detailsModalRoot)
+            setCancelable(true)
+        }.create().also {
+            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        bindingDialog.apply {
+            tirePressure = "${car.tirePressure} $UNIT_TIRE_PRESSURE"
+            milesTotal = "${car.totalMiles} $UNIT_MILES_TOTAL"
+            milesPerGallon = "${car.milesPerGallon} $UNIT_MILES_PER_GAL"
+            detailsModalButton.apply {
+                clipToOutline = true
+                setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
+    }
+
     private fun showCreateComponentBottomSheet() = showBottomSheet {
         dismissKeyboard(binding.root)
         viewModel.onNewPartCreated(it)
@@ -144,4 +176,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
     )
+
+    companion object {
+        private const val UNIT_TIRE_PRESSURE = "dpi"
+        private const val UNIT_MILES_TOTAL = "mi"
+        private const val UNIT_MILES_PER_GAL = "mi/gal"
+    }
 }
