@@ -15,6 +15,6 @@
     </style>
 
     <style name="ComponentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bg_round_corners_top</item>
+        <item name="android:background">@drawable/bg_bottom_sheet_round_corners_top</item>
     </style>
 </resources>

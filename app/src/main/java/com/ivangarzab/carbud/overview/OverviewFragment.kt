@@ -153,9 +153,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
         bindingDialog.apply {
-            tirePressure = "${car.tirePressure} $UNIT_TIRE_PRESSURE"
-            milesTotal = "${car.totalMiles} $UNIT_MILES_TOTAL"
-            milesPerGallon = "${car.milesPerGallon} $UNIT_MILES_PER_GAL"
+            tirePressure = car.tirePressure
+            milesTotal = car.totalMiles
+            milesPerGallon = car.milesPerGallon
             detailsModalButton.apply {
                 clipToOutline = true
                 setOnClickListener {
@@ -176,10 +176,4 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
     )
-
-    companion object {
-        private const val UNIT_TIRE_PRESSURE = "dpi"
-        private const val UNIT_MILES_TOTAL = "mi"
-        private const val UNIT_MILES_PER_GAL = "mi/gal"
-    }
 }
