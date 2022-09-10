@@ -24,7 +24,7 @@
             android:paddingEnd="16dp"
             android:paddingBottom="24dp"
             android:clickable="true"
-            android:background="@drawable/bg_round_corners_top"
+            android:background="@drawable/bg_bottom_sheet_round_corners_top"
             android:backgroundTint="@color/mark_color"
             app:behavior_peekHeight="0dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

@@ -13,12 +13,14 @@ import java.util.*
 @Parcelize
 data class Car(
     val uid: String,
-    val default: Boolean,
     val nickname: String,
     val make: String,
     val model: String,
     val year: String,
     val licenseNo: String,
+    val tirePressure: String,
+    val totalMiles: String,
+    val milesPerGallon: String,
     var parts: List<Part>,
     @DrawableRes val profileImage: Int
 ) : Parcelable {
@@ -39,23 +41,27 @@ data class Car(
     companion object {
         val empty: Car = Car(
             uid = "",
-            default = false,
             nickname = "",
             make = "",
             model = "",
             year = "",
             licenseNo = "",
+            tirePressure = "",
+            totalMiles = "",
+            milesPerGallon = "",
             parts = emptyList(),
             profileImage = 0
         )
         val default: Car = Car(
             uid = "123",
-            default = false,
             nickname = "Shaq",
             make = "Chevrolet",
             model = "Malibu",
             year = "2006",
             licenseNo = "IGB066",
+            tirePressure = "35",
+            totalMiles = "99,999",
+            milesPerGallon = "26",
             parts = listOf(
                 Part(
                     name = "Oil Change",
