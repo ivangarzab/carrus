@@ -1,14 +1,15 @@
 package com.ivangarzab.carbud.overview
 
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.data.Part
 import com.ivangarzab.carbud.databinding.ItemComponentBinding
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit
  * Created by Ivan Garza Bermea.
  */
 class PartListAdapter(
+    private val theme: Resources.Theme,
     private val parts: List<Part>,
     val onItemClicked: (Part) -> Unit,
     val onEditClicked: (Part) -> Unit
@@ -42,7 +44,10 @@ class PartListAdapter(
                     this.dueDate.timeInMillis > today
                 ) {
                     true -> {
-                        binding.componentItemContentText.setTextColor(Color.BLACK)
+                        val typedValue = TypedValue()
+                        theme.resolveAttribute(android.R.attr.textColor, typedValue, true)
+                        Log.d("TAG", "${typedValue.data}")
+                        binding.componentItemContentText.setTextColor(typedValue.data) // TODO: Use ?android:textColor instead
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
                         (this.dueDate.timeInMillis - today).let { timeLeftInMillis ->
                             "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"

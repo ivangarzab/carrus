@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/bg_dialog_insets_round_corners"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/backgroundColor"
         android:layout_marginTop="@dimen/modal_design_margin_base"
         android:layout_marginStart="@dimen/modal_design_margin_base"
         android:layout_marginEnd="@dimen/modal_design_margin_base">
@@ -35,8 +35,9 @@
             android:layout_marginStart="@dimen/modal_design_margin_base"
             android:layout_marginEnd="@dimen/modal_design_margin_base"
             android:layout_marginBottom="@dimen/modal_design_margin_base"
-            android:textColor="@color/black"
-            android:gravity="center"/>
+            android:textColor="?android:textColor"
+            android:gravity="center"
+            tools:textColor="@color/black"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -51,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tire_pressure"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
@@ -62,7 +64,8 @@
                 android:gravity="end"
                 android:text="@{tirePressure}"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/detailsModalTirePressureLabel"
                 app:layout_constraintEnd_toStartOf="@id/detailsModalTirePressureUnit"
@@ -73,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:text="psi"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_miles"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
@@ -101,7 +106,8 @@
                 android:layout_marginEnd="@dimen/modal_design_margin_unit"
                 android:text="@{milesTotal}"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 android:gravity="end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/detailsModalTotalMilesLabel"
@@ -113,7 +119,8 @@
                 android:layout_height="wrap_content"
                 android:text="miles"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/miles_per_gallon"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
@@ -141,7 +149,8 @@
                 android:gravity="end"
                 android:text="@{milesPerGallon}"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/detailsModalMilesPerGallonLabel"
                 app:layout_constraintEnd_toStartOf="@id/detailsModalMilesPerGallonUnit"
@@ -152,7 +161,8 @@
                 android:layout_height="wrap_content"
                 android:text="miles/gal"
                 android:textSize="@dimen/text_16"
-                android:textColor="@color/black"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

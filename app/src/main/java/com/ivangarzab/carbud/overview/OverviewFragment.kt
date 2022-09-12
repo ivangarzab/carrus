@@ -47,6 +47,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             state.car?.let {
                 binding.overviewContent.overviewComponentList.apply {
                     adapter = PartListAdapter(
+                        theme = requireContext().theme,
                         parts = it.parts,
                         onItemClicked = {
                             // TODO: onItemClicked()

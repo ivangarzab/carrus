@@ -13,6 +13,13 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
         <!-- Customize your theme here. -->
-<!--        <item name="android:colorBackground">@color/dark_background</item>-->
+        <item name="backgroundColor">@color/dark_background</item>
+        <item name="android:textColor">@color/silver</item>
+    </style>
+
+    <style name="Theme.CarBud.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">?attr/backgroundColor</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.CarBud</item>
     </style>
 </resources>
