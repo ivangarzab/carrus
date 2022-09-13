@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="documentsClickListener"
+            type="android.view.View.OnClickListener" />
         <variable
             name="submitClickListener"
             type="android.view.View.OnClickListener" />
@@ -12,21 +16,26 @@
         android:id="@+id/createRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bridal_heath">
+        android:background="?attr/backgroundColor">
 
-        <TextView
-            android:id="@+id/createTitle"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/createAppBarLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/create_title"
-            android:textSize="28sp"
-            android:textColor="@color/black"
-            android:padding="8dp"
-            android:gravity="center_horizontal"
+            android:theme="@style/Theme.CarBud.AppBarOverlay"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/createPreviewImage"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/createToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Add a Car"
+                app:popupTheme="@style/Theme.CarBud.PopupOverlay"
+                tools:title="Add a Car"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ImageView
             android:id="@+id/createPreviewImage"
@@ -34,8 +43,8 @@
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/label_artwork"
-            android:background="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/createTitle"
+            android:background="@drawable/bg_gradient_add_car"
+            app:layout_constraintTop_toBottomOf="@id/createAppBarLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/createNicknameInputLayout"/>
@@ -55,7 +64,6 @@
             android:id="@+id/createNicknameInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/bridal_heath"
             app:placeholderText="@string/nickname"
             app:layout_constraintBottom_toTopOf="@id/createMakeInputLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +85,6 @@
             android:id="@+id/createMakeInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/bridal_heath"
             app:placeholderText="@string/make"
             app:layout_constraintBottom_toTopOf="@id/createModelInputLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +106,6 @@
             android:id="@+id/createModelInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/bridal_heath"
             app:placeholderText="@string/model"
             app:layout_constraintBottom_toTopOf="@id/createYearInputLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +127,6 @@
             android:id="@+id/createYearInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/bridal_heath"
             app:placeholderText="@string/year"
             app:layout_constraintBottom_toTopOf="@id/createLicenseInputLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +151,6 @@
             android:id="@+id/createLicenseInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/bridal_heath"
             app:placeholderText="@string/license_no"
             app:layout_constraintBottom_toTopOf="@id/createUploadButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +168,7 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/createUploadButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -172,22 +176,28 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/create_upload_docs"
+            android:textColor="@color/silver"
+            android:onClickListener="@{documentsClickListener}"
+            android:enabled="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/createSubmitButton"/>
+            app:layout_constraintBottom_toTopOf="@id/createSubmitButton"
+            tools:textColor="@color/black"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/createSubmitButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/submit"
+            android:textColor="@color/silver"
             android:onClickListener="@{submitClickListener}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:textColor="@color/black"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

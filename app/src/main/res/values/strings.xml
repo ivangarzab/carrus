@@ -13,6 +13,9 @@
     <string name="submit">Submit</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="settings">Settings</string>
 
     <!-- Component -->
     <string name="new_component">New Component</string>
@@ -24,6 +27,9 @@
     <string name="car_name">Car Name</string>
     <string name="add_new_car">Add New Car</string>
     <string name="add_new_car_capitalized">ADD NEW CAR</string>
+    <string name="dialog_delete_car_title">Delete car data?</string>
+    <string name="menu_delete_car">Delete Car</string>
+    <string name="menu_add_component">Add Component</string>
 
     <!-- Create/Edit -->
     <string name="create_title">Add a new Car</string>

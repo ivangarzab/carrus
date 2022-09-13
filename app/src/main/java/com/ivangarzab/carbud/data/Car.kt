@@ -62,28 +62,7 @@ data class Car(
             tirePressure = "35",
             totalMiles = "99,999",
             milesPerGallon = "26",
-            parts = listOf(
-                Part(
-                    name = "Oil Change",
-                    lastDate = Calendar.getInstance().apply { timeInMillis = 1639037220000 },
-                    dueDate = Calendar.getInstance().apply { timeInMillis = 1667286420000 }
-                ),
-                Part(
-                    name = "Window Wipes",
-                    lastDate = Calendar.getInstance().apply { timeInMillis = 1651734420000 },
-                    dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 }
-                ),
-                Part(
-                    name = "Tires",
-                    lastDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-                    dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 }
-                ),
-                Part(
-                    name = "Rims",
-                    lastDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-                    dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 }
-                )
-            ),
+            parts = partList,
             profileImage = 0
         )
     }
@@ -103,3 +82,22 @@ data class Part(
                 "\ndueDate='${format.format(dueDate.time)}'"
     }
 }
+
+val partList: List<Part> = listOf(
+    Part(
+        "Oil Change",
+        Calendar.getInstance().apply { timeInMillis = 1639120980000 },
+        Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
+    Part(
+        "Window Wipes",
+        Calendar.getInstance().apply { timeInMillis = 1662358975427 },
+        Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
+    Part(
+        "Tires",
+        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
+    Part(
+        "Rims",
+        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        Calendar.getInstance().apply { timeInMillis = 1662016020000 })
+)

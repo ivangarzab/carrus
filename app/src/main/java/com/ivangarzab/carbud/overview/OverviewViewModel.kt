@@ -31,7 +31,11 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun fetchDefaultCar() = carRepository.getDefaultCar()?.let {
         updateCarState(it)
-    } ?: updateCarState(Car.empty)
+    }
+
+    fun deleteCarData() = carRepository.deleteDefaultCar().also {
+        updateCarState(null)
+    }
 
     fun onNewPartCreated(part: Part) {
         Log.d("IGB", "Got a new part: $part")
@@ -42,7 +46,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }
 
-    private fun updateCarState(car: Car) =
+    private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
 
     companion object {

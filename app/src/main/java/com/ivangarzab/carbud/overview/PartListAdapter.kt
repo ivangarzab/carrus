@@ -44,10 +44,10 @@ class PartListAdapter(
                     this.dueDate.timeInMillis > today
                 ) {
                     true -> {
-                        val typedValue = TypedValue()
-                        theme.resolveAttribute(android.R.attr.textColor, typedValue, true)
-                        Log.d("TAG", "${typedValue.data}")
-                        binding.componentItemContentText.setTextColor(typedValue.data) // TODO: Use ?android:textColor instead
+                        TypedValue().let {
+                            theme.resolveAttribute(android.R.attr.textColor, it, true)
+                            binding.componentItemContentText.setTextColor(it.data)
+                        }
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
                         (this.dueDate.timeInMillis - today).let { timeLeftInMillis ->
                             "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"
