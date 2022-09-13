@@ -113,11 +113,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 binding.overviewToolbarLayout.clipToOutline =
                     when (binding.overviewAppBarLayout.totalScrollRange + verticalOffset) {
                         0 -> {
-                            showMenuOption(R.id.action_add_component)
+                            showAddServiceMenuOption(true)
                             false
                         }
                         else -> {
-                            hideMenuOption(R.id.action_add_component)
+                            showAddServiceMenuOption(false)
                             true
                         }
                     }
@@ -132,20 +132,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
-    private fun showMenuOption(id: Int) = binding
+    private fun showAddServiceMenuOption(visible: Boolean) = binding
         .overviewToolbar
         .menu
-        .findItem(id)
+        .findItem(R.id.action_add_component)
         .apply {
-            isVisible = true
-        }
-
-    private fun hideMenuOption(id: Int) = binding
-        .overviewToolbar
-        .menu
-        .findItem(id)
-        .apply {
-            isVisible = false
+            isVisible = visible
         }
 
     private fun showCarDetailsDialog() {

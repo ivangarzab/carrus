@@ -9,10 +9,12 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentCreateBinding
 import com.ivangarzab.carbud.delegates.viewBinding
+import com.ivangarzab.carbud.extensions.markRequired
 import com.ivangarzab.carbud.extensions.toast
 
 /**
@@ -58,8 +60,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun setupViews() {
         binding.apply {
-
-            setDocumentsClickListener { toast("Coming Soon!") }
+            markRequiredFields(listOf(
+                binding.createMakeInputLayout,
+                binding.createModelInputLayout,
+                binding.createYearInputLayout
+            ))
+            setUploadClickListener { toast("Coming Soon!") }
             setSubmitClickListener {
                 viewModel.verifyData(
                     make = binding.createMakeInput.text.toString(),
@@ -79,5 +85,9 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 }
             }
         }
+    }
+
+    private fun markRequiredFields(list: List<TextInputLayout>) = list.forEach {
+        it.markRequired()
     }
 }

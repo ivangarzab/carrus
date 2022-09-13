@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="documentsClickListener"
+            name="uploadClickListener"
             type="android.view.View.OnClickListener" />
         <variable
             name="submitClickListener"
@@ -177,7 +177,7 @@
             android:layout_marginBottom="8dp"
             android:text="@string/create_upload_docs"
             android:textColor="@color/silver"
-            android:onClickListener="@{documentsClickListener}"
+            android:onClickListener="@{uploadClickListener}"
             android:enabled="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
