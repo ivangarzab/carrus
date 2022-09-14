@@ -106,7 +106,8 @@
 
         <include layout="@layout/fragment_overview_content"
             android:id="@+id/overviewContent"
-            tools:visibility="invisible"/>
+            app:car="@{car}"
+            tools:visibility="invisible" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/overviewAddFab"

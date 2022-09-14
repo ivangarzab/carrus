@@ -46,17 +46,19 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             Log.d("IGB", "Got new Car state: ${state.car}")
             binding.car = state.car
             state.car?.let {
-                binding.overviewContent.overviewComponentList.apply {
-                    adapter = PartListAdapter(
-                        theme = requireContext().theme,
-                        services = it.services,
-                        onItemClicked = {
-                            // TODO: onItemClicked()
-                        },
-                        onEditClicked = {
-                            // TODO: onEditClicked()
-                        }
-                    )
+                binding.overviewContent.apply {
+                    overviewContentServiceList.apply {
+                        adapter = PartListAdapter(
+                            theme = requireContext().theme,
+                            services = it.services,
+                            onItemClicked = {
+                                // TODO: onItemClicked()
+                            },
+                            onEditClicked = {
+                                // TODO: onEditClicked()
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -122,7 +124,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         }
                     }
             }
-            overviewContent.overviewComponentList.apply {
+            overviewContent.overviewContentServiceList.apply {
                 layoutManager = LinearLayoutManager(requireContext()).apply {
                     orientation = RecyclerView.VERTICAL
                 }
