@@ -38,12 +38,20 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateCarState(null)
     }
 
-    fun onNewServiceCreated(service: Service) {
+    fun onServiceCreated(service: Service) {
         Log.d("IGB", "Got a new part: $service")
         prefs.addService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
                 services = services.toMutableList().apply { add(service) }
+            })
+        }
+    }
+
+    fun onServiceDeleted(service: Service) {
+        state.value?.car?.let {
+            updateCarState(it.apply {
+                services = services.toMutableList().apply { remove(service) }
             })
         }
     }

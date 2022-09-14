@@ -52,7 +52,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                                 // TODO: onItemClicked()
                             },
                             onDeleteClicked = {
-                                // TODO: onEditClicked()
+                                viewModel.onServiceDeleted(it)
                             }
                         )
                     }
