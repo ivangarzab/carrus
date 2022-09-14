@@ -10,7 +10,7 @@ import android.view.View
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +28,7 @@ import com.ivangarzab.carbud.extensions.toast
  */
 class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
-    private val viewModel: OverviewViewModel by viewModels {
+    private val viewModel: OverviewViewModel by activityViewModels {
         SavedStateViewModelFactory(requireActivity().application, this)
     }
 

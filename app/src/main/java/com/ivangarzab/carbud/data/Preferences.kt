@@ -25,6 +25,11 @@ class Preferences(context: Context) {
             services = services.toMutableList().apply { add(service) }
         }
     }
+    fun deleteService(service: Service) {
+        defaultCar = defaultCar?.apply {
+            services = services.toMutableList().apply { remove(service) }
+        }
+    }
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"

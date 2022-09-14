@@ -38,8 +38,12 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateCarState(null)
     }
 
+    fun verifyServiceData(
+        name: String
+    ): Boolean = (name.isNotBlank()) // TODO: Verify more data
+
     fun onServiceCreated(service: Service) {
-        Log.d("IGB", "Got a new part: $service")
+        Log.d("IGB", "New Service created: $service")
         prefs.addService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
@@ -49,6 +53,8 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onServiceDeleted(service: Service) {
+        Log.d("IGB", "Service being deleted: $service")
+        prefs.deleteService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
                 services = services.toMutableList().apply { remove(service) }
