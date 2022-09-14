@@ -8,26 +8,18 @@
             alias="View"
             type="android.view.View"/>
         <variable
-            name="title"
-            type="String" />
-        <variable
             name="saveClickListener"
             type="android.view.View.OnClickListener" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/ComponentBottomSheetDialog"
             android:id="@+id/componentModalRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="24dp"
-            android:clickable="true"
-            android:background="@drawable/bg_bottom_sheet_round_corners_top"
-            android:backgroundTint="@color/mark_color"
-            app:behavior_peekHeight="0dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            android:clickable="true">
 
         <TextView
             android:id="@+id/componentModalTitleLabel"
@@ -35,14 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:gravity="center"
-            android:text="@{title}"
-            android:textSize="18sp"
+            android:text="@string/new_service"
+            android:textSize="@dimen/text_18"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="?android:textColor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@string/new_component"/>
+            tools:textColor="@color/black"/>
 
         <View
             android:id="@+id/componentModalGrabView"
@@ -88,7 +80,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="@string/label_icon"
             android:src="@android:drawable/ic_menu_my_calendar"
-            app:tint="@color/white"
+            app:tint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/componentModalNameField"
             app:layout_constraintStart_toEndOf="@id/componentModalLastDateField"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -112,7 +104,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="@string/label_icon"
             android:src="@android:drawable/ic_menu_my_calendar"
-            app:tint="@color/white"
+            app:tint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/componentModalLastDateField"
             app:layout_constraintStart_toEndOf="@id/componentModalDueDateField"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -121,11 +113,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:rippleColor="@color/modal_component"
             android:text="@string/save"
-            android:textColor="@color/mark_color"
+            android:textColor="@color/silver"
             android:background="@drawable/bg_round_corners"
-            app:backgroundTint="@color/silver"
+            app:backgroundTint="@color/mark_color"
             android:onClick="@{saveClickListener}"
             app:layout_constraintTop_toBottomOf="@id/componentModalDueDateField"
             app:layout_constraintStart_toStartOf="parent"

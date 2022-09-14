@@ -45,4 +45,7 @@
     <string name="tire_pressure">Tire Pressure:</string>
     <string name="total_miles">Total Miles:</string>
     <string name="miles_per_gallon">Miles per Gallon:</string>
+
+    <!-- Modal: Service -->
+    <string name="new_service">New Service</string>
 </resources>
