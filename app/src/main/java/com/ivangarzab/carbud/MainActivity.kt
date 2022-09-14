@@ -7,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.ivangarzab.carbud.data.Part
+import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.databinding.ActivityMainBinding
 import com.ivangarzab.carbud.extensions.bind
 
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     fun getBindingRoot() = binding.root
 
-    fun showBottomSheet(onPartCreated: (Part) -> Unit) {
+    fun showBottomSheet(onPartCreated: (Service) -> Unit) {
         binding.mainActivityBottomSheet.bind(
             resources = resources,
             onSave = onPartCreated

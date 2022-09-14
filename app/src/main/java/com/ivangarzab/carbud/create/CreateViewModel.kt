@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.data.Car
-import com.ivangarzab.carbud.data.partList
+import com.ivangarzab.carbud.data.serviceList
 import com.ivangarzab.carbud.repositories.CarRepository
 import java.util.*
 
@@ -35,7 +35,7 @@ class CreateViewModel : ViewModel() {
             tirePressure = "",
             totalMiles = "",
             milesPerGallon = "",
-            parts = partList, // TODO: hardcoded for testing
+            services = serviceList, // TODO: hardcoded for testing
             profileImage = 0
         ))
         onSubmit.postValue(true)

@@ -49,7 +49,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 binding.overviewContent.overviewComponentList.apply {
                     adapter = PartListAdapter(
                         theme = requireContext().theme,
-                        parts = it.parts,
+                        services = it.services,
                         onItemClicked = {
                             // TODO: onItemClicked()
                         },
@@ -183,7 +183,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private fun showCreateComponentBottomSheet() = showBottomSheet {
         dismissKeyboard(binding.root)
-        viewModel.onNewPartCreated(it)
+        viewModel.onNewServiceCreated(it)
         // Got to give the keyboard a little bit of time to hide.. TODO: Fix
         hideBottomSheet()
     }

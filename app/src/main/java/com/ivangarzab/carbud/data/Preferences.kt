@@ -20,6 +20,11 @@ class Preferences(context: Context) {
             false -> null
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)
+    fun addService(service: Service) {
+        defaultCar = defaultCar?.apply {
+            services = services.toMutableList().apply { add(service) }
+        }
+    }
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"

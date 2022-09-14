@@ -21,7 +21,7 @@ data class Car(
     val tirePressure: String,
     val totalMiles: String,
     val milesPerGallon: String,
-    var parts: List<Part>,
+    var services: List<Service>,
     @DrawableRes val profileImage: Int
 ) : Parcelable {
 
@@ -34,8 +34,9 @@ data class Car(
                 "\nmodel='$model'" +
                 "\nyear='$year'" +
                 "\nlicenseNo='$licenseNo'" +
-                "\nparts='$parts'" +
-                "\nprofileImage=$profileImage)"
+                "\nservices='$services'" +
+                "\nprofileImage=$profileImage" +
+                "\n)"
     }
 
     companion object {
@@ -49,7 +50,7 @@ data class Car(
             tirePressure = "",
             totalMiles = "",
             milesPerGallon = "",
-            parts = emptyList(),
+            services = emptyList(),
             profileImage = 0
         )
         val default: Car = Car(
@@ -62,41 +63,42 @@ data class Car(
             tirePressure = "35",
             totalMiles = "99,999",
             milesPerGallon = "26",
-            parts = partList,
+            services = serviceList,
             profileImage = 0
         )
     }
 }
 
 @Parcelize
-data class Part(
+data class Service(
     val name: String,
     val lastDate: Calendar,
     val dueDate: Calendar
 ): Parcelable {
     override fun toString(): String {
         val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
-        return "Part(" +
+        return "Service(" +
                 "\nname='$name'" +
                 "\nlastDate='${format.format(lastDate.time)}'" +
-                "\ndueDate='${format.format(dueDate.time)}'"
+                "\ndueDate='${format.format(dueDate.time)}'" +
+                "\n)"
     }
 }
 
-val partList: List<Part> = listOf(
-    Part(
+val serviceList: List<Service> = listOf(
+    Service(
         "Oil Change",
         Calendar.getInstance().apply { timeInMillis = 1639120980000 },
         Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
-    Part(
+    Service(
         "Window Wipes",
         Calendar.getInstance().apply { timeInMillis = 1662358975427 },
         Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
-    Part(
+    Service(
         "Tires",
         Calendar.getInstance().apply { timeInMillis = 1644909780000 },
         Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
-    Part(
+    Service(
         "Rims",
         Calendar.getInstance().apply { timeInMillis = 1644909780000 },
         Calendar.getInstance().apply { timeInMillis = 1662016020000 })
