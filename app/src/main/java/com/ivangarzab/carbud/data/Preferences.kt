@@ -73,7 +73,7 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
     Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
     Car::class -> getString(key, defaultValue as? String ?: "").let {
-        Gson().fromJson(it, Car::class.java) as T
+        (Gson().fromJson(it, Car::class.java) ?: Car.empty) as T
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
