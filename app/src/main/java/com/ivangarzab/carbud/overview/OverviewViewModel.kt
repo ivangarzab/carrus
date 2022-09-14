@@ -6,8 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.data.Car
-import com.ivangarzab.carbud.data.Part
+import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.extensions.setState
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.repositories.CarRepository
 import kotlinx.parcelize.Parcelize
 
@@ -31,18 +32,23 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun fetchDefaultCar() = carRepository.getDefaultCar()?.let {
         updateCarState(it)
-    } ?: updateCarState(Car.empty)
+    }
 
-    fun onNewPartCreated(part: Part) {
-        Log.d("IGB", "Got a new part: $part")
+    fun deleteCarData() = carRepository.deleteDefaultCar().also {
+        updateCarState(null)
+    }
+
+    fun onNewServiceCreated(service: Service) {
+        Log.d("IGB", "Got a new part: $service")
+        prefs.addService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
-                parts = parts.toMutableList().apply { add(part) }
+                services = services.toMutableList().apply { add(service) }
             })
         }
     }
 
-    private fun updateCarState(car: Car) =
+    private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
 
     companion object {

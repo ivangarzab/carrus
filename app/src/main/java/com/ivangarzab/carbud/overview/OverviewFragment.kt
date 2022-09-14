@@ -40,22 +40,25 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
+        setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
             Log.d("IGB", "Got new Car state: ${state.car}")
             binding.car = state.car
             state.car?.let {
-                binding.overviewContent.overviewComponentList.apply {
-                    adapter = PartListAdapter(
-                        theme = requireContext().theme,
-                        parts = it.parts,
-                        onItemClicked = {
-                            // TODO: onItemClicked()
-                        },
-                        onEditClicked = {
-                            // TODO: onEditClicked()
-                        }
-                    )
+                binding.overviewContent.apply {
+                    overviewContentServiceList.apply {
+                        adapter = PartListAdapter(
+                            theme = requireContext().theme,
+                            services = it.services,
+                            onItemClicked = {
+                                // TODO: onItemClicked()
+                            },
+                            onEditClicked = {
+                                // TODO: onEditClicked()
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -79,26 +82,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
-    private fun setupViews() {
+    private fun setupToolbar() {
         binding.apply {
-            overviewAppBar.addOnOffsetChangedListener { _, verticalOffset ->
-                binding.overviewToolbarLayout.clipToOutline =
-                    when (binding.overviewAppBar.totalScrollRange + verticalOffset) {
-                        0 -> {
-                            showMenuOption(R.id.action_add_component)
-                            false
-                        }
-                        else -> {
-                            hideMenuOption(R.id.action_add_component)
-                            true
-                        }
-                    }
-            }
-            overviewContent.overviewComponentList.apply {
-                layoutManager = LinearLayoutManager(requireContext()).apply {
-                    orientation = RecyclerView.VERTICAL
-                }
-            }
             overviewToolbar.inflateMenu(R.menu.menu_overview)
             overviewToolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
@@ -110,6 +95,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         toast("Settings!") // TODO: Implement when ready
                         true
                     }
+                    R.id.action_delete_car -> {
+                        showDeleteCarConfirmationDialog()
+                        true
+                    }
                     R.id.action_add_component -> {
                         showCreateComponentBottomSheet()
                         true
@@ -117,25 +106,40 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                     else -> false
                 }
             }
+        }
+    }
+
+    private fun setupViews() {
+        binding.apply {
+            overviewAppBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+                binding.overviewToolbarLayout.clipToOutline =
+                    when (binding.overviewAppBarLayout.totalScrollRange + verticalOffset) {
+                        0 -> {
+                            showAddServiceMenuOption(true)
+                            false
+                        }
+                        else -> {
+                            showAddServiceMenuOption(false)
+                            true
+                        }
+                    }
+            }
+            overviewContent.overviewContentServiceList.apply {
+                layoutManager = LinearLayoutManager(requireContext()).apply {
+                    orientation = RecyclerView.VERTICAL
+                }
+            }
             setAddCarClickListener { navigateToCreateFragment() }
             setAddComponentClickListener { showCreateComponentBottomSheet() }
         }
     }
 
-    private fun showMenuOption(id: Int) = binding
+    private fun showAddServiceMenuOption(visible: Boolean) = binding
         .overviewToolbar
         .menu
-        .findItem(id)
+        .findItem(R.id.action_add_component)
         .apply {
-            isVisible = true
-        }
-
-    private fun hideMenuOption(id: Int) = binding
-        .overviewToolbar
-        .menu
-        .findItem(id)
-        .apply {
-            isVisible = false
+            isVisible = visible
         }
 
     private fun showCarDetailsDialog() {
@@ -167,9 +171,21 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         dialog.show()
     }
 
+    private fun showDeleteCarConfirmationDialog() =
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(R.string.dialog_delete_car_title)
+            setNegativeButton(R.string.no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton(R.string.yes) { dialog, _ ->
+                viewModel.deleteCarData()
+                dialog.dismiss()
+            }
+        }.create().show()
+
     private fun showCreateComponentBottomSheet() = showBottomSheet {
         dismissKeyboard(binding.root)
-        viewModel.onNewPartCreated(it)
+        viewModel.onNewServiceCreated(it)
         // Got to give the keyboard a little bit of time to hide.. TODO: Fix
         hideBottomSheet()
     }

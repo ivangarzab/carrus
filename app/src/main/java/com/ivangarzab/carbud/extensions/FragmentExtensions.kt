@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ivangarzab.carbud.MainActivity
-import com.ivangarzab.carbud.data.Part
+import com.ivangarzab.carbud.data.Service
 
 /**
  * Created by Ivan Garza Bermea.
@@ -18,7 +18,7 @@ fun Fragment.toast(message: String) = Toast.makeText(
     Toast.LENGTH_SHORT
 ).show()
 
-fun Fragment.showBottomSheet(onReturn: (Part) -> Unit) =
+fun Fragment.showBottomSheet(onReturn: (Service) -> Unit) =
     (requireActivity() as MainActivity).showBottomSheet { onReturn(it) }
 
 fun Fragment.hideBottomSheet() = (requireActivity() as MainActivity).hideBottomSheet()

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.data.Car
-import com.ivangarzab.carbud.data.Part
 import com.ivangarzab.carbud.repositories.CarRepository
 import java.util.*
 
@@ -35,12 +34,7 @@ class CreateViewModel : ViewModel() {
             tirePressure = "",
             totalMiles = "",
             milesPerGallon = "",
-            parts = listOf(
-                Part("Oil Change", Calendar.getInstance().apply { timeInMillis = 1639120980000 }, Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
-                Part("Window Wipes", Calendar.getInstance().apply { timeInMillis = 1662358975427 }, Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
-                Part("Tires", Calendar.getInstance().apply { timeInMillis = 1644909780000 }, Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
-                Part("Rims", Calendar.getInstance().apply { timeInMillis = 1644909780000 }, Calendar.getInstance().apply { timeInMillis = 1662016020000 })
-            ),
+            services = emptyList(),
             profileImage = 0
         ))
         onSubmit.postValue(true)

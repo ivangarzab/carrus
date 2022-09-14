@@ -20,6 +20,11 @@ class Preferences(context: Context) {
             false -> null
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)
+    fun addService(service: Service) {
+        defaultCar = defaultCar?.apply {
+            services = services.toMutableList().apply { add(service) }
+        }
+    }
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
@@ -68,7 +73,7 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
     Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
     Car::class -> getString(key, defaultValue as? String ?: "").let {
-        Gson().fromJson(it, Car::class.java) as T
+        (Gson().fromJson(it, Car::class.java) ?: Car.empty) as T
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
