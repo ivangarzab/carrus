@@ -10,7 +10,7 @@ import android.view.View
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +20,6 @@ import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.delegates.viewBinding
-import com.ivangarzab.carbud.extensions.dismissKeyboard
-import com.ivangarzab.carbud.extensions.hideBottomSheet
-import com.ivangarzab.carbud.extensions.showBottomSheet
 import com.ivangarzab.carbud.extensions.toast
 
 
@@ -31,7 +28,7 @@ import com.ivangarzab.carbud.extensions.toast
  */
 class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
-    private val viewModel: OverviewViewModel by viewModels {
+    private val viewModel: OverviewViewModel by activityViewModels {
         SavedStateViewModelFactory(requireActivity().application, this)
     }
 
@@ -54,8 +51,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                             onItemClicked = {
                                 // TODO: onItemClicked()
                             },
-                            onEditClicked = {
-                                // TODO: onEditClicked()
+                            onDeleteClicked = {
+                                viewModel.onServiceDeleted(it)
                             }
                         )
                     }
@@ -100,7 +97,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         true
                     }
                     R.id.action_add_component -> {
-                        showCreateComponentBottomSheet()
+                        navigateToNewServiceBottomSheet()
                         true
                     }
                     else -> false
@@ -130,7 +127,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 }
             }
             setAddCarClickListener { navigateToCreateFragment() }
-            setAddComponentClickListener { showCreateComponentBottomSheet() }
+            setAddComponentClickListener { navigateToNewServiceBottomSheet() }
         }
     }
 
@@ -183,12 +180,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             }
         }.create().show()
 
-    private fun showCreateComponentBottomSheet() = showBottomSheet {
-        dismissKeyboard(binding.root)
-        viewModel.onNewServiceCreated(it)
-        // Got to give the keyboard a little bit of time to hide.. TODO: Fix
-        hideBottomSheet()
-    }
+    private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
+    )
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()

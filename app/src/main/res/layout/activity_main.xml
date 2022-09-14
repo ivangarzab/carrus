@@ -14,7 +14,4 @@
         app:navGraph="@navigation/nav_graph"
         app:defaultNavHost="true" />
 
-    <include layout="@layout/modal_component"
-        android:id="@+id/mainActivityBottomSheet"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

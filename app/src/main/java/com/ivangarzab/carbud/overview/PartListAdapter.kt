@@ -19,7 +19,7 @@ class PartListAdapter(
     private val theme: Resources.Theme,
     private val services: List<Service>,
     val onItemClicked: (Service) -> Unit,
-    val onEditClicked: (Service) -> Unit
+    val onDeleteClicked: (Service) -> Unit
 ) : RecyclerView.Adapter<PartListAdapter.PartListViewHolder>() {
 
     inner class PartListViewHolder(val binding: ItemComponentBinding) : RecyclerView.ViewHolder(binding.root)
@@ -59,7 +59,7 @@ class PartListAdapter(
                     }
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }
-                binding.componentItemContentImage.setOnClickListener { onEditClicked(this) }
+                binding.componentItemContentImage.setOnClickListener { onDeleteClicked(this) }
             }
         }
     }

@@ -30,6 +30,8 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         OverviewState()
     )
 
+    var datesInMillis: Pair<Long, Long> = Pair(0, 0)
+
     fun fetchDefaultCar() = carRepository.getDefaultCar()?.let {
         updateCarState(it)
     }
@@ -38,12 +40,26 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateCarState(null)
     }
 
-    fun onNewServiceCreated(service: Service) {
-        Log.d("IGB", "Got a new part: $service")
+    fun verifyServiceData(
+        name: String
+    ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L
+
+    fun onServiceCreated(service: Service) {
+        Log.d("IGB", "New Service created: $service")
         prefs.addService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
                 services = services.toMutableList().apply { add(service) }
+            })
+        }
+    }
+
+    fun onServiceDeleted(service: Service) {
+        Log.d("IGB", "Service being deleted: $service")
+        prefs.deleteService(service)
+        state.value?.car?.let {
+            updateCarState(it.apply {
+                services = services.toMutableList().apply { remove(service) }
             })
         }
     }
