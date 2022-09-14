@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.overview
+package com.ivangarzab.carbud.ui.overview
 
 import android.os.Parcelable
 import android.util.Log
@@ -7,9 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
-import com.ivangarzab.carbud.extensions.setState
+import com.ivangarzab.carbud.util.extensions.setState
 import com.ivangarzab.carbud.prefs
-import com.ivangarzab.carbud.repositories.CarRepository
+import com.ivangarzab.carbud.data.repositories.CarRepository
 import kotlinx.parcelize.Parcelize
 
 /**

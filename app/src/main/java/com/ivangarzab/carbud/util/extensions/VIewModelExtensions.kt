@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.extensions
+package com.ivangarzab.carbud.util.extensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle

@@ -1,12 +1,10 @@
-package com.ivangarzab.carbud.extensions
+package com.ivangarzab.carbud.util.extensions
 
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ivangarzab.carbud.MainActivity
-import com.ivangarzab.carbud.data.Service
 
 /**
  * Created by Ivan Garza Bermea.
