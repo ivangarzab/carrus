@@ -8,6 +8,12 @@
             alias="View"
             type="android.view.View"/>
         <variable
+            name="lastDateClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="dueDateClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
             name="saveClickListener"
             type="android.view.View.OnClickListener" />
     </data>
@@ -16,16 +22,16 @@
             android:id="@+id/componentModalRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="24dp"
+            android:paddingStart="@dimen/base_16"
+            android:paddingEnd="@dimen/base_16"
+            android:paddingBottom="@dimen/base_24"
             android:clickable="true">
 
         <TextView
             android:id="@+id/componentModalTitleLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/base_8"
             android:gravity="center"
             android:text="@string/new_service"
             android:textSize="@dimen/text_18"
@@ -39,8 +45,8 @@
         <View
             android:id="@+id/componentModalGrabView"
             android:layout_width="50dp"
-            android:layout_height="4dp"
-            android:layout_margin="16dp"
+            android:layout_height="@dimen/base_4"
+            android:layout_margin="@dimen/base_16"
             android:background="@drawable/view_grab"
             android:backgroundTint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/componentModalTitleLabel"
@@ -52,7 +58,7 @@
             android:id="@+id/componentModalNameField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/base_16"
             android:inputType="text"
             android:hint="@string/component_name"
             android:textColorHint="@color/silver"
@@ -65,20 +71,27 @@
             android:id="@+id/componentModalLastDateField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:inputType="date"
+            android:layout_marginTop="@dimen/base_16"
+            android:ems="10"
+            android:inputType="none"
+            android:enabled="false"
             android:hint="@string/last_repair_date"
             android:autofillHints=""
             android:textColorHint="@color/silver"
+            android:textColor="?android:textColor"
+            android:clickable="true"
+            android:onClick="@{lastDateClickListener}"
             app:layout_constraintTop_toBottomOf="@+id/componentModalNameField"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/componentModalLastDateCalendar" />
+            app:layout_constraintEnd_toStartOf="@+id/componentModalLastDateCalendar"
+            tools:textColor="@color/black"/>
         <ImageView
             android:id="@+id/componentModalLastDateCalendar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/base_42"
+            android:layout_height="@dimen/base_42"
+            android:layout_marginTop="@dimen/base_16"
             android:contentDescription="@string/label_icon"
+            android:onClick="@{lastDateClickListener}"
             android:src="@android:drawable/ic_menu_my_calendar"
             app:tint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/componentModalNameField"
@@ -89,20 +102,27 @@
             android:id="@+id/componentModalDueDateField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:inputType="date"
+            android:layout_marginTop="@dimen/base_16"
+            android:ems="10"
+            android:inputType="none"
+            android:enabled="false"
             android:hint="@string/due_date"
             android:autofillHints=""
             android:textColorHint="@color/silver"
+            android:textColor="?android:textColor"
+            android:clickable="true"
+            android:onClick="@{dueDateClickListener}"
             app:layout_constraintTop_toBottomOf="@+id/componentModalLastDateField"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/componentModalDueDateCalendar" />
+            app:layout_constraintEnd_toStartOf="@+id/componentModalDueDateCalendar"
+            tools:textColor="@color/black"/>
         <ImageView
             android:id="@+id/componentModalDueDateCalendar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/base_42"
+            android:layout_height="@dimen/base_42"
+            android:layout_marginTop="@dimen/base_16"
             android:contentDescription="@string/label_icon"
+            android:onClick="@{dueDateClickListener}"
             android:src="@android:drawable/ic_menu_my_calendar"
             app:tint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/componentModalLastDateField"
@@ -112,7 +132,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/base_16"
             android:text="@string/save"
             android:textColor="@color/silver"
             android:background="@drawable/bg_round_corners"

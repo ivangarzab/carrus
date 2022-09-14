@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">#967BB6</item>
         <item name="colorOnPrimary">#0000CA</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondary">@color/mark_color</item>
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- System bars color. -->
