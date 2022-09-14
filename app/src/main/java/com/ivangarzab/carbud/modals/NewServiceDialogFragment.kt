@@ -10,7 +10,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.data.Service
-import com.ivangarzab.carbud.databinding.ModalComponentBinding
+import com.ivangarzab.carbud.databinding.ModalServiceBinding
 import com.ivangarzab.carbud.extensions.dismissKeyboard
 import com.ivangarzab.carbud.extensions.toast
 import com.ivangarzab.carbud.overview.OverviewViewModel
@@ -25,14 +25,14 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
         SavedStateViewModelFactory(requireActivity().application, this)
     }
 
-    private lateinit var binding: ModalComponentBinding
+    private lateinit var binding: ModalServiceBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = ModalComponentBinding.inflate(
+    ): View {
+        binding = ModalServiceBinding.inflate(
             inflater,
             container,
             false
@@ -44,7 +44,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             setSaveClickListener {
-                val name = componentModalNameField.text.toString()
+                val name = serviceModalNameField.text.toString()
                 when (viewModel.verifyServiceData(
                     name = name
                 )) {
@@ -66,39 +66,47 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                 }
             }
             setLastDateClickListener {
-                showDatePickerDialog(
-                    date = Calendar.getInstance()
-                ) { year, month, day ->
-                    viewModel.datesInMillis = Pair(
-                        first = Calendar.getInstance().apply {
-                            set(year, month, day)
-                        }.timeInMillis,
-                        second = viewModel.datesInMillis.second
-                    )
-                    componentModalLastDateField.setText(
-                        getString(R.string.service_date_format, day, month, year)
-                    )
-                }
+                showRepairDatePickerDialog()
             }
             setDueDateClickListener {
-                showDatePickerDialog(
-                    date = Calendar.getInstance().apply {
-                        add(Calendar.DAY_OF_MONTH, 7)
-                    }
-                ) { year, month, day ->
-                    viewModel.datesInMillis = Pair(
-                        first = viewModel.datesInMillis.first,
-                        second = Calendar.getInstance().apply {
-                            set(year, month, day)
-                        }.timeInMillis
-                    )
-                    componentModalDueDateField.setText(
-                        getString(R.string.service_date_format, day, month, year)
-                    )
-                }
+                showDueDatePickerDialog()
             }
         }
     }
+
+    private fun showRepairDatePickerDialog() =
+        showDatePickerDialog(
+            date = Calendar.getInstance(),
+            onDateSelected = { year, month, day ->
+                viewModel.datesInMillis = Pair(
+                    first = Calendar.getInstance().apply {
+                        set(year, month, day)
+                    }.timeInMillis,
+                    second = viewModel.datesInMillis.second
+                )
+                binding.serviceModalLastDateField.setText(
+                    getString(R.string.service_date_format, day, month, year)
+                )
+            }
+        )
+
+    private fun showDueDatePickerDialog() =
+        showDatePickerDialog(
+            date = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_MONTH, 7)
+            },
+            onDateSelected = { year, month, day ->
+                viewModel.datesInMillis = Pair(
+                    first = viewModel.datesInMillis.first,
+                    second = Calendar.getInstance().apply {
+                        set(year, month, day)
+                    }.timeInMillis
+                )
+                binding.serviceModalDueDateField.setText(
+                    getString(R.string.service_date_format, day, month, year)
+                )
+            }
+        )
 
     private fun showDatePickerDialog(date: Calendar, onDateSelected: (Int, Int, Int) -> Unit) {
         DatePickerDialog(

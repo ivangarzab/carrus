@@ -33,5 +33,5 @@
         android:id="@+id/newServiceModal"
         android:name="com.ivangarzab.carbud.modals.NewServiceDialogFragment"
         android:label="dialog_new_service"
-        tools:layout="@layout/modal_component"/>
+        tools:layout="@layout/modal_service"/>
 </navigation>
