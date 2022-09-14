@@ -8,7 +8,7 @@
             alias="View"
             type="android.view.View"/>
         <variable
-            name="lastDateClickListener"
+            name="repairDateClickListener"
             type="android.view.View.OnClickListener" />
         <variable
             name="dueDateClickListener"
@@ -70,7 +70,7 @@
             tools:textColor="@color/black"/>
 
         <EditText
-            android:id="@+id/serviceModalLastDateField"
+            android:id="@+id/serviceModalRepairDateField"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_16"
@@ -83,22 +83,22 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:clickable="false"
-            android:onClick="@{lastDateClickListener}"
+            android:onClick="@{repairDateClickListener}"
             app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/serviceModalLastDateCalendar"
+            app:layout_constraintEnd_toStartOf="@+id/serviceModalRepairDateCalendar"
             tools:textColor="@color/black" />
         <ImageView
-            android:id="@+id/serviceModalLastDateCalendar"
+            android:id="@+id/serviceModalRepairDateCalendar"
             android:layout_width="@dimen/base_42"
             android:layout_height="@dimen/base_42"
             android:layout_marginTop="@dimen/base_16"
             android:contentDescription="@string/label_icon"
-            android:onClick="@{lastDateClickListener}"
+            android:onClick="@{repairDateClickListener}"
             android:src="@android:drawable/ic_menu_my_calendar"
             app:tint="@color/silver"
             app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
-            app:layout_constraintStart_toEndOf="@id/serviceModalLastDateField"
+            app:layout_constraintStart_toEndOf="@id/serviceModalRepairDateField"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
@@ -116,7 +116,7 @@
             android:focusableInTouchMode="false"
             android:clickable="false"
             android:onClick="@{dueDateClickListener}"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalLastDateField"
+            app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/serviceModalDueDateCalendar"
             tools:textColor="@color/black"/>
@@ -129,7 +129,7 @@
             android:onClick="@{dueDateClickListener}"
             android:src="@android:drawable/ic_menu_my_calendar"
             app:tint="@color/silver"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalLastDateField"
+            app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
             app:layout_constraintStart_toEndOf="@id/serviceModalDueDateField"
             app:layout_constraintEnd_toEndOf="parent" />
 

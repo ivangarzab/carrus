@@ -203,7 +203,7 @@ class PreferencesTest {
         private const val TEST_BOOLEAN: Boolean = true
         private val TEST_SERVICE: Service = Service(
             name = "test",
-            lastDate = Calendar.getInstance(),
+            repairDate = Calendar.getInstance(),
             dueDate = Calendar.getInstance()
         )
         // default values

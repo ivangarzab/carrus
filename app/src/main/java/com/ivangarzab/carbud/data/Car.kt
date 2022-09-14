@@ -72,14 +72,14 @@ data class Car(
 @Parcelize
 data class Service(
     val name: String,
-    val lastDate: Calendar,
+    val repairDate: Calendar,
     val dueDate: Calendar
 ): Parcelable {
     override fun toString(): String {
         val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
         return "Service(" +
                 "\nname='$name'" +
-                "\nlastDate='${format.format(lastDate.time)}'" +
+                "\nrepairDate='${format.format(repairDate.time)}'" +
                 "\ndueDate='${format.format(dueDate.time)}'" +
                 "\n)"
     }

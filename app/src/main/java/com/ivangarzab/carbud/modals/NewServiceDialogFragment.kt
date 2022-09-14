@@ -52,7 +52,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                         viewModel.onServiceCreated(
                             Service(
                                 name = name,
-                                lastDate = Calendar.getInstance().apply {
+                                repairDate = Calendar.getInstance().apply {
                                     timeInMillis = viewModel.datesInMillis.first
                                 },
                                 dueDate = Calendar.getInstance().apply {
@@ -65,7 +65,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                     false -> toast("Missing required data")
                 }
             }
-            setLastDateClickListener {
+            setRepairDateClickListener {
                 showRepairDatePickerDialog()
             }
             setDueDateClickListener {
@@ -84,7 +84,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                     }.timeInMillis,
                     second = viewModel.datesInMillis.second
                 )
-                binding.serviceModalLastDateField.setText(
+                binding.serviceModalRepairDateField.setText(
                     getString(R.string.service_date_format, day, month, year)
                 )
             }
