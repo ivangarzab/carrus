@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.modals
+package com.ivangarzab.carbud.ui.modals
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -11,9 +11,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.databinding.ModalServiceBinding
-import com.ivangarzab.carbud.extensions.dismissKeyboard
-import com.ivangarzab.carbud.extensions.toast
-import com.ivangarzab.carbud.overview.OverviewViewModel
+import com.ivangarzab.carbud.util.extensions.dismissKeyboard
+import com.ivangarzab.carbud.util.extensions.toast
+import com.ivangarzab.carbud.ui.overview.OverviewViewModel
 import java.util.*
 
 /**

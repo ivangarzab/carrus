@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.create
+package com.ivangarzab.carbud.ui.create
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,9 +13,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentCreateBinding
-import com.ivangarzab.carbud.delegates.viewBinding
-import com.ivangarzab.carbud.extensions.markRequired
-import com.ivangarzab.carbud.extensions.toast
+import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.markRequired
+import com.ivangarzab.carbud.util.extensions.toast
 
 /**
  * Created by Ivan Garza Bermea.

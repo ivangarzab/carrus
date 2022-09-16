@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.extensions
+package com.ivangarzab.carbud.util.extensions
 
 import com.google.android.material.textfield.TextInputLayout
 

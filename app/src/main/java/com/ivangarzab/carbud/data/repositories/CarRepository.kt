@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.repositories
+package com.ivangarzab.carbud.data.repositories
 
 import android.util.Log
 import com.ivangarzab.carbud.data.Car

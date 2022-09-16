@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.overview
+package com.ivangarzab.carbud.ui.overview
 
 import android.content.res.Resources
 import android.graphics.Color

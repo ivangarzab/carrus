@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.delegates
+package com.ivangarzab.carbud.util.delegates
 
 import android.os.Handler
 import android.os.Looper

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ivangarzab.carbud.overview.OverviewFragment">
+    tools:context=".ui.overview.OverviewFragment">
     <item
         android:id="@+id/action_details"
         android:orderInCategory="89"

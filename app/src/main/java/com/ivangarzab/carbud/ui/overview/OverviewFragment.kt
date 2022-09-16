@@ -1,4 +1,4 @@
-package com.ivangarzab.carbud.overview
+package com.ivangarzab.carbud.ui.overview
 
 import android.app.AlertDialog
 import android.graphics.Color
@@ -19,8 +19,8 @@ import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
-import com.ivangarzab.carbud.delegates.viewBinding
-import com.ivangarzab.carbud.extensions.toast
+import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.toast
 
 
 /**
@@ -40,9 +40,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            Log.d("IGB", "Got new Car state: ${state.car}")
             binding.car = state.car
             state.car?.let {
+                Log.d("IGB", "Got new Car state: ${state.car}")
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
                         adapter = PartListAdapter(
