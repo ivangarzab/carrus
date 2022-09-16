@@ -3,8 +3,8 @@ package com.ivangarzab.carbud.data
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.google.gson.Gson
+import com.ivangarzab.carbud.util.extensions.getFormattedDate
 import kotlinx.parcelize.Parcelize
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -75,15 +75,15 @@ data class Service(
     val repairDate: Calendar,
     val dueDate: Calendar
 ): Parcelable {
-    override fun toString(): String {
-        val format = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
-        return "Service(" +
+    override fun toString(): String =
+        "Service(" +
                 "\nname='$name'" +
-                "\nrepairDate='${format.format(repairDate.time)}'" +
-                "\ndueDate='${format.format(dueDate.time)}'" +
+                "\nrepairDate='${repairDate.getFormattedDate()}'" +
+                "\ndueDate='${dueDate.getFormattedDate()}'" +
                 "\n)"
-    }
 }
+
+fun Service.isPastDue(): Boolean = this.dueDate.timeInMillis < Calendar.getInstance().timeInMillis
 
 val serviceList: List<Service> = listOf(
     Service(

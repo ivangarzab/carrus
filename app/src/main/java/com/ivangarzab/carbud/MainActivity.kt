@@ -38,3 +38,5 @@ class MainActivity : AppCompatActivity() {
         private const val FULL_SCREEN: Boolean = false
     }
 }
+
+const val TAG: String = "IGB"
