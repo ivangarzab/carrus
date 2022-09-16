@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.isPastDue
+import com.ivangarzab.carbud.util.extensions.getFormattedDate
 import com.ivangarzab.carbud.data.Service as CarService
 
 /**
@@ -44,7 +45,7 @@ class PastDueService : Service() {
     private fun processPastRepairDatesList(pastDueServiceList: List<CarService>) {
         // TODO: Schedule Notification based on the Setting's constraints
         pastDueServiceList.forEach {
-            Log.v(TAG, "Service ${it.name} is past due with date")
+            Log.v(TAG, "Service '${it.name}' is past due with date: ${it.dueDate.getFormattedDate()}")
         }
         stopService()
     }

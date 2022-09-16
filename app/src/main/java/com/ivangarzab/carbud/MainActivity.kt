@@ -1,5 +1,6 @@
 package com.ivangarzab.carbud
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindow()
+
+        startService(Intent(this, PastDueService::class.java))
     }
 
     private fun setupWindow() {

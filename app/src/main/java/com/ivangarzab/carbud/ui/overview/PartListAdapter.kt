@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.data.Service
+import com.ivangarzab.carbud.data.isPastDue
 import com.ivangarzab.carbud.databinding.ItemComponentBinding
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -38,9 +39,8 @@ class PartListAdapter(
         with(holder) {
             with(services[position]) {
                 binding.componentItemName.text = this.name
-                val today = Calendar.getInstance().timeInMillis
                 binding.componentItemContentText.text = when (
-                    this.dueDate.timeInMillis > today
+                    this.isPastDue().not()
                 ) {
                     true -> {
                         TypedValue().let {
@@ -48,7 +48,7 @@ class PartListAdapter(
                             binding.componentItemContentText.setTextColor(it.data)
                         }
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
-                        (this.dueDate.timeInMillis - today).let { timeLeftInMillis ->
+                        (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"
                         }
                     }
