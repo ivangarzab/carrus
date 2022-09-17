@@ -40,7 +40,7 @@ class PartListAdapter(
             with(services[position]) {
                 binding.componentItemName.text = this.name
                 binding.componentItemContentText.text = when (
-                    this.isPastDue().not()
+                    this.isPastDue().not() // TODO: Switch out negative conditional
                 ) {
                     true -> {
                         TypedValue().let {

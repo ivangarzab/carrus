@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindow()
-
-        startService(Intent(this, PastDueService::class.java))
     }
 
     private fun setupWindow() {
