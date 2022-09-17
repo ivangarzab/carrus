@@ -43,6 +43,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             binding.car = state.car
             state.car?.let {
                 Log.d("IGB", "Got new Car state: ${state.car}")
+                if (it.services.isNotEmpty()) viewModel.schedulePastDueAlarm()
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
                         adapter = PartListAdapter(

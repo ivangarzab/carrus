@@ -15,6 +15,7 @@ import com.ivangarzab.carbud.data.Service as CarService
 class PastDueService : Service() {
 
     override fun onCreate() {
+        // TODO: Log what thread we're running in
         Log.d(TAG, "PastDue Service has been created")
         super.onCreate()
     }

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
@@ -62,6 +63,10 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
                 services = services.toMutableList().apply { remove(service) }
             })
         }
+    }
+
+    fun schedulePastDueAlarm() {
+        alarms.schedulePastDueServiceAlarm()
     }
 
     private fun updateCarState(car: Car?) =

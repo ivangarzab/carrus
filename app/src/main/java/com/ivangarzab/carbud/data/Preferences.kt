@@ -1,18 +1,26 @@
 package com.ivangarzab.carbud.data
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.ivangarzab.carbud.MainActivity
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@Suppress("ReplaceGetOrSet")
 class Preferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
         DEFAULT_SHARED_PREFS,
         Context.MODE_PRIVATE
     )
+
+    private val mainActivityIntent: PendingIntent = Intent(context, MainActivity::class.java).let {
+        PendingIntent.getActivity(context, 100, it, PendingIntent.FLAG_IMMUTABLE)
+    }
 
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
@@ -31,9 +39,25 @@ class Preferences(context: Context) {
         }
     }
 
+    var pastDueAlarmIntent: PendingIntent?
+        get() = when (sharedPreferences.contains(KEY_ALARM_INTENT_PAST_DUE)) {
+            true -> {
+                sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, "").let { jsonIntent ->
+                    if (jsonIntent.isNotBlank()) {
+                        Gson().fromJson(jsonIntent, PendingIntent::class.java)
+                    } else {
+                        mainActivityIntent
+                    }
+                }
+            }
+            false -> null
+        }
+        set(value) = sharedPreferences.set(KEY_ALARM_INTENT_PAST_DUE, value?.toJson())
+
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
         private const val KEY_DEFAULT_CAR = "default-car"
+        private const val KEY_ALARM_INTENT_PAST_DUE = "alarm-past-due"
     }
 }
 
@@ -82,3 +106,5 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
+
+fun PendingIntent.toJson(): String = Gson().toJson(this)
