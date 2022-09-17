@@ -1,14 +1,10 @@
 package com.ivangarzab.carbud.receivers
 
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.NotificationCompat
-import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car

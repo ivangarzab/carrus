@@ -20,14 +20,20 @@ class NotificationController(
 
     init {
         notificationManager.cancelAll() // TODO: Keep or discard?
-    }
-
-    private fun createNotificationChannel(channelId: String, channelName: String): String {
-        val channel = NotificationChannel(channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE)
-        channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        notificationManager.createNotificationChannel(channel)
-        return channelId
+        notificationManager.createNotificationChannelGroup(
+            NotificationChannelGroup(
+                NOTIFICATION_GROUP_REMINDERS_ID,
+                NOTIFICATION_GROUP_REMINDERS_NAME
+        ))
+        NotificationChannel(
+            NOTIFICATION_CHANNEL_DUE_DATE_ID,
+            NOTIFICATION_CHANNEL_DUE_DATE_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            group = NOTIFICATION_GROUP_REMINDERS_ID
+            notificationManager.createNotificationChannel(this)
+        }
     }
 
     fun getProgressBarNotification(
@@ -36,16 +42,16 @@ class NotificationController(
         isLoading: Boolean
     ): Notification {
         Log.d(TAG, "Showing progress bar notification: $isLoading")
-        val channelId = createNotificationChannel("Reminders", "Service due date reminders.")
-        return NotificationCompat.Builder(context, channelId).apply {
+        return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DUE_DATE_ID).apply {
+            setSmallIcon(NOTIFICATION_ICON_RES)
+            priority = NotificationCompat.PRIORITY_LOW
             setContentTitle(title)
             setContentText(body)
-            setSmallIcon(R.drawable.ic_mark_white)
-            priority = NotificationCompat.PRIORITY_LOW
             if (isLoading) {
                 setProgress(0, 0, true)
             } else {
                 setProgress(0, 0, false)
+                setAutoCancel(true)
             }
         }.build()
     }
@@ -53,20 +59,27 @@ class NotificationController(
     fun getReminderNotification(
         data: NotificationData
     ): Notification {
-        val channelId = createNotificationChannel("Reminders", "Service due date reminders.")
-        return NotificationCompat.Builder(context, channelId).apply {
-            setSmallIcon(R.drawable.ic_mark_white)
+        return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DUE_DATE_ID).apply {
+            setSmallIcon(NOTIFICATION_ICON_RES)
             priority = NotificationCompat.PRIORITY_DEFAULT
+            setAutoCancel(true)
             setContentText(data.title)
             setContentText(data.body)
             setContentIntent(getActivityIntent())
         }.build()
     }
 
-    fun getActivityIntent(): PendingIntent {
-        return Intent(context, MainActivity::class.java).let {
+    private fun getActivityIntent(): PendingIntent =
+        Intent(context, MainActivity::class.java).let {
             PendingIntent.getActivity(context, 1, it, PendingIntent.FLAG_IMMUTABLE)
         }
+
+    companion object {
+        private const val NOTIFICATION_ICON_RES = R.drawable.ic_mark_black
+        const val NOTIFICATION_GROUP_REMINDERS_ID = "notification-group-reminders"
+        const val NOTIFICATION_GROUP_REMINDERS_NAME = "Reminders"
+        const val NOTIFICATION_CHANNEL_DUE_DATE_ID = "notification-channel-past-due"
+        const val NOTIFICATION_CHANNEL_DUE_DATE_NAME = "Past Due"
     }
 }
 

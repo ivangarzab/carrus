@@ -57,6 +57,7 @@ class AlarmScheduler(
         alarmManager.setInexactRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, 9) // today at 9am
             }.timeInMillis,
             AlarmManager.INTERVAL_DAY,
