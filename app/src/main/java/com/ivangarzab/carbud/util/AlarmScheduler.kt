@@ -1,16 +1,12 @@
 package com.ivangarzab.carbud.util
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
-import com.ivangarzab.carbud.PastDueService
-import com.ivangarzab.carbud.TAG
-import com.ivangarzab.carbud.prefs
-import com.ivangarzab.carbud.util.AlarmScheduler.Companion.ACTION_CODE_ALARM_PAST_DUE
+import com.ivangarzab.carbud.*
+import com.ivangarzab.carbud.receivers.AlarmBroadcastReceiver
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -72,11 +68,11 @@ class AlarmScheduler(
     private fun scheduleTestAlarm(alarmIntent: PendingIntent) {
         alarmManager.setInexactRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + TimeUnit.MINUTES.toMillis(1), // a minute from now
-            TimeUnit.MINUTES.toMillis(3), // every 3 minutes
+            SystemClock.elapsedRealtime() + TimeUnit.SECONDS.toMillis(15), // 15 seconds from now
+            TimeUnit.MINUTES.toMillis(1), // every minute
             alarmIntent
         )
-        Log.d(TAG, "Scheduled test alarm a minute from now with an interval of 3 minutes")
+        Log.d(TAG, "Scheduled test alarm 15 seconds from now with an interval of a minute")
     }
 
     fun cancelAlarm(intent: PendingIntent) {
@@ -86,19 +82,5 @@ class AlarmScheduler(
     companion object {
         const val REQUEST_CODE_ALARM_PAST_DUE: Int = 100
         const val ACTION_CODE_ALARM_PAST_DUE: String = "alarm-past-due"
-    }
-}
-
-class AlarmBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        intent?.let {
-            Log.d(TAG, "We got an alarm intent: $it")
-            when (it.action) {
-                ACTION_CODE_ALARM_PAST_DUE -> context?.startService(
-                    Intent(context, PastDueService::class.java)
-                )
-                else -> "Unable to recognize alarm intent action"
-            }
-        }
     }
 }
