@@ -15,8 +15,7 @@ import com.ivangarzab.carbud.data.Service as CarService
 class PastDueService : Service() {
 
     override fun onCreate() {
-        // TODO: Log what thread we're running in
-        Log.d(TAG, "PastDue Service has been created")
+        Log.d(TAG, "PastDue Service has been created in thread='${Thread.currentThread().name}'")
         super.onCreate()
     }
 
@@ -38,7 +37,7 @@ class PastDueService : Service() {
         }
     }
 
-    private fun fetchCarData(): Car? = prefs.defaultCar
+    private fun fetchCarData(): Car? = carRepository.getDefaultCar()
 
     private fun filterPastDueServices(serviceList: List<CarService>): List<CarService> =
         serviceList.filter { it.isPastDue() }

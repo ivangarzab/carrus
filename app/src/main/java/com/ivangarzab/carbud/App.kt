@@ -2,6 +2,7 @@ package com.ivangarzab.carbud
 
 import android.app.Application
 import com.ivangarzab.carbud.data.Preferences
+import com.ivangarzab.carbud.data.repositories.CarRepository
 import com.ivangarzab.carbud.util.AlarmScheduler
 
 /**
@@ -28,3 +29,6 @@ open class App : Application() {
         var alarmScheduler: AlarmScheduler? = null
     }
 }
+
+//TODO: distribute this thru injection
+val carRepository: CarRepository = CarRepository()

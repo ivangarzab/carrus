@@ -41,7 +41,7 @@ class AlarmScheduler(
             prefs.pastDueAlarmIntent = null
         }
 
-        Log.d(TAG, "Scheduling 'PastDueService' alarm for car: ${prefs.defaultCar}")
+        Log.d(TAG, "Scheduling 'PastDueService' alarm")
         val alarmIntent: PendingIntent = Intent(context, AlarmBroadcastReceiver::class.java).let { intent ->
             intent.action = ACTION_CODE_ALARM_PAST_DUE
             PendingIntent.getBroadcast(

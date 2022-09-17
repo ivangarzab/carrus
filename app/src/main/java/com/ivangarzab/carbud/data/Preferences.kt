@@ -8,6 +8,8 @@ import com.google.gson.Gson
 import com.ivangarzab.carbud.MainActivity
 
 /**
+ * Should only be accessed by Repository, or other data handling classes.
+ *
  * Created by Ivan Garza Bermea.
  */
 @Suppress("ReplaceGetOrSet")
@@ -43,10 +45,10 @@ class Preferences(context: Context) {
         get() = when (sharedPreferences.contains(KEY_ALARM_INTENT_PAST_DUE)) {
             true -> {
                 sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, "").let { jsonIntent ->
-                    if (jsonIntent.isNotBlank()) {
+                    if (jsonIntent.isNotBlank() && jsonIntent != "{}") {
                         Gson().fromJson(jsonIntent, PendingIntent::class.java)
                     } else {
-                        mainActivityIntent
+                        null
                     }
                 }
             }

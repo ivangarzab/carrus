@@ -6,20 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.alarms
+import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
 import com.ivangarzab.carbud.prefs
-import com.ivangarzab.carbud.data.repositories.CarRepository
 import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() {
-
-    //TODO: get this thru injection
-    private val carRepository = CarRepository()
 
     @Parcelize
     data class OverviewState(

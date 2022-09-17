@@ -40,9 +40,14 @@ class PartListAdapter(
             with(services[position]) {
                 binding.componentItemName.text = this.name
                 binding.componentItemContentText.text = when (
-                    this.isPastDue().not() // TODO: Switch out negative conditional
+                    this.isPastDue()
                 ) {
                     true -> {
+                        binding.componentItemContentText.setTextColor(Color.RED)
+                        binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
+                        "DUE"
+                    }
+                    false -> {
                         TypedValue().let {
                             theme.resolveAttribute(android.R.attr.textColor, it, true)
                             binding.componentItemContentText.setTextColor(it.data)
@@ -51,11 +56,6 @@ class PartListAdapter(
                         (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"
                         }
-                    }
-                    false -> {
-                        binding.componentItemContentText.setTextColor(Color.RED)
-                        binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
-                        "DUE"
                     }
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }
