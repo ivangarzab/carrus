@@ -1,12 +1,18 @@
 package com.ivangarzab.carbud.ui.overview
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.util.delegates.viewBinding
@@ -34,6 +41,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
+    private val notificationPermissionRequestLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                viewModel.toggleNotificationPermissionState(isGranted)
+            } else {
+                Log.d(TAG, "Notification permissions denied")
+                // TODO: Implement denial case
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
@@ -43,7 +62,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             binding.car = state.car
             state.car?.let {
                 Log.d("IGB", "Got new Car state: ${state.car}")
-                if (it.services.isNotEmpty()) viewModel.schedulePastDueAlarm()
+                if (state.notificationPermissionState && it.services.isNotEmpty()) {
+                    viewModel.schedulePastDueAlarm()
+                }
 
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
@@ -66,6 +87,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     override fun onResume() {
         super.onResume()
         viewModel.fetchDefaultCar()
+        if (Build.VERSION.SDK_INT >= 33) {
+            attemptToRequestNotificationPermission()
+        } else {
+            Log.v(TAG, "We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
+            viewModel.toggleNotificationPermissionState(true)
+        }
     }
 
     private fun setupWindow() {
@@ -140,6 +167,21 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         .apply {
             isVisible = visible
         }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun attemptToRequestNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                notificationPermissionRequestLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+            else -> viewModel.toggleNotificationPermissionState(true)
+        }
+    }
 
     private fun showCarDetailsDialog() {
         val car = viewModel.state.value?.car

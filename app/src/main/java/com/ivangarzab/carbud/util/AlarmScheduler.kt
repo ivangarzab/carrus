@@ -50,15 +50,15 @@ class AlarmScheduler(
 
         // persist for later deletion
         prefs.pastDueAlarmIntent = alarmIntent
-        scheduleTestAlarm(alarmIntent)
+        scheduleDefaultDailyAlarm(alarmIntent)
     }
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
         alarmManager.setInexactRepeating(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            AlarmManager.RTC,
             Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, 9) // today at 9am
+                set(Calendar.HOUR_OF_DAY, 7) // today at 7am
             }.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             alarmIntent

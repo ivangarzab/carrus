@@ -20,7 +20,8 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     @Parcelize
     data class OverviewState(
-        val car: Car? = null
+        val car: Car? = null,
+        val notificationPermissionState: Boolean = false
     ) : Parcelable
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
@@ -64,6 +65,10 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun schedulePastDueAlarm() {
         alarms.schedulePastDueServiceAlarm()
+    }
+
+    fun toggleNotificationPermissionState(granted: Boolean) = setState(state, savedState, STATE) {
+        copy(notificationPermissionState = granted)
     }
 
     private fun updateCarState(car: Car?) =

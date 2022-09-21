@@ -1,6 +1,5 @@
 package com.ivangarzab.carbud.receivers
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,14 +19,11 @@ import com.ivangarzab.carbud.util.extensions.getFormattedDate
  */
 class AlarmBroadcastReceiver : BroadcastReceiver() {
     private lateinit var context: Context
-    private lateinit var notificationManager: NotificationManager
     private lateinit var notificationController: NotificationController
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
         this.context = context
-        this.notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         this.notificationController = NotificationController(context)
 
         intent?.let {
@@ -57,7 +53,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             Log.v(TAG, "Service '${it.name}' is past due with date: ${it.dueDate.getFormattedDate()}")
         }
         // TODO: Schedule Notification based on the Setting's constraints
-        notificationManager.notify(
+        notificationController.notificationManager.notify(
             600, notificationController.getReminderNotification(
                 NotificationData(
                     title = "A Service is due!",
