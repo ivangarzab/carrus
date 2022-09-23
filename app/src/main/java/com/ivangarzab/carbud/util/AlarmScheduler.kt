@@ -24,34 +24,42 @@ class AlarmScheduler(
     private val alarmManager: AlarmManager =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedulePastDueServiceAlarm() {
-        val context = if (weakContext.get() != null) {
-            weakContext.get()
-        } else {
-            Log.w(TAG, "Unable to schedule 'PastDue' alarm because of missing Context")
-            return // we bail
-        }
-
-        prefs.pastDueAlarmIntent?.let {
+    fun schedulePastDueAlarm() {
+        if (prefs.isAlarmPastDueActive) {
             Log.v(TAG, "'PastDueService' alarm is already scheduled")
 //            return // skip dupes
-            cancelAlarm(it)
-            prefs.pastDueAlarmIntent = null
+            cancelPastDueAlarm()
+            prefs.isAlarmPastDueActive = false
         }
 
-        val alarmIntent: PendingIntent = Intent(context, AlarmBroadcastReceiver::class.java).let { intent ->
-            intent.action = INTENT_ACTION_ALARM_PAST_DUE
-            PendingIntent.getBroadcast(
-                context,
-                REQUEST_CODE_ALARM_PAST_DUE,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
+        getPastDueAlarmPendingIntent()?.let {
+            prefs.isAlarmPastDueActive = true
+            Log.d(TAG, "Scheduling 'PastDue' alarm")
+            setAlarmBroadcastReceiverEnableState(true)
+            scheduleTestAlarm(it)
+        } ?: Log.w(TAG, "Unable to schedule 'PastDue' alarm")
+    }
+
+    fun cancelPastDueAlarm() {
+        setAlarmBroadcastReceiverEnableState(false)
+        getPastDueAlarmPendingIntent()?.let {
+            alarmManager.cancel(it)
+            it.cancel()
+        } ?: Log.w(TAG, "Unable to cancel 'PastDue' alarm")
+    }
+
+    private fun getPastDueAlarmPendingIntent(): PendingIntent? {
+        return weakContext.get()?.let {
+            Intent(it, AlarmBroadcastReceiver::class.java).let { intent ->
+                intent.action = INTENT_ACTION_ALARM_PAST_DUE
+                PendingIntent.getBroadcast(
+                    it,
+                    REQUEST_CODE_ALARM_PAST_DUE,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            }
         }
-        prefs.pastDueAlarmIntent = alarmIntent //TODO: Fix
-        Log.d(TAG, "Scheduling 'PastDue' alarm")
-        setAlarmBroadcastReceiverEnableState(true)
-        scheduleDefaultDailyAlarm(alarmIntent)
     }
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
@@ -75,11 +83,6 @@ class AlarmScheduler(
             alarmIntent
         )
         Log.d(TAG, "Scheduled test alarm 15 seconds from now with an interval of a minute")
-    }
-
-    fun cancelAlarm(intent: PendingIntent) {
-        setAlarmBroadcastReceiverEnableState(false)
-        alarmManager.cancel(intent)
     }
 
     private fun setAlarmBroadcastReceiverEnableState(enabled: Boolean) {

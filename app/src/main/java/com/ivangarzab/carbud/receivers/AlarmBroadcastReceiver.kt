@@ -39,9 +39,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun handleDeviceRebootAction() {
-        if (prefs.pastDueAlarmIntent != null) {
+        if (prefs.isAlarmPastDueActive) {
             Log.d(TAG, "Rescheduling 'PastDue' alarm")
-            alarms.schedulePastDueServiceAlarm()
+            alarms.schedulePastDueAlarm()
         } else {
             Log.w(TAG, "Unable to find Past Due alarm Intent")
         }

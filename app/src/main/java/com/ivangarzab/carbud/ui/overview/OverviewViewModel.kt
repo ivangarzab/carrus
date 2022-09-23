@@ -64,7 +64,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun schedulePastDueAlarm() {
-        alarms.schedulePastDueServiceAlarm()
+        alarms.schedulePastDueAlarm()
     }
 
     fun toggleNotificationPermissionState(granted: Boolean) = setState(state, savedState, STATE) {

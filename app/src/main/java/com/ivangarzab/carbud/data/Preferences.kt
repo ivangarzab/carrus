@@ -1,11 +1,8 @@
 package com.ivangarzab.carbud.data
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.ivangarzab.carbud.MainActivity
 
 /**
  * Should only be accessed by Repository, or other data handling classes.
@@ -37,20 +34,9 @@ class Preferences(context: Context) {
         }
     }
 
-    var pastDueAlarmIntent: PendingIntent?
-        get() = when (sharedPreferences.contains(KEY_ALARM_INTENT_PAST_DUE)) {
-            true -> {
-                sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, "").let { jsonIntent ->
-                    if (jsonIntent.isNotBlank() && jsonIntent != "{}") {
-                        Gson().fromJson(jsonIntent, PendingIntent::class.java)
-                    } else {
-                        null
-                    }
-                }
-            }
-            false -> null
-        }
-        set(value) = sharedPreferences.set(KEY_ALARM_INTENT_PAST_DUE, value?.toJson())
+    var isAlarmPastDueActive: Boolean
+        get() = sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, false)
+        set(value) = sharedPreferences.set(KEY_ALARM_INTENT_PAST_DUE, value)
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
@@ -104,5 +90,3 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
-
-fun PendingIntent.toJson(): String = Gson().toJson(this)
