@@ -20,10 +20,6 @@ class Preferences(context: Context) {
         Context.MODE_PRIVATE
     )
 
-    private val mainActivityIntent: PendingIntent = Intent(context, MainActivity::class.java).let {
-        PendingIntent.getActivity(context, 100, it, PendingIntent.FLAG_IMMUTABLE)
-    }
-
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
             true -> sharedPreferences.get(KEY_DEFAULT_CAR, Car.empty)

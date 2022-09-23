@@ -1,8 +1,10 @@
 package com.ivangarzab.carbud.util
 
 import android.app.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.SystemClock
 import android.util.Log
 import com.ivangarzab.carbud.*
@@ -26,7 +28,7 @@ class AlarmScheduler(
         val context = if (weakContext.get() != null) {
             weakContext.get()
         } else {
-            Log.w(TAG, "Unable to schedule 'PastDueService' alarm because of missing Context")
+            Log.w(TAG, "Unable to schedule 'PastDue' alarm because of missing Context")
             return // we bail
         }
 
@@ -37,9 +39,8 @@ class AlarmScheduler(
             prefs.pastDueAlarmIntent = null
         }
 
-        Log.d(TAG, "Scheduling 'PastDueService' alarm")
         val alarmIntent: PendingIntent = Intent(context, AlarmBroadcastReceiver::class.java).let { intent ->
-            intent.action = ACTION_CODE_ALARM_PAST_DUE
+            intent.action = INTENT_ACTION_ALARM_PAST_DUE
             PendingIntent.getBroadcast(
                 context,
                 REQUEST_CODE_ALARM_PAST_DUE,
@@ -47,9 +48,9 @@ class AlarmScheduler(
                 PendingIntent.FLAG_IMMUTABLE
             )
         }
-
-        // persist for later deletion
-        prefs.pastDueAlarmIntent = alarmIntent
+        prefs.pastDueAlarmIntent = alarmIntent //TODO: Fix
+        Log.d(TAG, "Scheduling 'PastDue' alarm")
+        setAlarmBroadcastReceiverEnableState(true)
         scheduleDefaultDailyAlarm(alarmIntent)
     }
 
@@ -70,18 +71,32 @@ class AlarmScheduler(
         alarmManager.setInexactRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             SystemClock.elapsedRealtime() + TimeUnit.SECONDS.toMillis(15), // 15 seconds from now
-            TimeUnit.MINUTES.toMillis(1), // every minute
+            TimeUnit.MINUTES.toMillis(1),
             alarmIntent
         )
         Log.d(TAG, "Scheduled test alarm 15 seconds from now with an interval of a minute")
     }
 
     fun cancelAlarm(intent: PendingIntent) {
+        setAlarmBroadcastReceiverEnableState(false)
         alarmManager.cancel(intent)
+    }
+
+    private fun setAlarmBroadcastReceiverEnableState(enabled: Boolean) {
+        weakContext.get()?.let { context ->
+            context.packageManager.setComponentEnabledSetting(
+                ComponentName(context, AlarmBroadcastReceiver::class.java),
+                when (enabled) {
+                    true -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                    else -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                },
+                PackageManager.DONT_KILL_APP
+            )
+        }
     }
 
     companion object {
         const val REQUEST_CODE_ALARM_PAST_DUE: Int = 100
-        const val ACTION_CODE_ALARM_PAST_DUE: String = "alarm-past-due"
+        const val INTENT_ACTION_ALARM_PAST_DUE: String = "alarm-past-due"
     }
 }

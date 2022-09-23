@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.ivangarzab.carbud.TAG
+import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.AlarmScheduler
 import com.ivangarzab.carbud.util.NotificationController
 import com.ivangarzab.carbud.util.NotificationData
@@ -29,9 +31,19 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         intent?.let {
             Log.d(TAG, "We got an alarm intent with action: ${it.action}")
             when (it.action) {
-                AlarmScheduler.ACTION_CODE_ALARM_PAST_DUE -> checkDueDates()
+                INTENT_ACTION_BOOT_COMPLETED -> handleDeviceRebootAction()
+                AlarmScheduler.INTENT_ACTION_ALARM_PAST_DUE -> checkDueDates()
                 else -> "Unable to recognize alarm intent action"
             }
+        }
+    }
+
+    private fun handleDeviceRebootAction() {
+        if (prefs.pastDueAlarmIntent != null) {
+            Log.d(TAG, "Rescheduling 'PastDue' alarm")
+            alarms.schedulePastDueServiceAlarm()
+        } else {
+            Log.w(TAG, "Unable to find Past Due alarm Intent")
         }
     }
 
@@ -40,7 +52,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             processPastRepairDatesList(
                 filterPastDueServices(car.services)
             )
-        } ?: Log.i(TAG, "No past due dates found for today")
+        } ?: Log.v(TAG, "No past due dates found for today")
     }
 
     private fun fetchCarData(): Car? = carRepository.getDefaultCar()
@@ -61,5 +73,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
                 )
             )
         )
+    }
+
+    companion object {
+        private const val INTENT_ACTION_BOOT_COMPLETED: String = "android.intent.action.BOOT_COMPLETED"
     }
 }

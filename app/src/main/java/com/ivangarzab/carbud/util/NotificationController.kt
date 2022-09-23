@@ -59,6 +59,7 @@ class NotificationController(
     fun getReminderNotification(
         data: NotificationData
     ): Notification {
+        Log.d(TAG, "Showing reminder notification with data: $data")
         return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DUE_DATE_ID).apply {
             setSmallIcon(NOTIFICATION_ICON_RES)
             priority = NotificationCompat.PRIORITY_DEFAULT
