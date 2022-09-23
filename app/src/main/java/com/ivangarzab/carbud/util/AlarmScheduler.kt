@@ -36,7 +36,7 @@ class AlarmScheduler(
             prefs.isAlarmPastDueActive = true
             Log.d(TAG, "Scheduling 'PastDue' alarm")
             setAlarmBroadcastReceiverEnableState(true)
-            scheduleTestAlarm(it)
+            scheduleDefaultDailyAlarm(it)
         } ?: Log.w(TAG, "Unable to schedule 'PastDue' alarm")
     }
 
