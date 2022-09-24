@@ -86,7 +86,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                     second = viewModel.datesInMillis.second
                 )
                 binding.serviceModalRepairDateField.setText(
-                    getString(R.string.service_date_format, day, month, year)
+                    getString(R.string.service_date_format, month, day, year)
                 )
                 binding.serviceModalRepairDateCalendar.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
@@ -107,7 +107,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                     }.timeInMillis
                 )
                 binding.serviceModalDueDateField.setText(
-                    getString(R.string.service_date_format, day, month, year)
+                    getString(R.string.service_date_format, month, day, year)
                 )
                 binding.serviceModalDueDateCalendar.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
