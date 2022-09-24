@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingsRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/backgroundColor">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/settingsAppBarLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.CarBud.AppBarOverlay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/settingsToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/settings"
+                app:popupTheme="@style/Theme.CarBud.PopupOverlay"
+                tools:title="@string/settings"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:id="@+id/settingsContentRoot"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/settingsAppBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/view_settings_option"
+                    android:id="@+id/settingsDarkModeOption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:title="@{@string/setting_dark_mode_title}"
+                    app:subtitle="@{@string/setting_dark_mode_subtitle}"
+                    app:showToggle="@{true}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:id="@+id/settingsDivider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/silver"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsDarkModeOption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include layout="@layout/view_settings_option"
+                    android:id="@+id/settingsDeleteCarOption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:title="@{@string/setting_delete_car_data_title}"
+                    app:subtitle="@{@string/setting_delete_car_data_subtitle}"
+                    app:showToggle="@{false}"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsDivider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include layout="@layout/view_settings_option"
+                    android:id="@+id/settingsDeleteServicesOption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:title="@{@string/setting_delete_all_services_title}"
+                    app:subtitle="@{@string/setting_delete_all_services_subtitle}"
+                    app:showToggle="@{false}"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsDeleteCarOption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

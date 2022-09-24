@@ -20,7 +20,6 @@ import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.util.delegates.viewBinding
-import com.ivangarzab.carbud.util.extensions.toast
 
 
 /**
@@ -89,7 +88,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         true
                     }
                     R.id.action_settings -> {
-                        toast("Settings!") // TODO: Implement when ready
+                        navigateToSettingsFragment()
                         true
                     }
                     R.id.action_delete_car -> {
@@ -186,5 +185,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
+
+    private fun navigateToSettingsFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 }

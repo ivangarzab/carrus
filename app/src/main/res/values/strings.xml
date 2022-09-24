@@ -30,6 +30,14 @@
     <string name="create_title">Add a new Car</string>
     <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
 
+    <!-- Settings -->
+    <string name="setting_dark_mode_title">Dark mode</string>
+    <string name="setting_dark_mode_subtitle">Toggle between light and dark themes</string>
+    <string name="setting_delete_car_data_title">Delete car data</string>
+    <string name="setting_delete_car_data_subtitle">You won\'t be able to get it back!</string>
+    <string name="setting_delete_all_services_title">Delete all car services</string>
+    <string name="setting_delete_all_services_subtitle">The car data will stay, but not its services</string>
+
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>
     <string name="label_icon">Icon</string>
