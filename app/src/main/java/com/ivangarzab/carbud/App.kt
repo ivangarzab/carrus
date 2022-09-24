@@ -2,6 +2,7 @@ package com.ivangarzab.carbud
 
 import android.app.Application
 import com.ivangarzab.carbud.data.Preferences
+import com.ivangarzab.carbud.data.repositories.CarRepository
 
 /**
  * Created by Ivan Garza Bermea.
@@ -21,3 +22,6 @@ open class App : Application() {
         var preferences: Preferences? = null
     }
 }
+
+//TODO: distribute this thru injection
+val carRepository: CarRepository = CarRepository()

@@ -60,11 +60,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchDefaultCar()
-    }
-
     private fun setupWindow() {
         ViewCompat.setOnApplyWindowInsetsListener(
             (requireActivity() as MainActivity).getBindingRoot()

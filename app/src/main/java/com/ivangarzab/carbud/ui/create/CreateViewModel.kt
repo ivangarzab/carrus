@@ -24,7 +24,7 @@ class CreateViewModel : ViewModel() {
         licenseNo: String = "xxxxxx"
     ) {
         Log.v("IGB", "Saving default car")
-        carRepository.saveCar(Car(
+        carRepository.saveCarData(Car(
             uid = UUID.randomUUID().toString(),
             nickname = nickname,
             make = make,
