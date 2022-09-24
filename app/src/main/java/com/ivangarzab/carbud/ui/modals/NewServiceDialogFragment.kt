@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -87,6 +88,9 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                 binding.serviceModalRepairDateField.setText(
                     getString(R.string.service_date_format, day, month, year)
                 )
+                binding.serviceModalRepairDateCalendar.setImageDrawable(
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
+                )
             }
         )
 
@@ -104,6 +108,9 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                 )
                 binding.serviceModalDueDateField.setText(
                     getString(R.string.service_date_format, day, month, year)
+                )
+                binding.serviceModalDueDateCalendar.setImageDrawable(
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
                 )
             }
         )
