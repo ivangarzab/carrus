@@ -2,7 +2,11 @@ package com.ivangarzab.carbud.ui.settings
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -11,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
 
 /**
@@ -24,6 +29,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
         setupToolbar()
+        setupViews()
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        prefs.darkMode?.let {
+            Log.v("IGB", "onViewStateRestored: Setting dark mode toggle state to $it")
+            binding.settingsDarkModeOption.settingsOptionToggle.isChecked = it
+        }
     }
 
     private fun setupWindow() {
@@ -46,6 +60,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
+        }
+    }
+
+    private fun setupViews() {
+        binding.apply {
+            settingsDarkModeOption.settingsOptionToggle.apply {
+                setOnClickListener {
+                    Log.v("IGB", "Dark mode toggle was checked to: $isChecked")
+                    prefs.darkMode = isChecked
+                    setDefaultNightMode(isChecked)
+                }
+            }
+        }
+    }
+
+    private fun setDefaultNightMode(isNight: Boolean) {
+        when (isNight) {
+            true -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+            false -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
         }
     }
 }

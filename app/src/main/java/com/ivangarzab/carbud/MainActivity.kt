@@ -3,6 +3,7 @@ package com.ivangarzab.carbud
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
 import com.ivangarzab.carbud.databinding.ActivityMainBinding
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindow()
+        setDarkMode()
     }
 
     private fun setupWindow() {
@@ -33,6 +35,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getBindingRoot() = binding.root
+
+    private fun setDarkMode() {
+        prefs.darkMode?.let {
+            when (it) {
+                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
 
     companion object {
         private const val FULL_SCREEN: Boolean = false
