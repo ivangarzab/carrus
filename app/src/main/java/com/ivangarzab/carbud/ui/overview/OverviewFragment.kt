@@ -27,7 +27,6 @@ import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.util.delegates.viewBinding
-import com.ivangarzab.carbud.util.extensions.toast
 
 
 /**
@@ -86,7 +85,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchDefaultCar()
         if (Build.VERSION.SDK_INT >= 33) {
             attemptToRequestNotificationPermission()
         } else {
@@ -118,11 +116,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         true
                     }
                     R.id.action_settings -> {
-                        toast("Settings!") // TODO: Implement when ready
-                        true
-                    }
-                    R.id.action_delete_car -> {
-                        showDeleteCarConfirmationDialog()
+                        navigateToSettingsFragment()
                         true
                     }
                     R.id.action_add_component -> {
@@ -212,23 +206,15 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         dialog.show()
     }
 
-    private fun showDeleteCarConfirmationDialog() =
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle(R.string.dialog_delete_car_title)
-            setNegativeButton(R.string.no) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.yes) { dialog, _ ->
-                viewModel.deleteCarData()
-                dialog.dismiss()
-            }
-        }.create().show()
-
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
     )
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
+
+    private fun navigateToSettingsFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 }

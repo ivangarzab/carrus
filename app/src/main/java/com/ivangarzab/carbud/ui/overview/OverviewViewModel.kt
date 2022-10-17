@@ -7,10 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
+import androidx.lifecycle.viewModelScope
+import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
 import com.ivangarzab.carbud.prefs
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -31,12 +34,12 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     var datesInMillis: Pair<Long, Long> = Pair(0, 0)
 
-    fun fetchDefaultCar() = carRepository.getDefaultCar()?.let {
-        updateCarState(it)
-    }
-
-    fun deleteCarData() = carRepository.deleteDefaultCar().also {
-        updateCarState(null)
+    init {
+        viewModelScope.launch {
+            carRepository.observeCarData().collect {
+                updateCarState(it)
+            }
+        }
     }
 
     fun verifyServiceData(

@@ -55,7 +55,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         } ?: Log.v(TAG, "No past due dates found for today")
     }
 
-    private fun fetchCarData(): Car? = carRepository.getDefaultCar()
+    private fun fetchCarData(): Car? = carRepository.fetchCarData()
 
     private fun filterPastDueServices(serviceList: List<Service>): List<Service> =
         serviceList.filter { it.isPastDue() }

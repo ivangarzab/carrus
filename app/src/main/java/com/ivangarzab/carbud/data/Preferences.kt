@@ -17,6 +17,13 @@ class Preferences(context: Context) {
         Context.MODE_PRIVATE
     )
 
+    var darkMode: Boolean?
+        get() = when (sharedPreferences.contains(KEY_DARK_MODE)) {
+            true -> sharedPreferences.get(KEY_DARK_MODE, false)
+            false -> null
+        }
+        set(value) = sharedPreferences.set(KEY_DARK_MODE, value)
+
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
             true -> sharedPreferences.get(KEY_DEFAULT_CAR, Car.empty)
@@ -40,6 +47,7 @@ class Preferences(context: Context) {
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
+        private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
         private const val KEY_ALARM_INTENT_PAST_DUE = "alarm-past-due"
     }
