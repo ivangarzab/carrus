@@ -39,10 +39,6 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }
 
-    fun deleteCarData() = carRepository.deleteCarData().also {
-        updateCarState(null)
-    }
-
     fun verifyServiceData(
         name: String
     ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L

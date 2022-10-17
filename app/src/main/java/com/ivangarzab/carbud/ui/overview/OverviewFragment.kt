@@ -86,10 +86,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         navigateToSettingsFragment()
                         true
                     }
-                    R.id.action_delete_car -> {
-                        showDeleteCarConfirmationDialog()
-                        true
-                    }
                     R.id.action_add_component -> {
                         navigateToNewServiceBottomSheet()
                         true
@@ -161,18 +157,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
         dialog.show()
     }
-
-    private fun showDeleteCarConfirmationDialog() =
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle(R.string.dialog_delete_car_title)
-            setNegativeButton(R.string.no) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.yes) { dialog, _ ->
-                viewModel.deleteCarData()
-                dialog.dismiss()
-            }
-        }.create().show()
 
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
