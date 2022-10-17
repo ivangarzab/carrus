@@ -3,16 +3,14 @@ package com.ivangarzab.carbud.ui.create
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
-import com.ivangarzab.carbud.data.repositories.CarRepository
 import java.util.*
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class CreateViewModel : ViewModel() {
-
-    private val carRepository = CarRepository()
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 

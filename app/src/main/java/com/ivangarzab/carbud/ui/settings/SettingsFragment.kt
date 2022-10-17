@@ -1,16 +1,15 @@
 package com.ivangarzab.carbud.ui.settings
 
+import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
@@ -25,17 +24,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding: FragmentSettingsBinding by viewBinding()
 
+    private val viewModel: SettingsViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
         setupToolbar()
         setupViews()
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            Log.d("IGB", "Got new Car state: ${state.car ?: "null"}")
+            state.car?.let { car ->
+                binding.car = car
+            }
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         prefs.darkMode?.let {
-            Log.v("IGB", "onViewStateRestored: Setting dark mode toggle state to $it")
             binding.settingsDarkModeOption.settingsOptionToggle.isChecked = it
         }
     }
@@ -67,18 +74,41 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.apply {
             settingsDarkModeOption.settingsOptionToggle.apply {
                 setOnClickListener {
-                    Log.v("IGB", "Dark mode toggle was checked to: $isChecked")
-                    prefs.darkMode = isChecked
-                    setDefaultNightMode(isChecked)
+                    viewModel.onDarkModeToggleClicked(isChecked)
                 }
+            }
+            settingsDeleteCarOption.root.setOnClickListener {
+                showConfirmationDialog(
+                    title = getString(R.string.dialog_delete_car_title),
+                    onActionConfirmed = {
+                        viewModel.onDeleteCarDataClicked()
+                    }
+                )
+            }
+            settingsDeleteServicesOption.root.setOnClickListener {
+                showConfirmationDialog(
+                    title = getString(R.string.dialog_delete_services_title),
+                    onActionConfirmed = {
+                        viewModel.onDeleteServicesClicked()
+                    }
+                )
             }
         }
     }
 
-    private fun setDefaultNightMode(isNight: Boolean) {
-        when (isNight) {
-            true -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            false -> AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-        }
+    private fun showConfirmationDialog(
+        title: String,
+        onActionConfirmed: () -> Unit
+    ) {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(title)
+            setNegativeButton(R.string.no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton(R.string.yes) { dialog, _ ->
+                onActionConfirmed()
+                dialog.dismiss()
+            }
+        }.create().show()
     }
 }

@@ -21,7 +21,6 @@
     <string name="car_name">Car Name</string>
     <string name="add_new_car">Add New Car</string>
     <string name="add_new_car_capitalized">ADD NEW CAR</string>
-    <string name="dialog_delete_car_title">Delete car data?</string>
     <string name="menu_delete_car">Delete Car</string>
     <string name="menu_add_component">Add Component</string>
     <string name="no_services_scheduled">No services scheduled at this time</string>
@@ -37,6 +36,8 @@
     <string name="setting_delete_car_data_subtitle">You won\'t be able to get it back!</string>
     <string name="setting_delete_all_services_title">Delete all car services</string>
     <string name="setting_delete_all_services_subtitle">The car data will stay, but not its services</string>
+    <string name="dialog_delete_car_title">Delete car data?</string>
+    <string name="dialog_delete_services_title">Delete all services from car data?</string>
 
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>

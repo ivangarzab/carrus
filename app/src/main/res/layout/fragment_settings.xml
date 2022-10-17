@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        
+        <import
+            alias="View"
+            type="android.view.View"/>
+        <variable
+            name="car"
+            type="com.ivangarzab.carbud.data.Car" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +63,7 @@
                     android:id="@+id/settingsDivider"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="@color/silver"
+                    android:background="@color/platinum"
                     app:layout_constraintTop_toBottomOf="@+id/settingsDarkModeOption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -78,6 +83,7 @@
                     android:id="@+id/settingsDeleteServicesOption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:visibility="@{car.services.isEmpty() ? View.GONE : View.VISIBLE}"
                     app:title="@{@string/setting_delete_all_services_title}"
                     app:subtitle="@{@string/setting_delete_all_services_subtitle}"
                     app:showToggle="@{false}"
