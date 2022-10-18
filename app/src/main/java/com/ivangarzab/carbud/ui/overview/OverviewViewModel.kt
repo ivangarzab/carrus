@@ -5,14 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.ivangarzab.carbud.alarms
-import com.ivangarzab.carbud.carRepository
 import androidx.lifecycle.viewModelScope
-import com.ivangarzab.carbud.carRepository
+import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
-import com.ivangarzab.carbud.prefs
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -47,7 +44,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L
 
     fun onServiceCreated(service: Service) {
-        Log.d("IGB", "New Service created: $service")
+        Log.d(TAG, "New Service created: $service")
         prefs.addService(service)
         state.value?.car?.let {
             updateCarState(it.apply {
@@ -57,7 +54,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onServiceDeleted(service: Service) {
-        Log.d("IGB", "Service being deleted: $service")
+        Log.d(TAG, "Service being deleted: $service")
         prefs.deleteService(service)
         state.value?.car?.let {
             updateCarState(it.apply {

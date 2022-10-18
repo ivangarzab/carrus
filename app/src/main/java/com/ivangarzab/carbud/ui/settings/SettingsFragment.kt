@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
@@ -33,7 +34,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         setupViews()
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            Log.d("IGB", "Got new Car state: ${state.car ?: "null"}")
+            Log.d(TAG, "Got new Car state: ${state.car ?: "null"}")
             state.car?.let { car ->
                 binding.car = car
             }

@@ -60,7 +60,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
             state.car?.let {
-                Log.d("IGB", "Got new Car state: ${state.car}")
+                Log.d(TAG, "Got new Car state: ${state.car}")
                 if (state.notificationPermissionState && it.services.isNotEmpty()) {
                     viewModel.schedulePastDueAlarm()
                 }
