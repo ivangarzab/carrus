@@ -152,13 +152,20 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         }
                     }
             }
-            overviewContent.overviewContentServiceList.apply {
-                layoutManager = LinearLayoutManager(requireContext()).apply {
-                    orientation = RecyclerView.VERTICAL
-                }
-            }
             setAddCarClickListener { navigateToCreateFragment() }
             setAddComponentClickListener { navigateToNewServiceBottomSheet() }
+
+            // Content binding
+            overviewContent.apply {
+                overviewContentServiceList.apply {
+                    // Set up recycler view
+                    layoutManager = LinearLayoutManager(requireContext()).apply {
+                        orientation = RecyclerView.VERTICAL
+                    }
+                }
+                setSortByNameClickListener { viewModel.sortServicesByName() }
+                setSortByDateClickListener { viewModel.sortServicesByDate() }
+            }
         }
     }
 

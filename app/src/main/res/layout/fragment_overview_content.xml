@@ -11,6 +11,12 @@
         <variable
             name="car"
             type="com.ivangarzab.carbud.data.Car" />
+        <variable
+            name="sortByNameClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="sortByDateClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -27,7 +33,7 @@
                 android:id="@+id/overviewServicesLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="@dimen/base_8"
                 android:gravity="center"
                 android:text="@string/services"
                 android:textSize="@dimen/text_20"
@@ -38,11 +44,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:textColor="@color/black"/>
 
+            <TextView
+                android:id="@+id/overviewServiceNameLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_16"
+                android:padding="@dimen/base_4"
+                android:gravity="start|bottom"
+                android:text="@string/name"
+                android:textSize="@dimen/text_12"
+                android:textColor="?android:textColor"
+                android:textStyle="italic"
+                android:onClickListener="@{sortByNameClickListener}"
+                app:layout_constraintTop_toBottomOf="@+id/overviewServicesLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/overviewServiceDateLabel"
+                tools:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/overviewServiceDateLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_16"
+                android:padding="@dimen/base_4"
+                android:gravity="end|bottom"
+                android:text="@string/date"
+                android:textSize="@dimen/text_12"
+                android:textColor="?android:textColor"
+                android:textStyle="italic"
+                android:onClickListener="@{sortByDateClickListener}"
+                app:layout_constraintTop_toBottomOf="@+id/overviewServicesLabel"
+                app:layout_constraintStart_toEndOf="@id/overviewServiceNameLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/overviewContentServiceList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/overviewServicesLabel"
+                app:layout_constraintTop_toBottomOf="@+id/overviewServiceNameLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

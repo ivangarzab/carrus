@@ -67,6 +67,26 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         copy(notificationPermissionState = granted)
     }
 
+    fun sortServicesByName() {
+        state.value?.car?.let {car ->
+            updateCarState(
+                car.copy(
+                    services = car.services.sortedBy { it.name }
+                )
+            )
+        }
+    }
+
+    fun sortServicesByDate() {
+        state.value?.car?.let {car ->
+            updateCarState(
+                car.copy(
+                    services = car.services.sortedBy { it.dueDate }
+                )
+            )
+        }
+    }
+
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
 
