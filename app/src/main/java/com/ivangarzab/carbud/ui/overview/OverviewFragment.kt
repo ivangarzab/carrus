@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,13 +22,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
-import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.setLightStatusBar
 import com.ivangarzab.carbud.util.extensions.updateMargins
+import timber.log.Timber
 
 
 /**
@@ -50,7 +49,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             if (isGranted) {
                 viewModel.toggleNotificationPermissionState(isGranted)
             } else {
-                Log.d(TAG, "Notification permissions denied")
+                Timber.d("Notification permissions denied")
                 // TODO: Implement denial case
             }
         }
@@ -63,7 +62,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
             state.car?.let {
-                Log.d(TAG, "Got new Car state: ${state.car}")
+                Timber.d("Got new Car state: ${state.car}")
                 setLightStatusBar(false)
                 if (state.notificationPermissionState &&
                     it.services.isNotEmpty() &&
@@ -71,7 +70,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 ) {
                     viewModel.schedulePastDueAlarm()
                 } else {
-                    Log.v(TAG, "Alarm is already scheduled")
+                    Timber.v("Alarm is already scheduled")
                 }
 
                 binding.overviewContent.apply {
@@ -97,7 +96,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         if (Build.VERSION.SDK_INT >= 33) {
             attemptToRequestNotificationPermission()
         } else {
-            Log.v(TAG, "We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
+            Timber.v("We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
             viewModel.toggleNotificationPermissionState(true)
         }
     }
