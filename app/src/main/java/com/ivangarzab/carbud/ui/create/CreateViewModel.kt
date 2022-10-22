@@ -3,6 +3,7 @@ package com.ivangarzab.carbud.ui.create
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import java.util.*
@@ -21,7 +22,7 @@ class CreateViewModel : ViewModel() {
         year: String,
         licenseNo: String = "xxxxxx"
     ) {
-        Log.v("IGB", "Saving default car")
+        Log.v(TAG, "Saving default car")
         carRepository.saveCarData(Car(
             uid = UUID.randomUUID().toString(),
             nickname = nickname,

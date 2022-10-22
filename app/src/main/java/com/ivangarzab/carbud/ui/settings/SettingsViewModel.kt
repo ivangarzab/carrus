@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ivangarzab.carbud.TAG
+import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.prefs
@@ -38,26 +40,27 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
-        Log.v("IGB", "Dark mode toggle was checked to: $checked")
+        Log.v(TAG, "Dark mode toggle was checked to: $checked")
         prefs.darkMode = checked
         setDefaultNightMode(checked)
     }
 
     fun onDeleteCarDataClicked() {
-        Log.d("IGB", "Deleting car data")
+        Log.d(TAG, "Deleting car data")
         carRepository.deleteCarData()
     }
 
     fun onDeleteServicesClicked() {
         state.value?.car?.let {
             if (it.services.isNotEmpty()) {
-                Log.d("IGB", "Deleting all services from car data")
+                Log.d(TAG, "Deleting all services from car data")
                 val newCar = it.apply {
                     services = emptyList()
                 }
                 carRepository.saveCarData(newCar)
+                alarms.cancelPastDueAlarm() // Make sure to cancel any leftover alarms
             }
-        } ?: Log.v("IGB", "There are no services to delete from car data")
+        } ?: Log.v(TAG, "There are no services to delete from car data")
     }
 
     private fun setDefaultNightMode(isNight: Boolean) {

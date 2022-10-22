@@ -1,6 +1,7 @@
 package com.ivangarzab.carbud.data.repositories
 
 import android.util.Log
+import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.appScope
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.prefs
@@ -20,20 +21,20 @@ class CarRepository {
 
     fun saveCarData(car: Car) {
         prefs.defaultCar = car
-        Log.d("IGB", "Car was saved: $car")
+        Log.d(TAG, "Car was saved: $car")
         setCarDataChannel(fetchCarData())
     }
 
     fun deleteCarData() {
         prefs.defaultCar = null
-        Log.d("IGB", "Car was removed")
+        Log.d(TAG, "Car was removed")
         setCarDataChannel(fetchCarData())
     }
 
-    private fun fetchCarData(): Car? = prefs.defaultCar
+    fun fetchCarData(): Car? = prefs.defaultCar
 
     private fun setCarDataChannel(car: Car?) {
-        Log.d("IGB", "Setting Car data channel: $car")
+        Log.d(TAG, "Setting Car data channel: $car")
         appScope.launch {
             carDataChannel.value = car
         }
