@@ -60,6 +60,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            onSortingViews(when (state.serviceSortingType) {
+                SortingCallback.SortingType.NONE -> binding.overviewContent.overviewServiceSortNoneLabel
+                SortingCallback.SortingType.NAME -> binding.overviewContent.overviewServiceSortNameLabel
+                SortingCallback.SortingType.DATE -> binding.overviewContent.overviewServiceSortDateLabel
+            })
+
             binding.car = state.car
             state.car?.let {
                 Timber.d("Got new Car state: ${state.car}")
@@ -234,27 +240,25 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     override fun onSort(view: View, type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
-        viewModel.apply {
-            when (type) {
-                SortingCallback.SortingType.NONE -> resetServicesSort()
-                SortingCallback.SortingType.NAME -> sortServicesByName()
-                SortingCallback.SortingType.DATE -> sortServicesByDate()
-            }
-        }
-        processSortingViews(view)
+        viewModel.onSortingByType(type)
     }
 
-    private fun processSortingViews(current: View) {
-        ViewCompat.setBackgroundTintList(
-            current,
-            ContextCompat.getColorStateList(requireContext(), R.color.purple_200)
-        )
+    private fun onSortingViews(current: View) {
+        highlightSelectedSortingView(current)
         binding.overviewContent.apply {
             processSortingView(overviewServiceSortNoneLabel, current)
             processSortingView(overviewServiceSortNameLabel, current)
             processSortingView(overviewServiceSortDateLabel, current)
         }
     }
+
+    private fun highlightSelectedSortingView(view: View) = ViewCompat.setBackgroundTintList(
+        view,
+        ContextCompat.getColorStateList(
+            requireContext(),
+            R.color.purple_200
+        )
+    )
 
     private fun processSortingView(target: View, current: View) {
         if (target != current) ViewCompat.setBackgroundTintList(

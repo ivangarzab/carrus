@@ -21,6 +21,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class OverviewState(
         val car: Car? = null,
+        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
         val notificationPermissionState: Boolean = false
     ) : Parcelable
 
@@ -67,12 +68,23 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         copy(notificationPermissionState = granted)
     }
 
-    fun resetServicesSort() {
+    fun onSortingByType(type: SortingCallback.SortingType) {
+        when (type) {
+            SortingCallback.SortingType.NONE -> resetServicesSort()
+            SortingCallback.SortingType.NAME -> sortServicesByName()
+            SortingCallback.SortingType.DATE -> sortServicesByDate()
+        }
+        setState(state, savedState, STATE) {
+            copy(serviceSortingType = type)
+        }
+    }
+
+    private fun resetServicesSort() {
         Timber.v("Resetting services sorting")
         updateCarState(carRepository.fetchCarData())
     }
 
-    fun sortServicesByName() {
+    private fun sortServicesByName() {
         Timber.v("Sorting services by name")
         state.value?.car?.let {car ->
             updateCarState(
@@ -83,7 +95,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }
 
-    fun sortServicesByDate() {
+    private fun sortServicesByDate() {
         Timber.v("Sorting services by due date")
         state.value?.car?.let {car ->
             updateCarState(
