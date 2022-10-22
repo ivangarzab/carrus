@@ -54,11 +54,11 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         state.value?.car?.let {
             if (it.services.isNotEmpty()) {
                 Log.d(TAG, "Deleting all services from car data")
-                val newCar = it.apply {
+                val newCar = it.copy(
                     services = emptyList()
-                }
+                )
                 carRepository.saveCarData(newCar)
-                alarms.cancelPastDueAlarm() // Make sure to cancel any leftover alarms
+                alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
             }
         } ?: Log.v(TAG, "There are no services to delete from car data")
     }

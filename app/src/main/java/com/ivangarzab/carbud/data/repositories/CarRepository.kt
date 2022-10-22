@@ -19,24 +19,21 @@ class CarRepository {
 
     fun observeCarData(): Flow<Car?> = carDataChannel.asStateFlow()
 
+    fun fetchCarData(): Car? = prefs.defaultCar
+
     fun saveCarData(car: Car) {
         prefs.defaultCar = car
-        Log.d(TAG, "Car was saved: $car")
-        setCarDataChannel(fetchCarData())
+        Log.d(TAG, "Car data was saved")
+        setCarDataChannel(car)
     }
 
     fun deleteCarData() {
         prefs.defaultCar = null
-        Log.d(TAG, "Car was removed")
-        setCarDataChannel(fetchCarData())
+        Log.d(TAG, "Car data was removed")
+        setCarDataChannel(null)
     }
 
-    fun fetchCarData(): Car? = prefs.defaultCar
-
-    private fun setCarDataChannel(car: Car?) {
-        Log.d(TAG, "Setting Car data channel: $car")
-        appScope.launch {
-            carDataChannel.value = car
-        }
+    private fun setCarDataChannel(car: Car?) = appScope.launch {
+        carDataChannel.value = car
     }
 }
