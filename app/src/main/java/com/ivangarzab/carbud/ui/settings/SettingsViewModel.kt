@@ -1,13 +1,11 @@
 package com.ivangarzab.carbud.ui.settings
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
@@ -15,6 +13,7 @@ import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -40,27 +39,27 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
-        Log.v(TAG, "Dark mode toggle was checked to: $checked")
+        Timber.v("Dark mode toggle was checked to: $checked")
         prefs.darkMode = checked
         setDefaultNightMode(checked)
     }
 
     fun onDeleteCarDataClicked() {
-        Log.d(TAG, "Deleting car data")
+        Timber.d("Deleting car data")
         carRepository.deleteCarData()
     }
 
     fun onDeleteServicesClicked() {
         state.value?.car?.let {
             if (it.services.isNotEmpty()) {
-                Log.d(TAG, "Deleting all services from car data")
+                Timber.d("Deleting all services from car data")
                 val newCar = it.copy(
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
                 alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
             }
-        } ?: Log.v(TAG, "There are no services to delete from car data")
+        } ?: Timber.v("There are no services to delete from car data")
     }
 
     private fun setDefaultNightMode(isNight: Boolean) {

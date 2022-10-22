@@ -7,6 +7,7 @@ import com.ivangarzab.carbud.util.AlarmScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -36,7 +37,10 @@ open class App : Application() {
         appScope = CoroutineScope(
             appGlobalJob + Dispatchers.Default
         )
-
+        if (BuildConfig.BUILD_TYPE != "release") {
+            Timber.plant(Timber.DebugTree())
+            Timber.v("Timber seed has been planted")
+        }
     }
 
     companion object {

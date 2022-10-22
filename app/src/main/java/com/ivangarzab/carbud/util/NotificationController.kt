@@ -3,11 +3,10 @@ package com.ivangarzab.carbud.util
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
-import com.ivangarzab.carbud.TAG
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -41,7 +40,7 @@ class NotificationController(
         body: String,
         isLoading: Boolean
     ): Notification {
-        Log.d(TAG, "Showing progress bar notification: $isLoading")
+        Timber.d("Showing progress bar notification: $isLoading")
         return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DUE_DATE_ID).apply {
             setSmallIcon(NOTIFICATION_ICON_RES)
             priority = NotificationCompat.PRIORITY_LOW
@@ -59,7 +58,7 @@ class NotificationController(
     fun getReminderNotification(
         data: NotificationData
     ): Notification {
-        Log.d(TAG, "Showing reminder notification with data: $data")
+        Timber.d("Showing reminder notification with data: $data")
         return NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_DUE_DATE_ID).apply {
             setSmallIcon(NOTIFICATION_ICON_RES)
             priority = NotificationCompat.PRIORITY_DEFAULT

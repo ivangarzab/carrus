@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.SystemClock
-import android.util.Log
 import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.receivers.AlarmBroadcastReceiver
 import com.ivangarzab.carbud.util.extensions.isAbleToScheduleExactAlarms
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -27,7 +27,7 @@ class AlarmScheduler(
 
     fun schedulePastDueAlarm() {
         if (prefs.isAlarmPastDueActive) {
-            Log.v(TAG, "'PastDueService' alarm is already scheduled")
+            Timber.v("'PastDueService' alarm is already scheduled")
 //            return // skip dupes
             cancelPastDueAlarm()
         }
@@ -35,13 +35,13 @@ class AlarmScheduler(
         getPastDueAlarmPendingIntent()?.let {
             if (alarmManager.isAbleToScheduleExactAlarms()) {
                 prefs.isAlarmPastDueActive = true
-                Log.d(TAG, "Scheduling 'PastDue' alarm")
+                Timber.d("Scheduling 'PastDue' alarm")
                 setAlarmBroadcastReceiverEnableState(true)
                 scheduleDefaultDailyAlarm(it)
             } else {
-                Log.w(TAG, "Unable to schedule 'PastDue' alarm due to missing permissions")
+                Timber.w("Unable to schedule 'PastDue' alarm due to missing permissions")
             }
-        } ?: Log.w(TAG, "Unable to schedule 'PastDue' alarm for an unknown reason")
+        } ?: Timber.w("Unable to schedule 'PastDue' alarm for an unknown reason")
     }
 
     fun cancelPastDueAlarm() {
@@ -49,7 +49,7 @@ class AlarmScheduler(
         getPastDueAlarmPendingIntent()?.let {
             alarmManager.cancel(it)
             it.cancel()
-        } ?: Log.w(TAG, "Unable to cancel 'PastDue' alarm")
+        } ?: Timber.w("Unable to cancel 'PastDue' alarm")
         prefs.isAlarmPastDueActive = false
     }
 
@@ -77,7 +77,7 @@ class AlarmScheduler(
             AlarmManager.INTERVAL_DAY,
             alarmIntent
         )
-        Log.d(TAG, "Scheduled daily alarm at 7am")
+        Timber.d("Scheduled daily alarm at 7am")
     }
 
     private fun scheduleTestAlarm(alarmIntent: PendingIntent) {
@@ -87,7 +87,7 @@ class AlarmScheduler(
             TimeUnit.MINUTES.toMillis(1),
             alarmIntent
         )
-        Log.d(TAG, "Scheduled test alarm 15 seconds from now with an interval of a minute")
+        Timber.d("Scheduled test alarm 15 seconds from now with an interval of a minute")
     }
 
     private fun setAlarmBroadcastReceiverEnableState(enabled: Boolean) {

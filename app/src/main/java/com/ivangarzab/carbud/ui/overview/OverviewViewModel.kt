@@ -1,7 +1,6 @@
 package com.ivangarzab.carbud.ui.overview
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,7 @@ import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -44,7 +44,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L
 
     fun onServiceCreated(service: Service) {
-        Log.d(TAG, "New Service created: $service")
+        Timber.d("New Service created: $service")
         prefs.apply {
             addService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
@@ -52,7 +52,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onServiceDeleted(service: Service) {
-        Log.d(TAG, "Service being deleted: $service")
+        Timber.d("Service being deleted: $service")
         prefs.apply {
             deleteService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
