@@ -65,8 +65,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             state.car?.let {
                 Log.d(TAG, "Got new Car state: ${state.car}")
                 setLightStatusBar(false)
-                if (state.notificationPermissionState && it.services.isNotEmpty()) {
+                if (state.notificationPermissionState &&
+                    it.services.isNotEmpty() &&
+                    prefs.isAlarmPastDueActive.not()
+                ) {
                     viewModel.schedulePastDueAlarm()
+                } else {
+                    Log.v(TAG, "Alarm is already scheduled")
                 }
 
                 binding.overviewContent.apply {
@@ -77,8 +82,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                             onItemClicked = {
                                 // TODO: onItemClicked()
                             },
-                            onDeleteClicked = {
-                                viewModel.onServiceDeleted(it)
+                            onDeleteClicked = { service ->
+                                viewModel.onServiceDeleted(service)
                             }
                         )
                     }
