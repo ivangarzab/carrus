@@ -26,7 +26,9 @@ import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.setLightStatusBar
 
 
 /**
@@ -61,6 +63,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             binding.car = state.car
             state.car?.let {
                 Log.d(TAG, "Got new Car state: ${state.car}")
+                setLightStatusBar(false)
                 if (state.notificationPermissionState && it.services.isNotEmpty()) {
                     viewModel.schedulePastDueAlarm()
                 }
@@ -79,7 +82,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         )
                     }
                 }
-            }
+            } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }
 
