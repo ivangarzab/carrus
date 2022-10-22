@@ -7,7 +7,6 @@ import android.util.Log
 import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
-import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
 import com.ivangarzab.carbud.prefs
@@ -32,7 +31,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             Log.d(TAG, "We got an alarm intent with action: ${it.action}")
             when (it.action) {
                 INTENT_ACTION_BOOT_COMPLETED -> handleDeviceRebootAction()
-                AlarmScheduler.INTENT_ACTION_ALARM_PAST_DUE -> checkDueDates()
+                AlarmScheduler.INTENT_ACTION_ALARM_PAST_DUE -> handlePastDueAlarmIntent()
                 else -> "Unable to recognize alarm intent action"
             }
         }
@@ -43,22 +42,17 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             Log.d(TAG, "Rescheduling 'PastDue' alarm")
             alarms.schedulePastDueAlarm()
         } else {
-            Log.w(TAG, "Unable to find Past Due alarm Intent")
+            Log.w(TAG, "Unable to find 'PastDue' alarm Intent")
         }
     }
 
-    private fun checkDueDates() {
-        fetchCarData()?.let { car ->
+    private fun handlePastDueAlarmIntent() {
+        carRepository.fetchCarData()?.let { car ->
             processPastRepairDatesList(
                 filterPastDueServices(car.services)
             )
         } ?: Log.v(TAG, "No past due dates found for today")
     }
-
-    private fun fetchCarData(): Car? = carRepository.fetchCarData()
-
-    private fun filterPastDueServices(serviceList: List<Service>): List<Service> =
-        serviceList.filter { it.isPastDue() }
 
     private fun processPastRepairDatesList(pastDueServiceList: List<Service>) {
         pastDueServiceList.forEach {
@@ -74,6 +68,9 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             )
         )
     }
+
+    private fun filterPastDueServices(serviceList: List<Service>): List<Service> =
+        serviceList.filter { it.isPastDue() }
 
     companion object {
         private const val INTENT_ACTION_BOOT_COMPLETED: String = "android.intent.action.BOOT_COMPLETED"

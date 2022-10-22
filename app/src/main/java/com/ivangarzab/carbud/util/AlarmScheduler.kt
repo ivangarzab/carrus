@@ -9,6 +9,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.receivers.AlarmBroadcastReceiver
+import com.ivangarzab.carbud.util.extensions.isAbleToScheduleExactAlarms
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -29,15 +30,18 @@ class AlarmScheduler(
             Log.v(TAG, "'PastDueService' alarm is already scheduled")
 //            return // skip dupes
             cancelPastDueAlarm()
-            prefs.isAlarmPastDueActive = false
         }
 
         getPastDueAlarmPendingIntent()?.let {
-            prefs.isAlarmPastDueActive = true
-            Log.d(TAG, "Scheduling 'PastDue' alarm")
-            setAlarmBroadcastReceiverEnableState(true)
-            scheduleDefaultDailyAlarm(it)
-        } ?: Log.w(TAG, "Unable to schedule 'PastDue' alarm")
+            if (alarmManager.isAbleToScheduleExactAlarms()) {
+                prefs.isAlarmPastDueActive = true
+                Log.d(TAG, "Scheduling 'PastDue' alarm")
+                setAlarmBroadcastReceiverEnableState(true)
+                scheduleDefaultDailyAlarm(it)
+            } else {
+                Log.w(TAG, "Unable to schedule 'PastDue' alarm due to missing permissions")
+            }
+        } ?: Log.w(TAG, "Unable to schedule 'PastDue' alarm for an unknown reason")
     }
 
     fun cancelPastDueAlarm() {
@@ -46,6 +50,7 @@ class AlarmScheduler(
             alarmManager.cancel(it)
             it.cancel()
         } ?: Log.w(TAG, "Unable to cancel 'PastDue' alarm")
+        prefs.isAlarmPastDueActive = false
     }
 
     private fun getPastDueAlarmPendingIntent(): PendingIntent? {
@@ -63,7 +68,7 @@ class AlarmScheduler(
     }
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
-        alarmManager.setInexactRepeating(
+        alarmManager.setRepeating(
             AlarmManager.RTC,
             Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
@@ -72,11 +77,11 @@ class AlarmScheduler(
             AlarmManager.INTERVAL_DAY,
             alarmIntent
         )
-        Log.d(TAG, "Scheduled daily alarm at 9am")
+        Log.d(TAG, "Scheduled daily alarm at 7am")
     }
 
     private fun scheduleTestAlarm(alarmIntent: PendingIntent) {
-        alarmManager.setInexactRepeating(
+        alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             SystemClock.elapsedRealtime() + TimeUnit.SECONDS.toMillis(15), // 15 seconds from now
             TimeUnit.MINUTES.toMillis(1),

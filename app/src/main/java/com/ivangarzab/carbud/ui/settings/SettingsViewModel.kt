@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carbud.TAG
+import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.prefs
@@ -57,6 +58,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
                     services = emptyList()
                 }
                 carRepository.saveCarData(newCar)
+                alarms.cancelPastDueAlarm() // Make sure to cancel any leftover alarms
             }
         } ?: Log.v(TAG, "There are no services to delete from car data")
     }
