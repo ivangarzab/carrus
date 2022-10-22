@@ -72,18 +72,19 @@
                     android:id="@+id/settingsDeleteCarOption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:visibility="@{car == null ? View.GONE : View.VISIBLE}"
                     app:title="@{@string/setting_delete_car_data_title}"
                     app:subtitle="@{@string/setting_delete_car_data_subtitle}"
                     app:showToggle="@{false}"
                     app:layout_constraintTop_toBottomOf="@+id/settingsDivider"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <include layout="@layout/view_settings_option"
                     android:id="@+id/settingsDeleteServicesOption"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="@{car.services.isEmpty() ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{car == null || car.services.isEmpty() ? View.GONE : View.VISIBLE}"
                     app:title="@{@string/setting_delete_all_services_title}"
                     app:subtitle="@{@string/setting_delete_all_services_subtitle}"
                     app:showToggle="@{false}"

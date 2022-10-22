@@ -35,9 +35,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             Log.d(TAG, "Got new Car state: ${state.car ?: "null"}")
-            state.car?.let { car ->
-                binding.car = car
-            }
+            binding.car = state.car
         }
     }
 

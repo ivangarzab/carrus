@@ -45,21 +45,17 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceCreated(service: Service) {
         Log.d(TAG, "New Service created: $service")
-        prefs.addService(service)
-        state.value?.car?.let {
-            updateCarState(it.apply {
-                services = services.toMutableList().apply { add(service) }
-            })
+        prefs.apply {
+            addService(service)
+            defaultCar?.let { carRepository.saveCarData(it) }
         }
     }
 
     fun onServiceDeleted(service: Service) {
         Log.d(TAG, "Service being deleted: $service")
-        prefs.deleteService(service)
-        state.value?.car?.let {
-            updateCarState(it.apply {
-                services = services.toMutableList().apply { remove(service) }
-            })
+        prefs.apply {
+            deleteService(service)
+            defaultCar?.let { carRepository.saveCarData(it) }
         }
     }
 

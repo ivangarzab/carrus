@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
 import com.ivangarzab.carbud.databinding.ActivityMainBinding
+import com.ivangarzab.carbud.util.extensions.updateMargins
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, FULL_SCREEN)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = insets.bottom
-                }
+                view.updateMargins(
+                    bottom = insets.bottom
+                )
             }
             // Return the insets in order for this to keep being passed down to descendant views
             windowInsets

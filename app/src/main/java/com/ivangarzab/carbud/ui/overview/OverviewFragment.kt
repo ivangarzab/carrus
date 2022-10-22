@@ -26,7 +26,10 @@ import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.TAG
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.setLightStatusBar
+import com.ivangarzab.carbud.util.extensions.updateMargins
 
 
 /**
@@ -61,8 +64,14 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             binding.car = state.car
             state.car?.let {
                 Log.d(TAG, "Got new Car state: ${state.car}")
-                if (state.notificationPermissionState && it.services.isNotEmpty()) {
+                setLightStatusBar(false)
+                if (state.notificationPermissionState &&
+                    it.services.isNotEmpty() &&
+                    prefs.isAlarmPastDueActive.not()
+                ) {
                     viewModel.schedulePastDueAlarm()
+                } else {
+                    Log.v(TAG, "Alarm is already scheduled")
                 }
 
                 binding.overviewContent.apply {
@@ -73,13 +82,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                             onItemClicked = {
                                 // TODO: onItemClicked()
                             },
-                            onDeleteClicked = {
-                                viewModel.onServiceDeleted(it)
+                            onDeleteClicked = { service ->
+                                viewModel.onServiceDeleted(service)
                             }
                         )
                     }
                 }
-            }
+            } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }
 
@@ -98,9 +107,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             (requireActivity() as MainActivity).getBindingRoot()
         ) { _, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                binding.overviewToolbar.apply {
-                    updatePadding(top = insets.top)
-                }
+                binding.overviewToolbar.updateMargins(
+                    top = insets.top
+                )
             }
             WindowInsetsCompat.CONSUMED
         }
