@@ -94,7 +94,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/overviewToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="?attr/actionBarSize"
                     app:title="@{car.nickname.isEmpty() ? car.make + ' ' + car.model : car.nickname}"
                     app:titleMargin="16dp"
                     app:layout_collapseMode="pin"

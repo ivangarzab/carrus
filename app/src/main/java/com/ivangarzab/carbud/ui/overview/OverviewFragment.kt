@@ -29,6 +29,7 @@ import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.setLightStatusBar
+import com.ivangarzab.carbud.util.extensions.updateMargins
 
 
 /**
@@ -101,9 +102,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             (requireActivity() as MainActivity).getBindingRoot()
         ) { _, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                binding.overviewToolbar.apply {
-                    updatePadding(top = insets.top)
-                }
+                binding.overviewToolbar.updateMargins(
+                    top = insets.top
+                )
             }
             WindowInsetsCompat.CONSUMED
         }
