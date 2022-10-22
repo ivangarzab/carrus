@@ -67,7 +67,13 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         copy(notificationPermissionState = granted)
     }
 
+    fun resetServicesSort() {
+        Timber.v("Resetting services sorting")
+        updateCarState(carRepository.fetchCarData())
+    }
+
     fun sortServicesByName() {
+        Timber.v("Sorting services by name")
         state.value?.car?.let {car ->
             updateCarState(
                 car.copy(
@@ -78,6 +84,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun sortServicesByDate() {
+        Timber.v("Sorting services by due date")
         state.value?.car?.let {car ->
             updateCarState(
                 car.copy(

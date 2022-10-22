@@ -34,7 +34,7 @@ import timber.log.Timber
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewFragment : Fragment(R.layout.fragment_overview) {
+class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private val viewModel: OverviewViewModel by activityViewModels {
         SavedStateViewModelFactory(requireActivity().application, this)
@@ -157,14 +157,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
             // Content binding
             overviewContent.apply {
+                sortingCallback = this@OverviewFragment
                 overviewContentServiceList.apply {
                     // Set up recycler view
                     layoutManager = LinearLayoutManager(requireContext()).apply {
                         orientation = RecyclerView.VERTICAL
                     }
                 }
-                setSortByNameClickListener { viewModel.sortServicesByName() }
-                setSortByDateClickListener { viewModel.sortServicesByDate() }
             }
         }
     }
@@ -232,4 +231,42 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
+
+    override fun onSort(view: View, type: SortingCallback.SortingType) {
+        Timber.v("Got a sorting request with type=$type")
+        viewModel.apply {
+            when (type) {
+                SortingCallback.SortingType.NONE -> resetServicesSort()
+                SortingCallback.SortingType.NAME -> sortServicesByName()
+                SortingCallback.SortingType.DATE -> sortServicesByDate()
+            }
+        }
+        processSortingViews(view)
+    }
+
+    private fun processSortingViews(current: View) {
+        ViewCompat.setBackgroundTintList(
+            current,
+            ContextCompat.getColorStateList(requireContext(), R.color.purple_200)
+        )
+        binding.overviewContent.apply {
+            processSortingView(overviewServiceSortNoneLabel, current)
+            processSortingView(overviewServiceSortNameLabel, current)
+            processSortingView(overviewServiceSortDateLabel, current)
+        }
+    }
+
+    private fun processSortingView(target: View, current: View) {
+        if (target != current) ViewCompat.setBackgroundTintList(
+            target,
+            ContextCompat.getColorStateList(requireContext(), R.color.bridal_heath)
+        )
+    }
+}
+
+interface SortingCallback {
+    enum class SortingType {
+        NONE, NAME, DATE
+    }
+    fun onSort(view: View, type: SortingType)
 }
