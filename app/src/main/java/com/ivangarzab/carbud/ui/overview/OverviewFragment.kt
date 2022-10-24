@@ -238,7 +238,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 
-    override fun onSort(view: View, type: SortingCallback.SortingType) {
+    override fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
         viewModel.onSortingByType(type)
     }
@@ -266,11 +266,4 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             ContextCompat.getColorStateList(requireContext(), R.color.bridal_heath)
         )
     }
-}
-
-interface SortingCallback {
-    enum class SortingType {
-        NONE, NAME, DATE
-    }
-    fun onSort(view: View, type: SortingType)
 }

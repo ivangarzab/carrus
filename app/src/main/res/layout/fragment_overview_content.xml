@@ -69,7 +69,7 @@
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
                     android:backgroundTint="@color/bridal_heath"
-                    android:onClick="@{(view) -> sortingCallback.onSort(view, SortingType.NONE)}"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.NONE)}"
                     tools:textColor="@color/black"/>
                 <TextView
                     android:id="@+id/overviewServiceSortNameLabel"
@@ -86,7 +86,7 @@
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
                     android:backgroundTint="@color/bridal_heath"
-                    android:onClick="@{(view) -> sortingCallback.onSort(view, SortingType.NAME)}"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.NAME)}"
                     tools:textColor="@color/black"/>
                 <TextView
                     android:id="@+id/overviewServiceSortDateLabel"
@@ -103,7 +103,7 @@
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
                     android:backgroundTint="@color/bridal_heath"
-                    android:onClick="@{(view) -> sortingCallback.onSort(view, SortingType.DATE)}"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.DATE)}"
                     tools:textColor="@color/black"/>
             </LinearLayout>
 
