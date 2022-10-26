@@ -74,6 +74,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val INTENT_ACTION_BOOT_COMPLETED: String = "android.intent.action.BOOT_COMPLETED"
-        private const val NOTIFICATION_ID_PAST_DUE: Int = 600
+        private const val NOTIFICATION_ID_PAST_DUE: Int = 300
     }
 }
