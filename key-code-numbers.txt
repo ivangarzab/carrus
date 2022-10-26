@@ -1,7 +1,8 @@
-100     : MainActivity
-101-199 : <protected>
-200-299 : Permissions
-300-399 : Alarms
+1       : MainActivity
+2-100   : <protected>
+101-199 : Permissions
+200-299 : Alarms
+300-399 : Notifications
 400-499 : <open>
 500-599 : <open>
 600-699 : <open>

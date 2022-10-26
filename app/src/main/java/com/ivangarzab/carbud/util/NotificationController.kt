@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.ivangarzab.carbud.MainActivity
+import com.ivangarzab.carbud.MainActivity.Companion.CODE_REQUEST_ACTIVITY_MAIN
 import com.ivangarzab.carbud.R
 import timber.log.Timber
 
@@ -71,7 +72,12 @@ class NotificationController(
 
     private fun getActivityIntent(): PendingIntent =
         Intent(context, MainActivity::class.java).let {
-            PendingIntent.getActivity(context, 1, it, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(
+                context,
+                CODE_REQUEST_ACTIVITY_MAIN,
+                it,
+                PendingIntent.FLAG_IMMUTABLE
+            )
         }
 
     companion object {

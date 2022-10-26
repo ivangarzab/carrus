@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val CODE_REQUEST_ACTIVITY_MAIN: Int = 1
         private const val FULL_SCREEN: Boolean = false
     }
 }
