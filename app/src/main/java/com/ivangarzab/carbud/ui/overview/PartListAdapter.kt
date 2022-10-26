@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.data.Service
+import com.ivangarzab.carbud.data.isPastDue
 import com.ivangarzab.carbud.databinding.ItemComponentBinding
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -38,24 +39,23 @@ class PartListAdapter(
         with(holder) {
             with(services[position]) {
                 binding.componentItemName.text = this.name
-                val today = Calendar.getInstance().timeInMillis
                 binding.componentItemContentText.text = when (
-                    this.dueDate.timeInMillis > today
+                    this.isPastDue()
                 ) {
                     true -> {
+                        binding.componentItemContentText.setTextColor(Color.RED)
+                        binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
+                        "DUE"
+                    }
+                    false -> {
                         TypedValue().let {
                             theme.resolveAttribute(android.R.attr.textColor, it, true)
                             binding.componentItemContentText.setTextColor(it.data)
                         }
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
-                        (this.dueDate.timeInMillis - today).let { timeLeftInMillis ->
+                        (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"
                         }
-                    }
-                    false -> {
-                        binding.componentItemContentText.setTextColor(Color.RED)
-                        binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
-                        "DUE"
                     }
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }

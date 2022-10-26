@@ -1,18 +1,16 @@
 package com.ivangarzab.carbud.ui.create
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
-import com.ivangarzab.carbud.data.repositories.CarRepository
+import timber.log.Timber
 import java.util.*
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class CreateViewModel : ViewModel() {
-
-    private val carRepository = CarRepository()
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -23,8 +21,8 @@ class CreateViewModel : ViewModel() {
         year: String,
         licenseNo: String = "xxxxxx"
     ) {
-        Log.v("IGB", "Saving default car")
-        carRepository.saveCar(Car(
+        Timber.v("Saving default car")
+        carRepository.saveCarData(Car(
             uid = UUID.randomUUID().toString(),
             nickname = nickname,
             make = make,

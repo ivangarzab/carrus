@@ -1,12 +1,17 @@
 package com.ivangarzab.carbud.ui.overview
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,8 +24,11 @@ import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
+import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
-import com.ivangarzab.carbud.util.extensions.toast
+import com.ivangarzab.carbud.util.extensions.setLightStatusBar
+import com.ivangarzab.carbud.util.extensions.updateMargins
+import timber.log.Timber
 
 
 /**
@@ -34,6 +42,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
+    private val notificationPermissionRequestLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                viewModel.toggleNotificationPermissionState(isGranted)
+            } else {
+                Timber.d("Notification permissions denied")
+                // TODO: Implement denial case
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
@@ -42,7 +62,17 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.car = state.car
             state.car?.let {
-                Log.d("IGB", "Got new Car state: ${state.car}")
+                Timber.d("Got new Car state: ${state.car}")
+                setLightStatusBar(false)
+                if (state.notificationPermissionState &&
+                    it.services.isNotEmpty() &&
+                    prefs.isAlarmPastDueActive.not()
+                ) {
+                    viewModel.schedulePastDueAlarm()
+                } else {
+                    Timber.v("Alarm is already scheduled")
+                }
+
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
                         adapter = PartListAdapter(
@@ -51,19 +81,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                             onItemClicked = {
                                 // TODO: onItemClicked()
                             },
-                            onDeleteClicked = {
-                                viewModel.onServiceDeleted(it)
+                            onDeleteClicked = { service ->
+                                viewModel.onServiceDeleted(service)
                             }
                         )
                     }
                 }
-            }
+            } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchDefaultCar()
+        if (Build.VERSION.SDK_INT >= 33) {
+            attemptToRequestNotificationPermission()
+        } else {
+            Timber.v("We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
+            viewModel.toggleNotificationPermissionState(true)
+        }
     }
 
     private fun setupWindow() {
@@ -71,9 +106,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             (requireActivity() as MainActivity).getBindingRoot()
         ) { _, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                binding.overviewToolbar.apply {
-                    updatePadding(top = insets.top)
-                }
+                binding.overviewToolbar.updateMargins(
+                    top = insets.top
+                )
             }
             WindowInsetsCompat.CONSUMED
         }
@@ -89,11 +124,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         true
                     }
                     R.id.action_settings -> {
-                        toast("Settings!") // TODO: Implement when ready
-                        true
-                    }
-                    R.id.action_delete_car -> {
-                        showDeleteCarConfirmationDialog()
+                        navigateToSettingsFragment()
                         true
                     }
                     R.id.action_add_component -> {
@@ -139,6 +170,21 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             isVisible = visible
         }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun attemptToRequestNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED -> {
+                notificationPermissionRequestLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+            else -> viewModel.toggleNotificationPermissionState(true)
+        }
+    }
+
     private fun showCarDetailsDialog() {
         val car = viewModel.state.value?.car
         car ?: return
@@ -168,23 +214,15 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         dialog.show()
     }
 
-    private fun showDeleteCarConfirmationDialog() =
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle(R.string.dialog_delete_car_title)
-            setNegativeButton(R.string.no) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.yes) { dialog, _ ->
-                viewModel.deleteCarData()
-                dialog.dismiss()
-            }
-        }.create().show()
-
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
     )
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
+
+    private fun navigateToSettingsFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 }

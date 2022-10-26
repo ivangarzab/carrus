@@ -16,15 +16,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_delete_car"
-        android:orderInCategory="91"
-        android:title="@string/menu_delete_car"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_add_component"
         android:orderInCategory="200"
         android:title="@string/menu_add_component"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_add"/>
+        android:icon="@drawable/ic_add_white" />
 </menu>

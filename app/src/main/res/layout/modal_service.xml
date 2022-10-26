@@ -95,8 +95,8 @@
             android:layout_marginTop="@dimen/base_16"
             android:contentDescription="@string/label_icon"
             android:onClick="@{repairDateClickListener}"
-            android:src="@android:drawable/ic_menu_my_calendar"
-            app:tint="@color/silver"
+            android:src="@drawable/ic_calendar_today"
+            app:tint="@color/mark_color"
             app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
             app:layout_constraintStart_toEndOf="@id/serviceModalRepairDateField"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -127,8 +127,8 @@
             android:layout_marginTop="@dimen/base_16"
             android:contentDescription="@string/label_icon"
             android:onClick="@{dueDateClickListener}"
-            android:src="@android:drawable/ic_menu_my_calendar"
-            app:tint="@color/silver"
+            android:src="@drawable/ic_calendar_event"
+            app:tint="@color/mark_color"
             app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
             app:layout_constraintStart_toEndOf="@id/serviceModalDueDateField"
             app:layout_constraintEnd_toEndOf="parent" />

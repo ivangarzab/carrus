@@ -5,14 +5,24 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 
 /**
+ * Should only be accessed by Repository, or other data handling classes.
+ *
  * Created by Ivan Garza Bermea.
  */
+@Suppress("ReplaceGetOrSet")
 class Preferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
         DEFAULT_SHARED_PREFS,
         Context.MODE_PRIVATE
     )
+
+    var darkMode: Boolean?
+        get() = when (sharedPreferences.contains(KEY_DARK_MODE)) {
+            true -> sharedPreferences.get(KEY_DARK_MODE, false)
+            false -> null
+        }
+        set(value) = sharedPreferences.set(KEY_DARK_MODE, value)
 
     var defaultCar: Car?
         get() = when (sharedPreferences.contains(KEY_DEFAULT_CAR)) {
@@ -31,9 +41,15 @@ class Preferences(context: Context) {
         }
     }
 
+    var isAlarmPastDueActive: Boolean
+        get() = sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, false)
+        set(value) = sharedPreferences.set(KEY_ALARM_INTENT_PAST_DUE, value)
+
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
+        private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
+        private const val KEY_ALARM_INTENT_PAST_DUE = "alarm-past-due"
     }
 }
 

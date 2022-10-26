@@ -1,28 +1,27 @@
 package com.ivangarzab.carbud.ui.overview
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.util.extensions.setState
-import com.ivangarzab.carbud.prefs
-import com.ivangarzab.carbud.data.repositories.CarRepository
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() {
 
-    //TODO: get this thru injection
-    private val carRepository = CarRepository()
-
     @Parcelize
     data class OverviewState(
-        val car: Car? = null
+        val car: Car? = null,
+        val notificationPermissionState: Boolean = false
     ) : Parcelable
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
@@ -32,12 +31,12 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     var datesInMillis: Pair<Long, Long> = Pair(0, 0)
 
-    fun fetchDefaultCar() = carRepository.getDefaultCar()?.let {
-        updateCarState(it)
-    }
-
-    fun deleteCarData() = carRepository.deleteDefaultCar().also {
-        updateCarState(null)
+    init {
+        viewModelScope.launch {
+            carRepository.observeCarData().collect {
+                updateCarState(it)
+            }
+        }
     }
 
     fun verifyServiceData(
@@ -45,23 +44,27 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L
 
     fun onServiceCreated(service: Service) {
-        Log.d("IGB", "New Service created: $service")
-        prefs.addService(service)
-        state.value?.car?.let {
-            updateCarState(it.apply {
-                services = services.toMutableList().apply { add(service) }
-            })
+        Timber.d("New Service created: $service")
+        prefs.apply {
+            addService(service)
+            defaultCar?.let { carRepository.saveCarData(it) }
         }
     }
 
     fun onServiceDeleted(service: Service) {
-        Log.d("IGB", "Service being deleted: $service")
-        prefs.deleteService(service)
-        state.value?.car?.let {
-            updateCarState(it.apply {
-                services = services.toMutableList().apply { remove(service) }
-            })
+        Timber.d("Service being deleted: $service")
+        prefs.apply {
+            deleteService(service)
+            defaultCar?.let { carRepository.saveCarData(it) }
         }
+    }
+
+    fun schedulePastDueAlarm() {
+        alarms.schedulePastDueAlarm()
+    }
+
+    fun toggleNotificationPermissionState(granted: Boolean) = setState(state, savedState, STATE) {
+        copy(notificationPermissionState = granted)
     }
 
     private fun updateCarState(car: Car?) =
