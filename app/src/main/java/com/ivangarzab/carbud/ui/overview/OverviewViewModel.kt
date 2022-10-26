@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
+import com.ivangarzab.carbud.data.serviceList
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -108,6 +109,14 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
+
+    fun setupEasterEggForTesting() {
+        state.value?.car?.let {
+            carRepository.saveCarData(it.copy(
+                services = serviceList
+            ))
+        }
+    }
 
     companion object {
         private const val STATE: String = "OverviewViewModel.STATE"

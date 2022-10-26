@@ -89,7 +89,7 @@ val serviceList: List<Service> = listOf(
     Service(
         "Oil Change",
         Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-        Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
+        Calendar.getInstance().apply { timeInMillis = 1672550100000 }),
     Service(
         "Window Wipes",
         Calendar.getInstance().apply { timeInMillis = 1662358975427 },
@@ -101,5 +101,5 @@ val serviceList: List<Service> = listOf(
     Service(
         "Rims",
         Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        Calendar.getInstance().apply { timeInMillis = 1662016020000 })
+        Calendar.getInstance().apply { timeInMillis = 1667276100000 })
 )

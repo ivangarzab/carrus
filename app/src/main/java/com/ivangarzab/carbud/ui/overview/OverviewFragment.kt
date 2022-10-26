@@ -170,6 +170,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         orientation = RecyclerView.VERTICAL
                     }
                 }
+                // EASTER EGG: Test Car Service data
+                overviewServicesLabel.setOnLongClickListener {
+                    viewModel.setupEasterEggForTesting()
+                    true
+                }
             }
         }
     }
