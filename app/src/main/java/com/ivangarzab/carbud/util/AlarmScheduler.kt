@@ -104,7 +104,7 @@ class AlarmScheduler(
     }
 
     companion object {
-        const val REQUEST_CODE_ALARM_PAST_DUE: Int = 100
+        const val REQUEST_CODE_ALARM_PAST_DUE: Int = 200
         const val INTENT_ACTION_ALARM_PAST_DUE: String = "alarm-past-due"
     }
 }

@@ -59,7 +59,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
         // TODO: Schedule Notification based on the Setting's constraints
         notificationController.notificationManager.notify(
-            600, notificationController.getReminderNotification(
+            NOTIFICATION_ID_PAST_DUE,
+            notificationController.getReminderNotification(
                 NotificationData(
                     title = "A Service is due!",
                     body = "Make sure to take care of that past due service."
@@ -73,5 +74,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val INTENT_ACTION_BOOT_COMPLETED: String = "android.intent.action.BOOT_COMPLETED"
+        private const val NOTIFICATION_ID_PAST_DUE: Int = 300
     }
 }

@@ -2,7 +2,6 @@ package com.ivangarzab.carbud
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val REQUEST_CODE: Int = 1
         private const val FULL_SCREEN: Boolean = false
     }
 }
