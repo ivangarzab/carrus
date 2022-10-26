@@ -34,7 +34,7 @@ import timber.log.Timber
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewFragment : Fragment(R.layout.fragment_overview) {
+class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private val viewModel: OverviewViewModel by activityViewModels {
         SavedStateViewModelFactory(requireActivity().application, this)
@@ -60,6 +60,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
+            onSortingViews(when (state.serviceSortingType) {
+                SortingCallback.SortingType.NONE -> binding.overviewContent.overviewServiceSortNoneLabel
+                SortingCallback.SortingType.NAME -> binding.overviewContent.overviewServiceSortNameLabel
+                SortingCallback.SortingType.DATE -> binding.overviewContent.overviewServiceSortDateLabel
+            })
+
             binding.car = state.car
             state.car?.let {
                 Timber.d("Got new Car state: ${state.car}")
@@ -152,13 +158,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                         }
                     }
             }
-            overviewContent.overviewContentServiceList.apply {
-                layoutManager = LinearLayoutManager(requireContext()).apply {
-                    orientation = RecyclerView.VERTICAL
-                }
-            }
             setAddCarClickListener { navigateToCreateFragment() }
             setAddComponentClickListener { navigateToNewServiceBottomSheet() }
+
+            // Content binding
+            overviewContent.apply {
+                sortingCallback = this@OverviewFragment
+                overviewContentServiceList.apply {
+                    // Set up recycler view
+                    layoutManager = LinearLayoutManager(requireContext()).apply {
+                        orientation = RecyclerView.VERTICAL
+                    }
+                }
+                // EASTER EGG: Test Car Service data
+                overviewServicesLabel.setOnLongClickListener {
+                    viewModel.setupEasterEggForTesting()
+                    true
+                }
+            }
         }
     }
 
@@ -225,4 +242,33 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
+
+    override fun onSort(type: SortingCallback.SortingType) {
+        Timber.v("Got a sorting request with type=$type")
+        viewModel.onSortingByType(type)
+    }
+
+    private fun onSortingViews(current: View) {
+        highlightSelectedSortingView(current)
+        binding.overviewContent.apply {
+            processSortingView(overviewServiceSortNoneLabel, current)
+            processSortingView(overviewServiceSortNameLabel, current)
+            processSortingView(overviewServiceSortDateLabel, current)
+        }
+    }
+
+    private fun highlightSelectedSortingView(view: View) = ViewCompat.setBackgroundTintList(
+        view,
+        ContextCompat.getColorStateList(
+            requireContext(),
+            R.color.purple_200
+        )
+    )
+
+    private fun processSortingView(target: View, current: View) {
+        if (target != current) ViewCompat.setBackgroundTintList(
+            target,
+            ContextCompat.getColorStateList(requireContext(), R.color.bridal_heath)
+        )
+    }
 }

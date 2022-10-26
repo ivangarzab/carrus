@@ -17,6 +17,11 @@
     <string name="no">No</string>
     <string name="settings">Settings</string>
 
+    <!-- Sorting -->
+    <string name="none">none</string>
+    <string name="name">name</string>
+    <string name="date">date</string>
+
     <!-- Overview -->
     <string name="car_name">Car Name</string>
     <string name="add_new_car">Add New Car</string>

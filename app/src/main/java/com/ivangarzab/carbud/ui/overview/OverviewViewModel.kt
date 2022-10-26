@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.data.Service
+import com.ivangarzab.carbud.data.serviceList
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -21,6 +22,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class OverviewState(
         val car: Car? = null,
+        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
         val notificationPermissionState: Boolean = false
     ) : Parcelable
 
@@ -67,8 +69,54 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         copy(notificationPermissionState = granted)
     }
 
+    fun onSortingByType(type: SortingCallback.SortingType) {
+        when (type) {
+            SortingCallback.SortingType.NONE -> resetServicesSort()
+            SortingCallback.SortingType.NAME -> sortServicesByName()
+            SortingCallback.SortingType.DATE -> sortServicesByDate()
+        }
+        setState(state, savedState, STATE) {
+            copy(serviceSortingType = type)
+        }
+    }
+
+    private fun resetServicesSort() {
+        Timber.v("Resetting services sorting")
+        updateCarState(carRepository.fetchCarData())
+    }
+
+    private fun sortServicesByName() {
+        Timber.v("Sorting services by name")
+        state.value?.car?.let {car ->
+            updateCarState(
+                car.copy(
+                    services = car.services.sortedBy { it.name }
+                )
+            )
+        }
+    }
+
+    private fun sortServicesByDate() {
+        Timber.v("Sorting services by due date")
+        state.value?.car?.let {car ->
+            updateCarState(
+                car.copy(
+                    services = car.services.sortedBy { it.dueDate }
+                )
+            )
+        }
+    }
+
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
+
+    fun setupEasterEggForTesting() {
+        state.value?.car?.let {
+            carRepository.saveCarData(it.copy(
+                services = serviceList
+            ))
+        }
+    }
 
     companion object {
         private const val STATE: String = "OverviewViewModel.STATE"

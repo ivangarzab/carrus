@@ -11,6 +11,12 @@
         <variable
             name="car"
             type="com.ivangarzab.carbud.data.Car" />
+        <import
+            alias="SortingType"
+            type="com.ivangarzab.carbud.ui.overview.SortingCallback.SortingType"/>
+        <variable
+            name="sortingCallback"
+            type="com.ivangarzab.carbud.ui.overview.SortingCallback" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -27,7 +33,7 @@
                 android:id="@+id/overviewServicesLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:padding="@dimen/base_8"
                 android:gravity="center"
                 android:text="@string/services"
                 android:textSize="@dimen/text_20"
@@ -38,11 +44,74 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:textColor="@color/black"/>
 
+            <LinearLayout
+                android:id="@+id/overviewServicesSortingLayout"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_16"
+                android:layout_marginEnd="@dimen/base_16"
+                app:layout_constraintTop_toBottomOf="@+id/overviewServicesLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/overviewServiceSortNoneLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_6"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:padding="@dimen/base_6"
+                    android:gravity="start|bottom"
+                    android:text="@string/none"
+                    android:textSize="@dimen/text_12"
+                    android:textColor="?android:textColor"
+                    android:textStyle="italic"
+                    android:background="@drawable/bg_round_corners"
+                    android:backgroundTint="@color/bridal_heath"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.NONE)}"
+                    tools:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/overviewServiceSortNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_6"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:padding="@dimen/base_6"
+                    android:gravity="start|bottom"
+                    android:text="@string/name"
+                    android:textSize="@dimen/text_12"
+                    android:textColor="?android:textColor"
+                    android:textStyle="italic"
+                    android:background="@drawable/bg_round_corners"
+                    android:backgroundTint="@color/bridal_heath"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.NAME)}"
+                    tools:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/overviewServiceSortDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_6"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:padding="@dimen/base_6"
+                    android:gravity="end|bottom"
+                    android:text="@string/date"
+                    android:textSize="@dimen/text_12"
+                    android:textColor="?android:textColor"
+                    android:textStyle="italic"
+                    android:background="@drawable/bg_round_corners"
+                    android:backgroundTint="@color/bridal_heath"
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.DATE)}"
+                    tools:textColor="@color/black"/>
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/overviewContentServiceList"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/overviewServicesLabel"
+                app:layout_constraintTop_toBottomOf="@+id/overviewServicesSortingLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
