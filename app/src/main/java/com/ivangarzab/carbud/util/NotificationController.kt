@@ -64,9 +64,9 @@ class NotificationController(
             setSmallIcon(NOTIFICATION_ICON_RES)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setAutoCancel(true)
-            setContentText(data.title)
+            setContentTitle(data.title)
             setContentText(data.body)
-            setContentIntent(getActivityIntent())
+            setContentIntent(data.contentIntent ?: getActivityIntent())
         }.build()
     }
 

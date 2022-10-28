@@ -3,6 +3,7 @@ package com.ivangarzab.carbud.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Service
@@ -54,19 +55,30 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun processPastRepairDatesList(pastDueServiceList: List<Service>) {
-        pastDueServiceList.forEach {
-            Timber.v("Service '${it.name}' is past due with date: ${it.dueDate.getFormattedDate()}")
-        }
-        // TODO: Schedule Notification based on the Setting's constraints
-        notificationController.notificationManager.notify(
-            NOTIFICATION_ID_PAST_DUE,
-            notificationController.getReminderNotification(
-                NotificationData(
-                    title = "A Service is due!",
-                    body = "Make sure to take care of that past due service."
+        when (pastDueServiceList.isEmpty()) {
+            true -> Timber.v("There's no past due services")
+            false -> {
+                pastDueServiceList.forEach {
+                    Timber.v("Service '${it.name}' is past due with date: ${it.dueDate.getFormattedDate()}")
+                }
+                // TODO: Schedule Notification based on the Setting's constraints
+                notificationController.notificationManager.notify(
+                    NOTIFICATION_ID_PAST_DUE,
+                    notificationController.getReminderNotification(
+                        NotificationData(
+                            title = context.getString(R.string.notification_past_due_title),
+                            body = when (pastDueServiceList.size > 1) {
+                                true -> context.getString(R.string.notification_past_due_service_multiple)
+                                false -> context.getString(
+                                    R.string.notification_past_due_service_one,
+                                    pastDueServiceList[0].name
+                                )
+                            }
+                        )
+                    )
                 )
-            )
-        )
+            }
+        }
     }
 
     private fun filterPastDueServices(serviceList: List<Service>): List<Service> =

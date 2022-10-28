@@ -141,7 +141,7 @@
                 android:layout_marginBottom="8dp"
                 android:autofillHints="false"
                 android:hint="@string/year"
-                android:inputType="text"
+                android:inputType="number"
                 app:layout_constraintBottom_toTopOf="@id/createLicenseInput"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

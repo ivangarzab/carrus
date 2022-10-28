@@ -76,7 +76,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 ) {
                     viewModel.schedulePastDueAlarm()
                 } else {
-                    Timber.v("Alarm is already scheduled")
+                    Timber.v("No need to schedule 'Past Due' alarm")
                 }
 
                 binding.overviewContent.apply {
