@@ -10,6 +10,9 @@
         <variable
             name="car"
             type="com.ivangarzab.carbud.data.Car" />
+        <variable
+            name="alarmTime"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,6 +92,18 @@
                     app:subtitle="@{@string/setting_delete_all_services_subtitle}"
                     app:showToggle="@{false}"
                     app:layout_constraintTop_toBottomOf="@+id/settingsDeleteCarOption"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <include layout="@layout/view_settings_option"
+                    android:id="@+id/settingsAlarmTimeOption"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:title="@{@string/setting_alarm_time_title}"
+                    app:subtitle="@{@string/setting_alarm_time_subtitle}"
+                    app:showToggle="@{false}"
+                    app:value="@{alarmTime}"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsDeleteServicesOption"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 

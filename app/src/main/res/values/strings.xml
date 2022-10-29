@@ -11,6 +11,7 @@
     <string name="services">Services</string>
     <string name="details">Details</string>
     <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
@@ -43,6 +44,8 @@
     <string name="setting_delete_all_services_subtitle">The car data will stay, but not its services</string>
     <string name="dialog_delete_car_title">Delete car data?</string>
     <string name="dialog_delete_services_title">Delete all services from car data?</string>
+    <string name="setting_alarm_time_title">Alarm time</string>
+    <string name="setting_alarm_time_subtitle">Value should be between 1 – 24</string>
 
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>

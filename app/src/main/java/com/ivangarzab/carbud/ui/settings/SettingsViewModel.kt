@@ -22,7 +22,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     @Parcelize
     data class SettingsState(
-        val car: Car? = null
+        val car: Car? = null,
+        val alarmTime: String? = null
     ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
@@ -31,6 +32,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     )
 
     init {
+        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "7")
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -69,8 +71,26 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }
 
+    fun onAlarmTimePicked(alarmTime: String) {
+        Timber.d("Alarm time reset to: ${getTimeString(alarmTime.toInt())}")
+        prefs.alarmPastDueTime = alarmTime.toInt()
+        updateAlarmTimeState(alarmTime)
+    }
+
+    fun getTimeString(hour: Int): String = "$hour:00 ${
+        when (hour) {
+            in 1..12 -> "AM"
+            in 13..24 -> "PM"
+            else -> ""
+        }
+    }"
+
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
+
+    private fun updateAlarmTimeState(alarmTime: String) {
+        setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
+    }
 
     companion object {
         private const val STATE: String = "SettingsViewModel.STATE"
