@@ -72,7 +72,11 @@ class AlarmScheduler(
             AlarmManager.RTC,
             Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, 7) // today at 7am
+                set(Calendar.MINUTE, 0)
+                set(
+                    Calendar.HOUR_OF_DAY,
+                    prefs.alarmPastDueTime ?: 7 // 7am is the default
+                )
             }.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             alarmIntent
