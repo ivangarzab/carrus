@@ -11,6 +11,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.ivangarzab.carbud.BuildConfig
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
@@ -40,6 +41,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 alarmTime = viewModel.getTimeString(
                     state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
                 )
+                versionNumber = "v${BuildConfig.VERSION_NAME}"
             }
         }
     }
@@ -59,6 +61,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 binding.settingsAppBarLayout.apply {
                     updatePadding(top = insets.top)
                 }
+                binding.settingsVersionNumber.updatePadding(
+                    bottom = insets.bottom
+                )
             }
             WindowInsetsCompat.CONSUMED
         }
