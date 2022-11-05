@@ -42,14 +42,24 @@ class Preferences(context: Context) {
     }
 
     var isAlarmPastDueActive: Boolean
-        get() = sharedPreferences.get(KEY_ALARM_INTENT_PAST_DUE, false)
-        set(value) = sharedPreferences.set(KEY_ALARM_INTENT_PAST_DUE, value)
+        get() = sharedPreferences.get(KEY_ALARM_PAST_DUE_INTENT, false)
+        set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_INTENT, value)
+
+    var alarmPastDueTime: Int?
+        get() = sharedPreferences.get(KEY_ALARM_PAST_DUE_TIME, -1).let {
+            when (it) {
+                in 1..24 -> it
+                else -> null
+            }
+        }
+        set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
         private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
-        private const val KEY_ALARM_INTENT_PAST_DUE = "alarm-past-due"
+        private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
+        private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
     }
 }
 

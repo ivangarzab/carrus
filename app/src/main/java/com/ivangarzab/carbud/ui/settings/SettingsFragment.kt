@@ -3,14 +3,15 @@ package com.ivangarzab.carbud.ui.settings
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.NumberPicker
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.ivangarzab.carbud.BuildConfig
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
@@ -35,7 +36,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             Timber.d("Got new Car state: ${state.car ?: "null"}")
-            binding.car = state.car
+            binding.apply {
+                car = state.car
+                alarmTime = viewModel.getTimeString(
+                    state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
+                )
+                versionNumber = "v${BuildConfig.VERSION_NAME}"
+            }
         }
     }
 
@@ -54,6 +61,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 binding.settingsAppBarLayout.apply {
                     updatePadding(top = insets.top)
                 }
+                binding.settingsVersionNumber.updatePadding(
+                    bottom = insets.bottom
+                )
             }
             WindowInsetsCompat.CONSUMED
         }
@@ -92,7 +102,37 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     }
                 )
             }
+
+            settingsAlarmTimeOption.root.setOnClickListener {
+                showNumberPickerDialog { numberPicked ->
+                    viewModel.onAlarmTimePicked(numberPicked)
+                }
+            }
         }
+    }
+
+    private fun showNumberPickerDialog(
+        onNumberPicked: (String) -> Unit
+    ) {
+        val numberPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 23
+            displayedValues = arrayOf(
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
+                "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+            )
+            value = (prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME) - 1
+        }
+        AlertDialog.Builder(requireContext()).apply {
+            setView(numberPicker)
+            setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton(R.string.submit) { dialog, _ ->
+                onNumberPicked(numberPicker.displayedValues[numberPicker.value])
+                dialog.dismiss()
+            }
+        }.create().show()
     }
 
     private fun showConfirmationDialog(
@@ -109,5 +149,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
         }.create().show()
+    }
+
+    companion object {
+        private const val DEFAULT_ALARM_TIME: Int = 7
     }
 }
