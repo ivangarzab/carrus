@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="modal_design_margin_base">@dimen/base_24</dimen>
+    <dimen name="modal_design_margin_small">@dimen/base_16</dimen>
+    <dimen name="modal_design_margin_min">@dimen/base_8</dimen>
+    <dimen name="modal_design_margin_unit">@dimen/base_4</dimen>
+
+    <!-- raw base dimens -->
+    <dimen name="base_0">0dp</dimen>
+    <dimen name="base_1">1dp</dimen>
+    <dimen name="base_4">4dp</dimen>
+    <dimen name="base_6">6dp</dimen>
+    <dimen name="base_8">8dp</dimen>
+    <dimen name="base_12">12dp</dimen>
+    <dimen name="base_16">16dp</dimen>
+    <dimen name="base_24">24dp</dimen>
+    <dimen name="base_32">32dp</dimen>
+    <dimen name="base_42">42dp</dimen>
+
+    <!-- raw text dimens -->
+    <dimen name="text_12">12sp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_20">20sp</dimen>
+</resources>

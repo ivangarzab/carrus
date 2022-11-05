@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">CarBud</string>
+
+    <!-- General -->
+    <string name="make">Make</string>
+    <string name="model">Model</string>
+    <string name="nickname">Nickname</string>
+    <string name="year">Year</string>
+    <string name="license_no">License No.</string>
+    <string name="color">Color</string>
+    <string name="services">Services</string>
+    <string name="details">Details</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="settings">Settings</string>
+
+    <!-- Sorting -->
+    <string name="none">none</string>
+    <string name="name">name</string>
+    <string name="date">date</string>
+
+    <!-- Overview -->
+    <string name="car_name">Car Name</string>
+    <string name="add_new_car">Add New Car</string>
+    <string name="add_new_car_capitalized">ADD NEW CAR</string>
+    <string name="menu_delete_car">Delete Car</string>
+    <string name="menu_add_component">Add Component</string>
+    <string name="no_services_scheduled">No services scheduled at this time</string>
+
+    <!-- Create/Edit -->
+    <string name="create_title">Add a new Car</string>
+    <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
+
+    <!-- Settings -->
+    <string name="setting_dark_mode_title">Dark mode</string>
+    <string name="setting_dark_mode_subtitle">Toggle between light and dark themes</string>
+    <string name="setting_delete_car_data_title">Delete car data</string>
+    <string name="setting_delete_car_data_subtitle">You won\'t be able to get it back!</string>
+    <string name="setting_delete_all_services_title">Delete all car services</string>
+    <string name="setting_delete_all_services_subtitle">The car data will stay, but not its services</string>
+    <string name="dialog_delete_car_title">Delete car data?</string>
+    <string name="dialog_delete_services_title">Delete all services from car data?</string>
+    <string name="setting_alarm_time_title">Alarm time</string>
+    <string name="setting_alarm_time_subtitle">Value should be between 1 – 24</string>
+
+    <!-- Content Description -->
+    <string name="label_artwork">Artwork</string>
+    <string name="label_icon">Icon</string>
+    <string name="label_button">Button</string>
+
+    <!-- Modal: Details -->
+    <string name="tire_pressure">Tire Pressure:</string>
+    <string name="total_miles">Total Miles:</string>
+    <string name="miles_per_gallon">Miles per Gallon:</string>
+
+    <!-- Modal: Service -->
+    <string name="new_service">New Service</string>
+    <string name="service_name">Service name</string>
+    <string name="repair_date">Repair date</string>
+    <string name="due_date">Due date</string>
+    <string name="service_date_format">%1$d/%2$d/%3$d</string>
+
+    <!-- Notifications -->
+    <string name="notification_past_due_title">You have past due services!</string>
+    <string name="notification_past_due_service_one">Remember that the service \'%s\' is past due.</string>
+    <string name="notification_past_due_service_multiple">There are two or more services that are past due.</string>
+</resources>

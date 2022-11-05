@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import
+            alias="View"
+            type="android.view.View"/>
+        <variable
+            name="car"
+            type="com.ivangarzab.carbud.data.Car" />
+        <variable
+            name="alarmTime"
+            type="String" />
+        <variable
+            name="versionNumber"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingsRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/backgroundColor">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/settingsAppBarLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.CarBud.AppBarOverlay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/settingsToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/settings"
+                app:popupTheme="@style/Theme.CarBud.PopupOverlay"
+                tools:title="@string/settings"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/settingsContentRoot"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/settingsAppBarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <include
+                android:id="@+id/settingsDarkModeOption"
+                layout="@layout/view_settings_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showToggle="@{true}"
+                app:subtitle="@{@string/setting_dark_mode_subtitle}"
+                app:title="@{@string/setting_dark_mode_title}" />
+
+            <View
+                android:id="@+id/settingsDivider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/platinum" />
+
+            <include
+                android:id="@+id/settingsAlarmTimeOption"
+                layout="@layout/view_settings_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showToggle="@{false}"
+                app:subtitle="@{@string/setting_alarm_time_subtitle}"
+                app:title="@{@string/setting_alarm_time_title}"
+                app:value="@{alarmTime}" />
+
+            <View
+                android:id="@+id/settingsDivider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/platinum" />
+
+            <include
+                android:id="@+id/settingsDeleteServicesOption"
+                layout="@layout/view_settings_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{car == null || car.services.isEmpty() ? View.GONE : View.VISIBLE}"
+                app:showToggle="@{false}"
+                app:subtitle="@{@string/setting_delete_all_services_subtitle}"
+                app:title="@{@string/setting_delete_all_services_title}" />
+
+            <include
+                android:id="@+id/settingsDeleteCarOption"
+                layout="@layout/view_settings_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{car == null ? View.GONE : View.VISIBLE}"
+                app:showToggle="@{false}"
+                app:subtitle="@{@string/setting_delete_car_data_subtitle}"
+                app:title="@{@string/setting_delete_car_data_title}" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/settingsDividerVersionNumber"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/base_8"
+            android:background="@color/platinum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/settingsVersionNumber"/>
+
+        <TextView
+            android:id="@+id/settingsVersionNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@{versionNumber}"
+            android:textColor="?android:textColor"
+            android:textSize="@dimen/text_16"
+            android:textStyle="italic"
+            android:lines="1"
+            android:gravity="start"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:textColor="@color/black"
+            tools:text="v1.0.0"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

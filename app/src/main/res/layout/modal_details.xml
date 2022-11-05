@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="tirePressure"
+            type="String" />
+        <variable
+            name="milesTotal"
+            type="String" />
+        <variable
+            name="milesPerGallon"
+            type="String" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/detailsModalRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_dialog_insets_round_corners"
+        android:backgroundTint="?attr/backgroundColor"
+        android:layout_marginTop="@dimen/modal_design_margin_base"
+        android:layout_marginStart="@dimen/modal_design_margin_base"
+        android:layout_marginEnd="@dimen/modal_design_margin_base">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/details"
+            android:textSize="@dimen/text_18"
+            android:layout_marginTop="@dimen/modal_design_margin_base"
+            android:layout_marginStart="@dimen/modal_design_margin_base"
+            android:layout_marginEnd="@dimen/modal_design_margin_base"
+            android:layout_marginBottom="@dimen/modal_design_margin_base"
+            android:textColor="?android:textColor"
+            android:gravity="center"
+            tools:textColor="@color/black"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/modal_design_margin_base"
+            android:layout_marginEnd="@dimen/modal_design_margin_base"
+            android:layout_marginBottom="@dimen/modal_design_margin_min">
+            <TextView
+                android:id="@+id/detailsModalTirePressureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tire_pressure"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/detailsModalTirePressureValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/modal_design_margin_unit"
+                android:gravity="end"
+                android:text="@{tirePressure}"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailsModalTirePressureLabel"
+                app:layout_constraintEnd_toStartOf="@id/detailsModalTirePressureUnit"
+                tools:text="35"/>
+            <TextView
+                android:id="@+id/detailsModalTirePressureUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="psi"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/base_24"
+            android:layout_marginEnd="@dimen/base_24"
+            android:layout_marginBottom="@dimen/modal_design_margin_min">
+            <TextView
+                android:id="@+id/detailsModalTotalMilesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_miles"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/detailsModalTotalMilesValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/modal_design_margin_unit"
+                android:text="@{milesTotal}"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                android:gravity="end"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailsModalTotalMilesLabel"
+                app:layout_constraintEnd_toStartOf="@+id/detailsModalTotalMilesUnit"
+                tools:text="100,000"/>
+            <TextView
+                android:id="@+id/detailsModalTotalMilesUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="miles"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/modal_design_margin_base"
+            android:layout_marginEnd="@dimen/modal_design_margin_base">
+            <TextView
+                android:id="@+id/detailsModalMilesPerGallonLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/miles_per_gallon"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/detailsModalMilesPerGallonValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/modal_design_margin_unit"
+                android:gravity="end"
+                android:text="@{milesPerGallon}"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailsModalMilesPerGallonLabel"
+                app:layout_constraintEnd_toStartOf="@id/detailsModalMilesPerGallonUnit"
+                tools:text="35"/>
+            <TextView
+                android:id="@+id/detailsModalMilesPerGallonUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="miles/gal"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/detailsModalButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/modal_design_margin_small"
+            android:gravity="center"
+            android:elevation="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:text="@string/ok"
+            android:textColor="@color/mark_color"
+            android:background="@drawable/bg_button_state" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

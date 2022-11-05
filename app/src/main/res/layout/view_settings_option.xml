@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import
+            alias="View"
+            type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subtitle"
+            type="String" />
+        <variable
+            name="showToggle"
+            type="Boolean" />
+        <variable
+            name="value"
+            type="String" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/base_16"
+    android:paddingStart="@dimen/base_32"
+    android:paddingEnd="@dimen/base_32"
+    android:paddingBottom="@dimen/base_16"
+    android:clickable="true"
+    android:background="?selectableItemBackground">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/settingsOptionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_16"
+        android:text="@{title}"
+        android:textColor="?android:textColor"
+        android:textSize="@dimen/text_18"
+        android:lines="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/settingsOptionToggle"
+        app:layout_constraintBottom_toTopOf="@+id/settingsOptionSubtitle"
+        tools:text="Option title"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/settingsOptionSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_16"
+        android:text="@{subtitle}"
+        android:textColor="@color/silver"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settingsOptionTitle"
+        app:layout_constraintEnd_toStartOf="@+id/settingsOptionToggle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="This is a somewhat long subtitle for the settings option in order to test how it would be handled"/>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/settingsOptionToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="@{showToggle ? View.VISIBLE : View.INVISIBLE}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settingsOptionSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="invisible"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/settingsOptionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{value}"
+        android:textColor="?android:textColor"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:visibility="@{showToggle || value == null ? View.GONE : View.VISIBLE}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settingsOptionSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="7"
+        tools:visibility="invisible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
