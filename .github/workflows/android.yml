@@ -1,4 +1,4 @@
-name: Android CI
+name: android
 run-name: ${{ github.actor }} is running a 'build' workflow
 
 on:
