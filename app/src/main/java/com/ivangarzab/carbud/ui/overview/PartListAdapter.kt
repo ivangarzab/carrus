@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
 import com.ivangarzab.carbud.databinding.ItemComponentBinding
+import com.ivangarzab.carbud.prefs
+import com.ivangarzab.carbud.util.extensions.getShortenedDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -39,9 +41,7 @@ class PartListAdapter(
         with(holder) {
             with(services[position]) {
                 binding.componentItemName.text = this.name
-                binding.componentItemContentText.text = when (
-                    this.isPastDue()
-                ) {
+                binding.componentItemContentText.text = when (this.isPastDue()) {
                     true -> {
                         binding.componentItemContentText.setTextColor(Color.RED)
                         binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
@@ -54,7 +54,14 @@ class PartListAdapter(
                         }
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
                         (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
-                            "${TimeUnit.MILLISECONDS.toDays(timeLeftInMillis)} days"
+                            TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
+                                when (prefs.dueDateFormat) {
+                                    "due date" -> this.dueDate.getShortenedDate()
+                                    "weeks" -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
+                                    "months" -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                    else -> "$daysLeft days"
+                                }
+                            }
                         }
                     }
                 }
@@ -66,5 +73,8 @@ class PartListAdapter(
 
     override fun getItemCount(): Int = services.size
 
-
+    companion object {
+        private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
+        private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f
+    }
 }

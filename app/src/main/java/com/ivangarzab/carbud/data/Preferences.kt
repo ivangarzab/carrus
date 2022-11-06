@@ -54,12 +54,19 @@ class Preferences(context: Context) {
         }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
 
+    var dueDateFormat: String
+        get() = sharedPreferences.get(KEY_FORMAT_DUE_DATE, "").let {
+            it.takeIf { it.isNotBlank() } ?: "days"
+        }
+        set(value) = sharedPreferences.set(KEY_FORMAT_DUE_DATE, value)
+
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
         private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
         private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
+        private const val KEY_FORMAT_DUE_DATE = "format-due-date"
     }
 }
 

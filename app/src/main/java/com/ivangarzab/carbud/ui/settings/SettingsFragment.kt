@@ -42,6 +42,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
                 )
                 versionNumber = "v${BuildConfig.VERSION_NAME}"
+                dueDateStyle = state.dueDateStyle
             }
         }
     }
@@ -108,6 +109,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     viewModel.onAlarmTimePicked(numberPicked)
                 }
             }
+
+            settingsDueDateStyleOption.root.setOnClickListener {
+                showDueDateStylePickerDialog { optionPicked ->
+                    viewModel.onDueDateStylePicked(optionPicked)
+                }
+            }
         }
     }
 
@@ -117,10 +124,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val numberPicker = NumberPicker(requireContext()).apply {
             minValue = 0
             maxValue = 23
-            displayedValues = arrayOf(
-                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-                "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
-            )
+            displayedValues = viewModel.pickerOptionsAlarmTime
             value = (prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME) - 1
         }
         AlertDialog.Builder(requireContext()).apply {
@@ -130,6 +134,27 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
             setPositiveButton(R.string.submit) { dialog, _ ->
                 onNumberPicked(numberPicker.displayedValues[numberPicker.value])
+                dialog.dismiss()
+            }
+        }.create().show()
+    }
+
+    private fun showDueDateStylePickerDialog(
+        onStylePicked: (String) -> Unit
+    ) {
+        val optionPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 3
+            displayedValues = viewModel.pickerOptionsDueDateStyle
+            value = 0
+        }
+        AlertDialog.Builder(requireContext()).apply {
+            setView(optionPicker)
+            setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton(R.string.submit) { dialog, _ ->
+                onStylePicked(optionPicker.displayedValues[optionPicker.value])
                 dialog.dismiss()
             }
         }.create().show()

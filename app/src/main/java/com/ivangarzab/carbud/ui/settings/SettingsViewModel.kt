@@ -23,7 +23,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class SettingsState(
         val car: Car? = null,
-        val alarmTime: String? = null
+        val alarmTime: String? = null,
+        val dueDateStyle: String? = null
     ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
@@ -77,6 +78,13 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateAlarmTimeState(alarmTime)
     }
 
+    fun onDueDateStylePicked(option: String) {
+        Timber.d("Due Date style changed to: '$option'")
+        prefs.dueDateFormat = option
+        setState(state, savedState, STATE) { copy(dueDateStyle = option) }
+
+    }
+
     fun getTimeString(hour: Int): String = "$hour:00 ${
         when (hour) {
             in 1..12 -> "AM"
@@ -91,6 +99,14 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     private fun updateAlarmTimeState(alarmTime: String) {
         setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
     }
+
+    val pickerOptionsAlarmTime = arrayOf(
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
+        "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+    )
+    val pickerOptionsDueDateStyle = arrayOf(
+        "days", "weeks", "months", "due date"
+    )
 
     companion object {
         private const val STATE: String = "SettingsViewModel.STATE"

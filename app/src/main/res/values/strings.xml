@@ -46,6 +46,8 @@
     <string name="dialog_delete_services_title">Delete all services from car data?</string>
     <string name="setting_alarm_time_title">Alarm time</string>
     <string name="setting_alarm_time_subtitle">Value should be between 1 – 24</string>
+    <string name="settings_due_date_style_title">Due Date Format</string>
+    <string name="settings_due_date_style_subtitle">How do you want the due date style to be?</string>
 
     <!-- Content Description -->
     <string name="label_artwork">Artwork</string>
