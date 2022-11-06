@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
+import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     data class SettingsState(
         val car: Car? = null,
         val alarmTime: String? = null,
-        val dueDateStyle: String? = null
+        val dueDateStyle: DueDateFormat = DueDateFormat.DAYS
     ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
@@ -78,7 +79,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateAlarmTimeState(alarmTime)
     }
 
-    fun onDueDateStylePicked(option: String) {
+    fun onDueDateStylePicked(option: DueDateFormat) {
         Timber.d("Due Date style changed to: '$option'")
         prefs.dueDateFormat = option
         setState(state, savedState, STATE) { copy(dueDateStyle = option) }

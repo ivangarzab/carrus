@@ -95,7 +95,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     }
                 }
 
-                binding.overviewToolbarImage.setImageURI(Uri.parse(it.imageUri))
+                it.imageUri?.let { uri ->
+                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                }
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }

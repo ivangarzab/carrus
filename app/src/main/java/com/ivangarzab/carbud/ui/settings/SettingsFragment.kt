@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.BuildConfig
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
@@ -42,7 +43,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
                 )
                 versionNumber = "v${BuildConfig.VERSION_NAME}"
-                dueDateStyle = state.dueDateStyle
+                dueDateStyle = state.dueDateStyle.value
             }
         }
     }
@@ -112,7 +113,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             settingsDueDateStyleOption.root.setOnClickListener {
                 showDueDateStylePickerDialog { optionPicked ->
-                    viewModel.onDueDateStylePicked(optionPicked)
+                    viewModel.onDueDateStylePicked(DueDateFormat.get(optionPicked))
                 }
             }
         }

@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
 import com.ivangarzab.carbud.databinding.ItemComponentBinding
@@ -56,9 +57,9 @@ class PartListAdapter(
                         (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
                                 when (prefs.dueDateFormat) {
-                                    "due date" -> this.dueDate.getShortenedDate()
-                                    "weeks" -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
-                                    "months" -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                    DueDateFormat.DATE -> this.dueDate.getShortenedDate()
+                                    DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
+                                    DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
                                     else -> "$daysLeft days"
                                 }
                             }
