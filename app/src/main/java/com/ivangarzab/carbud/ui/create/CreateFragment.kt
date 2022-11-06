@@ -3,6 +3,9 @@ package com.ivangarzab.carbud.ui.create
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -16,6 +19,7 @@ import com.ivangarzab.carbud.databinding.FragmentCreateBinding
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.markRequired
 import com.ivangarzab.carbud.util.extensions.toast
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -26,11 +30,21 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private val binding: FragmentCreateBinding by viewBinding()
 
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
         setupToolbar()
         setupViews()
+
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+            it?.let { uri ->
+                Timber.d("Got image uri: $uri")
+                binding.createPreviewImage.setImageURI(uri)
+            } ?: Timber.d("No media selected")
+        }
+
         viewModel.onSubmit.observe(viewLifecycleOwner) { success ->
             if (success) findNavController().popBackStack()
         }
@@ -65,6 +79,11 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 binding.createModelInputLayout,
                 binding.createYearInputLayout
             ))
+            setImageClickListener {
+                pickMedia.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            }
             setUploadClickListener { toast("Coming Soon!") }
             setSubmitClickListener {
                 viewModel.verifyData(
