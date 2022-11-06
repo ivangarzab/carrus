@@ -40,10 +40,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             binding.apply {
                 car = state.car
                 alarmTime = viewModel.getTimeString(
-                    state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
+                    state.alarmTime?.toInt() ?: SettingsViewModel.DEFAULT_ALARM_TIME
                 )
                 versionNumber = "v${BuildConfig.VERSION_NAME}"
-                dueDateStyle = state.dueDateStyle.value
+                dueDateFormat = state.dueDateFormat.value
             }
         }
     }
@@ -111,9 +111,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 }
             }
 
-            settingsDueDateStyleOption.root.setOnClickListener {
-                showDueDateStylePickerDialog { optionPicked ->
-                    viewModel.onDueDateStylePicked(DueDateFormat.get(optionPicked))
+            settingsDueDateFormatOption.root.setOnClickListener {
+                showDueDateFormatPickerDialog { optionPicked ->
+                    viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
                 }
             }
         }
@@ -126,7 +126,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             minValue = 0
             maxValue = 23
             displayedValues = viewModel.pickerOptionsAlarmTime
-            value = (prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME) - 1
+            value = (prefs.alarmPastDueTime ?: SettingsViewModel.DEFAULT_ALARM_TIME) - 1
         }
         AlertDialog.Builder(requireContext()).apply {
             setView(numberPicker)
@@ -140,14 +140,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }.create().show()
     }
 
-    private fun showDueDateStylePickerDialog(
-        onStylePicked: (String) -> Unit
+    private fun showDueDateFormatPickerDialog(
+        onFormatPicked: (String) -> Unit
     ) {
         val optionPicker = NumberPicker(requireContext()).apply {
-            minValue = 0
-            maxValue = 3
-            displayedValues = viewModel.pickerOptionsDueDateStyle
-            value = 0
+            viewModel.pickerOptionsDueDateFormat.let { options ->
+                minValue = 0
+                maxValue = options.size - 1
+                displayedValues = options
+                value = if (options.contains(prefs.dueDateFormat.value)) {
+                    options.indexOf(prefs.dueDateFormat.value)
+                } else {
+                    0
+                }
+            }
         }
         AlertDialog.Builder(requireContext()).apply {
             setView(optionPicker)
@@ -155,7 +161,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
             setPositiveButton(R.string.submit) { dialog, _ ->
-                onStylePicked(optionPicker.displayedValues[optionPicker.value])
+                onFormatPicked(optionPicker.displayedValues[optionPicker.value])
                 dialog.dismiss()
             }
         }.create().show()
@@ -175,9 +181,5 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
         }.create().show()
-    }
-
-    companion object {
-        private const val DEFAULT_ALARM_TIME: Int = 7
     }
 }

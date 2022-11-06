@@ -25,7 +25,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     data class SettingsState(
         val car: Car? = null,
         val alarmTime: String? = null,
-        val dueDateStyle: DueDateFormat = DueDateFormat.DAYS
+        val dueDateFormat: DueDateFormat = DueDateFormat.DAYS
     ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
@@ -34,7 +34,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     )
 
     init {
-        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "7")
+        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "$DEFAULT_ALARM_TIME")
+        updateDueDateFormatState(prefs.dueDateFormat)
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -79,10 +80,10 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         updateAlarmTimeState(alarmTime)
     }
 
-    fun onDueDateStylePicked(option: DueDateFormat) {
-        Timber.d("Due Date style changed to: '$option'")
+    fun onDueDateFormatPicked(option: DueDateFormat) {
+        Timber.d("Due Date format changed to: '$option'")
         prefs.dueDateFormat = option
-        setState(state, savedState, STATE) { copy(dueDateStyle = option) }
+        updateDueDateFormatState(option)
 
     }
 
@@ -101,15 +102,20 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
     }
 
+    private fun updateDueDateFormatState(format: DueDateFormat) {
+        setState(state, savedState, STATE) { copy(dueDateFormat = format) }
+    }
+
     val pickerOptionsAlarmTime = arrayOf(
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
         "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
     )
-    val pickerOptionsDueDateStyle = arrayOf(
+    val pickerOptionsDueDateFormat = arrayOf(
         "days", "weeks", "months", "due date"
     )
 
     companion object {
+        const val DEFAULT_ALARM_TIME: Int = 7
         private const val STATE: String = "SettingsViewModel.STATE"
     }
 }

@@ -17,7 +17,7 @@
             name="versionNumber"
             type="String" />
         <variable
-            name="dueDateStyle"
+            name="dueDateFormat"
             type="String" />
     </data>
 
@@ -81,13 +81,14 @@
                 app:value="@{alarmTime}" />
 
             <include
-                android:id="@+id/settingsDueDateStyleOption"
+                android:id="@+id/settingsDueDateFormatOption"
                 layout="@layout/view_settings_option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:showToggle="@{false}"
                 app:title="@{@string/settings_due_date_style_title}"
-                app:subtitle="@{@string/settings_due_date_style_subtitle}" />
+                app:subtitle="@{@string/settings_due_date_style_subtitle}"
+                app:value="@{dueDateFormat}"/>
 
             <View
                 android:id="@+id/settingsDivider2"
