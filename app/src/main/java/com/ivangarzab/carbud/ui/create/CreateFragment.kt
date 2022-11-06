@@ -1,6 +1,8 @@
 package com.ivangarzab.carbud.ui.create
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -41,12 +43,19 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
                 Timber.d("Got image uri: $uri")
-                binding.createPreviewImage.setImageURI(uri)
+                viewModel.imageUri.postValue(uri.toString())
             } ?: Timber.d("No media selected")
         }
 
-        viewModel.onSubmit.observe(viewLifecycleOwner) { success ->
-            if (success) findNavController().popBackStack()
+        viewModel.apply {
+            onSubmit.observe(viewLifecycleOwner) { success ->
+                if (success) findNavController().popBackStack()
+            }
+            imageUri.observe(viewLifecycleOwner) {
+                it?.let { uri ->
+                    binding.createPreviewImage.setImageURI(Uri.parse(uri))
+                }
+            }
         }
     }
 
@@ -98,7 +107,13 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                             make = binding.createMakeInput.text.toString(),
                             model = binding.createModelInput.text.toString(),
                             year = binding.createYearInput.text.toString(),
-                            licenseNo = binding.createLicenseInput.text.toString()
+                            licenseNo = binding.createLicenseInput.text.toString(),
+                            imageUri = viewModel.imageUri.value?.apply {
+                                requireContext().contentResolver.takePersistableUriPermission(
+                                    Uri.parse(this),
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                )
+                            }
                         )
                     }
                 }

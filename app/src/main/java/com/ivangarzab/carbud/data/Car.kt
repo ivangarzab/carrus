@@ -1,7 +1,6 @@
 package com.ivangarzab.carbud.data
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import com.google.gson.Gson
 import com.ivangarzab.carbud.util.extensions.getFormattedDate
 import kotlinx.parcelize.Parcelize
@@ -22,7 +21,7 @@ data class Car(
     val totalMiles: String,
     val milesPerGallon: String,
     var services: List<Service>,
-    @DrawableRes val profileImage: Int
+    val imageUri: String? = null
 ) : Parcelable {
 
     fun toJson(): String = Gson().toJson(this)
@@ -35,7 +34,7 @@ data class Car(
                 "\nyear='$year'" +
                 "\nlicenseNo='$licenseNo'" +
                 "\nservices='$services'" +
-                "\nprofileImage=$profileImage" +
+                "\nimageUri=$imageUri" +
                 "\n)"
     }
 
@@ -50,8 +49,7 @@ data class Car(
             tirePressure = "",
             totalMiles = "",
             milesPerGallon = "",
-            services = emptyList(),
-            profileImage = 0
+            services = emptyList()
         )
         val default: Car = Car(
             uid = "123",
@@ -63,8 +61,7 @@ data class Car(
             tirePressure = "35",
             totalMiles = "99,999",
             milesPerGallon = "26",
-            services = serviceList,
-            profileImage = 0
+            services = serviceList
         )
     }
 }

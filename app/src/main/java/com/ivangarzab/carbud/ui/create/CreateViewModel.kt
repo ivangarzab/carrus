@@ -12,6 +12,8 @@ import java.util.*
  */
 class CreateViewModel : ViewModel() {
 
+    val imageUri: MutableLiveData<String?> = MutableLiveData(null)
+
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun submitData(
@@ -19,7 +21,8 @@ class CreateViewModel : ViewModel() {
         make: String,
         model: String,
         year: String,
-        licenseNo: String = "xxxxxx"
+        licenseNo: String = "xxxxxx",
+        imageUri: String? = null
     ) {
         Timber.v("Saving default car")
         carRepository.saveCarData(Car(
@@ -33,7 +36,7 @@ class CreateViewModel : ViewModel() {
             totalMiles = "",
             milesPerGallon = "",
             services = emptyList(),
-            profileImage = 0
+            imageUri = imageUri
         ))
         onSubmit.postValue(true)
     }

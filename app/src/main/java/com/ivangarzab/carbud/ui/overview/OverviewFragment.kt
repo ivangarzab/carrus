@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -93,6 +94,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         )
                     }
                 }
+
+                binding.overviewToolbarImage.setImageURI(Uri.parse(it.imageUri))
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }
