@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.data.Car
 import com.ivangarzab.carbud.databinding.FragmentCreateBinding
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.markRequired
@@ -88,6 +89,13 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 binding.createModelInputLayout,
                 binding.createYearInputLayout
             ))
+            createPreviewImage.setOnLongClickListener {
+                // TODO: EASTER EGG -- Delete before first alpha!
+                with(Car.default) {
+                    viewModel.submitData(nickname, make, model, year)
+                }
+                true
+            }
             setImageClickListener {
                 pickMedia.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)

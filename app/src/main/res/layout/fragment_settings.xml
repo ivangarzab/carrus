@@ -86,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:showToggle="@{false}"
-                app:title="@{@string/settings_due_date_style_title}"
-                app:subtitle="@{@string/settings_due_date_style_subtitle}"
+                app:title="@{@string/settings_due_date_format_title}"
+                app:subtitle="@{@string/settings_due_date_format_subtitle}"
                 app:value="@{dueDateFormat}"/>
 
             <View
