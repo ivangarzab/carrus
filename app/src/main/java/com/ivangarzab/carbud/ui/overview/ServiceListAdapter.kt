@@ -19,26 +19,26 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Ivan Garza Bermea.
  */
-class PartListAdapter(
+class ServiceListAdapter(
     private val theme: Resources.Theme,
     private val services: List<Service>,
     val onItemClicked: (Service) -> Unit,
     val onDeleteClicked: (Service) -> Unit
-) : RecyclerView.Adapter<PartListAdapter.PartListViewHolder>() {
+) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
-    inner class PartListViewHolder(val binding: ItemComponentBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ServiceListViewHolder(val binding: ItemComponentBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListViewHolder {
         ItemComponentBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         ).also {
-            return PartListViewHolder(it)
+            return ServiceListViewHolder(it)
         }
     }
 
-    override fun onBindViewHolder(holder: PartListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         with(holder) {
             with(services[position]) {
                 binding.componentItemName.text = this.name
@@ -56,11 +56,14 @@ class PartListAdapter(
                         binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
                         (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
-                                when (prefs.dueDateFormat) {
-                                    DueDateFormat.DATE -> this.dueDate.getShortenedDate()
-                                    DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
-                                    DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
-                                    else -> "$daysLeft days"
+                                when (daysLeft) {
+                                    0L -> "Tomorrow"
+                                    else -> when (prefs.dueDateFormat) {
+                                        DueDateFormat.DATE -> this.dueDate.getShortenedDate()
+                                        DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
+                                        DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                        else -> "$daysLeft days"
+                                    }
                                 }
                             }
                         }
