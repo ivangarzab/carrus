@@ -7,10 +7,15 @@ import java.util.*
  * Created by Ivan Garza Bermea.
  */
 fun Calendar.getFormattedDate(): String = SimpleDateFormat(
-    getPreferredDateFormat(),
+    "MMMM dd, yyyy",
     Locale.US
 ).let { format ->
     format.format(this.time)
 }
 
-fun Calendar.getPreferredDateFormat(): String = "MMMM dd, yyyy"
+fun Calendar.getShortenedDate(): String = SimpleDateFormat(
+    "MM/dd/yy",
+    Locale.US
+).let { format ->
+    format.format(this.time)
+}

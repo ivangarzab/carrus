@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carbud.BuildConfig
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
@@ -39,9 +40,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             binding.apply {
                 car = state.car
                 alarmTime = viewModel.getTimeString(
-                    state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
+                    state.alarmTime?.toInt() ?: SettingsViewModel.DEFAULT_ALARM_TIME
                 )
                 versionNumber = "v${BuildConfig.VERSION_NAME}"
+                dueDateFormat = state.dueDateFormat.value
             }
         }
     }
@@ -108,6 +110,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     viewModel.onAlarmTimePicked(numberPicked)
                 }
             }
+
+            settingsDueDateFormatOption.root.setOnClickListener {
+                showDueDateFormatPickerDialog { optionPicked ->
+                    viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
+                }
+            }
         }
     }
 
@@ -117,11 +125,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val numberPicker = NumberPicker(requireContext()).apply {
             minValue = 0
             maxValue = 23
-            displayedValues = arrayOf(
-                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-                "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
-            )
-            value = (prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME) - 1
+            displayedValues = viewModel.pickerOptionsAlarmTime
+            value = (prefs.alarmPastDueTime ?: SettingsViewModel.DEFAULT_ALARM_TIME) - 1
         }
         AlertDialog.Builder(requireContext()).apply {
             setView(numberPicker)
@@ -130,6 +135,33 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
             setPositiveButton(R.string.submit) { dialog, _ ->
                 onNumberPicked(numberPicker.displayedValues[numberPicker.value])
+                dialog.dismiss()
+            }
+        }.create().show()
+    }
+
+    private fun showDueDateFormatPickerDialog(
+        onFormatPicked: (String) -> Unit
+    ) {
+        val optionPicker = NumberPicker(requireContext()).apply {
+            viewModel.pickerOptionsDueDateFormat.let { options ->
+                minValue = 0
+                maxValue = options.size - 1
+                displayedValues = options
+                value = if (options.contains(prefs.dueDateFormat.value)) {
+                    options.indexOf(prefs.dueDateFormat.value)
+                } else {
+                    0
+                }
+            }
+        }
+        AlertDialog.Builder(requireContext()).apply {
+            setView(optionPicker)
+            setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton(R.string.submit) { dialog, _ ->
+                onFormatPicked(optionPicker.displayedValues[optionPicker.value])
                 dialog.dismiss()
             }
         }.create().show()
@@ -149,9 +181,5 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
         }.create().show()
-    }
-
-    companion object {
-        private const val DEFAULT_ALARM_TIME: Int = 7
     }
 }
