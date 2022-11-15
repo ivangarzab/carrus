@@ -75,7 +75,7 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onAlarmTimePicked(alarmTime: String) {
-        Timber.d("Alarm time reset to: ${getTimeString(alarmTime.toInt())}")
+        Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
         prefs.alarmPastDueTime = alarmTime.toInt()
         updateAlarmTimeState(alarmTime)
     }
