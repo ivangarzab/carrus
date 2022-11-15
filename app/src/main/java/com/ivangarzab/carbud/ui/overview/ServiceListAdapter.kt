@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
-import com.ivangarzab.carbud.databinding.ItemComponentBinding
+import com.ivangarzab.carbud.databinding.ItemServiceBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.extensions.getShortenedDate
 import java.util.*
@@ -26,10 +26,10 @@ class ServiceListAdapter(
     val onDeleteClicked: (Service) -> Unit
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
-    inner class ServiceListViewHolder(val binding: ItemComponentBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ServiceListViewHolder(val binding: ItemServiceBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListViewHolder {
-        ItemComponentBinding.inflate(
+        ItemServiceBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
