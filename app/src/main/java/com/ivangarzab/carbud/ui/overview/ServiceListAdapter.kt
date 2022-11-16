@@ -25,6 +25,7 @@ class ServiceListAdapter(
     private val theme: Resources.Theme,
     private val services: List<Service>,
     val onItemClicked: (Service) -> Unit,
+    val onEditClicked: (Service) -> Unit,
     val onDeleteClicked: (Service) -> Unit
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
@@ -80,6 +81,7 @@ class ServiceListAdapter(
                     it.root.setOnClickListener { onExpandToggle(binding, this) }
                     it.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
                     it.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
+                    it.serviceItemEditIcon.setOnClickListener { onEditClicked(this) }
                 }
             }
         }

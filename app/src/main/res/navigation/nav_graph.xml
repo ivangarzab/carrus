@@ -40,7 +40,13 @@
         android:id="@+id/newServiceModal"
         android:name="com.ivangarzab.carbud.ui.modals.NewServiceDialogFragment"
         android:label="dialog_new_service"
-        tools:layout="@layout/modal_service"/>
+        tools:layout="@layout/modal_service">
+        <argument
+            android:name="service"
+            app:argType="com.ivangarzab.carbud.data.Service"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </dialog>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.ivangarzab.carbud.ui.settings.SettingsFragment"

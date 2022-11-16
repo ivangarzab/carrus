@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.prefs
@@ -90,6 +91,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                                 // TODO: Go through the list of ServiceItemState's,
                                 //  and make sure there only always 1 expanded state at a time.
                             },
+                            onEditClicked = { navigateToEditServiceBottomSheet(it) },
                             onDeleteClicked = { service ->
                                 viewModel.onServiceDeleted(service)
                             }
@@ -240,6 +242,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
+    )
+
+    private fun navigateToEditServiceBottomSheet(service: Service) = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal(
+            service = service
+        )
     )
 
     private fun navigateToCreateFragment() = findNavController().navigate(

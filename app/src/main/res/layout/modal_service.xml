@@ -16,6 +16,9 @@
         <variable
             name="saveClickListener"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="data"
+            type="com.ivangarzab.carbud.ui.overview.ModalServiceState" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="text"
+                android:text="@{data.name}"
                 android:hint="@string/service_name"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"
@@ -75,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="date"
+                android:text="@{data.repairDate}"
                 android:hint="@string/repair_date"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"
@@ -108,6 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="date"
+                android:text="@{data.dueDate}"
                 android:hint="@string/due_date"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"
@@ -140,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="text"
+                android:text="@{data.brand}"
                 android:hint="@string/service_brand"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"
@@ -155,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="text"
+                android:text="@{data.type}"
                 android:hint="@string/service_type"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"
@@ -170,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:inputType="numberDecimal"
+                android:text="@{data.price}"
                 android:hint="@string/service_price"
                 android:autofillHints=""
                 android:textColorHint="@color/silver"

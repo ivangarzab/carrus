@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.databinding.ModalServiceBinding
+import com.ivangarzab.carbud.ui.overview.ModalServiceState
 import com.ivangarzab.carbud.util.extensions.dismissKeyboard
 import com.ivangarzab.carbud.util.extensions.toast
 import com.ivangarzab.carbud.ui.overview.OverviewViewModel
+import com.ivangarzab.carbud.util.extensions.getShortenedDate
 import java.util.*
 
 /**
@@ -27,6 +30,8 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
     }
 
     private lateinit var binding: ModalServiceBinding
+
+    private val args: NewServiceDialogFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +48,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        args.service?.let { fillInData(it) }
         binding.apply {
             setSaveClickListener {
                 val name = serviceModalNameField.text.toString()
@@ -73,6 +79,17 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                 showDueDatePickerDialog()
             }
         }
+    }
+
+    private fun fillInData(data: Service) {
+        binding.data = ModalServiceState(
+            name = data.name,
+            repairDate = data.repairDate.getShortenedDate(),
+            dueDate = data.dueDate.getShortenedDate(),
+            brand = data.brand ?: "",
+            type = data.type ?: "",
+            price = data.cost.toString()
+        )
     }
 
     private fun showRepairDatePickerDialog() =
