@@ -34,6 +34,7 @@ class ServiceListAdapter(
             parent,
             false
         ).also {
+            it.expanded = false
             return ServiceListViewHolder(it)
         }
     }
@@ -70,7 +71,9 @@ class ServiceListAdapter(
                     }
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }
-                binding.componentItemContentImage.setOnClickListener { onDeleteClicked(this) }
+                binding.componentItemContentImage.setOnClickListener {
+                    binding.expanded = binding.expanded?.not() ?: false
+                }
             }
         }
     }
