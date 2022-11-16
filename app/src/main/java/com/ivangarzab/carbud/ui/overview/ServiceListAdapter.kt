@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.data.isPastDue
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit
  * Created by Ivan Garza Bermea.
  */
 class ServiceListAdapter(
+    private val resources: Resources,
     private val theme: Resources.Theme,
     private val services: List<Service>,
     val onItemClicked: (Service) -> Unit,
@@ -42,38 +44,43 @@ class ServiceListAdapter(
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         with(holder) {
             with(services[position]) {
-                binding.serviceItemName.text = this.name
-                binding.serviceItemContentText.text = when (this.isPastDue()) {
-                    true -> {
-                        binding.serviceItemContentText.setTextColor(Color.RED)
-                        binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
-                        "DUE"
-                    }
-                    false -> {
-                        TypedValue().let {
-                            theme.resolveAttribute(android.R.attr.textColor, it, true)
-                            binding.serviceItemContentText.setTextColor(it.data)
+                binding.let {
+                    it.data = this
+                    it.serviceItemPrice.text = resources.getString(R.string.price_money, cost.toString())
+                    it.serviceItemRepairDate.text = repairDate.getShortenedDate()
+                    it.serviceItemContentText.text = when (this.isPastDue()) {
+                        true -> {
+                            binding.serviceItemContentText.setTextColor(Color.RED)
+                            binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
+                            "DUE"
                         }
-                        binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
-                        (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
-                            TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
-                                when (daysLeft) {
-                                    0L -> "Tomorrow"
-                                    else -> when (prefs.dueDateFormat) {
-                                        DueDateFormat.DATE -> this.dueDate.getShortenedDate()
-                                        DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
-                                        DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
-                                        else -> "$daysLeft days"
+                        false -> {
+                            TypedValue().let {
+                                theme.resolveAttribute(android.R.attr.textColor, it, true)
+                                binding.serviceItemContentText.setTextColor(it.data)
+                            }
+                            binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
+                            (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
+                                TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
+                                    when (daysLeft) {
+                                        0L -> "Tomorrow"
+                                        else -> when (prefs.dueDateFormat) {
+                                            DueDateFormat.DATE -> this.dueDate.getShortenedDate()
+                                            DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
+                                            DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                            else -> "$daysLeft days"
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                binding.root.setOnClickListener { onItemClicked(this) }
-                binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
-                binding.serviceItemContentImage.setOnClickListener {
-                    binding.expanded = binding.expanded?.not() ?: false
+
+                    it.root.setOnClickListener { onItemClicked(this) }
+                    it.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
+                    it.serviceItemContentImage.setOnClickListener {
+                        binding.expanded = binding.expanded?.not() ?: false
+                    }
                 }
             }
         }

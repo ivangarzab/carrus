@@ -83,6 +83,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
                         adapter = ServiceListAdapter(
+                            resources = requireContext().resources,
                             theme = requireContext().theme,
                             services = it.services,
                             onItemClicked = {

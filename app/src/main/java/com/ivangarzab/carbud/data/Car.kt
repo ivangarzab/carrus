@@ -87,19 +87,35 @@ fun Service.isPastDue(): Boolean = this.dueDate.timeInMillis < Calendar.getInsta
 
 val serviceList: List<Service> = listOf(
     Service(
-        "Oil Change",
-        Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-        Calendar.getInstance().apply { timeInMillis = 1672550100000 }),
+        name = "Oil Change",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1672550100000 },
+        brand = "Armor All",
+        type = "Synthetic",
+        cost = 79.99f
+    ),
     Service(
-        "Window Wipes",
-        Calendar.getInstance().apply { timeInMillis = 1662358975427 },
-        Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
+        name = "Window Wipes",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
+        brand = "Walmart",
+        type = "6''",
+        cost = 25.00f
+    ),
     Service(
-        "Tires",
-        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
+        name = "Tires",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 },
+        brand = "Michelin",
+        type = "24''",
+        cost = 500.69f
+    ),
     Service(
-        "Rims",
-        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        Calendar.getInstance().apply { timeInMillis = 1667276100000 })
+        name = "Rims",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
+        brand = "Auto Zone",
+        type = "24''",
+        cost = 420.00f
+    )
 )
