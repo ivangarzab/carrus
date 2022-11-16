@@ -87,7 +87,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                             theme = requireContext().theme,
                             services = it.services,
                             onItemClicked = {
-                                // TODO: onItemClicked()
+                                // TODO: Go through the list of ServiceItemState's,
+                                //  and make sure there only always 1 expanded state at a time.
                             },
                             onDeleteClicked = { service ->
                                 viewModel.onServiceDeleted(service)

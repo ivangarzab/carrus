@@ -30,6 +30,13 @@
             android:layout_marginStart="@dimen/base_8"
             android:layout_marginEnd="@dimen/base_8">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/serviceItemGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".62"/>
+
             <ImageView
                 android:id="@+id/serviceItemBackgroundImage"
                 android:layout_width="0dp"
@@ -42,7 +49,7 @@
 
             <TextView
                 android:id="@+id/serviceItemName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:layout_marginStart="@dimen/base_8"
@@ -52,24 +59,27 @@
                 android:textColor="?android:textColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/serviceItemGuideline"
                 tools:text="SERVICE"
                 tools:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/serviceItemContentText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
-                android:layout_marginEnd="@dimen/base_8"
+                android:layout_marginEnd="@dimen/base_4"
                 android:textColor="?android:textColor"
                 android:textSize="@dimen/text_18"
+                android:gravity="end"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/serviceItemContentImage"
+                app:layout_constraintStart_toEndOf="@+id/serviceItemGuideline"
+                app:layout_constraintEnd_toStartOf="@+id/serviceItemExpandIcon"
                 tools:text="169 days"
                 tools:textColor="@color/black"/>
 
             <ImageView
-                android:id="@+id/serviceItemContentImage"
+                android:id="@+id/serviceItemExpandIcon"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginTop="@dimen/base_8"
@@ -82,29 +92,19 @@
                 tools:src="@drawable/ic_arrow_drop_down"/>
 
             <TextView
-                android:id="@+id/serviceItemBrandName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/serviceItemDetails"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="@dimen/base_8"
-                android:text="@{data.brand}"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemExpandIcon"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Brand Name"
+                app:layout_constraintEnd_toStartOf="@+id/serviceItemGuideline"
+                app:layout_constraintBottom_toTopOf="@id/serviceItemBottomDivider"
+                tools:text="Brand Name and type of material"
                 tools:textColor="@color/black"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/base_2"
-                android:text="@{data.type}"
-                android:textSize="@dimen/text_16"
-                android:textColor="?android:textColor"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
-                app:layout_constraintStart_toEndOf="@id/serviceItemBrandName"
-                tools:text="material type"/>
 
             <TextView
                 android:id="@+id/serviceItemPrice"
@@ -114,7 +114,7 @@
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemExpandIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="$100.00"/>
 

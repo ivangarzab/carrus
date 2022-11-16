@@ -48,6 +48,7 @@ class ServiceListAdapter(
                     it.data = this
                     it.serviceItemPrice.text = resources.getString(R.string.price_money, cost.toString())
                     it.serviceItemRepairDate.text = repairDate.getShortenedDate()
+                    it.serviceItemDetails.text = resources.getString(R.string.service_details, brand, type)
                     it.serviceItemContentText.text = when (this.isPastDue()) {
                         true -> {
                             binding.serviceItemContentText.setTextColor(Color.RED)
@@ -76,14 +77,17 @@ class ServiceListAdapter(
                         }
                     }
 
-                    it.root.setOnClickListener { onItemClicked(this) }
+                    it.root.setOnClickListener { onExpandToggle(binding, this) }
+                    it.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
                     it.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
-                    it.serviceItemContentImage.setOnClickListener {
-                        binding.expanded = binding.expanded?.not() ?: false
-                    }
                 }
             }
         }
+    }
+
+    private fun onExpandToggle(binding: ItemServiceBinding, service: Service) {
+        binding.expanded = binding.expanded?.not() ?: false
+        onItemClicked(service)
     }
 
     override fun getItemCount(): Int = services.size

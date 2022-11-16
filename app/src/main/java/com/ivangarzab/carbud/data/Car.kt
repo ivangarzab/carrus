@@ -80,6 +80,9 @@ data class Service(
                 "\nname='$name'" +
                 "\nrepairDate='${repairDate.getFormattedDate()}'" +
                 "\ndueDate='${dueDate.getFormattedDate()}'" +
+                "\nbrand='$brand'" +
+                "\ntype='$type'" +
+                "\ncost='$cost'" +
                 "\n)"
 }
 
@@ -99,7 +102,7 @@ val serviceList: List<Service> = listOf(
         repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
         brand = "Walmart",
-        type = "6''",
+        type = "6'', long",
         cost = 25.00f
     ),
     Service(
@@ -114,8 +117,8 @@ val serviceList: List<Service> = listOf(
         name = "Rims",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
-        brand = "Auto Zone",
-        type = "24''",
+        brand = "Auto Zone Express",
+        type = "24'', black",
         cost = 420.00f
     )
 )
