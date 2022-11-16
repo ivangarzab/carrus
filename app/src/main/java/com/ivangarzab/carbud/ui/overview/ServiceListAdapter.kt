@@ -42,19 +42,19 @@ class ServiceListAdapter(
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         with(holder) {
             with(services[position]) {
-                binding.componentItemName.text = this.name
-                binding.componentItemContentText.text = when (this.isPastDue()) {
+                binding.serviceItemName.text = this.name
+                binding.serviceItemContentText.text = when (this.isPastDue()) {
                     true -> {
-                        binding.componentItemContentText.setTextColor(Color.RED)
-                        binding.componentItemContentText.setTypeface(null, Typeface.BOLD)
+                        binding.serviceItemContentText.setTextColor(Color.RED)
+                        binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
                         "DUE"
                     }
                     false -> {
                         TypedValue().let {
                             theme.resolveAttribute(android.R.attr.textColor, it, true)
-                            binding.componentItemContentText.setTextColor(it.data)
+                            binding.serviceItemContentText.setTextColor(it.data)
                         }
-                        binding.componentItemContentText.setTypeface(null, Typeface.NORMAL)
+                        binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
                         (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                             TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
                                 when (daysLeft) {
@@ -72,7 +72,7 @@ class ServiceListAdapter(
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }
                 binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
-                binding.componentItemContentImage.setOnClickListener {
+                binding.serviceItemContentImage.setOnClickListener {
                     binding.expanded = binding.expanded?.not() ?: false
                 }
             }
