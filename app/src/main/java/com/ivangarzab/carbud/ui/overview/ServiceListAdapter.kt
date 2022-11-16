@@ -47,7 +47,7 @@ class ServiceListAdapter(
             with(services[position]) {
                 binding.let {
                     it.data = this
-                    it.serviceItemPrice.text = resources.getString(R.string.price_money, cost.toString())
+                    it.serviceItemPrice.text = resources.getString(R.string.price_money, cost)
                     it.serviceItemRepairDate.text = repairDate.getShortenedDate()
                     it.serviceItemDetails.text = resources.getString(R.string.service_details, brand, type)
                     it.serviceItemContentText.text = when (this.isPastDue()) {

@@ -14,7 +14,7 @@
             name="dueDateClickListener"
             type="android.view.View.OnClickListener" />
         <variable
-            name="saveClickListener"
+            name="actionClickListener"
             type="android.view.View.OnClickListener" />
         <variable
             name="data"
@@ -36,14 +36,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/base_8"
                 android:gravity="center"
-                android:text="@string/new_service"
+                android:text="@{data == null || data.isEmpty() ? @string/new_service : @string/edit_service}"
                 android:textSize="@dimen/text_18"
                 android:textStyle="bold"
                 android:textColor="?android:textColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"/>
+                tools:textColor="@color/black"
+                tools:text="@string/new_service"/>
 
             <View
                 android:id="@+id/serviceModalGrabView"
@@ -205,15 +206,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
-                android:text="@string/save"
-                android:textColor="@color/silver"
+                android:text="@{data == null || data.isEmpty() ? @string/save : @string/update}"
+                android:textColor="@color/off_white"
                 android:background="@drawable/bg_round_corners"
                 app:backgroundTint="@color/mark_color"
-                android:onClick="@{saveClickListener}"
+                android:onClick="@{actionClickListener}"
                 app:layout_constraintTop_toBottomOf="@id/serviceModalPriceField"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="@string/save"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

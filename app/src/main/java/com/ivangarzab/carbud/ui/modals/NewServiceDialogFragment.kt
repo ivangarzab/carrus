@@ -50,7 +50,8 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         args.service?.let { fillInData(it) }
         binding.apply {
-            setSaveClickListener {
+            setActionClickListener {
+               //TODO: Implement viewModel.onServiceUpdated()
                 val name = serviceModalNameField.text.toString()
                 when (viewModel.verifyServiceData(
                     name = name

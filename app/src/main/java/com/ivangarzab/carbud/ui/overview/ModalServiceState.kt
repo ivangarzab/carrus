@@ -14,4 +14,7 @@ data class ModalServiceState(
     val brand: String,
     val type: String,
     val price: String
-) : Parcelable
+) : Parcelable {
+
+    fun isEmpty(): Boolean = name.isEmpty() && repairDate.isEmpty() && dueDate.isEmpty()
+}
