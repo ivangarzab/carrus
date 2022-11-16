@@ -22,7 +22,7 @@
             android:id="@+id/serviceItemInnerRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_16"
+            android:layout_marginTop="@dimen/base_8"
             android:layout_marginBottom="@dimen/base_16"
             android:layout_marginStart="@dimen/base_8"
             android:layout_marginEnd="@dimen/base_8">
@@ -41,7 +41,7 @@
                 android:id="@+id/serviceItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_8"
+                android:layout_marginTop="@dimen/base_16"
                 android:layout_marginStart="@dimen/base_8"
                 android:textSize="20sp"
                 android:textStyle="italic"
@@ -55,7 +55,7 @@
                 android:id="@+id/serviceItemContentText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_8"
+                android:layout_marginTop="@dimen/base_16"
                 android:layout_marginEnd="8dp"
                 android:textColor="?android:textColor"
                 android:textSize="18sp"
@@ -68,6 +68,7 @@
                 android:id="@+id/serviceItemContentImage"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
+                android:layout_marginTop="@dimen/base_8"
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@{expanded ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
@@ -76,13 +77,71 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:src="@drawable/ic_arrow_drop_down"/>
 
+            <TextView
+                android:id="@+id/serviceItemBrandName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_8"
+                android:text="Brand Name"
+                android:textSize="@dimen/base_16"
+                android:textColor="?android:textColor"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:textColor="@color/black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="material type"
+                android:textSize="@dimen/base_16"
+                android:textColor="?android:textColor"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintStart_toEndOf="@id/serviceItemBrandName"/>
+
+            <TextView
+                android:id="@+id/serviceItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_8"
+                android:text="$100.00"
+                android:textSize="@dimen/base_16"
+                android:textColor="?android:textColor"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/serviceItemRepairDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_8"
+                android:text="12/12/22"
+                android:textSize="@dimen/base_16"
+                android:textColor="?android:textColor"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemPrice"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_2"
+                android:text="on"
+                android:textSize="@dimen/base_16"
+                android:textColor="?android:textColor"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemPrice"
+                app:layout_constraintEnd_toStartOf="@id/serviceItemRepairDate"/>
+
             <View
+                android:id="@+id/serviceItemBottomDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/base_8"
                 android:background="@color/platinum"
                 android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemRepairDate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -90,13 +149,13 @@
                 android:id="@+id/serviceItemTrashIcon"
                 android:layout_width="@dimen/base_42"
                 android:layout_height="@dimen/base_42"
-                android:layout_marginTop="@dimen/base_16"
+                android:layout_marginTop="@dimen/base_8"
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@drawable/ic_delete_trash"
                 android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
                 app:tint="?android:textColor"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -104,13 +163,13 @@
                 android:id="@+id/serviceItemEditIcon"
                 android:layout_width="@dimen/base_42"
                 android:layout_height="@dimen/base_42"
-                android:layout_marginTop="@dimen/base_16"
+                android:layout_marginTop="@dimen/base_8"
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@drawable/ic_edit"
                 android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
                 app:tint="?android:textColor"
-                app:layout_constraintTop_toBottomOf="@id/serviceItemContentImage"
+                app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 

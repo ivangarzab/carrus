@@ -70,7 +70,10 @@ data class Car(
 data class Service(
     val name: String,
     val repairDate: Calendar,
-    val dueDate: Calendar
+    val dueDate: Calendar,
+    val brand: String? = null,
+    val type: String? = null,
+    val cost: Float = 0.00f
 ): Parcelable {
     override fun toString(): String =
         "Service(" +
