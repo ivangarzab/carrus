@@ -53,23 +53,23 @@ class ServiceListAdapter(
                         true -> {
                             binding.serviceItemContentText.setTextColor(Color.RED)
                             binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
-                            "DUE"
+                            resources.getString(R.string.due).uppercase()
                         }
                         false -> {
-                            TypedValue().let {
-                                theme.resolveAttribute(android.R.attr.textColor, it, true)
-                                binding.serviceItemContentText.setTextColor(it.data)
+                            TypedValue().let { value ->
+                                theme.resolveAttribute(android.R.attr.textColor, value, true)
+                                binding.serviceItemContentText.setTextColor(value.data)
                             }
                             binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
                             (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                                 TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
                                     when (daysLeft) {
-                                        0L -> "Tomorrow"
+                                        0L -> resources.getString(R.string.tomorrow)
                                         else -> when (prefs.dueDateFormat) {
                                             DueDateFormat.DATE -> this.dueDate.getShortenedDate()
                                             DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
                                             DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
-                                            else -> "$daysLeft days"
+                                            else -> "$daysLeft ${resources.getString(R.string.days).lowercase()}"
                                         }
                                     }
                                 }
