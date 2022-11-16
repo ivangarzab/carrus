@@ -71,6 +71,7 @@ class ServiceListAdapter(
                     }
                 }
                 binding.root.setOnClickListener { onItemClicked(this) }
+                binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
                 binding.componentItemContentImage.setOnClickListener {
                     binding.expanded = binding.expanded?.not() ?: false
                 }

@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import
+            alias="View"
+            type="android.view.View"/>
         <variable
             name="expanded"
             type="Boolean" />
@@ -18,7 +21,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/componentItemInnerRoot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_16"
+            android:layout_marginBottom="@dimen/base_16"
+            android:layout_marginStart="@dimen/base_8"
+            android:layout_marginEnd="@dimen/base_8">
 
             <ImageView
                 android:id="@+id/componentItemBackgroundImage"
@@ -34,15 +41,13 @@
                 android:id="@+id/componentItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
-                android:textSize="24sp"
+                android:layout_marginTop="@dimen/base_8"
+                android:layout_marginStart="@dimen/base_8"
+                android:textSize="20sp"
                 android:textStyle="italic"
                 android:textColor="?android:textColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="COMPONENT"
                 tools:textColor="@color/black"/>
 
@@ -50,12 +55,12 @@
                 android:id="@+id/componentItemContentText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_8"
                 android:layout_marginEnd="8dp"
                 android:textColor="?android:textColor"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/componentItemContentImage"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="169 days"
                 tools:textColor="@color/black"/>
 
@@ -63,17 +68,51 @@
                 android:id="@+id/componentItemContentImage"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@{expanded ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:src="@drawable/ic_arrow_drop_down"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/base_8"
+                android:background="@color/platinum"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/componentItemContentImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/serviceItemTrashIcon"
+                android:layout_width="@dimen/base_42"
+                android:layout_height="@dimen/base_42"
+                android:layout_marginTop="@dimen/base_16"
+                android:contentDescription="@string/label_icon"
+                android:padding="8dp"
+                android:src="@drawable/ic_delete_trash"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:tint="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@id/componentItemContentImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/serviceItemEditIcon"
+                android:layout_width="@dimen/base_42"
+                android:layout_height="@dimen/base_42"
+                android:layout_marginTop="@dimen/base_16"
+                android:contentDescription="@string/label_icon"
+                android:padding="8dp"
+                android:src="@drawable/ic_edit"
+                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                app:tint="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@id/componentItemContentImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
