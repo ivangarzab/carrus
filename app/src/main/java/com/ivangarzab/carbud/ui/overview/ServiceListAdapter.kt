@@ -84,7 +84,7 @@ class ServiceListAdapter(
         ItemServiceState(
             position = position,
             name = data.name,
-            repairDateFormat = "on ${data.repairDate.getShortenedDate()}",
+            repairDateFormat = resources.getString(R.string.service_repair_date_format, data.repairDate.getShortenedDate()),
             details = resources.getString(R.string.service_details, data.brand, data.type),
             price = resources.getString(R.string.price_money, data.cost),
             dueDateFormat = when (data.isPastDue()) {
@@ -96,8 +96,8 @@ class ServiceListAdapter(
                                 0L -> resources.getString(R.string.tomorrow)
                                 else -> when (prefs.dueDateFormat) {
                                     DueDateFormat.DATE -> data.dueDate.getShortenedDate()
-                                    DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
-                                    DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                    DueDateFormat.WEEKS -> resources.getString(R.string.service_due_date_week_format, String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS))
+                                    DueDateFormat.MONTHS -> resources.getString(R.string.service_due_date_months_format, String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS))
                                     else -> "$daysLeft ${resources.getString(R.string.days).lowercase()}"
                                 }
                             }
