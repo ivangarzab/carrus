@@ -31,6 +31,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         OverviewState()
     )
 
+    // Pair<repairDate, dueDate>
     var datesInMillis: Pair<Long, Long> = Pair(0, 0)
 
     init {
@@ -50,6 +51,22 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         prefs.apply {
             addService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
+        }
+    }
+
+    fun onServiceUpdate(service: Service) {
+        Timber.d("Service being updated: $service")
+        prefs.defaultCar?.let { car ->
+            carRepository.saveCarData(
+                car.copy(
+                    services = car.services.map {
+                        when (it.id == service.id) {
+                            true -> service
+                            false -> it
+                        }
+                    }
+                )
+            )
         }
     }
 

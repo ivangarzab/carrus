@@ -91,7 +91,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                                 // TODO: Go through the list of ServiceItemState's,
                                 //  and make sure there only always 1 expanded state at a time.
                             },
-                            onEditClicked = { navigateToEditServiceBottomSheet(it) },
+                            onEditClicked = { service ->
+                                navigateToEditServiceBottomSheet(service)
+                            },
                             onDeleteClicked = { service ->
                                 viewModel.onServiceDeleted(service)
                             }

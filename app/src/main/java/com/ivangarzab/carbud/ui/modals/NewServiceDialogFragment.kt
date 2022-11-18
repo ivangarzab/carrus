@@ -32,6 +32,8 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
     private lateinit var binding: ModalServiceBinding
 
     private val args: NewServiceDialogFragmentArgs by navArgs()
+    private enum class Type { CREATE, EDIT }
+    private lateinit var type: Type
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,27 +50,45 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        args.service?.let { fillInData(it) }
+        type = args.service?.let {
+            setupContent(it)
+            Type.EDIT
+        } ?: Type.CREATE
+
         binding.apply {
             setActionClickListener {
-               //TODO: Implement viewModel.onServiceUpdated()
                 val name = serviceModalNameField.text.toString()
                 when (viewModel.verifyServiceData(
                     name = name
                 )) {
                     true -> {
-                        viewModel.onServiceCreated(
-                            Service(
-                                name = name,
-                                repairDate = Calendar.getInstance().apply {
-                                    timeInMillis = viewModel.datesInMillis.first
-                                },
-                                dueDate = Calendar.getInstance().apply {
-                                    timeInMillis = viewModel.datesInMillis.second
-                                }
-                            )
-                        )
-                        this@NewServiceDialogFragment.dismiss()
+                        when (type) {
+                            Type.CREATE -> viewModel.onServiceCreated(
+                                Service(
+                                    id = UUID.randomUUID().toString(),
+                                    name = name,
+                                    repairDate = Calendar.getInstance().apply {
+                                        timeInMillis = viewModel.datesInMillis.first
+                                    },
+                                    dueDate = Calendar.getInstance().apply {
+                                        timeInMillis = viewModel.datesInMillis.second
+                                    }
+                                )
+                            ).also { this@NewServiceDialogFragment.dismiss() }
+                            Type.EDIT -> args.service?.let {
+                                viewModel.onServiceUpdate(
+                                    it.copy(
+                                        name = name,
+                                        repairDate = Calendar.getInstance().apply {
+                                            timeInMillis = viewModel.datesInMillis.first
+                                        },
+                                        dueDate = Calendar.getInstance().apply {
+                                            timeInMillis = viewModel.datesInMillis.second
+                                        }
+                                    )
+                                ).also { this@NewServiceDialogFragment.dismiss() }
+                            }
+                        }
                     }
                     false -> toast("Missing required data")
                 }
@@ -82,7 +102,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun fillInData(data: Service) {
+    private fun setupContent(data: Service) {
         binding.data = ModalServiceState(
             name = data.name,
             repairDate = data.repairDate.getShortenedDate(),
@@ -91,6 +111,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
             type = data.type ?: "",
             price = data.cost.toString()
         )
+        viewModel.datesInMillis = Pair(data.repairDate.timeInMillis, data.dueDate.timeInMillis)
     }
 
     private fun showRepairDatePickerDialog() =

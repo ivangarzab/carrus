@@ -1,7 +1,7 @@
 package com.ivangarzab.carbud.ui.overview
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.

@@ -68,6 +68,7 @@ data class Car(
 
 @Parcelize
 data class Service(
+    val id: String,
     val name: String,
     val repairDate: Calendar,
     val dueDate: Calendar,
@@ -90,6 +91,7 @@ fun Service.isPastDue(): Boolean = this.dueDate.timeInMillis < Calendar.getInsta
 
 val serviceList: List<Service> = listOf(
     Service(
+        id = "1",
         name = "Oil Change",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1672550100000 },
@@ -98,6 +100,7 @@ val serviceList: List<Service> = listOf(
         cost = 79.99f
     ),
     Service(
+        id = "2",
         name = "Window Wipes",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
@@ -106,6 +109,7 @@ val serviceList: List<Service> = listOf(
         cost = 25.00f
     ),
     Service(
+        id = "3",
         name = "Tires",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 },
@@ -114,6 +118,7 @@ val serviceList: List<Service> = listOf(
         cost = 500.69f
     ),
     Service(
+        id = "4",
         name = "Rims",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
         dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
