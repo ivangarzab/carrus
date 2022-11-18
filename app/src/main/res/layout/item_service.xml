@@ -8,11 +8,8 @@
             alias="View"
             type="android.view.View"/>
         <variable
-            name="expanded"
-            type="Boolean" />
-        <variable
-            name="data"
-            type="com.ivangarzab.carbud.data.Service" />
+            name="state"
+            type="com.ivangarzab.carbud.ui.overview.ItemServiceState" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -53,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:layout_marginStart="@dimen/base_8"
-                android:text="@{data.name}"
+                android:text="@{state.name}"
                 android:textSize="@dimen/text_20"
                 android:textStyle="italic"
                 android:textColor="?android:textColor"
@@ -69,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
                 android:layout_marginEnd="@dimen/base_4"
+                android:text="@{state.dueDateFormat}"
                 android:textColor="?android:textColor"
                 android:textSize="@dimen/text_18"
                 android:gravity="end"
@@ -85,7 +83,7 @@
                 android:layout_marginTop="@dimen/base_8"
                 android:contentDescription="@string/label_icon"
                 android:padding="@dimen/base_8"
-                android:src="@{expanded ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                android:src="@{state.expanded ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,9 +94,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/base_8"
+                android:text="@{state.details}"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemExpandIcon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/serviceItemGuideline"
@@ -111,9 +110,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/base_8"
+                android:text="@{state.price}"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemExpandIcon"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="$100.00"/>
@@ -123,9 +123,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/base_8"
+                android:text="@{state.repairDateFormat}"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemPrice"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="12/12/22"/>
@@ -136,7 +137,7 @@
                 android:text="@string/on"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemPrice"
                 app:layout_constraintEnd_toStartOf="@id/serviceItemRepairDate"/>
 
@@ -146,7 +147,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/base_8"
                 android:background="@color/platinum"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemRepairDate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -159,7 +160,7 @@
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@drawable/ic_delete_trash"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,7 +174,7 @@
                 android:contentDescription="@string/label_icon"
                 android:padding="8dp"
                 android:src="@drawable/ic_edit"
-                android:visibility="@{expanded ? View.VISIBLE : View.GONE}"
+                android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintStart_toStartOf="parent"

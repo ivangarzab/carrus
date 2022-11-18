@@ -1,8 +1,6 @@
 package com.ivangarzab.carbud.ui.overview
 
 import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -37,62 +35,70 @@ class ServiceListAdapter(
             parent,
             false
         ).also {
-            it.expanded = false
             return ServiceListViewHolder(it)
         }
     }
 
+    override fun getItemCount(): Int = services.size
+
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         with(holder) {
             with(services[position]) {
-                binding.let {
-                    it.data = this
-                    it.serviceItemPrice.text = resources.getString(R.string.price_money, cost)
-                    it.serviceItemRepairDate.text = repairDate.getShortenedDate()
-                    it.serviceItemDetails.text = resources.getString(R.string.service_details, brand, type)
-                    it.serviceItemContentText.text = when (this.isPastDue()) {
-                        true -> {
-                            binding.serviceItemContentText.setTextColor(Color.RED)
-                            binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
-                            resources.getString(R.string.due).uppercase()
-                        }
-                        false -> {
-                            TypedValue().let { value ->
-                                theme.resolveAttribute(android.R.attr.textColor, value, true)
-                                binding.serviceItemContentText.setTextColor(value.data)
-                            }
-                            binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
-                            (this.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
-                                TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
-                                    when (daysLeft) {
-                                        0L -> resources.getString(R.string.tomorrow)
-                                        else -> when (prefs.dueDateFormat) {
-                                            DueDateFormat.DATE -> this.dueDate.getShortenedDate()
-                                            DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
-                                            DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
-                                            else -> "$daysLeft ${resources.getString(R.string.days).lowercase()}"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                binding.let { binding ->
+                    generateItemServiceState(position, this).let { state ->
+                        binding.state = state
+                        binding.root.setOnClickListener { onExpandToggle(binding, this) }
+                        binding.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
+                        binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
+                        binding.serviceItemEditIcon.setOnClickListener { onEditClicked(this) }
                     }
-
-                    it.root.setOnClickListener { onExpandToggle(binding, this) }
-                    it.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
-                    it.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
-                    it.serviceItemEditIcon.setOnClickListener { onEditClicked(this) }
                 }
             }
         }
     }
 
     private fun onExpandToggle(binding: ItemServiceBinding, service: Service) {
-        binding.expanded = binding.expanded?.not() ?: false
+        binding.state = binding.state?.let {
+            it.copy(expanded = it.expanded.not())
+        }
         onItemClicked(service)
     }
 
-    override fun getItemCount(): Int = services.size
+    private fun generateItemServiceState(position: Int, data: Service): ItemServiceState =
+        ItemServiceState(
+            position = position,
+            name = data.name,
+            repairDateFormat = data.repairDate.getShortenedDate(),
+            details = resources.getString(R.string.service_details, data.brand, data.type),
+            price = resources.getString(R.string.price_money, data.cost),
+            dueDateFormat = when (data.isPastDue()) {
+                true -> {
+                    /*binding.serviceItemContentText.setTextColor(Color.RED)
+                    binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)*/
+                    resources.getString(R.string.due).uppercase()
+                }
+                false -> {
+                    TypedValue().let { value ->
+                        theme.resolveAttribute(android.R.attr.textColor, value, true)
+//                        binding.serviceItemContentText.setTextColor(value.data)
+                    }
+//                    binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
+                    (data.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
+                        TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
+                            when (daysLeft) {
+                                0L -> resources.getString(R.string.tomorrow)
+                                else -> when (prefs.dueDateFormat) {
+                                    DueDateFormat.DATE -> data.dueDate.getShortenedDate()
+                                    DueDateFormat.WEEKS -> "${String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS)} weeks"
+                                    DueDateFormat.MONTHS -> "${String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS)} months"
+                                    else -> "$daysLeft ${resources.getString(R.string.days).lowercase()}"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        )
 
     companion object {
         private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
