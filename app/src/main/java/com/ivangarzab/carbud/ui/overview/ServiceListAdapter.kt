@@ -1,6 +1,8 @@
 package com.ivangarzab.carbud.ui.overview
 
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -47,6 +49,20 @@ class ServiceListAdapter(
                 binding.let { binding ->
                     generateItemServiceState(position, this).let { state ->
                         binding.state = state
+                        when (isPastDue()) { // TODO: This should be done smarter...
+                            true -> {
+                                binding.serviceItemContentText.setTextColor(Color.RED)
+                                binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
+                            }
+                            false -> {
+                                TypedValue().let { value ->
+                                    theme.resolveAttribute(android.R.attr.textColor, value, true)
+                                    binding.serviceItemContentText.setTextColor(value.data)
+                                }
+                                binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
+                            }
+                        }
+
                         binding.root.setOnClickListener { onExpandToggle(binding, this) }
                         binding.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
                         binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
@@ -68,21 +84,12 @@ class ServiceListAdapter(
         ItemServiceState(
             position = position,
             name = data.name,
-            repairDateFormat = data.repairDate.getShortenedDate(),
+            repairDateFormat = "on ${data.repairDate.getShortenedDate()}",
             details = resources.getString(R.string.service_details, data.brand, data.type),
             price = resources.getString(R.string.price_money, data.cost),
             dueDateFormat = when (data.isPastDue()) {
-                true -> {
-                    /*binding.serviceItemContentText.setTextColor(Color.RED)
-                    binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)*/
-                    resources.getString(R.string.due).uppercase()
-                }
+                true -> resources.getString(R.string.due).uppercase()
                 false -> {
-                    TypedValue().let { value ->
-                        theme.resolveAttribute(android.R.attr.textColor, value, true)
-//                        binding.serviceItemContentText.setTextColor(value.data)
-                    }
-//                    binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
                     (data.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
                         TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
                             when (daysLeft) {
