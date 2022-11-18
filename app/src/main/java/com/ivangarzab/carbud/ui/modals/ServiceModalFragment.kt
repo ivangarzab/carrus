@@ -64,28 +64,11 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                     true -> {
                         when (type) {
                             Type.CREATE -> viewModel.onServiceCreated(
-                                Service(
-                                    id = UUID.randomUUID().toString(),
-                                    name = name,
-                                    repairDate = Calendar.getInstance().apply {
-                                        timeInMillis = viewModel.datesInMillis.first
-                                    },
-                                    dueDate = Calendar.getInstance().apply {
-                                        timeInMillis = viewModel.datesInMillis.second
-                                    }
-                                )
+                                getServiceFromContent()
                             ).also { this@ServiceModalFragment.dismiss() }
                             Type.EDIT -> args.service?.let {
                                 viewModel.onServiceUpdate(
-                                    it.copy(
-                                        name = name,
-                                        repairDate = Calendar.getInstance().apply {
-                                            timeInMillis = viewModel.datesInMillis.first
-                                        },
-                                        dueDate = Calendar.getInstance().apply {
-                                            timeInMillis = viewModel.datesInMillis.second
-                                        }
-                                    )
+                                    getServiceFromContent(it.id)
                                 ).also { this@ServiceModalFragment.dismiss() }
                             }
                         }
@@ -102,6 +85,11 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        dismissKeyboard(binding.root)
+    }
+
     private fun setupContent(data: Service) {
         binding.data = ModalServiceState(
             name = data.name,
@@ -112,6 +100,24 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             price = data.cost.toString()
         )
         viewModel.datesInMillis = Pair(data.repairDate.timeInMillis, data.dueDate.timeInMillis)
+    }
+
+    private fun getServiceFromContent(
+        id: String = ""
+    ): Service = binding.let {
+        Service(
+            id = id.ifBlank { UUID.randomUUID().toString() },
+            name = it.serviceModalNameField.text.toString(),
+            repairDate = Calendar.getInstance().apply {
+                timeInMillis = viewModel.datesInMillis.first
+            },
+            dueDate = Calendar.getInstance().apply {
+                timeInMillis = viewModel.datesInMillis.second
+            },
+            brand = it.serviceModalBrandField.text.toString(),
+            type = it.serviceModalTypeField.text.toString(),
+            cost = it.serviceModalPriceField.text.toString().toFloat()
+        )
     }
 
     private fun showRepairDatePickerDialog() =
@@ -165,11 +171,6 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             date.get(Calendar.MONTH),
             date.get(Calendar.DAY_OF_MONTH)
         ).show()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        dismissKeyboard(binding.root)
     }
 
     companion object {
