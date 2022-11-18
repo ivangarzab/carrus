@@ -23,7 +23,7 @@ import java.util.*
 /**
  * Created by Ivan Garza Bermea.
  */
-class NewServiceDialogFragment : BottomSheetDialogFragment() {
+class ServiceModalFragment : BottomSheetDialogFragment() {
 
     private val viewModel: OverviewViewModel by activityViewModels {
         SavedStateViewModelFactory(requireActivity().application, this)
@@ -31,7 +31,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: ModalServiceBinding
 
-    private val args: NewServiceDialogFragmentArgs by navArgs()
+    private val args: ServiceModalFragmentArgs by navArgs()
     private enum class Type { CREATE, EDIT }
     private lateinit var type: Type
 
@@ -74,7 +74,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                                         timeInMillis = viewModel.datesInMillis.second
                                     }
                                 )
-                            ).also { this@NewServiceDialogFragment.dismiss() }
+                            ).also { this@ServiceModalFragment.dismiss() }
                             Type.EDIT -> args.service?.let {
                                 viewModel.onServiceUpdate(
                                     it.copy(
@@ -86,7 +86,7 @@ class NewServiceDialogFragment : BottomSheetDialogFragment() {
                                             timeInMillis = viewModel.datesInMillis.second
                                         }
                                     )
-                                ).also { this@NewServiceDialogFragment.dismiss() }
+                                ).also { this@ServiceModalFragment.dismiss() }
                             }
                         }
                     }

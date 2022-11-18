@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_create"/>
     <dialog
         android:id="@+id/newServiceModal"
-        android:name="com.ivangarzab.carbud.ui.modals.NewServiceDialogFragment"
+        android:name="com.ivangarzab.carbud.ui.modals.ServiceModalFragment"
         android:label="dialog_new_service"
         tools:layout="@layout/modal_service">
         <argument
