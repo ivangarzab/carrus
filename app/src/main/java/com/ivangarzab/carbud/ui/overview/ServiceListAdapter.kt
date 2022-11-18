@@ -7,6 +7,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.ivangarzab.carbud.R
 import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.data.Service
@@ -49,7 +51,7 @@ class ServiceListAdapter(
                 binding.let { binding ->
                     generateItemServiceState(position, this).let { state ->
                         binding.state = state
-                        when (isPastDue()) { // TODO: This should be done smarter...
+                        when (isPastDue()) { // TODO: This is duplicating code from generateItemServiceState()
                             true -> {
                                 binding.serviceItemContentText.setTextColor(Color.RED)
                                 binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
@@ -74,8 +76,17 @@ class ServiceListAdapter(
     }
 
     private fun onExpandToggle(binding: ItemServiceBinding, service: Service) {
-        binding.state = binding.state?.let {
-            it.copy(expanded = it.expanded.not())
+        binding.state = binding.state?.let { state ->
+            state.expanded.let {
+                TransitionManager.beginDelayedTransition(binding.serviceItemInnerRoot, AutoTransition().apply {
+                    duration = ITEM_ANIMATION_DURATION_MS
+                    if (state.expanded) {
+                        addTarget(binding.serviceItemDetails)
+                        addTarget(binding.serviceItemRepairDate)
+                    }
+                })
+                state.copy(expanded = it.not())
+            }
         }
         onItemClicked(service)
     }
@@ -110,5 +121,6 @@ class ServiceListAdapter(
     companion object {
         private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
         private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f
+        private const val ITEM_ANIMATION_DURATION_MS: Long = 250
     }
 }
