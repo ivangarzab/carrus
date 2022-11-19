@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carbud.MainActivity
 import com.ivangarzab.carbud.R
+import com.ivangarzab.carbud.data.Service
 import com.ivangarzab.carbud.databinding.FragmentOverviewBinding
 import com.ivangarzab.carbud.databinding.ModalDetailsBinding
 import com.ivangarzab.carbud.prefs
@@ -81,17 +83,26 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
                 binding.overviewContent.apply {
                     overviewContentServiceList.apply {
-                        adapter = PartListAdapter(
+                        adapter = ServiceListAdapter(
+                            resources = requireContext().resources,
                             theme = requireContext().theme,
                             services = it.services,
                             onItemClicked = {
-                                // TODO: onItemClicked()
+                                // TODO: Go through the list of ServiceItemState's,
+                                //  and make sure there only always 1 expanded state at a time.
+                            },
+                            onEditClicked = { service ->
+                                navigateToEditServiceBottomSheet(service)
                             },
                             onDeleteClicked = { service ->
                                 viewModel.onServiceDeleted(service)
                             }
                         )
                     }
+                }
+
+                it.imageUri?.let { uri ->
+                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
                 }
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
@@ -233,6 +244,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
+    )
+
+    private fun navigateToEditServiceBottomSheet(service: Service) = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal(
+            service = service
+        )
     )
 
     private fun navigateToCreateFragment() = findNavController().navigate(

@@ -2,7 +2,10 @@ package com.ivangarzab.carbud.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import com.google.gson.Gson
+import timber.log.Timber
+import java.util.*
 
 /**
  * Should only be accessed by Repository, or other data handling classes.
@@ -54,12 +57,49 @@ class Preferences(context: Context) {
         }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
 
+    var dueDateFormat: DueDateFormat
+        get() = sharedPreferences.get(KEY_FORMAT_DUE_DATE, DueDateFormat.DAYS.name).let {
+            DueDateFormat.get(it)
+        }
+        set(value) = sharedPreferences.set(KEY_FORMAT_DUE_DATE, value)
+
+    init {
+        defaultCar?.let { car ->
+            Timber.d("Default car from a past version: $car")
+            if (car.services.isNotEmpty() && car.services.get(0).version != VERSION_SERVICE) {
+                // Outdated data -- update on the background
+                defaultCar = car.copy(
+                    services = car.services.map {
+                        Service(
+                            id = UUID.randomUUID().toString(),
+                            name = it.name,
+                            repairDate = it.repairDate,
+                            dueDate = it.dueDate
+                        )
+                    }
+                )
+            }
+        }
+
+        // Get Night Mode state on first install
+        if (darkMode == null) {
+            val nightModeFlags: Int = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            darkMode = when (nightModeFlags) {
+                Configuration.UI_MODE_NIGHT_YES -> true
+                Configuration.UI_MODE_NIGHT_NO -> false
+                else -> false
+            }
+            Timber.i("Dark Mode set to: $darkMode")
+        }
+    }
+
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
         private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
         private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
+        private const val KEY_FORMAT_DUE_DATE = "format-due-date"
     }
 }
 
@@ -86,6 +126,7 @@ operator fun SharedPreferences.set(
     is Float -> edit { it.putFloat(key, value) }
     is Long -> edit { it.putLong(key, value) }
     is Car -> edit { it.putString(key, value.toJson()) }
+    is DueDateFormat -> edit { it.putString(key, value.value)}
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
 
@@ -105,6 +146,9 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
     Car::class -> getString(key, defaultValue as? String ?: "").let {
         (Gson().fromJson(it, Car::class.java) ?: Car.empty) as T
+    }
+    DueDateFormat::class -> getString(key, defaultValue as String).let {
+        DueDateFormat.get(it ?: DueDateFormat.DAYS.name) as T
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }

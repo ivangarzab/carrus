@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
+import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.extensions.setState
 import kotlinx.coroutines.launch
@@ -23,7 +24,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class SettingsState(
         val car: Car? = null,
-        val alarmTime: String? = null
+        val alarmTime: String? = null,
+        val dueDateFormat: DueDateFormat = DueDateFormat.DAYS
     ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
@@ -32,7 +34,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     )
 
     init {
-        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "7")
+        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "$DEFAULT_ALARM_TIME")
+        updateDueDateFormatState(prefs.dueDateFormat)
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -72,9 +75,17 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     fun onAlarmTimePicked(alarmTime: String) {
-        Timber.d("Alarm time reset to: ${getTimeString(alarmTime.toInt())}")
+        Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
         prefs.alarmPastDueTime = alarmTime.toInt()
+        alarms.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
+    }
+
+    fun onDueDateFormatPicked(option: DueDateFormat) {
+        Timber.d("Due Date format changed to: '$option'")
+        prefs.dueDateFormat = option
+        updateDueDateFormatState(option)
+
     }
 
     fun getTimeString(hour: Int): String = "$hour:00 ${
@@ -92,7 +103,20 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
     }
 
+    private fun updateDueDateFormatState(format: DueDateFormat) {
+        setState(state, savedState, STATE) { copy(dueDateFormat = format) }
+    }
+
+    val pickerOptionsAlarmTime = arrayOf(
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
+        "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+    )
+    val pickerOptionsDueDateFormat = arrayOf(
+        "days", "weeks", "months", "due date"
+    )
+
     companion object {
+        const val DEFAULT_ALARM_TIME: Int = 7
         private const val STATE: String = "SettingsViewModel.STATE"
     }
 }

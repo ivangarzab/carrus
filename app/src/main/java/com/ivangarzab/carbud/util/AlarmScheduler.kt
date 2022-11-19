@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.SystemClock
 import com.ivangarzab.carbud.*
 import com.ivangarzab.carbud.receivers.AlarmBroadcastReceiver
+import com.ivangarzab.carbud.ui.settings.SettingsViewModel.Companion.DEFAULT_ALARM_TIME
 import com.ivangarzab.carbud.util.extensions.isAbleToScheduleExactAlarms
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -25,8 +26,8 @@ class AlarmScheduler(
     private val alarmManager: AlarmManager =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedulePastDueAlarm() {
-        if (prefs.isAlarmPastDueActive) {
+    fun schedulePastDueAlarm(force: Boolean = false) {
+        if (force.not() && prefs.isAlarmPastDueActive) {
             Timber.v("'PastDueService' alarm is already scheduled")
 //            return // skip dupes
             cancelPastDueAlarm()
@@ -68,6 +69,7 @@ class AlarmScheduler(
     }
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
+        val alarmTime: Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME // 7am is the default
         alarmManager.setRepeating(
             AlarmManager.RTC,
             Calendar.getInstance().apply {
@@ -75,13 +77,13 @@ class AlarmScheduler(
                 set(Calendar.MINUTE, 0)
                 set(
                     Calendar.HOUR_OF_DAY,
-                    prefs.alarmPastDueTime ?: 7 // 7am is the default
+                    alarmTime
                 )
             }.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             alarmIntent
         )
-        Timber.d("Scheduled daily alarm at 7am")
+        Timber.d("Scheduled daily alarm at $alarmTime")
     }
 
     private fun scheduleTestAlarm(alarmIntent: PendingIntent) {

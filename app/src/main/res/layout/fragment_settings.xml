@@ -16,6 +16,9 @@
         <variable
             name="versionNumber"
             type="String" />
+        <variable
+            name="dueDateFormat"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,6 +79,16 @@
                 app:subtitle="@{@string/setting_alarm_time_subtitle}"
                 app:title="@{@string/setting_alarm_time_title}"
                 app:value="@{alarmTime}" />
+
+            <include
+                android:id="@+id/settingsDueDateFormatOption"
+                layout="@layout/view_settings_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:showToggle="@{false}"
+                app:title="@{@string/settings_due_date_format_title}"
+                app:subtitle="@{@string/settings_due_date_format_subtitle}"
+                app:value="@{dueDateFormat}"/>
 
             <View
                 android:id="@+id/settingsDivider2"
