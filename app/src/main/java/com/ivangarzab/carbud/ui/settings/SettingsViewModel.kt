@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
@@ -95,6 +96,18 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
             else -> ""
         }
     }"
+
+    fun onExportData() {
+        carRepository.fetchCarData()?.let { data ->
+            Gson().toJson(data).let { json ->
+                // TODO: Do something with the JSON String data
+            }
+        }
+    }
+
+    fun onImportData() {
+
+    }
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }

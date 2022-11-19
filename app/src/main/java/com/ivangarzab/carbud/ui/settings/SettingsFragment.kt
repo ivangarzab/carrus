@@ -18,6 +18,7 @@ import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.toast
 import timber.log.Timber
 
 /**
@@ -115,6 +116,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 showDueDateFormatPickerDialog { optionPicked ->
                     viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
                 }
+            }
+
+            setExportClickListener {
+                toast("EXPORT")
+                viewModel.onExportData()
+            }
+
+            setImportClickListener {
+                toast("IMPORT")
+                viewModel.onImportData()
             }
         }
     }

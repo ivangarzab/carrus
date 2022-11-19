@@ -19,6 +19,12 @@
         <variable
             name="dueDateFormat"
             type="String" />
+        <variable
+            name="exportClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="importClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,6 +121,48 @@
                 app:showToggle="@{false}"
                 app:subtitle="@{@string/setting_delete_car_data_subtitle}"
                 app:title="@{@string/setting_delete_car_data_title}" />
+
+            <View
+                android:id="@+id/settingsDivider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/platinum" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/settingsImportExportLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsExportButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_8"
+                    android:layout_marginBottom="@dimen/base_8"
+                    android:layout_marginEnd="@dimen/base_16"
+                    android:layout_marginStart="@dimen/base_16"
+                    android:text="export data"
+                    android:textColor="@color/off_white"
+                    android:onClickListener="@{exportClickListener}"
+                    app:layout_constraintEnd_toStartOf="@id/settingsImportButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsImportButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_8"
+                    android:layout_marginBottom="@dimen/base_8"
+                    android:layout_marginEnd="@dimen/base_16"
+                    android:layout_marginStart="@dimen/base_16"
+                    android:text="import data"
+                    android:textColor="@color/off_white"
+                    android:onClickListener="@{importClickListener}"
+                    app:layout_constraintStart_toEndOf="@id/settingsExportButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
