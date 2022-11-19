@@ -68,6 +68,7 @@ data class Car(
 
 @Parcelize
 data class Service(
+    val version: Int = VERSION_SERVICE,
     val id: String,
     val name: String,
     val repairDate: Calendar,
@@ -89,6 +90,7 @@ data class Service(
 
 fun Service.isPastDue(): Boolean = this.dueDate.timeInMillis < Calendar.getInstance().timeInMillis
 
+const val VERSION_SERVICE: Int = 1
 val serviceList: List<Service> = listOf(
     Service(
         id = "1",
