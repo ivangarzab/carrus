@@ -53,15 +53,15 @@ class ServiceListAdapter(
                         binding.state = state
                         when (isPastDue()) { // TODO: This is duplicating code from generateItemServiceState()
                             true -> {
-                                binding.serviceItemContentText.setTextColor(Color.RED)
-                                binding.serviceItemContentText.setTypeface(null, Typeface.BOLD)
+                                binding.serviceItemDueDate.setTextColor(Color.RED)
+                                binding.serviceItemDueDate.setTypeface(null, Typeface.BOLD)
                             }
                             false -> {
                                 TypedValue().let { value ->
                                     theme.resolveAttribute(android.R.attr.textColor, value, true)
-                                    binding.serviceItemContentText.setTextColor(value.data)
+                                    binding.serviceItemDueDate.setTextColor(value.data)
                                 }
-                                binding.serviceItemContentText.setTypeface(null, Typeface.NORMAL)
+                                binding.serviceItemDueDate.setTypeface(null, Typeface.NORMAL)
                             }
                         }
 
