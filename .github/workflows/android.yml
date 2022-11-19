@@ -26,7 +26,7 @@ jobs:
     - run: echo "🖥️ The workflow is now ready to test your code."
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - run: echo "🐛 Building Debug APK."  
     - name: Build with Gradle
-    - run: echo "🐛 Building Debug APK."
-    - run: ./gradlew build
+      run: ./gradlew build
     - run: echo "Build status report=${{ job.status }}."
