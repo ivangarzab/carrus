@@ -115,7 +115,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:listitem="@layout/item_component"/>
+                tools:listitem="@layout/item_service"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/overviewContentServiceWallLayout"

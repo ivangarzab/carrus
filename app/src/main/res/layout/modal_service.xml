@@ -14,8 +14,11 @@
             name="dueDateClickListener"
             type="android.view.View.OnClickListener" />
         <variable
-            name="saveClickListener"
+            name="actionClickListener"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="data"
+            type="com.ivangarzab.carbud.ui.overview.ModalServiceState" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,124 +30,192 @@
             android:paddingBottom="@dimen/base_24"
             android:clickable="true">
 
-        <TextView
-            android:id="@+id/serviceModalTitleLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/base_8"
-            android:gravity="center"
-            android:text="@string/new_service"
-            android:textSize="@dimen/text_18"
-            android:textStyle="bold"
-            android:textColor="?android:textColor"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/serviceModalTitleLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/base_8"
+                android:gravity="center"
+                android:text="@{data == null || data.isEmpty() ? @string/new_service : @string/edit_service}"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"
+                tools:text="@string/new_service"/>
 
-        <View
-            android:id="@+id/serviceModalGrabView"
-            android:layout_width="50dp"
-            android:layout_height="@dimen/base_4"
-            android:layout_margin="@dimen/base_16"
-            android:background="@drawable/view_grab"
-            android:backgroundTint="@color/silver"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalTitleLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <View
+                android:id="@+id/serviceModalGrabView"
+                android:layout_width="50dp"
+                android:layout_height="@dimen/base_4"
+                android:layout_margin="@dimen/base_16"
+                android:background="@drawable/view_grab"
+                android:backgroundTint="@color/silver"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalTitleLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
 
-        <EditText
-            android:id="@+id/serviceModalNameField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_16"
-            android:inputType="text"
-            android:hint="@string/service_name"
-            android:autofillHints=""
-            android:textColorHint="@color/silver"
-            android:textColor="?android:textColor"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalGrabView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/serviceModalNameField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="text"
+                android:text="@{data.name}"
+                android:hint="@string/service_name"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalGrabView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"/>
 
-        <EditText
-            android:id="@+id/serviceModalRepairDateField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_16"
-            android:inputType="date"
-            android:hint="@string/repair_date"
-            android:autofillHints=""
-            android:textColorHint="@color/silver"
-            android:textColor="?android:textColor"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:clickable="false"
-            android:onClick="@{repairDateClickListener}"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/serviceModalRepairDateCalendar"
-            tools:textColor="@color/black" />
-        <ImageView
-            android:id="@+id/serviceModalRepairDateCalendar"
-            android:layout_width="@dimen/base_42"
-            android:layout_height="@dimen/base_42"
-            android:layout_marginTop="@dimen/base_16"
-            android:contentDescription="@string/label_icon"
-            android:onClick="@{repairDateClickListener}"
-            android:src="@drawable/ic_calendar_today"
-            app:tint="@color/mark_color"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
-            app:layout_constraintStart_toEndOf="@id/serviceModalRepairDateField"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <EditText
+                android:id="@+id/serviceModalRepairDateField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="date"
+                android:text="@{data.repairDate}"
+                android:hint="@string/repair_date"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:onClick="@{repairDateClickListener}"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/serviceModalRepairDateCalendar"
+                tools:textColor="@color/black" />
 
-        <EditText
-            android:id="@+id/serviceModalDueDateField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_16"
-            android:inputType="date"
-            android:hint="@string/due_date"
-            android:autofillHints=""
-            android:textColorHint="@color/silver"
-            android:textColor="?android:textColor"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:clickable="false"
-            android:onClick="@{dueDateClickListener}"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/serviceModalDueDateCalendar"
-            tools:textColor="@color/black"/>
-        <ImageView
-            android:id="@+id/serviceModalDueDateCalendar"
-            android:layout_width="@dimen/base_42"
-            android:layout_height="@dimen/base_42"
-            android:layout_marginTop="@dimen/base_16"
-            android:contentDescription="@string/label_icon"
-            android:onClick="@{dueDateClickListener}"
-            android:src="@drawable/ic_calendar_event"
-            app:tint="@color/mark_color"
-            app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
-            app:layout_constraintStart_toEndOf="@id/serviceModalDueDateField"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/serviceModalRepairDateCalendar"
+                android:layout_width="@dimen/base_42"
+                android:layout_height="@dimen/base_42"
+                android:layout_marginTop="@dimen/base_16"
+                android:contentDescription="@string/label_icon"
+                android:onClick="@{repairDateClickListener}"
+                android:src="@drawable/ic_calendar_today"
+                app:tint="@color/mark_color"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
+                app:layout_constraintStart_toEndOf="@id/serviceModalRepairDateField"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_16"
-            android:text="@string/save"
-            android:textColor="@color/silver"
-            android:background="@drawable/bg_round_corners"
-            app:backgroundTint="@color/mark_color"
-            android:onClick="@{saveClickListener}"
-            app:layout_constraintTop_toBottomOf="@id/serviceModalDueDateField"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <EditText
+                android:id="@+id/serviceModalDueDateField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="date"
+                android:text="@{data.dueDate}"
+                android:hint="@string/due_date"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:onClick="@{dueDateClickListener}"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/serviceModalDueDateCalendar"
+                tools:textColor="@color/black"/>
+            <ImageView
+                android:id="@+id/serviceModalDueDateCalendar"
+                android:layout_width="@dimen/base_42"
+                android:layout_height="@dimen/base_42"
+                android:layout_marginTop="@dimen/base_16"
+                android:contentDescription="@string/label_icon"
+                android:onClick="@{dueDateClickListener}"
+                android:src="@drawable/ic_calendar_event"
+                app:tint="@color/mark_color"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
+                app:layout_constraintStart_toEndOf="@id/serviceModalDueDateField"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <EditText
+                android:id="@+id/serviceModalBrandField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="text"
+                android:text="@{data.brand}"
+                android:hint="@string/service_brand"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalDueDateField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/serviceModalTypeField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="text"
+                android:text="@{data.type}"
+                android:hint="@string/service_type"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalBrandField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/serviceModalPriceField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:inputType="numberDecimal"
+                android:text="@{data.price}"
+                android:hint="@string/service_price"
+                android:autofillHints=""
+                android:textColorHint="@color/silver"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalTypeField"
+                app:layout_constraintStart_toEndOf="@+id/serviceModalDollarSign"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/serviceModalDollarSign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:text="@string/dollar_sign"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:textColor="?android:textColor"
+                app:layout_constraintTop_toBottomOf="@+id/serviceModalTypeField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/serviceModalPriceField"
+                tools:textColor="@color/black"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_16"
+                android:text="@{data == null || data.isEmpty() ? @string/save : @string/update}"
+                android:textColor="@color/off_white"
+                android:background="@drawable/bg_round_corners"
+                app:backgroundTint="@color/mark_color"
+                android:onClick="@{actionClickListener}"
+                app:layout_constraintTop_toBottomOf="@id/serviceModalPriceField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="@string/save"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

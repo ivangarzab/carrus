@@ -68,35 +68,64 @@ data class Car(
 
 @Parcelize
 data class Service(
+    val version: Int = VERSION_SERVICE,
+    val id: String,
     val name: String,
     val repairDate: Calendar,
-    val dueDate: Calendar
+    val dueDate: Calendar,
+    val brand: String? = null,
+    val type: String? = null,
+    val cost: Float = 0.00f
 ): Parcelable {
     override fun toString(): String =
         "Service(" +
                 "\nname='$name'" +
                 "\nrepairDate='${repairDate.getFormattedDate()}'" +
                 "\ndueDate='${dueDate.getFormattedDate()}'" +
+                "\nbrand='$brand'" +
+                "\ntype='$type'" +
+                "\ncost='$cost'" +
                 "\n)"
 }
 
 fun Service.isPastDue(): Boolean = this.dueDate.timeInMillis < Calendar.getInstance().timeInMillis
 
+const val VERSION_SERVICE: Int = 1
 val serviceList: List<Service> = listOf(
     Service(
-        "Oil Change",
-        Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-        Calendar.getInstance().apply { timeInMillis = 1672550100000 }),
+        id = "1",
+        name = "Oil Change",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1672550100000 },
+        brand = "Armor All",
+        type = "Synthetic",
+        cost = 79.99f
+    ),
     Service(
-        "Window Wipes",
-        Calendar.getInstance().apply { timeInMillis = 1662358975427 },
-        Calendar.getInstance().apply { timeInMillis = 1669882020000 }),
+        id = "2",
+        name = "Window Wipes",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
+        brand = "Walmart",
+        type = "6'', long",
+        cost = 25.00f
+    ),
     Service(
-        "Tires",
-        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        Calendar.getInstance().apply { timeInMillis = 1662016020000 }),
+        id = "3",
+        name = "Tires",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 },
+        brand = "Michelin",
+        type = "24''",
+        cost = 500.69f
+    ),
     Service(
-        "Rims",
-        Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        Calendar.getInstance().apply { timeInMillis = 1667276100000 })
+        id = "4",
+        name = "Rims",
+        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
+        brand = "Auto Zone Express",
+        type = "24'', black",
+        cost = 420.00f
+    )
 )

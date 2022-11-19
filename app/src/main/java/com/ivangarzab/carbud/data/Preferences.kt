@@ -3,6 +3,8 @@ package com.ivangarzab.carbud.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import timber.log.Timber
+import java.util.UUID
 
 /**
  * Should only be accessed by Repository, or other data handling classes.
@@ -16,6 +18,25 @@ class Preferences(context: Context) {
         DEFAULT_SHARED_PREFS,
         Context.MODE_PRIVATE
     )
+
+    init {
+        defaultCar?.let { car ->
+            Timber.d("Default car from a past version: $car")
+            if (car.services.isNotEmpty() && car.services.get(0).version != VERSION_SERVICE) {
+                // Outdated data -- update on the background
+                defaultCar = car.copy(
+                    services = car.services.map {
+                        Service(
+                            id = UUID.randomUUID().toString(),
+                            name = it.name,
+                            repairDate = it.repairDate,
+                            dueDate = it.dueDate
+                        )
+                    }
+                )
+            }
+        }
+    }
 
     var darkMode: Boolean?
         get() = when (sharedPreferences.contains(KEY_DARK_MODE)) {

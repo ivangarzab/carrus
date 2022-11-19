@@ -8,6 +8,7 @@
     <!-- raw base dimens -->
     <dimen name="base_0">0dp</dimen>
     <dimen name="base_1">1dp</dimen>
+    <dimen name="base_2">2dp</dimen>
     <dimen name="base_4">4dp</dimen>
     <dimen name="base_6">6dp</dimen>
     <dimen name="base_8">8dp</dimen>
