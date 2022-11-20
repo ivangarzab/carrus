@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -18,6 +19,9 @@ import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
+import com.ivangarzab.carbud.util.extensions.readFromFile
+import com.ivangarzab.carbud.util.extensions.toast
+import com.ivangarzab.carbud.util.extensions.writeInFile
 import timber.log.Timber
 
 /**
@@ -28,6 +32,32 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding: FragmentSettingsBinding by viewBinding()
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    private val createDocumentsContract = registerForActivityResult(
+        ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
+    ) { uri ->
+        Timber.d("Got result from create document contract: ${uri ?: "<nil>"}")
+        uri?.let {
+            viewModel.getExportData()?.let {
+                uri.writeInFile(requireContext().contentResolver, it)
+            } ?: toast("Unable to export data")
+        } ?: Timber.w("Error fetching uri")
+    }
+
+    private val openDocumentContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
+        uri?.let {
+            it.readFromFile(requireContext().contentResolver).let { data ->
+                data?.let {
+                    viewModel.onImportData(data).let { success ->
+                        if (success.not()) toast("Unable to import data")
+                    }
+                } ?: Timber.w("Unable to parse data from file with uri: $uri")
+            }
+        } ?: Timber.w("Unable to read from file with uri: $uri")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,6 +146,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
                 }
             }
+
+            setExportClickListener { createDocumentsContract.launch(DEFAULT_EXPORT_FILE_NAME) }
+            setImportClickListener { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) }
         }
     }
 
@@ -181,5 +214,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
         }.create().show()
+    }
+
+    companion object {
+        private const val DEFAULT_EXPORT_FILE_NAME = "carrus-backup.txt"
+        private const val DEFAULT_FILE_MIME_TYPE = "text/plain"
     }
 }
