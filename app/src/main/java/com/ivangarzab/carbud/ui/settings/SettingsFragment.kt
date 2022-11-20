@@ -19,7 +19,7 @@ import com.ivangarzab.carbud.data.DueDateFormat
 import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
-import com.ivangarzab.carbud.util.extensions.toast
+import com.ivangarzab.carbud.util.extensions.readFromFile
 import com.ivangarzab.carbud.util.extensions.writeInFile
 import timber.log.Timber
 
@@ -33,14 +33,27 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val viewModel: SettingsViewModel by viewModels()
 
     private val createDocumentsContract = registerForActivityResult(
-        ActivityResultContracts.CreateDocument("text/plain")
+        ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
     ) { uri ->
-        Timber.d("Got result from the document contract: ${uri ?: "<nil>"}")
+        Timber.d("Got result from create document contract: ${uri ?: "<nil>"}")
         uri?.let {
             viewModel.getExportData()?.let {
                 uri.writeInFile(requireContext().contentResolver, it)
             } ?: Timber.w("No data found to export")
         } ?: Timber.w("Error fetching uri")
+    }
+
+    private val openDocumentContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
+        uri?.let {
+            it.readFromFile(requireContext().contentResolver).let { data ->
+                data?.let {
+                    viewModel.onImportData(data)
+                } ?: Timber.w("Unable to parse data from file with uri: $uri")
+            }
+        } ?: Timber.w("Unable to read from file with uri: $uri")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -131,15 +144,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 }
             }
 
-            setExportClickListener {
-                toast("EXPORT")
-                createDocumentsContract.launch("carrus-backup.txt")
-            }
-
-            setImportClickListener {
-                toast("IMPORT")
-                viewModel.onImportData()
-            }
+            setExportClickListener { createDocumentsContract.launch(DEFAULT_EXPORT_FILE_NAME) }
+            setImportClickListener { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) }
         }
     }
 
@@ -205,5 +211,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 dialog.dismiss()
             }
         }.create().show()
+    }
+
+    companion object {
+        private const val DEFAULT_EXPORT_FILE_NAME = "carrus-backup.txt"
+        private const val DEFAULT_FILE_MIME_TYPE = "text/plain"
     }
 }
