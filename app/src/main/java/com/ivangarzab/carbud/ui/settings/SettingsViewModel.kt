@@ -97,12 +97,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }"
 
-    fun onExportData() {
-        carRepository.fetchCarData()?.let { data ->
-            Gson().toJson(data).let { json ->
-                // TODO: Do something with the JSON String data
-            }
-        }
+    fun getExportData(): String? = carRepository.fetchCarData()?.let { data ->
+        Gson().toJson(data)
     }
 
     fun onImportData() {

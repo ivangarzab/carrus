@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -19,6 +20,7 @@ import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.toast
+import com.ivangarzab.carbud.util.extensions.writeInFile
 import timber.log.Timber
 
 /**
@@ -29,6 +31,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding: FragmentSettingsBinding by viewBinding()
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    private val createDocumentsContract = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("text/plain")
+    ) { uri ->
+        Timber.d("Got result from the document contract: ${uri ?: "<nil>"}")
+        uri?.let {
+            viewModel.getExportData()?.let {
+                uri.writeInFile(requireContext().contentResolver, it)
+            } ?: Timber.w("No data found to export")
+        } ?: Timber.w("Error fetching uri")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,7 +133,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             setExportClickListener {
                 toast("EXPORT")
-                viewModel.onExportData()
+                createDocumentsContract.launch("carrus-backup.txt")
             }
 
             setImportClickListener {
