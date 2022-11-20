@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CarBud.Starting">
+        android:theme="@style/Theme.Carrus.Starting">
         <activity
             android:name="com.ivangarzab.carrus.MainActivity"
             android:exported="true"

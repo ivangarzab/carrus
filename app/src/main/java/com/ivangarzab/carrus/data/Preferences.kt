@@ -94,7 +94,7 @@ class Preferences(context: Context) {
     }
 
     companion object {
-        private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carbud.preferences"
+        private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carrus.preferences"
         private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
