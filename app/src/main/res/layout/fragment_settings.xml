@@ -9,7 +9,7 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carbud.data.Car" />
+            type="com.ivangarzab.carrus.data.Car" />
         <variable
             name="alarmTime"
             type="String" />

@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.ivangarzab.carbud"
+        applicationId "com.ivangarzab.carrus"
         minSdk 26
         targetSdk 33
         versionCode 1
