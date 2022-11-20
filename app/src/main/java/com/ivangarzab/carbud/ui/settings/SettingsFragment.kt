@@ -20,6 +20,7 @@ import com.ivangarzab.carbud.databinding.FragmentSettingsBinding
 import com.ivangarzab.carbud.prefs
 import com.ivangarzab.carbud.util.delegates.viewBinding
 import com.ivangarzab.carbud.util.extensions.readFromFile
+import com.ivangarzab.carbud.util.extensions.toast
 import com.ivangarzab.carbud.util.extensions.writeInFile
 import timber.log.Timber
 
@@ -39,7 +40,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         uri?.let {
             viewModel.getExportData()?.let {
                 uri.writeInFile(requireContext().contentResolver, it)
-            } ?: Timber.w("No data found to export")
+            } ?: toast("Unable to export data")
         } ?: Timber.w("Error fetching uri")
     }
 
@@ -50,7 +51,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         uri?.let {
             it.readFromFile(requireContext().contentResolver).let { data ->
                 data?.let {
-                    viewModel.onImportData(data)
+                    viewModel.onImportData(data).let { success ->
+                        if (success.not()) toast("Unable to import data")
+                    }
                 } ?: Timber.w("Unable to parse data from file with uri: $uri")
             }
         } ?: Timber.w("Unable to read from file with uri: $uri")

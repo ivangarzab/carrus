@@ -101,10 +101,16 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         Gson().toJson(data)
     }
 
-    fun onImportData(data: String) {
-        Gson().fromJson(data, Car::class.java).let { car ->
-            Timber.d("Got car data to import: $car")
-            carRepository.saveCarData(car)
+    fun onImportData(data: String): Boolean {
+        return try {
+            Gson().fromJson(data, Car::class.java).let { car ->
+                Timber.d("Got car data to import: $car")
+                carRepository.saveCarData(car)
+            }
+            true
+        } catch (e: Exception) {
+            Timber.w("Unable to import data", e)
+            false
         }
     }
 
