@@ -13,8 +13,8 @@ android {
         applicationId "com.ivangarzab.carrus"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0mvp-alpha02"
+        versionCode 2
+        versionName "1.0mvp-alpha03"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
