@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.CarBud.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Carrus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.CarBud.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Carrus.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ComponentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ComponentBottomSheetStyle</item>

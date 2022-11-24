@@ -6,7 +6,7 @@
     app:startDestination="@id/overviewFragment">
     <fragment
         android:id="@+id/overviewFragment"
-        android:name="com.ivangarzab.carbud.ui.overview.OverviewFragment"
+        android:name="com.ivangarzab.carrus.ui.overview.OverviewFragment"
         android:label="fragment_overview"
         tools:layout="@layout/fragment_overview" >
         <action
@@ -33,23 +33,23 @@
     </fragment>
     <fragment
         android:id="@+id/createFragment"
-        android:name="com.ivangarzab.carbud.ui.create.CreateFragment"
+        android:name="com.ivangarzab.carrus.ui.create.CreateFragment"
         android:label="fragment_create"
         tools:layout="@layout/fragment_create"/>
     <dialog
         android:id="@+id/newServiceModal"
-        android:name="com.ivangarzab.carbud.ui.modals.ServiceModalFragment"
+        android:name="com.ivangarzab.carrus.ui.modals.ServiceModalFragment"
         android:label="dialog_new_service"
         tools:layout="@layout/modal_service">
         <argument
             android:name="service"
-            app:argType="com.ivangarzab.carbud.data.Service"
+            app:argType="com.ivangarzab.carrus.data.Service"
             app:nullable="true"
             android:defaultValue="@null" />
     </dialog>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.ivangarzab.carbud.ui.settings.SettingsFragment"
+        android:name="com.ivangarzab.carrus.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings"/>
 </navigation>

@@ -1,0 +1,49 @@
+package com.ivangarzab.carrus.ui.create
+
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.ivangarzab.carrus.carRepository
+import com.ivangarzab.carrus.data.Car
+import timber.log.Timber
+import java.util.*
+
+/**
+ * Created by Ivan Garza Bermea.
+ */
+class CreateViewModel : ViewModel() {
+
+    val imageUri: MutableLiveData<String?> = MutableLiveData(null)
+
+    val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun submitData(
+        nickname: String = "",
+        make: String,
+        model: String,
+        year: String,
+        licenseNo: String = "xxxxxx",
+        imageUri: String? = null
+    ) {
+        Timber.v("Saving default car")
+        carRepository.saveCarData(Car(
+            uid = UUID.randomUUID().toString(),
+            nickname = nickname,
+            make = make,
+            model = model,
+            year = year,
+            licenseNo = licenseNo,
+            tirePressure = "",
+            totalMiles = "",
+            milesPerGallon = "",
+            services = emptyList(),
+            imageUri = imageUri
+        ))
+        onSubmit.postValue(true)
+    }
+
+    fun verifyData(
+        make: String,
+        model: String,
+        year: String
+    ): Boolean = make.isNotBlank() && model.isNotBlank() && year.isNotBlank()
+}
