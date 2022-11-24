@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.ivangarzab.carbud.alarms
 import com.ivangarzab.carbud.carRepository
 import com.ivangarzab.carbud.data.Car
@@ -95,6 +96,23 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
             else -> ""
         }
     }"
+
+    fun getExportData(): String? = carRepository.fetchCarData()?.let { data ->
+        Gson().toJson(data)
+    }
+
+    fun onImportData(data: String): Boolean {
+        return try {
+            Gson().fromJson(data, Car::class.java).let { car ->
+                Timber.d("Got car data to import: $car")
+                carRepository.saveCarData(car)
+            }
+            true
+        } catch (e: Exception) {
+            Timber.w("Unable to import data", e)
+            false
+        }
+    }
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
