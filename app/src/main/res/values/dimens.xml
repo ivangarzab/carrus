@@ -5,6 +5,7 @@
     <dimen name="modal_design_margin_min">@dimen/base_8</dimen>
     <dimen name="modal_design_margin_unit">@dimen/base_4</dimen>
     <dimen name="create_image_border_width">@dimen/base_2</dimen>
+    <dimen name="create_image_border_radius">@dimen/base_3</dimen>
 
     <!-- raw base dimens -->
     <dimen name="base_0">0dp</dimen>
