@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <stroke
+        android:width="@dimen/create_image_border_width"
+        android:color="#444444" />
+    <padding
+        android:left="@dimen/create_image_border_width"
+        android:top="@dimen/create_image_border_width"
+        android:right="@dimen/create_image_border_width"
+        android:bottom="@dimen/create_image_border_width" />
+</shape>

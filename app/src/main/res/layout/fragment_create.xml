@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import
+            alias="View"
+            type="android.view.View" />
         <variable
             name="imageClickListener"
             type="android.view.View.OnClickListener" />
@@ -13,6 +16,9 @@
         <variable
             name="submitClickListener"
             type="android.view.View.OnClickListener" />
+        <variable
+            name="isThereAnImage"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,19 +59,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/createAddPhotoButton"
+                    android:layout_width="0dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="@dimen/base_16"
+                    android:layout_marginStart="@dimen/base_16"
+                    android:layout_marginEnd="@dimen/base_16"
+                    android:layout_marginBottom="@dimen/base_8"
+                    android:text="Add a photo"
+                    android:backgroundTint="?android:colorBackground"
+                    android:drawableStart="@drawable/ic_add"
+                    android:onClickListener="@{imageClickListener}"
+                    android:visibility="@{isThereAnImage ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/createNicknameInputLayout"
+                    tools:visibility="visible"/>
+
                 <ImageView
                     android:id="@+id/createPreviewImage"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="@dimen/base_16"
+                    android:layout_marginStart="@dimen/base_16"
+                    android:layout_marginEnd="@dimen/base_16"
                     android:contentDescription="@string/label_artwork"
                     android:scaleType="fitXY"
                     android:onClickListener="@{imageClickListener}"
-                    android:background="@drawable/bg_gradient_add_car"
+                    android:background="@drawable/bg_image_outline"
+                    android:visibility="@{isThereAnImage ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/createNicknameInputLayout"/>
+                    app:layout_constraintBottom_toTopOf="@id/createNicknameInputLayout"
+                    tools:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/createUploadImage"
@@ -75,9 +105,11 @@
                     android:contentDescription="@string/label_artwork"
                     android:onClickListener="@{imageClickListener}"
                     android:src="@drawable/ic_image_upload"
+                    android:visibility="@{isThereAnImage ? View.VISIBLE : View.GONE}"
                     app:tint="@color/silver"
                     app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
-                    app:layout_constraintBottom_toBottomOf="@id/createPreviewImage" />
+                    app:layout_constraintBottom_toBottomOf="@id/createPreviewImage"
+                    tools:visibility="gone"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/createNicknameInputLayout"
@@ -211,7 +243,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/submit"
-                    android:textColor="@color/silver"
+                    android:textColor="@color/white"
                     android:onClickListener="@{submitClickListener}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

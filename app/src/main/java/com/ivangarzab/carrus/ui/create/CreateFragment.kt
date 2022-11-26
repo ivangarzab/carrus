@@ -54,7 +54,10 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             }
             imageUri.observe(viewLifecycleOwner) {
                 it?.let { uri ->
-                    binding.createPreviewImage.setImageURI(Uri.parse(uri))
+                    binding.apply {
+                        createPreviewImage.setImageURI(Uri.parse(uri))
+                        isThereAnImage = true
+                    }
                 }
             }
         }
@@ -84,6 +87,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun setupViews() {
         binding.apply {
+            isThereAnImage = false
             markRequiredFields(listOf(
                 binding.createMakeInputLayout,
                 binding.createModelInputLayout,
