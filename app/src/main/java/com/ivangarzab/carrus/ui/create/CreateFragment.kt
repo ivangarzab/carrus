@@ -54,10 +54,10 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             }
             state.observe(viewLifecycleOwner) {
                 it?.let { state ->
+                    binding.state = state
                     state.imageUri?.let { uri ->
                         binding.apply {
                             createPreviewImage.setImageURI(Uri.parse(uri))
-                            isThereAnImage = true
                         }
                     }
                 }
@@ -89,7 +89,6 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun setupViews() {
         binding.apply {
-            isThereAnImage = false
             markRequiredFields(listOf(
                 binding.createMakeInputLayout,
                 binding.createModelInputLayout,
@@ -107,7 +106,9 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
             }
-            setUploadClickListener { toast("Coming Soon!") }
+            setExpandClickListener {
+                viewModel.onExpandToggle()
+            }
             setSubmitClickListener {
                 viewModel.verifyData(
                     make = binding.createMakeInput.text.toString(),

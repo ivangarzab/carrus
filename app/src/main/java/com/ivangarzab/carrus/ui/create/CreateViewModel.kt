@@ -69,6 +69,12 @@ class CreateViewModel(
         }
     }
 
+    fun onExpandToggle() {
+        setState(state, savedState, STATE) {
+            copy(isExpanded = isExpanded.not())
+        }
+    }
+
     companion object {
         private const val STATE: String = "CreateViewModel.STATE"
     }

@@ -11,14 +11,14 @@
             name="imageClickListener"
             type="android.view.View.OnClickListener" />
         <variable
-            name="uploadClickListener"
+            name="expandClickListener"
             type="android.view.View.OnClickListener" />
         <variable
             name="submitClickListener"
             type="android.view.View.OnClickListener" />
         <variable
-            name="isThereAnImage"
-            type="Boolean" />
+            name="state"
+            type="com.ivangarzab.carrus.ui.create.CreateViewModel.CarModalState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,7 +74,7 @@
                     app:iconSize="25dp"
                     app:iconGravity="textStart"
                     android:onClickListener="@{imageClickListener}"
-                    android:visibility="@{isThereAnImage ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{state.imageUri != null ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
                     android:scaleType="fitXY"
                     android:onClickListener="@{imageClickListener}"
                     android:background="@drawable/bg_image_outline"
-                    android:visibility="@{isThereAnImage ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{state.imageUri != null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
                     android:contentDescription="@string/label_artwork"
                     android:onClickListener="@{imageClickListener}"
                     android:src="@drawable/ic_image_upload"
-                    android:visibility="@{isThereAnImage ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{state.imageUri != null ? View.VISIBLE : View.GONE}"
                     app:tint="@color/silver"
                     app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
                     app:layout_constraintBottom_toBottomOf="@id/createPreviewImage"
@@ -201,7 +201,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:placeholderText="@string/license_no"
-                    app:layout_constraintBottom_toTopOf="@id/createUploadButton"
+                    app:layout_constraintBottom_toTopOf="@id/createExpandButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
@@ -216,18 +216,22 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/createUploadButton"
+                    android:id="@+id/createExpandButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="65dp"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/create_upload_docs"
-                    android:textColor="@color/silver"
-                    android:onClickListener="@{uploadClickListener}"
-                    android:enabled="false"
+                    android:backgroundTint="?android:colorBackground"
+                    android:text="more details"
+                    app:icon="@drawable/ic_arrow_drop_down"
+                    app:iconSize="25dp"
+                    app:iconGravity="textStart"
+                    android:onClickListener="@{expandClickListener}"
+                    android:visibility="@{state.expanded ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/createSubmitButton"
-                    tools:textColor="@color/black"/>
+                    tools:textColor="@color/black"
+                    tools:visibility="invisible"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/createSubmitButton"
