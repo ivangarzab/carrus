@@ -7,6 +7,10 @@
     <string name="nickname">Nickname</string>
     <string name="year">Year</string>
     <string name="license_no">License No.</string>
+    <string name="total_miles">Total Miles</string>
+    <string name="miles_per_gallon">Miles per gallon</string>
+    <string name="tire_pressure">Tire Pressure</string>
+    <string name="vin_no">VIN No.</string>
     <string name="color">Color</string>
     <string name="services">Services</string>
     <string name="details">Details</string>
@@ -41,6 +45,7 @@
     <!-- Create/Edit -->
     <string name="create_title">Add a new Car</string>
     <string name="add_a_photo">Add a Photo</string>
+    <string name="more_details">More Details</string>
     <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
 
     <!-- Settings -->
@@ -63,9 +68,9 @@
     <string name="label_button">Button</string>
 
     <!-- Modal: Details -->
-    <string name="tire_pressure">Tire Pressure:</string>
+    <!--<string name="tire_pressure">Tire Pressure:</string>
     <string name="total_miles">Total Miles:</string>
-    <string name="miles_per_gallon">Miles per Gallon:</string>
+    <string name="miles_per_gallon">Miles per Gallon:</string>-->
 
     <!-- Service -->
     <string name="new_service">New Service</string>

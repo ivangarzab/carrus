@@ -38,6 +38,9 @@ class CreateViewModel(
         model: String,
         year: String,
         licenseNo: String = "xxxxxx",
+        tirePressure: String = "",
+        totalMiles: String = "--",
+        milesPerGallon: String = "0",
         imageUri: String? = null
     ) {
         Timber.v("Saving default car")
@@ -48,9 +51,9 @@ class CreateViewModel(
             model = model,
             year = year,
             licenseNo = licenseNo,
-            tirePressure = "",
-            totalMiles = "",
-            milesPerGallon = "",
+            tirePressure = tirePressure,
+            totalMiles = totalMiles,
+            milesPerGallon = milesPerGallon,
             services = emptyList(),
             imageUri = imageUri
         ))

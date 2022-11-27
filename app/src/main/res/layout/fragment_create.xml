@@ -73,13 +73,13 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/createAddPhotoButton"
                         android:layout_width="0dp"
-                        android:layout_height="65dp"
+                        android:layout_height="@dimen/create_action_button_height"
                         android:layout_marginTop="@dimen/base_16"
                         android:layout_marginBottom="@dimen/base_8"
                         android:text="@string/add_a_photo"
                         android:backgroundTint="?android:colorBackground"
                         app:icon="@drawable/ic_add"
-                        app:iconSize="25dp"
+                        app:iconSize="@dimen/create_action_button_icon_size"
                         app:iconGravity="textStart"
                         android:onClickListener="@{imageClickListener}"
                         android:visibility="@{state.imageUri != null ? View.GONE : View.VISIBLE}"
@@ -219,41 +219,136 @@
                         android:id="@+id/createLicenseInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/base_8"
                         android:autofillHints="false"
                         android:hint="@string/license_no"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/createExpandButton"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/createExpandLayout"
                     android:layout_width="0dp"
-                    android:layout_height="65dp"
-                    android:layout_marginBottom="8dp"
-                    android:backgroundTint="?android:colorBackground"
-                    android:text="more details"
-                    app:icon="@drawable/ic_arrow_drop_down"
-                    app:iconSize="25dp"
-                    app:iconGravity="textStart"
-                    android:onClickListener="@{expandClickListener}"
-                    android:visibility="@{state.expanded ? View.GONE : View.VISIBLE}"
+                    android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createLicenseInputLayout"
-                    tools:textColor="@color/black"
-                    tools:visibility="visible"/>
+                    app:layout_constraintTop_toBottomOf="@+id/createLicenseInputLayout">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/createExpandButton"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/create_action_button_height"
+                        android:layout_marginBottom="@dimen/base_8"
+                        android:backgroundTint="?android:colorBackground"
+                        android:text="@string/more_details"
+                        app:icon="@{state.expanded ? @drawable/ic_arrow_drop_up : @drawable/ic_arrow_drop_down}"
+                        app:iconSize="@dimen/create_action_button_icon_size"
+                        app:iconGravity="textStart"
+                        android:onClickListener="@{expandClickListener}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:textColor="@color/black"
+                        tools:visibility="visible"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createOdometerInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/total_miles"
+                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/createMiPerGalInputLayout"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createOdometerInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/base_8"
+                            android:autofillHints="false"
+                            android:hint="@string/total_miles"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createMiPerGalInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/miles_per_gallon"
+                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/createOdometerInputLayout"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createMiPerGalInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/base_8"
+                            android:layout_marginStart="@dimen/base_8"
+                            android:autofillHints="false"
+                            android:hint="@string/miles_per_gallon"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createVinNumberInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/vin_no"
+                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintTop_toBottomOf="@id/createOdometerInputLayout"
+                        app:layout_constraintEnd_toStartOf="@id/createMiPerGalInputLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/createExpandButton">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createVinNumberInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/base_8"
+                            android:autofillHints="false"
+                            android:hint="@string/vin_no"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createTirePressureInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/tire_pressure"
+                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintTop_toBottomOf="@id/createOdometerInputLayout"
+                        app:layout_constraintStart_toEndOf="@id/createOdometerInputLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/createExpandButton">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createTirePressureInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/base_8"
+                            android:autofillHints="false"
+                            android:hint="@string/tire_pressure"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/createSubmitButton"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_height="@dimen/create_action_button_height"
+                    android:layout_marginBottom="@dimen/base_8"
                     android:text="@string/submit"
                     android:textColor="@color/white"
                     android:onClickListener="@{submitClickListener}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createExpandButton"
+                    app:layout_constraintTop_toBottomOf="@+id/createExpandLayout"
                     tools:textColor="@color/black"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

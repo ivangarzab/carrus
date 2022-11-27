@@ -6,6 +6,8 @@
     <dimen name="modal_design_margin_unit">@dimen/base_4</dimen>
     <dimen name="create_image_border_width">@dimen/base_2</dimen>
     <dimen name="create_image_border_radius">@dimen/base_3</dimen>
+    <dimen name="create_action_button_height">@dimen/base_65</dimen>
+    <dimen name="create_action_button_icon_size">@dimen/base_25</dimen>
 
     <!-- raw base dimens -->
     <dimen name="base_0">0dp</dimen>
@@ -19,8 +21,10 @@
     <dimen name="base_12">12dp</dimen>
     <dimen name="base_16">16dp</dimen>
     <dimen name="base_24">24dp</dimen>
+    <dimen name="base_25">25dp</dimen>
     <dimen name="base_32">32dp</dimen>
     <dimen name="base_42">42dp</dimen>
+    <dimen name="base_65">65dp</dimen>
 
     <!-- raw text dimens -->
     <dimen name="text_12">12sp</dimen>
