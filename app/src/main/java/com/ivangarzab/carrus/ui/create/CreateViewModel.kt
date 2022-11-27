@@ -38,8 +38,9 @@ class CreateViewModel(
         model: String,
         year: String,
         licenseNo: String = "xxxxxx",
+        vinNo: String = "---",
         tirePressure: String = "",
-        totalMiles: String = "--",
+        totalMiles: String = "---",
         milesPerGallon: String = "0",
         imageUri: String? = null
     ) {
@@ -51,6 +52,7 @@ class CreateViewModel(
             model = model,
             year = year,
             licenseNo = licenseNo,
+            vinNo = vinNo,
             tirePressure = tirePressure,
             totalMiles = totalMiles,
             milesPerGallon = milesPerGallon,

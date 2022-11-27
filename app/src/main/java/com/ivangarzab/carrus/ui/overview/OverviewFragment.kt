@@ -229,6 +229,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
         bindingDialog.apply {
+            vinNo = car.vinNo
             tirePressure = car.tirePressure
             milesTotal = car.totalMiles
             milesPerGallon = car.milesPerGallon

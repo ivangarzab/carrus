@@ -123,6 +123,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                             model = binding.createModelInput.text.toString(),
                             year = binding.createYearInput.text.toString(),
                             licenseNo = binding.createLicenseInput.text.toString(),
+                            vinNo = binding.createVinNumberInput.text.toString(),
                             tirePressure = binding.createTirePressureInput.text.toString(),
                             totalMiles = binding.createOdometerInput.text.toString(),
                             milesPerGallon = binding.createMiPerGalInput.text.toString(),
