@@ -29,6 +29,7 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
+import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
 
@@ -138,6 +139,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 when (it.itemId) {
                     R.id.action_details -> {
                         showCarDetailsDialog()
+                        true
+                    }
+                    R.id.action_edit -> {
+                        toast("Edit car data clicked!")
                         true
                     }
                     R.id.action_settings -> {

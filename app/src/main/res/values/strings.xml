@@ -42,6 +42,7 @@
     <string name="add_new_car">Add New Car</string>
     <string name="add_new_car_capitalized">ADD NEW CAR</string>
     <string name="menu_delete_car">Delete Car</string>
+    <string name="menu_edit_car">Edit Car</string>
     <string name="menu_add_component">Add Component</string>
     <string name="no_services_scheduled">No services scheduled at this time</string>
 
