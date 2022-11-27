@@ -142,7 +142,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         true
                     }
                     R.id.action_edit -> {
-                        toast("Edit car data clicked!")
+                        navigateToEditFragment()
                         true
                     }
                     R.id.action_settings -> {
@@ -260,6 +260,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
+
+    private fun navigateToEditFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToCreateFragment(
+            data = viewModel.state.value?.car
+        )
     )
 
     private fun navigateToSettingsFragment() = findNavController().navigate(

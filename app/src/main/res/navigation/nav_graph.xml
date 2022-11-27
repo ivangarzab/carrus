@@ -35,7 +35,13 @@
         android:id="@+id/createFragment"
         android:name="com.ivangarzab.carrus.ui.create.CreateFragment"
         android:label="fragment_create"
-        tools:layout="@layout/fragment_create"/>
+        tools:layout="@layout/fragment_create">
+        <argument
+            android:name="data"
+            app:argType="com.ivangarzab.carrus.data.Car"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <dialog
         android:id="@+id/newServiceModal"
         android:name="com.ivangarzab.carrus.ui.modals.ServiceModalFragment"

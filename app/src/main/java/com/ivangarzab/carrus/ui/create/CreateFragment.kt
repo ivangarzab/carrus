@@ -14,6 +14,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
@@ -33,10 +34,19 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private val binding: FragmentCreateBinding by viewBinding()
 
+    private val args: CreateFragmentArgs by navArgs()
+    private enum class Type { CREATE, EDIT }
+    private lateinit var type: Type
+
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        type = args.data?.let {
+            viewModel.onSetupContent(it)
+            Type.EDIT
+        } ?: Type.CREATE
+
         setupWindow()
         setupToolbar()
         setupViews()

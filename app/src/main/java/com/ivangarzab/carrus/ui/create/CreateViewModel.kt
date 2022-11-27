@@ -22,6 +22,17 @@ class CreateViewModel(
     @Parcelize
     data class CarModalState(
         val isExpanded: Boolean = false,
+        val title: String = "Add a Car",
+        val actionButton: String = "Submit",
+        val nickname: String = "",
+        val make: String = "",
+        val model: String = "",
+        val year: String = "",
+        val licenseNo: String = "",
+        val vinNo: String = "",
+        val tirePressure: String = "",
+        val totalMiles: String = "",
+        val milesPerGallon: String = "",
         val imageUri: String? = null
     ) : Parcelable
 
@@ -77,6 +88,25 @@ class CreateViewModel(
     fun onExpandToggle() {
         setState(state, savedState, STATE) {
             copy(isExpanded = isExpanded.not())
+        }
+    }
+
+    fun onSetupContent(car: Car) {
+        setState(state, savedState, STATE) {
+            copy(
+                title = "Edit Car",
+                actionButton = "Update",
+                nickname = car.nickname,
+                make = car.make,
+                model = car.model,
+                year = car.year,
+                licenseNo = car.licenseNo,
+                vinNo = car.vinNo,
+                tirePressure = car.tirePressure,
+                totalMiles = car.totalMiles,
+                milesPerGallon = car.milesPerGallon,
+                imageUri = car.imageUri
+            )
         }
     }
 
