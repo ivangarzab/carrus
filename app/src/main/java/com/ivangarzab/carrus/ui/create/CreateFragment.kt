@@ -44,7 +44,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
                 Timber.d("Got image uri: $uri")
-                viewModel.imageUri.postValue(uri.toString())
+                viewModel.onImageUriReceived(uri.toString())
             } ?: Timber.d("No media selected")
         }
 
@@ -52,11 +52,13 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             onSubmit.observe(viewLifecycleOwner) { success ->
                 if (success) findNavController().popBackStack()
             }
-            imageUri.observe(viewLifecycleOwner) {
-                it?.let { uri ->
-                    binding.apply {
-                        createPreviewImage.setImageURI(Uri.parse(uri))
-                        isThereAnImage = true
+            state.observe(viewLifecycleOwner) {
+                it?.let { state ->
+                    state.imageUri?.let { uri ->
+                        binding.apply {
+                            createPreviewImage.setImageURI(Uri.parse(uri))
+                            isThereAnImage = true
+                        }
                     }
                 }
             }
@@ -120,7 +122,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                             model = binding.createModelInput.text.toString(),
                             year = binding.createYearInput.text.toString(),
                             licenseNo = binding.createLicenseInput.text.toString(),
-                            imageUri = viewModel.imageUri.value?.apply {
+                            imageUri = viewModel.state.value?.imageUri?.apply {
                                 requireContext().contentResolver.takePersistableUriPermission(
                                     Uri.parse(this),
                                     Intent.FLAG_GRANT_READ_URI_PERMISSION

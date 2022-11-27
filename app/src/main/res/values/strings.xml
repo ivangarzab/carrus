@@ -40,6 +40,7 @@
 
     <!-- Create/Edit -->
     <string name="create_title">Add a new Car</string>
+    <string name="add_a_photo">Add a Photo</string>
     <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
 
     <!-- Settings -->

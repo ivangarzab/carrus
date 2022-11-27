@@ -54,6 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/createFieldsContainer"
                 android:layout_width="match_parent"
@@ -67,9 +68,11 @@
                     android:layout_height="65dp"
                     android:layout_marginTop="@dimen/base_16"
                     android:layout_marginBottom="@dimen/base_8"
-                    android:text="Add a photo"
+                    android:text="@string/add_a_photo"
                     android:backgroundTint="?android:colorBackground"
-                    android:drawableStart="@drawable/ic_add"
+                    app:icon="@drawable/ic_add"
+                    app:iconSize="25dp"
+                    app:iconGravity="textStart"
                     android:onClickListener="@{imageClickListener}"
                     android:visibility="@{isThereAnImage ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toTopOf="parent"
@@ -241,9 +244,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
