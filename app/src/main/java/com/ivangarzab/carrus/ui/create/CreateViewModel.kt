@@ -40,6 +40,8 @@ class CreateViewModel(
         STATE,
         CarModalState()
     )
+    enum class Type { CREATE, EDIT }
+    lateinit var type: Type
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -56,7 +58,7 @@ class CreateViewModel(
         imageUri: String? = null
     ) {
         Timber.v("Saving default car")
-        carRepository.saveCarData(Car(
+        Car(
             uid = UUID.randomUUID().toString(),
             nickname = nickname,
             make = make,
@@ -69,7 +71,14 @@ class CreateViewModel(
             milesPerGallon = milesPerGallon,
             services = emptyList(),
             imageUri = imageUri
-        ))
+        ).let { data ->
+            when (type) {
+                Type.CREATE -> carRepository.saveCarData(data)
+                Type.EDIT -> carRepository.saveCarData(data.copy(
+                    services = carRepository.fetchCarData()?.services ?: emptyList()
+                ))
+            }
+        }
         onSubmit.postValue(true)
     }
 

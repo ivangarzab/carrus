@@ -35,17 +35,15 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
     private val binding: FragmentCreateBinding by viewBinding()
 
     private val args: CreateFragmentArgs by navArgs()
-    private enum class Type { CREATE, EDIT }
-    private lateinit var type: Type
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        type = args.data?.let {
+        viewModel.type = args.data?.let {
             viewModel.onSetupContent(it)
-            Type.EDIT
-        } ?: Type.CREATE
+            CreateViewModel.Type.EDIT
+        } ?: CreateViewModel.Type.CREATE
 
         setupWindow()
         setupToolbar()
