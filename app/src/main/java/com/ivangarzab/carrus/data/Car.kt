@@ -34,6 +34,10 @@ data class Car(
                 "\nmodel='$model'" +
                 "\nyear='$year'" +
                 "\nlicenseNo='$licenseNo'" +
+                "\nvinNo='$vinNo'" +
+                "\ntirePressure='$tirePressure'" +
+                "\ntotalMiles='$totalMiles'" +
+                "\nmi/gal='$milesPerGallon'" +
                 "\nservices='$services'" +
                 "\nimageUri=$imageUri" +
                 "\n)"

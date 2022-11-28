@@ -4,10 +4,15 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.transition.doOnEnd
+import androidx.core.transition.doOnResume
+import androidx.core.transition.doOnStart
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -52,6 +57,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
                 Timber.d("Got image uri: $uri")
+                TransitionManager.beginDelayedTransition(
+                    binding.createImageLayout,
+                    AutoTransition().apply {
+                        duration = TRANSITION_DURATION_IMAGE_UPLOAD
+                    }
+                )
                 viewModel.onImageUriReceived(uri.toString())
             } ?: Timber.d("No media selected")
         }
@@ -102,10 +113,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 binding.createModelInputLayout,
                 binding.createYearInputLayout
             ))
-            createPreviewImage.setOnLongClickListener {
+            createAddPhotoButton.setOnLongClickListener {
                 // TODO: EASTER EGG -- Delete before first alpha!
                 with(Car.default) {
-                    viewModel.submitData(nickname, make, model, year)
+                    viewModel.submitData(
+                        nickname, make, model, year, licenseNo, vinNo, tirePressure, totalMiles, milesPerGallon
+                    )
                 }
                 true
             }
@@ -115,6 +128,16 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 )
             }
             setExpandClickListener {
+                TransitionManager.beginDelayedTransition(
+                    createExpandLayout,
+                    AutoTransition().apply {
+                        state?.let {
+                            if (it.isExpanded) {
+                                addTarget(createExpandButton)
+                            }
+                        }
+                    }
+                )
                 viewModel.onExpandToggle()
             }
             setSubmitClickListener {
@@ -150,5 +173,9 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun markRequiredFields(list: List<TextInputLayout>) = list.forEach {
         it.markRequired()
+    }
+
+    companion object {
+        private const val TRANSITION_DURATION_IMAGE_UPLOAD = 125L
     }
 }
