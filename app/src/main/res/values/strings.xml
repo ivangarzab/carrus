@@ -86,7 +86,6 @@
     <string name="service_type">Service material type/specs</string>
     <string name="service_price">Service price</string>
     <string name="service_date_format">%1$d/%2$d/%3$d</string>
-    <string name="service_details">%1$s : %2$s</string>
     <string name="service_repair_date_format">on %s</string>
     <string name="service_due_date_week_format">%s weeks</string>
     <string name="service_due_date_months_format">%s months</string>

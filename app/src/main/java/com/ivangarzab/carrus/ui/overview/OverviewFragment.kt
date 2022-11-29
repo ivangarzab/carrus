@@ -127,6 +127,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 binding.overviewToolbar.updateMargins(
                     top = insets.top
                 )
+                binding.overviewContent.overviewContentServiceList.updateMargins(
+                    bottom = insets.bottom
+                )
             }
             WindowInsetsCompat.CONSUMED
         }

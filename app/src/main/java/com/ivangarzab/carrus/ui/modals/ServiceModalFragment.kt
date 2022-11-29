@@ -116,7 +116,11 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             },
             brand = it.serviceModalBrandField.text.toString(),
             type = it.serviceModalTypeField.text.toString(),
-            cost = it.serviceModalPriceField.text.toString().toFloat()
+            cost = it.serviceModalPriceField.text?.toString()?.takeIf { nonNullString ->
+                nonNullString.isNotEmpty()
+            }?.run {
+                toFloat()
+            } ?: DEFAULT_PRICE
         )
     }
 
@@ -142,7 +146,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
     private fun showDueDatePickerDialog() =
         showDatePickerDialog(
             date = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_MONTH, 7)
+                add(Calendar.DAY_OF_MONTH, DEFAULT_DUE_DATE_ADDITION)
             },
             onDateSelected = { year, month, day ->
                 viewModel.datesInMillis = Pair(
@@ -175,5 +179,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
 
     companion object {
         private const val NO_THEME_RES: Int = 0
+        private const val DEFAULT_PRICE: Float = 0.00f
+        private const val DEFAULT_DUE_DATE_ADDITION: Int = 7
     }
 }
