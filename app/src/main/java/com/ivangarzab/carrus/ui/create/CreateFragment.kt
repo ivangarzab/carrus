@@ -53,7 +53,10 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             it.readFromFile(requireContext().contentResolver).let { data ->
                 data?.let {
                     viewModel.onImportData(data).let { success ->
-                        if (success.not()) toast("Unable to import data")
+                        when (success) {
+                            true -> toast("Data imported successfully!")
+                            false -> toast("Unable to import data")
+                        }
                     }
                 } ?: Timber.w("Unable to parse data from file with uri: $uri")
             }
