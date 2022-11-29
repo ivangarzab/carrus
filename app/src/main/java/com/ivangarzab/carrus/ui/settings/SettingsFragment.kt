@@ -218,6 +218,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     companion object {
         private const val DEFAULT_EXPORT_FILE_NAME = "carrus-backup.txt"
-        private const val DEFAULT_FILE_MIME_TYPE = "text/plain"
     }
 }
+
+const val DEFAULT_FILE_MIME_TYPE = "text/plain"

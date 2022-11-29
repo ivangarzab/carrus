@@ -25,8 +25,10 @@ import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.databinding.FragmentCreateBinding
+import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.markRequired
+import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
 import timber.log.Timber
 
@@ -42,6 +44,21 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
     private val args: CreateFragmentArgs by navArgs()
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
+    private val openDocumentContract = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
+        uri?.let {
+            it.readFromFile(requireContext().contentResolver).let { data ->
+                data?.let {
+                    viewModel.onImportData(data).let { success ->
+                        if (success.not()) toast("Unable to import data")
+                    }
+                } ?: Timber.w("Unable to parse data from file with uri: $uri")
+            }
+        } ?: Timber.w("Unable to read from file with uri: $uri")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -103,6 +120,18 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
+            inflateMenu(R.menu.menu_create)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_import_data -> {
+                        openDocumentContract.launch(
+                            arrayOf(DEFAULT_FILE_MIME_TYPE)
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
     }
 
@@ -159,10 +188,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                             totalMiles = binding.createOdometerInput.text.toString(),
                             milesPerGallon = binding.createMiPerGalInput.text.toString(),
                             imageUri = viewModel.state.value?.imageUri?.apply {
-                                requireContext().contentResolver.takePersistableUriPermission(
-                                    Uri.parse(this),
-                                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                )
+                                persistUriPermission(this)
                             }
                         )
                     }
@@ -173,6 +199,13 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun markRequiredFields(list: List<TextInputLayout>) = list.forEach {
         it.markRequired()
+    }
+
+    private fun persistUriPermission(uri: String) {
+        requireContext().contentResolver.takePersistableUriPermission(
+            Uri.parse(uri),
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
     }
 
     companion object {

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.util.extensions.setState
@@ -118,6 +119,40 @@ class CreateViewModel(
             )
         }
     }
+
+    fun onImportData(data: String): Boolean {
+        return try {
+            Gson().fromJson(data, Car::class.java).let { car ->
+                Timber.d("Got car data to import: $car")
+                carRepository.saveCarData(adaptCarData(car))
+            }
+            onSubmit.postValue(true)
+            true
+        } catch (e: Exception) {
+            Timber.w("Unable to import data", e)
+            false
+        }
+    }
+
+    /**
+     * TODO: There's got to be a better way of doing this!
+     *  Or at least arrive at at state where we don't need this anymore --
+     *  Should we start versioning our Car data too?
+     */
+    private fun adaptCarData(data: Car): Car = Car (
+        uid = UUID.randomUUID().toString(),
+        nickname = data.nickname ?: "",
+        make = data.make ?: "",
+        model = data.model ?: "",
+        year = data.year ?: "",
+        licenseNo = data.licenseNo ?: "",
+        vinNo = data.vinNo ?: "",
+        tirePressure = data.tirePressure ?: "",
+        totalMiles = data.totalMiles ?: "",
+        milesPerGallon = data.milesPerGallon ?: "",
+        services = data.services,
+        imageUri = null
+    )
 
     companion object {
         private const val STATE: String = "CreateViewModel.STATE"
