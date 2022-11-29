@@ -12,6 +12,7 @@ import androidx.transition.TransitionManager
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.getDetails
 import com.ivangarzab.carrus.data.isPastDue
 import com.ivangarzab.carrus.databinding.ItemServiceBinding
 import com.ivangarzab.carrus.prefs
@@ -96,7 +97,7 @@ class ServiceListAdapter(
             position = position,
             name = data.name,
             repairDateFormat = resources.getString(R.string.service_repair_date_format, data.repairDate.getShortenedDate()),
-            details = resources.getString(R.string.service_details, data.brand, data.type),
+            details = data.getDetails(),
             price = resources.getString(R.string.price_money, data.cost),
             dueDateFormat = when (data.isPastDue()) {
                 true -> resources.getString(R.string.due).uppercase()
@@ -121,6 +122,6 @@ class ServiceListAdapter(
     companion object {
         private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
         private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f
-        private const val ITEM_ANIMATION_DURATION_MS: Long = 250
+        private const val ITEM_ANIMATION_DURATION_MS: Long = 200
     }
 }
