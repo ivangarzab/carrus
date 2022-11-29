@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "180507216105",
+    "project_id": "carrus-6606",
+    "storage_bucket": "carrus-6606.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180507216105:android:36505bdf0649abb188c878",
+        "android_client_info": {
+          "package_name": "com.ivangarzab.carrus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180507216105-g1ouhvno2np29gn40us93brhv6gbpb9g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA46SzBXKNx8QLCtiLFasGClD2--gd931Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180507216105-g1ouhvno2np29gn40us93brhv6gbpb9g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
