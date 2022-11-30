@@ -55,20 +55,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/createFieldsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/createImageLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/createAddPhotoButton"
@@ -123,30 +122,9 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/createNicknameInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:placeholderText="@string/nickname"
-                    app:layout_constraintTop_toBottomOf="@+id/createImageLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/createNicknameInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:autofillHints="false"
-                        android:hint="@string/nickname"
-                        android:text="@{state.nickname}"
-                        android:inputType="text" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/createMakeInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:placeholderText="@string/make"
                     app:layout_constraintTop_toBottomOf="@+id/createNicknameInputLayout"
@@ -167,7 +145,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/createModelInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:placeholderText="@string/model"
                     app:layout_constraintTop_toBottomOf="@+id/createMakeInputLayout"
@@ -185,54 +163,84 @@
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/createYearInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:placeholderText="@string/year"
-                    app:layout_constraintTop_toBottomOf="@+id/createModelInputLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    android:layout_marginBottom="@dimen/base_8">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createYearInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/year"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/createYearLicenseNoGuideline"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createYearInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/base_8"
+                            android:autofillHints="false"
+                            android:hint="@string/year"
+                            android:text="@{state.year}"
+                            android:inputType="number"
+                            android:imeOptions="actionNext"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/createYearLicenseNoGuideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent=".4"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/createLicenseInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:placeholderText="@string/license_no"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/createYearLicenseNoGuideline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/createLicenseInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="false"
+                            android:hint="@string/license_no"
+                            android:text="@{state.licenseNo}"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/createNicknameInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:placeholderText="@string/nickname">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/createYearInput"
+                        android:id="@+id/createNicknameInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:autofillHints="false"
-                        android:hint="@string/year"
-                        android:text="@{state.year}"
-                        android:inputType="number"
-                        app:layout_constraintBottom_toTopOf="@id/createLicenseInput"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/createLicenseInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:placeholderText="@string/license_no"
-                    app:layout_constraintTop_toBottomOf="@+id/createYearInputLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/createLicenseInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/base_8"
-                        android:autofillHints="false"
-                        android:hint="@string/license_no"
-                        android:text="@{state.licenseNo}"
+                        android:hint="@string/nickname"
+                        android:text="@{state.nickname}"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/createExpandLayout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -255,101 +263,138 @@
                         tools:textColor="@color/black"
                         tools:visibility="visible"/>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/createOdometerInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/createMilesLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:placeholderText="@string/total_miles"
-                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                        android:layout_marginBottom="@dimen/base_8"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/createMiPerGalInputLayout"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/createOdometerInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/base_8"
-                            android:autofillHints="false"
-                            android:hint="@string/total_miles"
-                            android:text="@{state.totalMiles}"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/createMiPerGalInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:placeholderText="@string/miles_per_gallon"
-                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/createOdometerInputLayout"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/createMiPerGalInput"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/createOdometerInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/base_8"
-                            android:layout_marginStart="@dimen/base_8"
-                            android:autofillHints="false"
-                            android:hint="@string/miles_per_gallon"
-                            android:text="@{state.milesPerGallon}"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            app:placeholderText="@string/total_miles"
+                            android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/createMilesGuideline"
+                            app:layout_constraintStart_toStartOf="parent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/createVinNumberInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/createOdometerInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/base_8"
+                                android:autofillHints="false"
+                                android:hint="@string/total_miles"
+                                android:text="@{state.totalMiles}"
+                                android:inputType="number"
+                                android:imeOptions="actionNext" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/createMilesGuideline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.5" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/createMiPerGalInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:placeholderText="@string/miles_per_gallon"
+                            android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/createMilesGuideline"
+                            app:layout_constraintEnd_toEndOf="parent">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/createMiPerGalInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/base_8"
+                                android:layout_marginStart="@dimen/base_8"
+                                android:autofillHints="false"
+                                android:hint="@string/miles_per_gallon"
+                                android:text="@{state.milesPerGallon}"
+                                android:inputType="number"
+                                android:imeOptions="actionNext" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:placeholderText="@string/vin_no"
-                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintTop_toBottomOf="@id/createOdometerInputLayout"
-                        app:layout_constraintEnd_toStartOf="@id/createMiPerGalInputLayout"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/createMilesLayout"
+                        app:layout_constraintBottom_toTopOf="@+id/createExpandButton"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/createExpandButton">
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/createVinNumberInput"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/createVinNumberInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/base_8"
-                            android:autofillHints="false"
-                            android:hint="@string/vin_no"
-                            android:text="@{state.vinNo}"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            app:placeholderText="@string/vin_no"
+                            android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/createVinPressureGuideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/createTirePressureInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:placeholderText="@string/tire_pressure"
-                        android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintTop_toBottomOf="@id/createOdometerInputLayout"
-                        app:layout_constraintStart_toEndOf="@id/createOdometerInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/createExpandButton">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/createVinNumberInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:autofillHints="false"
+                                android:hint="@string/vin_no"
+                                android:text="@{state.vinNo}"
+                                android:inputType="number"
+                                android:imeOptions="actionNext"/>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/createTirePressureInput"
-                            android:layout_width="match_parent"
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/createVinPressureGuideline"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/base_8"
-                            android:autofillHints="false"
-                            android:hint="@string/tire_pressure"
-                            android:text="@{state.tirePressure}"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.58" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/createTirePressureInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:placeholderText="@string/tire_pressure"
+                            android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/createVinPressureGuideline"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/createTirePressureInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/base_8"
+                                android:autofillHints="false"
+                                android:hint="@string/tire_pressure"
+                                android:text="@{state.tirePressure}"
+                                android:inputType="number"
+                                android:imeOptions="actionDone"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/createSubmitButton"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/create_action_button_height"
                     android:layout_marginBottom="@dimen/base_8"
                     android:text="@{state.actionButton}"
@@ -361,7 +406,7 @@
                     tools:textColor="@color/black"
                     tools:text="Submit"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
