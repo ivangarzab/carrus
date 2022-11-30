@@ -216,7 +216,7 @@
                             android:autofillHints="false"
                             android:hint="@string/license_no"
                             android:text="@{state.licenseNo}"
-                            android:inputType="text" />
+                            android:inputType="textCapCharacters" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -260,8 +260,8 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        tools:textColor="@color/black"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible"
+                        tools:icon="@drawable/ic_arrow_drop_down"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/createMilesLayout"
@@ -300,13 +300,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.5" />
+                            app:layout_constraintGuide_percent="0.55" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/createMiPerGalInputLayout"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/base_8"
                             app:placeholderText="@string/miles_per_gallon"
                             android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                             app:layout_constraintTop_toTopOf="parent"
@@ -317,8 +318,6 @@
                                 android:id="@+id/createMiPerGalInput"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/base_8"
-                                android:layout_marginStart="@dimen/base_8"
                                 android:autofillHints="false"
                                 android:hint="@string/miles_per_gallon"
                                 android:text="@{state.milesPerGallon}"
@@ -355,7 +354,7 @@
                                 android:autofillHints="false"
                                 android:hint="@string/vin_no"
                                 android:text="@{state.vinNo}"
-                                android:inputType="number"
+                                android:inputType="textCapCharacters"
                                 android:imeOptions="actionNext"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -364,13 +363,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.58" />
+                            app:layout_constraintGuide_percent="0.55" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/createTirePressureInputLayout"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/base_8"
                             app:placeholderText="@string/tire_pressure"
                             android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                             app:layout_constraintTop_toTopOf="parent"
@@ -382,7 +382,6 @@
                                 android:id="@+id/createTirePressureInput"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/base_8"
                                 android:autofillHints="false"
                                 android:hint="@string/tire_pressure"
                                 android:text="@{state.tirePressure}"

@@ -8,7 +8,7 @@
     <string name="year">Year</string>
     <string name="license_no">License No.</string>
     <string name="total_miles">Total Miles</string>
-    <string name="miles_per_gallon">Miles per gallon</string>
+    <string name="miles_per_gallon">miles/gallon</string>
     <string name="tire_pressure">Tire Pressure</string>
     <string name="vin_no">VIN No.</string>
     <string name="color">Color</string>
