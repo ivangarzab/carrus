@@ -29,6 +29,7 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
+import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
 
@@ -143,6 +144,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         showCarDetailsDialog()
                         true
                     }
+                    R.id.action_edit -> {
+                        navigateToEditFragment()
+                        true
+                    }
                     R.id.action_settings -> {
                         navigateToSettingsFragment()
                         true
@@ -232,6 +237,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
         bindingDialog.apply {
+            vinNo = car.vinNo
             tirePressure = car.tirePressure
             milesTotal = car.totalMiles
             milesPerGallon = car.milesPerGallon
@@ -257,6 +263,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()
+    )
+
+    private fun navigateToEditFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToCreateFragment(
+            data = viewModel.state.value?.car
+        )
     )
 
     private fun navigateToSettingsFragment() = findNavController().navigate(

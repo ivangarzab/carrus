@@ -17,6 +17,7 @@ data class Car(
     val model: String,
     val year: String,
     val licenseNo: String,
+    val vinNo: String,
     val tirePressure: String,
     val totalMiles: String,
     val milesPerGallon: String,
@@ -33,6 +34,10 @@ data class Car(
                 "\nmodel='$model'" +
                 "\nyear='$year'" +
                 "\nlicenseNo='$licenseNo'" +
+                "\nvinNo='$vinNo'" +
+                "\ntirePressure='$tirePressure'" +
+                "\ntotalMiles='$totalMiles'" +
+                "\nmi/gal='$milesPerGallon'" +
                 "\nservices='$services'" +
                 "\nimageUri=$imageUri" +
                 "\n)"
@@ -46,6 +51,7 @@ data class Car(
             model = "",
             year = "",
             licenseNo = "",
+            vinNo = "",
             tirePressure = "",
             totalMiles = "",
             milesPerGallon = "",
@@ -58,6 +64,7 @@ data class Car(
             model = "Malibu",
             year = "2006",
             licenseNo = "IGB066",
+            vinNo = "4Y1SL65848Z411439",
             tirePressure = "35",
             totalMiles = "99,999",
             milesPerGallon = "26",

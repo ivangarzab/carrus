@@ -5,8 +5,14 @@
     tools:context=".ui.overview.OverviewFragment">
     <item
         android:id="@+id/action_details"
-        android:orderInCategory="89"
+        android:orderInCategory="88"
         android:title="@string/details"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="89"
+        android:title="@string/menu_edit_car"
         app:showAsAction="never" />
 
     <item
