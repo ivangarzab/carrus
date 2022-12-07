@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.ivangarzab.carrus.carRepository
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.*
 import com.ivangarzab.carrus.util.extensions.setState
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -46,48 +46,39 @@ class CreateViewModel(
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    fun submitData(
-        nickname: String = "",
-        make: String,
-        model: String,
-        year: String,
-        licenseNo: String = "xxxxxx",
-        vinNo: String = "---",
-        tirePressure: String = "",
-        totalMiles: String = "---",
-        milesPerGallon: String = "0",
-        imageUri: String? = null
-    ) {
-        Timber.v("Saving default car")
-        Car(
-            uid = UUID.randomUUID().toString(),
-            nickname = nickname,
-            make = make,
-            model = model,
-            year = year,
-            licenseNo = licenseNo,
-            vinNo = vinNo,
-            tirePressure = tirePressure,
-            totalMiles = totalMiles,
-            milesPerGallon = milesPerGallon,
-            services = emptyList(),
-            imageUri = imageUri
-        ).let { data ->
-            when (type) {
-                Type.CREATE -> carRepository.saveCarData(data)
-                Type.EDIT -> carRepository.saveCarData(data.copy(
-                    services = carRepository.fetchCarData()?.services ?: emptyList()
-                ))
-            }
-        }
-        onSubmit.postValue(true)
-    }
-
     fun verifyData(
         make: String,
         model: String,
         year: String
     ): Boolean = make.isNotBlank() && model.isNotBlank() && year.isNotBlank()
+
+    fun onSubmitData() {
+        state.value?.let { state ->
+            Timber.v("Saving car data")
+            Car(
+                uid = UUID.randomUUID().toString(),
+                nickname = state.nickname,
+                make = state.make,
+                model = state.model,
+                year = state.year,
+                licenseNo = state.licenseNo,
+                vinNo = state.vinNo,
+                tirePressure = state.tirePressure,
+                totalMiles = state.totalMiles,
+                milesPerGallon = state.milesPerGallon,
+                services = emptyList(),
+                imageUri = state.imageUri
+            ).let { data ->
+                when (type) {
+                    Type.CREATE -> carRepository.saveCarData(data)
+                    Type.EDIT -> carRepository.saveCarData(data.copy(
+                        services = carRepository.fetchCarData()?.services ?: emptyList()
+                    ))
+                }
+            }
+        }
+        onSubmit.postValue(true)
+    }
 
     fun onImageUriReceived(uri: String) {
         setState(state, savedState, STATE) {
@@ -98,6 +89,32 @@ class CreateViewModel(
     fun onExpandToggle() {
         setState(state, savedState, STATE) {
             copy(isExpanded = isExpanded.not())
+        }
+    }
+
+    fun onUpdateStateData(
+        nickname: String = "",
+        make: String,
+        model: String,
+        year: String,
+        licenseNo: String,
+        vinNo: String,
+        tirePressure: String,
+        totalMiles: String,
+        milesPerGallon: String
+    ) {
+        setState(state, savedState, STATE) {
+            copy(
+                nickname = nickname,
+                make = make,
+                model = model,
+                year = year,
+                licenseNo = licenseNo,
+                vinNo = vinNo,
+                tirePressure = tirePressure,
+                totalMiles = totalMiles,
+                milesPerGallon = milesPerGallon
+            )
         }
     }
 

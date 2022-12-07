@@ -80,7 +80,11 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                         duration = TRANSITION_DURATION_IMAGE_UPLOAD
                     }
                 )
-                viewModel.onImageUriReceived(uri.toString())
+                submitAllData()
+                uri.toString().apply {
+                    persistUriPermission(this)
+                    viewModel.onImageUriReceived(this)
+                }
             } ?: Timber.d("No media selected")
         }
 
@@ -145,9 +149,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             createAddPhotoButton.setOnLongClickListener {
                 // TODO: EASTER EGG -- Delete before first alpha!
                 with(Car.default) {
-                    viewModel.submitData(
-                        nickname, make, model, year, licenseNo, vinNo, tirePressure, totalMiles, milesPerGallon
-                    )
+                    viewModel.apply {
+                        onUpdateStateData(
+                            nickname, make, model, year, licenseNo, vinNo, tirePressure, totalMiles, milesPerGallon
+                        )
+                        onSubmitData()
+                    }
                 }
                 true
             }
@@ -167,6 +174,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                         }
                     }
                 )
+                submitAllData()
                 viewModel.onExpandToggle()
             }
             setSubmitClickListener {
@@ -177,20 +185,8 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 ).let {
                     when (it) {
                         false -> toast("Missing required fields")
-                        true -> viewModel.submitData(
-                            nickname = binding.createNicknameInput.text.toString(),
-                            make = binding.createMakeInput.text.toString(),
-                            model = binding.createModelInput.text.toString(),
-                            year = binding.createYearInput.text.toString(),
-                            licenseNo = binding.createLicenseInput.text.toString(),
-                            vinNo = binding.createVinNumberInput.text.toString(),
-                            tirePressure = binding.createTirePressureInput.text.toString(),
-                            totalMiles = binding.createOdometerInput.text.toString(),
-                            milesPerGallon = binding.createMiPerGalInput.text.toString(),
-                            imageUri = viewModel.state.value?.imageUri?.apply {
-                                persistUriPermission(this)
-                            }
-                        )
+                        true -> submitAllData()
+                            .also { viewModel.onSubmitData() }
                     }
                 }
             }
@@ -205,6 +201,20 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         requireContext().contentResolver.takePersistableUriPermission(
             Uri.parse(uri),
             Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    }
+
+    private fun submitAllData() = with(binding) {
+        viewModel.onUpdateStateData(
+            nickname = createNicknameInput.text.toString(),
+            make = createMakeInput.text.toString(),
+            model = createModelInput.text.toString(),
+            year = createYearInput.text.toString(),
+            licenseNo = createLicenseInput.text.toString(),
+            vinNo = createVinNumberInput.text.toString(),
+            tirePressure = createTirePressureInput.text.toString(),
+            totalMiles = createOdometerInput.text.toString(),
+            milesPerGallon = createMiPerGalInput.text.toString()
         )
     }
 
