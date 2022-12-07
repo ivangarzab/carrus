@@ -9,7 +9,7 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carbud.data.Car" />
+            type="com.ivangarzab.carrus.data.Car" />
         <variable
             name="alarmTime"
             type="String" />
@@ -37,7 +37,7 @@
             android:id="@+id/settingsAppBarLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:theme="@style/Theme.CarBud.AppBarOverlay"
+            android:theme="@style/Theme.Carrus.AppBarOverlay"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/settings"
-                app:popupTheme="@style/Theme.CarBud.PopupOverlay"
+                app:popupTheme="@style/Theme.Carrus.PopupOverlay"
                 tools:title="@string/settings"/>
         </com.google.android.material.appbar.AppBarLayout>
 

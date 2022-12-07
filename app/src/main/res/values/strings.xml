@@ -7,6 +7,10 @@
     <string name="nickname">Nickname</string>
     <string name="year">Year</string>
     <string name="license_no">License No.</string>
+    <string name="total_miles">Total Miles</string>
+    <string name="miles_per_gallon">miles/gallon</string>
+    <string name="tire_pressure">Tire Pressure</string>
+    <string name="vin_no">VIN No.</string>
     <string name="color">Color</string>
     <string name="services">Services</string>
     <string name="details">Details</string>
@@ -21,6 +25,9 @@
     <string name="on">on</string>
     <string name="price_money">$%.2f</string>
     <string name="dollar_sign">$</string>
+    <string name="miles">miles</string>
+    <string name="miles_per_gal">miles/gal</string>
+    <string name="psi">psi</string>
     <string name="due">Due</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="days">Days</string>
@@ -35,11 +42,14 @@
     <string name="add_new_car">Add New Car</string>
     <string name="add_new_car_capitalized">ADD NEW CAR</string>
     <string name="menu_delete_car">Delete Car</string>
+    <string name="menu_edit_car">Edit Car</string>
     <string name="menu_add_component">Add Component</string>
     <string name="no_services_scheduled">No services scheduled at this time</string>
 
     <!-- Create/Edit -->
     <string name="create_title">Add a new Car</string>
+    <string name="add_a_photo">Add a Photo</string>
+    <string name="more_details">More Details</string>
     <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
 
     <!-- Settings -->
@@ -62,9 +72,9 @@
     <string name="label_button">Button</string>
 
     <!-- Modal: Details -->
-    <string name="tire_pressure">Tire Pressure:</string>
+    <!--<string name="tire_pressure">Tire Pressure:</string>
     <string name="total_miles">Total Miles:</string>
-    <string name="miles_per_gallon">Miles per Gallon:</string>
+    <string name="miles_per_gallon">Miles per Gallon:</string>-->
 
     <!-- Service -->
     <string name="new_service">New Service</string>
@@ -76,7 +86,6 @@
     <string name="service_type">Service material type/specs</string>
     <string name="service_price">Service price</string>
     <string name="service_date_format">%1$d/%2$d/%3$d</string>
-    <string name="service_details">%1$s : %2$s</string>
     <string name="service_repair_date_format">on %s</string>
     <string name="service_due_date_week_format">%s weeks</string>
     <string name="service_due_date_months_format">%s months</string>

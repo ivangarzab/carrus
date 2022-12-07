@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Generate APK
+    name: Generate App Bundle
     runs-on: ubuntu-latest
     steps:
     - run: echo "🎫 A new tag=${{ github.ref_name }} has been created!"
@@ -28,37 +28,37 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - run: echo "Building Release APK."  
-    - name: Build 'release' with Gradle
-      run: ./gradlew assembleRelease
+    - run: echo "Building 'release' App Bundle."
+    - name: Bundle 'release' with Gradle
+      run: ./gradlew bundleRelease
       
-    - name: Sign APK
-      id: sign_apk
+    - name: Sign AAB
+      id: sign_aab
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/apk/release
+        releaseDirectory: app/build/outputs/bundle/release
         signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
         alias: ${{ secrets.SIGNING_ALIAS }}
         keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}  
       
     - run: echo "Build status report=${{ job.status }}."
-    - name: Upload APK
+    - name: Upload App Bundle
       uses: actions/upload-artifact@v1
       with:
-        name: apk
-        path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+        name: aab
+        path: ${{steps.sign_aab.outputs.signedReleaseFile}}
         
   release:
-   name: Release APK
+   name: Release App Bundle
    needs: build
    runs-on: ubuntu-latest
    steps:
      - run: echo "👾 Time to create the release!"
-     - name: Download APK from build
+     - name: Download AAB from build
        uses: actions/download-artifact@v1
        with:
-         name: apk
+         name: aab
          
      - name: Create Release
        id: create_release
@@ -69,16 +69,16 @@ jobs:
          tag_name: ${{ github.ref_name }}
          release_name: v${{ github.ref_name }}
          
-     - run: echo "✅ APK is release for upload."    
-     - name: Upload Release APK
+     - run: echo "✅ App Bundle is ready for upload."
+     - name: Upload Release AAB
        id: upload_release_asset
        uses: actions/upload-release-asset@v1.0.1
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
          upload_url: ${{ steps.create_release.outputs.upload_url }}
-         asset_path: apk/app-release-unsigned-signed.apk
-         asset_name: ${{ github.event.repository.name }}.apk
+         asset_path: aab/app-release.aab
+         asset_name: ${{ github.event.repository.name }}.aab
          asset_content_type: application/zip
      - run: echo "Upload returned with status=${{ job.status }}." 
     

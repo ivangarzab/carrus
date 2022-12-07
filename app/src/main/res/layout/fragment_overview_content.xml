@@ -10,13 +10,13 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carbud.data.Car" />
+            type="com.ivangarzab.carrus.data.Car" />
         <import
             alias="SortingType"
-            type="com.ivangarzab.carbud.ui.overview.SortingCallback.SortingType"/>
+            type="com.ivangarzab.carrus.ui.overview.SortingCallback.SortingType"/>
         <variable
             name="sortingCallback"
-            type="com.ivangarzab.carbud.ui.overview.SortingCallback" />
+            type="com.ivangarzab.carrus.ui.overview.SortingCallback" />
     </data>
 
     <androidx.core.widget.NestedScrollView

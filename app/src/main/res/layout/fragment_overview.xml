@@ -11,7 +11,7 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carbud.data.Car" />
+            type="com.ivangarzab.carrus.data.Car" />
         <variable
             name="addCarClickListener"
             type="android.view.View.OnClickListener" />
@@ -31,7 +31,7 @@
             android:layout_height="260dp"
             android:fitsSystemWindows="true"
             android:background="?attr/backgroundColor"
-            android:theme="@style/Theme.CarBud.AppBarOverlay">
+            android:theme="@style/Theme.Carrus.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/overviewToolbarLayout"
@@ -98,7 +98,7 @@
                     app:title="@{car.nickname.isEmpty() ? car.make + ' ' + car.model : car.nickname}"
                     app:titleMargin="16dp"
                     app:layout_collapseMode="pin"
-                    app:popupTheme="@style/Theme.CarBud.PopupOverlay"
+                    app:popupTheme="@style/Theme.Carrus.PopupOverlay"
                     tools:title="Car Name" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>

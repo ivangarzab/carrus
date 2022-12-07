@@ -13,6 +13,9 @@
         <variable
             name="milesPerGallon"
             type="String" />
+        <variable
+            name="vinNo"
+            type="String" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -47,39 +50,29 @@
             android:layout_marginEnd="@dimen/modal_design_margin_base"
             android:layout_marginBottom="@dimen/modal_design_margin_min">
             <TextView
-                android:id="@+id/detailsModalTirePressureLabel"
+                android:id="@+id/detailsModalVinNoLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tire_pressure"
+                android:text="@string/vin_no"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
             <TextView
-                android:id="@+id/detailsModalTirePressureValue"
+                android:id="@+id/detailsModalVinNoValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/modal_design_margin_unit"
                 android:gravity="end"
-                android:text="@{tirePressure}"
+                android:text="@{vinNo}"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 tools:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/detailsModalTirePressureLabel"
-                app:layout_constraintEnd_toStartOf="@id/detailsModalTirePressureUnit"
-                tools:text="35"/>
-            <TextView
-                android:id="@+id/detailsModalTirePressureUnit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="psi"
-                android:textSize="@dimen/text_16"
-                android:textColor="?android:textColor"
-                tools:textColor="@color/black"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/detailsModalVinNoLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="123456789IGB101112"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -117,7 +110,7 @@
                 android:id="@+id/detailsModalTotalMilesUnit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="miles"
+                android:text="@string/miles"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 tools:textColor="@color/black"
@@ -130,7 +123,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="@dimen/modal_design_margin_base"
-            android:layout_marginEnd="@dimen/modal_design_margin_base">
+            android:layout_marginEnd="@dimen/modal_design_margin_base"
+            android:layout_marginBottom="@dimen/modal_design_margin_min">
             <TextView
                 android:id="@+id/detailsModalMilesPerGallonLabel"
                 android:layout_width="wrap_content"
@@ -159,7 +153,49 @@
                 android:id="@+id/detailsModalMilesPerGallonUnit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="miles/gal"
+                android:text="@string/miles_per_gal"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/modal_design_margin_base"
+            android:layout_marginEnd="@dimen/modal_design_margin_base">
+            <TextView
+                android:id="@+id/detailsModalTirePressureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tire_pressure"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/detailsModalTirePressureValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/modal_design_margin_unit"
+                android:gravity="end"
+                android:text="@{tirePressure}"
+                android:textSize="@dimen/text_16"
+                android:textColor="?android:textColor"
+                tools:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailsModalTirePressureLabel"
+                app:layout_constraintEnd_toStartOf="@id/detailsModalTirePressureUnit"
+                tools:text="35"/>
+            <TextView
+                android:id="@+id/detailsModalTirePressureUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/psi"
                 android:textSize="@dimen/text_16"
                 android:textColor="?android:textColor"
                 tools:textColor="@color/black"
