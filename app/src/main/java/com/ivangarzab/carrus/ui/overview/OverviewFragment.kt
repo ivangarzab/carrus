@@ -29,7 +29,6 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
-import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
 
@@ -293,14 +292,19 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         view,
         ContextCompat.getColorStateList(
             requireContext(),
-            R.color.purple_200
+            R.color.indigo
         )
     )
 
     private fun processSortingView(target: View, current: View) {
-        if (target != current) ViewCompat.setBackgroundTintList(
-            target,
-            ContextCompat.getColorStateList(requireContext(), R.color.bridal_heath)
-        )
+        if (target != current) {
+            ViewCompat.setBackgroundTintList(
+                target,
+                ContextCompat.getColorStateList(
+                    requireContext(),
+                    R.color.background
+                )
+            )
+        }
     }
 }

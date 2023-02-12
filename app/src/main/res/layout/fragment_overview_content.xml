@@ -68,7 +68,6 @@
                     android:textColor="?android:textColor"
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
-                    android:backgroundTint="@color/bridal_heath"
                     android:onClick="@{() -> sortingCallback.onSort(SortingType.NONE)}"
                     tools:textColor="@color/black"/>
                 <TextView
@@ -85,7 +84,6 @@
                     android:textColor="?android:textColor"
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
-                    android:backgroundTint="@color/bridal_heath"
                     android:onClick="@{() -> sortingCallback.onSort(SortingType.NAME)}"
                     tools:textColor="@color/black"/>
                 <TextView
@@ -102,7 +100,6 @@
                     android:textColor="?android:textColor"
                     android:textStyle="italic"
                     android:background="@drawable/bg_round_corners"
-                    android:backgroundTint="@color/bridal_heath"
                     android:onClick="@{() -> sortingCallback.onSort(SortingType.DATE)}"
                     tools:textColor="@color/black"/>
             </LinearLayout>

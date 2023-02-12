@@ -3,11 +3,11 @@
     <style name="Theme.Carrus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/mark_color</item>
-        <item name="colorPrimaryVariant">#967BB6</item>
-        <item name="colorOnPrimary">#0000CA</item>
+        <item name="colorPrimaryVariant">@color/mark_color</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/mark_color</item>
-        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorSecondaryVariant">@color/mark_color</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- System bars color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
