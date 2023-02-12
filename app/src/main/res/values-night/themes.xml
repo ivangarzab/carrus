@@ -21,7 +21,8 @@
 
     <style name="Theme.Carrus.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">?attr/backgroundColor</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_anim_mark_i</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.Carrus</item>
     </style>
 </resources>
