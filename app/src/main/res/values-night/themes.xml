@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/mark_color</item>
         <item name="colorPrimaryVariant">@color/off_black</item>
-        <item name="colorOnPrimary">@color/off_black</item>
+        <item name="colorOnPrimary">@color/silver</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/indigo</item>
         <item name="colorSecondaryVariant">@color/off_black</item>

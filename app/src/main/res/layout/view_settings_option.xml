@@ -72,7 +72,8 @@
         app:layout_constraintStart_toEndOf="@id/settingsOptionSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:visibility="invisible"/>
+        tools:checked="true"
+        tools:visibility="visible"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/settingsOptionValue"
