@@ -16,7 +16,7 @@
         <item name="backgroundColor">@color/background</item>
         <item name="android:textColor">@color/silver</item>
 
-        <item name="bottomSheetDialogTheme">@style/ComponentBottomSheetDialog</item>
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
     <style name="Theme.Carrus.Starting" parent="Theme.SplashScreen">
