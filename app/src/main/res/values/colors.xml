@@ -3,8 +3,8 @@
     <color name="mark_color">@color/indigo</color>
 
     <!-- light theme -->
-    <color name="background">@color/off_white</color>
-    <color name="grabber">@color/silver</color>
+    <color name="background">@color/white</color>
+    <color name="grabber">@color/platinum</color>
     <color name="subText">@color/silver</color>
 
     <!-- raw -->
