@@ -2,10 +2,10 @@
 <resources>
     <color name="mark_color">@color/indigo</color>
 
-    <!-- light theme -->
-    <color name="background">@color/white</color>
-    <color name="grabber">@color/platinum</color>
-    <color name="subText">@color/silver</color>
+    <!-- night theme -->
+    <color name="background">@color/off_black</color>
+    <color name="grabber">@color/mine_shaft</color>
+    <color name="subText">#868686</color>
 
     <!-- raw -->
     <color name="white">#FFFFFF</color>
@@ -16,5 +16,4 @@
     <color name="off_black">#121212</color>
     <color name="black">#000000</color>
     <color name="indigo">#3F00FF</color>
-    <color name="transparent">#FFFFFFFF</color>
 </resources>

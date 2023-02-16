@@ -3,20 +3,20 @@
     <style name="Theme.Carrus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/mark_color</item>
-        <item name="colorPrimaryVariant">#967BB6</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/off_black</item>
+        <item name="colorOnPrimary">@color/silver</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/indigo</item>
+        <item name="colorSecondaryVariant">@color/off_black</item>
+        <item name="colorOnSecondary">@color/off_black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
         <!-- Customize your theme here. -->
-        <item name="backgroundColor">@color/dark_background</item>
+        <item name="backgroundColor">@color/background</item>
         <item name="android:textColor">@color/silver</item>
 
-        <item name="bottomSheetDialogTheme">@style/ComponentBottomSheetDialog</item>
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
     <style name="Theme.Carrus.Starting" parent="Theme.SplashScreen">
