@@ -141,7 +141,9 @@ class CreateViewModel(
         return try {
             Gson().fromJson(data, Car::class.java).let { car ->
                 Timber.d("Got car data to import: $car")
-                carRepository.saveCarData(adaptCarData(car))
+                carRepository.saveCarData(adaptCarData(
+                    car.copy(imageUri = null) // get rid of the image URL to avoid exception
+                ))
             }
             onSubmit.postValue(true)
             true

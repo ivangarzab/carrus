@@ -114,7 +114,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 }
 
                 it.imageUri?.let { uri ->
-                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                    try {
+                        binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                    } catch (e: Exception) {
+                        // Make sure we don't crash if there are any problems accessing the image file
+                        Timber.w("Caught exception while parsing imageUrl", e)
+                    }
                 }
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
