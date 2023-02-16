@@ -81,7 +81,7 @@ class NotificationController(
         }
 
     companion object {
-        private const val NOTIFICATION_ICON_RES = R.drawable.ic_mark_black
+        private const val NOTIFICATION_ICON_RES = R.drawable.ic_mark_i
         const val NOTIFICATION_GROUP_REMINDERS_ID = "notification-group-reminders"
         const val NOTIFICATION_GROUP_REMINDERS_NAME = "Reminders"
         const val NOTIFICATION_CHANNEL_DUE_DATE_ID = "notification-channel-past-due"
