@@ -4,12 +4,16 @@
 
     <style name="Theme.Carrus.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ComponentBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/ComponentBottomSheetStyle</item>
+    <style name="CustomBottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
 
-    <style name="ComponentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bg_bottom_sheet_round_corners_top</item>
-        <item name="backgroundTint">?attr/backgroundColor</item>
+    <style name="CustomBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.BottomSheets</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.BottomSheets" parent="">
+        <item name="cornerSize">32dp</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 </resources>

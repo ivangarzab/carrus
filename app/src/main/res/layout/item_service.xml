@@ -57,8 +57,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/serviceItemGuideline"
-                tools:text="SERVICE"
-                tools:textColor="@color/black"/>
+                tools:text="SERVICE" />
 
             <TextView
                 android:id="@+id/serviceItemDueDate"
@@ -74,8 +73,7 @@
                 app:layout_constraintStart_toEndOf="@+id/serviceItemGuideline"
                 app:layout_constraintEnd_toStartOf="@+id/serviceItemExpandIcon"
                 app:layout_constraintBottom_toTopOf="@id/serviceItemPrice"
-                tools:text="10.2 months"
-                tools:textColor="@color/black"/>
+                tools:text="10.2 months" />
 
             <ImageView
                 android:id="@+id/serviceItemExpandIcon"
@@ -103,8 +101,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/serviceItemGuideline"
                 app:layout_constraintBottom_toTopOf="@id/serviceItemBottomDivider"
-                tools:text="Brand Name and type of material"
-                tools:textColor="@color/black"/>
+                tools:text="Brand Name and type of material" />
 
             <TextView
                 android:id="@+id/serviceItemPrice"
@@ -118,7 +115,7 @@
                 android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemDueDate"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="$100.00"/>
+                tools:text="$100.00" />
 
             <TextView
                 android:id="@+id/serviceItemRepairDate"
@@ -131,18 +128,18 @@
                 android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemPrice"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="on 12/12/22"/>
+                tools:text="on 12/12/22" />
 
             <View
                 android:id="@+id/serviceItemBottomDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/base_8"
-                android:background="@color/platinum"
+                android:background="@color/grabber"
                 android:visibility="@{state.expanded ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemRepairDate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/serviceItemTrashIcon"
@@ -156,7 +153,7 @@
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
                 android:id="@+id/serviceItemEditIcon"
@@ -170,7 +167,7 @@
                 app:tint="?android:textColor"
                 app:layout_constraintTop_toBottomOf="@id/serviceItemBottomDivider"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

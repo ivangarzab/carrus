@@ -28,6 +28,7 @@
             android:paddingStart="@dimen/base_16"
             android:paddingEnd="@dimen/base_16"
             android:paddingBottom="@dimen/base_24"
+            android:background="@drawable/bg_bottom_sheet_round_corners_top"
             android:clickable="true">
 
             <TextView
@@ -43,7 +44,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"
                 tools:text="@string/new_service"/>
 
             <View
@@ -52,155 +52,145 @@
                 android:layout_height="@dimen/base_4"
                 android:layout_margin="@dimen/base_16"
                 android:background="@drawable/view_grab"
-                android:backgroundTint="@color/silver"
+                android:backgroundTint="@color/grabber"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalTitleLabel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalNameField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_16"
-                android:inputType="text"
-                android:text="@{data.name}"
-                android:hint="@string/service_name"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
+                app:placeholderText="@string/service_name"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalGrabView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"/>
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/serviceModalNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="false"
+                android:text="@{data.name}"
+                android:hint="@string/service_name"
+                android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalRepairDateField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:inputType="date"
-                android:text="@{data.repairDate}"
-                android:hint="@string/repair_date"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:clickable="false"
+                android:layout_marginTop="@dimen/base_8"
+                app:placeholderText="@string/repair_date"
                 android:onClick="@{repairDateClickListener}"
+                app:startIconDrawable="@drawable/ic_calendar_today"
+                app:startIconTint="@color/indigo"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/serviceModalRepairDateCalendar"
-                tools:textColor="@color/black" />
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageView
-                android:id="@+id/serviceModalRepairDateCalendar"
-                android:layout_width="@dimen/base_42"
-                android:layout_height="@dimen/base_42"
-                android:layout_marginTop="@dimen/base_16"
-                android:contentDescription="@string/label_icon"
-                android:onClick="@{repairDateClickListener}"
-                android:src="@drawable/ic_calendar_today"
-                app:tint="@color/mark_color"
-                app:layout_constraintTop_toBottomOf="@+id/serviceModalNameField"
-                app:layout_constraintStart_toEndOf="@id/serviceModalRepairDateField"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serviceModalRepairDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="false"
+                    android:text="@{data.repairDate}"
+                    android:hint="@string/repair_date"
+                    android:inputType="date"
+                    android:onClick="@{repairDateClickListener}"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalDueDateField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:inputType="date"
-                android:text="@{data.dueDate}"
-                android:hint="@string/due_date"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:clickable="false"
+                android:layout_marginTop="@dimen/base_8"
+                app:placeholderText="@string/due_date"
                 android:onClick="@{dueDateClickListener}"
+                app:startIconDrawable="@drawable/ic_calendar_event"
+                app:startIconTint="@color/indigo"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/serviceModalDueDateCalendar"
-                tools:textColor="@color/black"/>
-            <ImageView
-                android:id="@+id/serviceModalDueDateCalendar"
-                android:layout_width="@dimen/base_42"
-                android:layout_height="@dimen/base_42"
-                android:layout_marginTop="@dimen/base_16"
-                android:contentDescription="@string/label_icon"
-                android:onClick="@{dueDateClickListener}"
-                android:src="@drawable/ic_calendar_event"
-                app:tint="@color/mark_color"
-                app:layout_constraintTop_toBottomOf="@+id/serviceModalRepairDateField"
-                app:layout_constraintStart_toEndOf="@id/serviceModalDueDateField"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serviceModalDueDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="false"
+                    android:text="@{data.dueDate}"
+                    android:hint="@string/due_date"
+                    android:inputType="date"
+                    android:onClick="@{dueDateClickListener}"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalBrandField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:inputType="text"
-                android:text="@{data.brand}"
-                android:hint="@string/service_brand"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
+                android:layout_marginTop="@dimen/base_8"
+                app:placeholderText="@string/service_brand"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalDueDateField"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"/>
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serviceModalBrandInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="false"
+                    android:text="@{data.brand}"
+                    android:hint="@string/service_brand"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalTypeField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:inputType="text"
-                android:text="@{data.type}"
-                android:hint="@string/service_type"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
+                android:layout_marginTop="@dimen/base_8"
+                app:placeholderText="@string/service_type"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalBrandField"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"/>
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serviceModalTypeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="false"
+                    android:text="@{data.type}"
+                    android:hint="@string/service_type"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/serviceModalPriceField"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:inputType="numberDecimal"
-                android:text="@{data.price}"
-                android:hint="@string/service_price"
-                android:autofillHints=""
-                android:textColorHint="@color/silver"
-                android:textColor="?android:textColor"
-                app:layout_constraintTop_toBottomOf="@+id/serviceModalTypeField"
-                app:layout_constraintStart_toEndOf="@+id/serviceModalDollarSign"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/serviceModalDollarSign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/base_16"
-                android:text="@string/dollar_sign"
-                android:textSize="@dimen/text_18"
-                android:textStyle="bold"
-                android:textColor="?android:textColor"
+                android:layout_marginTop="@dimen/base_8"
+                app:prefixText="@string/dollar_sign"
+                app:placeholderText="@string/service_price"
                 app:layout_constraintTop_toBottomOf="@+id/serviceModalTypeField"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/serviceModalPriceField"
-                tools:textColor="@color/black"/>
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serviceModalPriceInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="false"
+                    android:text="@{data.price}"
+                    android:hint="@string/service_price"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"

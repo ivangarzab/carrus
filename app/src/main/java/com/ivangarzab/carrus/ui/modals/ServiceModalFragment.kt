@@ -57,7 +57,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
 
         binding.apply {
             setActionClickListener {
-                val name = serviceModalNameField.text.toString()
+                val name = serviceModalNameInput.text.toString()
                 when (viewModel.verifyServiceData(
                     name = name
                 )) {
@@ -107,16 +107,16 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
     ): Service = binding.let {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
-            name = it.serviceModalNameField.text.toString(),
+            name = it.serviceModalNameInput.text.toString(),
             repairDate = Calendar.getInstance().apply {
                 timeInMillis = viewModel.datesInMillis.first
             },
             dueDate = Calendar.getInstance().apply {
                 timeInMillis = viewModel.datesInMillis.second
             },
-            brand = it.serviceModalBrandField.text.toString(),
-            type = it.serviceModalTypeField.text.toString(),
-            cost = it.serviceModalPriceField.text?.toString()?.takeIf { nonNullString ->
+            brand = it.serviceModalBrandInput.text.toString(),
+            type = it.serviceModalTypeInput.text.toString(),
+            cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
                 nonNullString.isNotEmpty()
             }?.run {
                 toFloat()
@@ -134,11 +134,8 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                     }.timeInMillis,
                     second = viewModel.datesInMillis.second
                 )
-                binding.serviceModalRepairDateField.setText(
+                binding.serviceModalRepairDateInput.setText(
                     getString(R.string.service_date_format, month, day, year)
-                )
-                binding.serviceModalRepairDateCalendar.setImageDrawable(
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
                 )
             }
         )
@@ -155,11 +152,8 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                         set(year, month, day)
                     }.timeInMillis
                 )
-                binding.serviceModalDueDateField.setText(
+                binding.serviceModalDueDateInput.setText(
                     getString(R.string.service_date_format, month, day, year)
-                )
-                binding.serviceModalDueDateCalendar.setImageDrawable(
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_calendar_checked)
                 )
             }
         )
