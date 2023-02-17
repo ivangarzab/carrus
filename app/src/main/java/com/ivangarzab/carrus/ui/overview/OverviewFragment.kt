@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -29,7 +30,6 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
-import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
 
@@ -63,11 +63,22 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            onSortingViews(when (state.serviceSortingType) {
-                SortingCallback.SortingType.NONE -> binding.overviewContent.overviewServiceSortNoneLabel
-                SortingCallback.SortingType.NAME -> binding.overviewContent.overviewServiceSortNameLabel
-                SortingCallback.SortingType.DATE -> binding.overviewContent.overviewServiceSortDateLabel
-            })
+            binding.overviewContent.apply {
+                when (state.serviceSortingType) {
+                    SortingCallback.SortingType.NONE -> onSortingViews(
+                        overviewServiceSortNoneCard,
+                        overviewServiceSortNoneLabel
+                    )
+                    SortingCallback.SortingType.NAME -> onSortingViews(
+                        overviewServiceSortNameCard,
+                        overviewServiceSortNameLabel
+                    )
+                    SortingCallback.SortingType.DATE -> onSortingViews(
+                        overviewServiceSortDateCard,
+                        overviewServiceSortDateLabel
+                    )
+                }
+            }
 
             binding.car = state.car
             state.car?.let {
@@ -103,7 +114,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 }
 
                 it.imageUri?.let { uri ->
-                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                    try {
+                        binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                    } catch (e: Exception) {
+                        // Make sure we don't crash if there are any problems accessing the image file
+                        Timber.w("Caught exception while parsing imageUrl", e)
+                    }
                 }
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
@@ -280,27 +296,66 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         viewModel.onSortingByType(type)
     }
 
-    private fun onSortingViews(current: View) {
-        highlightSelectedSortingView(current)
-        binding.overviewContent.apply {
-            processSortingView(overviewServiceSortNoneLabel, current)
-            processSortingView(overviewServiceSortNameLabel, current)
-            processSortingView(overviewServiceSortDateLabel, current)
-        }
+    private fun onSortingViews(current: View, label: TextView) {
+        processSortingViews(current)
+        highlightSelectedSortingView(current, label)
     }
 
-    private fun highlightSelectedSortingView(view: View) = ViewCompat.setBackgroundTintList(
+    private fun highlightSelectedSortingView(
+        view: View,
+        label: TextView
+    ) = ViewCompat.setBackgroundTintList(
         view,
         ContextCompat.getColorStateList(
             requireContext(),
-            R.color.purple_200
+            R.color.indigo
+        )
+    ).also {
+        // Switch color, if needed
+       prefs.darkMode?.let { darkMode ->
+           if (darkMode.not()) {
+               label.setTextColor(
+                   requireContext().getColor(R.color.white)
+               )
+           }
+       }
+    }
+
+    private fun processSortingViews(
+        current: View
+    ) = binding.overviewContent.apply {
+        listOf(
+            overviewServiceSortNoneCard,
+            overviewServiceSortNameCard,
+            overviewServiceSortDateCard
+        ).forEach { target ->
+            if (target != current) {
+                unhighlightSortingView(target)
+            }
+        }
+        // if needed, return text color to normal
+        prefs.darkMode?.let { darkMode ->
+            if (darkMode.not()) {
+                listOf(
+                    overviewServiceSortNoneLabel,
+                    overviewServiceSortNameLabel,
+                    overviewServiceSortDateLabel
+                ).forEach {
+                    it.setTextColor(
+                        requireContext().getColor(R.color.black)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun unhighlightSortingView(
+        view: View
+    ) = ViewCompat.setBackgroundTintList(
+        view,
+        ContextCompat.getColorStateList(
+            requireContext(),
+            R.color.background
         )
     )
-
-    private fun processSortingView(target: View, current: View) {
-        if (target != current) ViewCompat.setBackgroundTintList(
-            target,
-            ContextCompat.getColorStateList(requireContext(), R.color.bridal_heath)
-        )
-    }
 }
