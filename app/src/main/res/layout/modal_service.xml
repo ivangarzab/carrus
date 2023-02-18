@@ -75,7 +75,7 @@
                 android:autofillHints="false"
                 android:text="@{data.name}"
                 android:hint="@string/service_name"
-                android:inputType="text" />
+                android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -100,6 +100,9 @@
                     android:text="@{data.repairDate}"
                     android:hint="@string/repair_date"
                     android:inputType="date"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
                     android:onClick="@{repairDateClickListener}"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,6 +128,9 @@
                     android:text="@{data.dueDate}"
                     android:hint="@string/due_date"
                     android:inputType="date"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
                     android:onClick="@{dueDateClickListener}"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +152,7 @@
                     android:autofillHints="false"
                     android:text="@{data.brand}"
                     android:hint="@string/service_brand"
-                    android:inputType="text" />
+                    android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -167,7 +173,7 @@
                     android:autofillHints="false"
                     android:text="@{data.type}"
                     android:hint="@string/service_type"
-                    android:inputType="text" />
+                    android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
