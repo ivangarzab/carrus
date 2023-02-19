@@ -29,5 +29,9 @@ jobs:
       run: chmod +x gradlew
     - run: echo "🐛 Building Debug APK."  
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew
+        -PSIGNING_KEYSTORE_PASSWORD=${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+        -PSIGNING_ALIAS=${{ secrets.SIGNING_ALIAS }}
+        -PSIGNING_ALIAS_PASSWORD=${{ secrets.SIGNING_ALIAS_PASSWORD }}
+        build
     - run: echo "Build status report=${{ job.status }}."
