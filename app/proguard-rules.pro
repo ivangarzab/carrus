@@ -5,6 +5,10 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Output a full report of all the rules that R8 applies when
+# building the project.
+-printconfiguration /tmp/full-r8-config.txt
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
@@ -14,8 +18,18 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
+-keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*, Signature, Exceptions, InnerClasses
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+# Keep all Exceptions.
+-keep public class * extends java.lang.Exception
+# Keep the bind() function for View Binding.
+-keep class * implements androidx.viewbinding.ViewBinding {
+    public static *** bind(android.view.View);
+}
+# Custom exceptions start here:
+#-keepclassmembers class com.ivangarzab.carrus.data.CarKt { *; }
+-keep class com.ivangarzab.carrus.data.Car { *; }
+-keep class com.ivangarzab.carrus.data.Service { *; }
