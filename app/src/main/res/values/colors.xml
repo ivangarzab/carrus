@@ -16,5 +16,27 @@
     <color name="off_black">#121212</color>
     <color name="black">#000000</color>
     <color name="indigo">#3F00FF</color>
+
+    <!-- alphas -->
     <color name="transparent">#FFFFFFFF</color>
+    <color name="white_90_percent">#E6FFFFFF</color>
+    <color name="white_80_percent">#CCFFFFFF</color>
+    <color name="white_70_percent">#B3FFFFFF</color>
+    <color name="white_60_percent">#99FFFFFF</color>
+    <color name="white_50_percent">#80FFFFFF</color>
+    <color name="white_40_percent">#66FFFFFF</color>
+    <color name="white_30_percent">#4DFFFFFF</color>
+    <color name="white_20_percent">#33FFFFFF</color>
+    <color name="white_10_percent">#1AFFFFFF</color>
+
+    <color name="black_90_percent">#E6000000</color>
+    <color name="black_80_percent">#CC000000</color>
+    <color name="black_70_percent">#B3000000</color>
+    <color name="black_60_percent">#99000000</color>
+    <color name="black_50_percent">#80000000</color>
+    <color name="black_40_percent">#66000000</color>
+    <color name="black_30_percent">#4D000000</color>
+    <color name="black_20_percent">#33000000</color>
+    <color name="black_10_percent">#1A000000</color>
+
 </resources>
