@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:animateLayoutChanges="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
+                android:layout_marginStart="@dimen/base_16"
+                android:layout_marginEnd="@dimen/base_16">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/createImageLayout"
@@ -95,8 +95,8 @@
                     <ImageView
                         android:id="@+id/createPreviewImage"
                         android:layout_width="0dp"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_height="@dimen/base_200"
+                        android:layout_marginBottom="@dimen/base_8"
                         android:layout_marginTop="@dimen/base_16"
                         android:contentDescription="@string/label_artwork"
                         android:scaleType="centerCrop"
@@ -111,10 +111,10 @@
 
                     <ImageView
                         android:id="@+id/createUploadImage"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_margin="8dp"
-                        android:padding="4dp"
+                        android:layout_width="@dimen/base_42"
+                        android:layout_height="@dimen/base_42"
+                        android:layout_margin="@dimen/base_8"
+                        android:padding="@dimen/base_4"
                         android:contentDescription="@string/label_artwork"
                         android:onClickListener="@{imageClickListener}"
                         android:src="@drawable/ic_image_upload"
@@ -128,10 +128,10 @@
 
                     <ImageView
                         android:id="@+id/createDeleteImage"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_margin="8dp"
-                        android:padding="4dp"
+                        android:layout_width="@dimen/base_42"
+                        android:layout_height="@dimen/base_42"
+                        android:layout_margin="@dimen/base_8"
+                        android:padding="@dimen/base_4"
                         android:contentDescription="@string/label_artwork"
                         android:onClickListener="@{deleteImageClickListener}"
                         android:src="@drawable/ic_delete_trash"
@@ -159,7 +159,7 @@
                         android:id="@+id/createMakeInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/base_8"
                         android:autofillHints="false"
                         android:hint="@string/make"
                         android:text="@{state.make}"
@@ -180,7 +180,7 @@
                         android:id="@+id/createModelInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/base_8"
                         android:autofillHints="false"
                         android:hint="@string/model"
                         android:text="@{state.model}"
@@ -255,7 +255,7 @@
                         android:id="@+id/createNicknameInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/base_8"
                         android:autofillHints="false"
                         android:hint="@string/nickname"
                         android:text="@{state.nickname}"
@@ -354,7 +354,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/base_8"
                         app:layout_constraintTop_toBottomOf="@id/createMilesLayout"
                         app:layout_constraintBottom_toTopOf="@+id/createExpandButton"
                         app:layout_constraintStart_toStartOf="parent"
