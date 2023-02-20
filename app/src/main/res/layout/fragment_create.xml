@@ -11,6 +11,9 @@
             name="imageClickListener"
             type="android.view.View.OnClickListener" />
         <variable
+            name="deleteImageClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
             name="expandClickListener"
             type="android.view.View.OnClickListener" />
         <variable
@@ -96,7 +99,7 @@
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="@dimen/base_16"
                         android:contentDescription="@string/label_artwork"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:onClickListener="@{imageClickListener}"
                         android:background="@drawable/bg_image_outline"
                         android:visibility="@{state.imageUri != null ? View.VISIBLE : View.GONE}"
@@ -104,21 +107,41 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        tools:visibility="gone"/>
+                        tools:visibility="visible"/>
 
                     <ImageView
                         android:id="@+id/createUploadImage"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
                         android:layout_margin="8dp"
+                        android:padding="4dp"
                         android:contentDescription="@string/label_artwork"
                         android:onClickListener="@{imageClickListener}"
                         android:src="@drawable/ic_image_upload"
                         android:visibility="@{state.imageUri != null ? View.VISIBLE : View.GONE}"
-                        app:tint="@color/silver"
+                        app:tint="@color/platinum"
+                        android:background="@drawable/bg_round_corners"
+                        android:backgroundTint="@color/black_40_percent"
                         app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
                         app:layout_constraintBottom_toBottomOf="@id/createPreviewImage"
-                        tools:visibility="gone"/>
+                        tools:visibility="visible"/>
+
+                    <ImageView
+                        android:id="@+id/createDeleteImage"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_margin="8dp"
+                        android:padding="4dp"
+                        android:contentDescription="@string/label_artwork"
+                        android:onClickListener="@{deleteImageClickListener}"
+                        android:src="@drawable/ic_delete_trash"
+                        android:visibility="@{state.imageUri != null ? View.VISIBLE : View.GONE}"
+                        app:tint="@color/platinum"
+                        android:background="@drawable/bg_round_corners"
+                        android:backgroundTint="@color/black_40_percent"
+                        app:layout_constraintTop_toTopOf="@id/createPreviewImage"
+                        app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
+                        tools:visibility="visible"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
