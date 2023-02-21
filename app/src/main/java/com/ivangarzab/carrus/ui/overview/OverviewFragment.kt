@@ -135,7 +135,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         // Make sure we don't crash if there are any problems accessing the image file
                         Timber.w("Caught exception while parsing imageUrl", e)
                     }
-                } ?: showAddServiceMenuOption(true)
+                }
             } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
         }
     }

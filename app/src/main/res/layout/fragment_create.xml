@@ -107,7 +107,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        tools:visibility="visible"/>
+                        tools:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/createUploadImage"
@@ -124,7 +124,7 @@
                         android:backgroundTint="@color/black_40_percent"
                         app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
                         app:layout_constraintBottom_toBottomOf="@id/createPreviewImage"
-                        tools:visibility="visible"/>
+                        tools:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/createDeleteImage"
@@ -141,7 +141,7 @@
                         android:backgroundTint="@color/black_40_percent"
                         app:layout_constraintTop_toTopOf="@id/createPreviewImage"
                         app:layout_constraintEnd_toEndOf="@id/createPreviewImage"
-                        tools:visibility="visible"/>
+                        tools:visibility="gone"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
