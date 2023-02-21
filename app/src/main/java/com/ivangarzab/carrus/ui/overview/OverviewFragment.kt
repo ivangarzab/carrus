@@ -121,8 +121,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         TypedValue.applyDimension(
                             TypedValue.COMPLEX_UNIT_DIP,
                             when (it.imageUri == null) {
-                                true -> 170f
-                                false -> 260f
+                                true -> SIZE_TOP_VIEW_PICTURELESS
+                                false -> SIZE_TOP_VIEW_PICTUREFULL
                             },
                             resources.displayMetrics
                         ).toInt()
@@ -375,4 +375,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             R.color.background
         )
     )
+
+    companion object {
+        private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f
+        private const val SIZE_TOP_VIEW_PICTURELESS: Float = 170f
+    }
 }
