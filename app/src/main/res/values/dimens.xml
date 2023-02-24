@@ -25,6 +25,7 @@
     <dimen name="base_32">32dp</dimen>
     <dimen name="base_42">42dp</dimen>
     <dimen name="base_65">65dp</dimen>
+    <dimen name="base_80">80dp</dimen>
 
     <!-- raw text dimens -->
     <dimen name="text_12">12sp</dimen>
