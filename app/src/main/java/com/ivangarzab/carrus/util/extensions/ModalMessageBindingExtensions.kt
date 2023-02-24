@@ -1,5 +1,7 @@
 package com.ivangarzab.carrus.util.extensions
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.View
 import com.ivangarzab.carrus.databinding.ModalMessageBinding
 
@@ -12,8 +14,13 @@ fun ModalMessageBinding.bind(
 ) {
     this.message = message
     this.setCloseButtonClickListener {view ->
-        //TODO: Create dissolve animation
-        onCloseClickListener?.onClick(view)
+        root.animate()
+            .alpha(0f)
+            .setDuration(250)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    onCloseClickListener?.onClick(view)
+                }
+            })
     }
-
 }
