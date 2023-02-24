@@ -225,13 +225,16 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun insertTestMessage() {
         binding.overviewContent.overviewMessagesLayout.apply {
+            removeAllViews()
             addView(
                 ModalMessageBinding.inflate(
                     layoutInflater,
                     this,
                     false
                 ).apply {
-                    bind("Creating light-weight custom Views in Android using Kotlin & Data Binding")
+                    bind("Creating light-weight custom Views in Android using Kotlin & Data Binding") {
+                        removeAllViews()
+                    }
                 }.root
             )
         }

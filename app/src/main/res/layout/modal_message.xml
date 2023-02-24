@@ -8,29 +8,50 @@
         <variable
             name="message"
             type="String" />
+
+        <variable
+            name="closeButtonClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="115dp"
         app:cardCornerRadius="@dimen/base_16"
         app:cardUseCompatPadding="true">
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/modalMessageRoot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/silver">
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/modalMessageCloseButton"
+                android:layout_width="@dimen/base_32"
+                android:layout_height="@dimen/base_32"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:padding="3dp"
+                android:contentDescription="@string/label_button"
+                android:onClickListener="@{closeButtonClickListener}"
+                android:src="@drawable/ic_close"
+                app:tint="?android:textColor"
+                app:layout_constraintTop_toTopOf="@+id/modalMessageRoot"
+                app:layout_constraintStart_toStartOf="@id/modalMessageRoot" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="@dimen/base_8"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/base_16"
+                android:layout_marginEnd="@dimen/base_16"
+                android:layout_marginBottom="@dimen/base_8"
                 android:text="@{message}"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:textStyle="italic|"
+                android:textStyle="italic"
                 android:textSize="@dimen/text_16"
                 android:gravity="center_vertical"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/modalMessageCloseButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
