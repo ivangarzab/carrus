@@ -27,10 +27,9 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
-import com.ivangarzab.carrus.databinding.ModalMessageBinding
 import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.ui.customviews.StackingMessagesView
 import com.ivangarzab.carrus.util.delegates.viewBinding
-import com.ivangarzab.carrus.util.extensions.bind
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
@@ -225,18 +224,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun insertTestMessage() {
         binding.overviewContent.overviewMessagesLayout.apply {
-            removeAllViews()
-            addView(
-                ModalMessageBinding.inflate(
-                    layoutInflater,
-                    this,
-                    false
-                ).apply {
-                    bind("Creating light-weight custom Views in Android using Kotlin & Data Binding") {
-                        removeAllViews()
-                    }
-                }.root
-            )
+            addMessage(StackingMessagesView.MessageData(
+                type = StackingMessagesView.MessageType.INFO,
+                text = "This is our first test message inside the stacking layout!"
+            ))
         }
     }
 
