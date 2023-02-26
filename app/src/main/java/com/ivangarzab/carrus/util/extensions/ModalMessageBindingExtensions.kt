@@ -16,7 +16,7 @@ fun ItemMessageBinding.bind(
     this.setCloseButtonClickListener {view ->
         root.animate()
             .alpha(0f)
-            .setDuration(250)
+            .setDuration(ITEM_MESSAGE_DISMISS_ANIM_DURATION)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     onCloseClickListener?.onClick(view)
@@ -24,3 +24,4 @@ fun ItemMessageBinding.bind(
             })
     }
 }
+private const val ITEM_MESSAGE_DISMISS_ANIM_DURATION: Long = 250

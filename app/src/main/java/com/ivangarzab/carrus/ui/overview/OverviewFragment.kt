@@ -28,10 +28,11 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
-import com.ivangarzab.carrus.ui.customviews.StackingMessagesView
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
+import com.ivangarzab.carrus.util.managers.MessageData
+import com.ivangarzab.carrus.util.managers.MessageType
 import timber.log.Timber
 
 
@@ -224,10 +225,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private fun insertTestMessage() {
         binding.overviewContent.overviewMessagesLayout.apply {
-            addMessage(StackingMessagesView.MessageData(
-                type = StackingMessagesView.MessageType.INFO,
-                text = "This is our first test message inside the stacking layout!"
-            ))
+            addMessage( //TODO: It would be best to simply pass in an enum type
+                MessageData(
+                    type = MessageType.INFO,
+                    text = "This is our first test message inside the stacking layout!"
+                )
+            )
         }
     }
 
