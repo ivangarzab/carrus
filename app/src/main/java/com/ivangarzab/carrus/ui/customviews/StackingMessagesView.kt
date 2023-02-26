@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.ivangarzab.carrus.databinding.ModalMessageBinding
+import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.util.extensions.bind
 import timber.log.Timber
 
@@ -46,7 +46,7 @@ class StackingMessagesView @JvmOverloads constructor(
         if (messageQueue.isNotEmpty()) {
             val message = messageQueue[0]
             addView(
-                ModalMessageBinding.inflate(
+                ItemMessageBinding.inflate(
                     layoutInflater,
                     this,
                     false

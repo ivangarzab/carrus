@@ -3,12 +3,12 @@ package com.ivangarzab.carrus.util.extensions
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
-import com.ivangarzab.carrus.databinding.ModalMessageBinding
+import com.ivangarzab.carrus.databinding.ItemMessageBinding
 
 /**
  * Created by Ivan Garza Bermea.
  */
-fun ModalMessageBinding.bind(
+fun ItemMessageBinding.bind(
     message: String,
     onCloseClickListener: View.OnClickListener? = null
 ) {
