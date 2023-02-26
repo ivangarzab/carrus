@@ -3,8 +3,10 @@ package com.ivangarzab.carrus.ui.customviews
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.FrameLayout
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
+import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
 import com.ivangarzab.carrus.util.extensions.bind
 import com.ivangarzab.carrus.util.managers.MessageData
 import com.ivangarzab.carrus.util.managers.MessageQueue
@@ -17,18 +19,24 @@ class StackingMessagesView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : FrameLayout(context, attrs, defStyle) {
+) : ConstraintLayout(context, attrs, defStyle) {
 
-    private val layoutInflater: LayoutInflater
+    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-    private val messageQueue: MessageQueue
+    private val binding = ViewStackingMessagesBinding.inflate(
+        layoutInflater,
+        this,
+        true
+    )
+
+    private val messageQueue: MessageQueue = MessageQueue()
 
     init {
-        layoutInflater = LayoutInflater.from(context)
-        messageQueue = MessageQueue()
+//        inflate(context, R.layout.view_stacking_messages, this)
     }
 
     fun addMessage(data: MessageData) {
+        Timber.v("Got a new message to queue!")
         messageQueue.add(data)
         processMessageQueue()
     }
@@ -40,6 +48,7 @@ class StackingMessagesView @JvmOverloads constructor(
             } catch (e: NoSuchElementException) {
                 Timber.w("Unable to get next available message from queue")
             }
+            processAlertBadge()
         } else {
             Timber.v("There are no messages to process in queue")
         }
@@ -47,19 +56,44 @@ class StackingMessagesView @JvmOverloads constructor(
 
     private fun showMessage(message: MessageData) {
         Timber.v("Showing message: $message")
-        addView(
-            ItemMessageBinding.inflate(
-                layoutInflater,
-                this,
-                false
-            ).apply {
-                bind(message.text) { onMessageDismissed() }
-            }.root
-        )
+        binding.stackingMessagesContainer.apply {
+            addView(
+                ItemMessageBinding.inflate(
+                    layoutInflater,
+                    this,
+                    false
+                ).apply {
+                    bind(message.text) { onMessageDismissed() }
+                    /*layoutParams = LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    )*/
+                }.root
+            )
+        }
     }
 
     private fun onMessageDismissed() {
         // TODO: Polish
         removeAllViews()
+    }
+
+    private fun processAlertBadge() {
+        messageQueue.size().let { size ->
+            Timber.v("Processing alert badge with queue size: $size")
+            binding.stackingMessagesBadge.apply {
+                when (size) {
+                    0 -> visibility = View.GONE
+                    in 1..6 -> {
+                        visibility = View.VISIBLE
+                        text = size.toString()
+                    }
+                    else -> {
+                        visibility = View.VISIBLE
+                        text = "6+"
+                    }
+                }
+            }
+        }
     }
 }

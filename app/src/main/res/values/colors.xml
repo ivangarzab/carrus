@@ -16,5 +16,6 @@
     <color name="off_black">#121212</color>
     <color name="black">#000000</color>
     <color name="indigo">#3F00FF</color>
+    <color name="scarlet">#FF2400</color>
     <color name="transparent">#FFFFFFFF</color>
 </resources>

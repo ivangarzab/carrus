@@ -70,6 +70,7 @@
     <string name="label_artwork">Artwork</string>
     <string name="label_icon">Icon</string>
     <string name="label_button">Button</string>
+    <string name="label_alert_badge">Alert badge</string>
 
     <!-- Modal: Details -->
     <!--<string name="tire_pressure">Tire Pressure:</string>
