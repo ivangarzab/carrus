@@ -74,12 +74,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
                 Timber.d("Got image uri: $uri")
-                TransitionManager.beginDelayedTransition(
-                    binding.createImageLayout,
-                    AutoTransition().apply {
-                        duration = TRANSITION_DURATION_IMAGE_UPLOAD
-                    }
-                )
+                animateImageLayout()
                 submitAllData()
                 uri.toString().apply {
                     persistUriPermission(this)
@@ -163,6 +158,10 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
             }
+            setDeleteImageClickListener {
+                animateImageLayout()
+                viewModel.onImageDeleted()
+            }
             setExpandClickListener {
                 TransitionManager.beginDelayedTransition(
                     createExpandLayout,
@@ -201,6 +200,15 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         requireContext().contentResolver.takePersistableUriPermission(
             Uri.parse(uri),
             Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    }
+
+    private fun animateImageLayout() {
+        TransitionManager.beginDelayedTransition(
+            binding.createImageLayout,
+            AutoTransition().apply {
+                duration = TRANSITION_DURATION_IMAGE_UPLOAD
+            }
         )
     }
 

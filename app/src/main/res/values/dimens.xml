@@ -20,15 +20,20 @@
     <dimen name="base_10">10dp</dimen>
     <dimen name="base_12">12dp</dimen>
     <dimen name="base_16">16dp</dimen>
+    <dimen name="base_20">20dp</dimen>
     <dimen name="base_24">24dp</dimen>
     <dimen name="base_25">25dp</dimen>
     <dimen name="base_32">32dp</dimen>
     <dimen name="base_42">42dp</dimen>
     <dimen name="base_65">65dp</dimen>
+    <dimen name="base_130">130dp</dimen>
+    <dimen name="base_200">200dp</dimen>
+    <dimen name="base_260">260dp</dimen>
 
     <!-- raw text dimens -->
     <dimen name="text_12">12sp</dimen>
     <dimen name="text_18">18sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="text_20">20sp</dimen>
+    <dimen name="text_22">22sp</dimen>
 </resources>
