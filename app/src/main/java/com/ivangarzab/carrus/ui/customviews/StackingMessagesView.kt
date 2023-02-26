@@ -31,10 +31,6 @@ class StackingMessagesView @JvmOverloads constructor(
 
     private val messageQueue: MessageQueue = MessageQueue()
 
-    init {
-//        inflate(context, R.layout.view_stacking_messages, this)
-    }
-
     fun addMessage(data: MessageData) {
         Timber.v("Got a new message to queue!")
         messageQueue.add(data)
@@ -44,13 +40,15 @@ class StackingMessagesView @JvmOverloads constructor(
     private fun processMessageQueue() {
         if (messageQueue.isNotEmpty()) {
             try {
-                showMessage(messageQueue.pop())
+                if (binding.stackingMessagesContainer.getChildAt(0) == null) {
+                    showMessage(messageQueue.pop())
+                }
             } catch (e: NoSuchElementException) {
                 Timber.w("Unable to get next available message from queue")
             }
             processAlertBadge()
         } else {
-            Timber.v("There are no messages to process in queue")
+            Timber.v("There are no messages in queue to process")
         }
     }
 
@@ -64,33 +62,25 @@ class StackingMessagesView @JvmOverloads constructor(
                     false
                 ).apply {
                     bind(message.text) { onMessageDismissed() }
-                    /*layoutParams = LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT
-                    )*/
                 }.root
             )
         }
     }
 
     private fun onMessageDismissed() {
-        // TODO: Polish
-        removeAllViews()
+        binding.stackingMessagesContainer.removeAllViews()
+        processMessageQueue()
     }
 
     private fun processAlertBadge() {
         messageQueue.size().let { size ->
             Timber.v("Processing alert badge with queue size: $size")
-            binding.stackingMessagesBadge.apply {
+            binding.apply {
                 when (size) {
-                    0 -> visibility = View.GONE
-                    in 1..6 -> {
-                        visibility = View.VISIBLE
-                        text = size.toString()
-                    }
+                    0 -> stackingMessagesBadge.visibility = View.GONE
                     else -> {
-                        visibility = View.VISIBLE
-                        text = "6+"
+                        stackingMessagesBadge.visibility = View.VISIBLE
+                        alertsNo = if (size > 6) "6+" else size.toString()
                     }
                 }
             }

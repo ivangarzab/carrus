@@ -67,6 +67,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             processStateChange(state)
         }
+
+        binding.overviewToolbarImage.setOnLongClickListener {
+            insertTestMessage()
+            true
+        }
     }
 
     override fun onResume() {
@@ -218,9 +223,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 }
             }
         } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
-
-        //TODO: Delete
-        insertTestMessage()
     }
 
     private fun insertTestMessage() {
