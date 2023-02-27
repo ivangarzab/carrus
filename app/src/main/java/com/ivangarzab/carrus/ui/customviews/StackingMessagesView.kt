@@ -61,7 +61,7 @@ class StackingMessagesView @JvmOverloads constructor(
                     this,
                     false
                 ).apply {
-                    bind(message.text) { onMessageDismissed() }
+                    bind(message.text, resources) { onMessageDismissed() }
                 }.root
             )
         }

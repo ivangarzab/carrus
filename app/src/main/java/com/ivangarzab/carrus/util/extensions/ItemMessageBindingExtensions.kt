@@ -1,0 +1,89 @@
+package com.ivangarzab.carrus.util.extensions
+
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.content.res.Resources
+import android.view.MotionEvent
+import android.view.View
+import com.ivangarzab.carrus.databinding.ItemMessageBinding
+import timber.log.Timber
+import java.lang.Float.min
+
+/**
+ * Created by Ivan Garza Bermea.
+ */
+fun ItemMessageBinding.bind(
+    message: String,
+    resources: Resources,
+    onCloseClickListener: View.OnClickListener? = null
+) {
+    this.message = message
+    this.setCloseButtonClickListener {view ->
+        root.animate()
+            .alpha(0f)
+            .setDuration(ITEM_MESSAGE_ANIM_DISMISS_DURATION)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    onCloseClickListener?.onClick(view)
+                }
+            })
+    }
+
+    root.setOnTouchListener { v, event ->
+        // variables to store current configuration of quote card.
+        val displayMetrics = resources.displayMetrics
+        val cardWidth = root.width
+        val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
+
+        when (event.action) {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                var currentX = root.x
+                Timber.d("MotionEvent ACTION_UP/CANCEL captured with currentX=$currentX")
+                // Check if we swiped past the threshold to the left
+                if (currentX < MIN_DISTANCE_SWIPE_LEFT) {
+                    root.animate()
+                        .alpha(0f)
+//                        .translationXBy(-5f)
+                        .setDuration(ITEM_MESSAGE_ANIM_DISMISS_DURATION)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator) {
+                                onCloseClickListener?.onClick(this@bind.root)
+                            }
+                        })
+                        .start()
+                } else {
+                    root.animate()
+                        .x(cardStart)
+                        .setDuration(ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator) {
+                                // check if the swipe distance was more than
+                                // minimum swipe required to load a new quote
+                                if (currentX < MIN_DISTANCE_SWIPE_LEFT) {
+                                    // Add logic to load a new quote if swiped adequately
+                                    currentX = 0f
+                                }
+                            }
+                        })
+                        .start()
+                }
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val newX = event.rawX
+                // carry out swipe only if newX < cardStart, that is,
+                // the card is swiped to the left side, not to the right
+                if (newX - cardWidth < cardStart) {
+                    root.animate()
+                        .x(min(cardStart, newX - (cardWidth / 2)))
+                        .setDuration(0)
+                        .start()
+                }
+            }
+        }
+        v.performClick()
+        true
+    }
+}
+private const val ITEM_MESSAGE_ANIM_DISMISS_DURATION: Long = 300
+private const val ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION: Long = 150
+private const val MIN_DISTANCE_SWIPE_LEFT: Long = -275
