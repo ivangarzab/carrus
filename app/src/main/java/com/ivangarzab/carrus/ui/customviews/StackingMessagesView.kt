@@ -111,7 +111,11 @@ class StackingMessagesView @JvmOverloads constructor(
             false -> binding.stackingMessagesRoot.measuredHeight
         }.toInt()
         val endValue = when (expand) {
-            true -> TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 115f, resources.displayMetrics).toInt()
+            true -> TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                ANIM_VIEW_HEIGHT_EXPECTED,
+                resources.displayMetrics
+            )
             false -> ANIM_VIEW_HEIGHT_NULL_STATE
         }.toInt()
 
@@ -132,5 +136,10 @@ class StackingMessagesView @JvmOverloads constructor(
     companion object {
         private const val ANIM_VIEW_HEIGHT_DURATION_MS: Long = 300
         private const val ANIM_VIEW_HEIGHT_NULL_STATE: Long = -100
+        private const val ANIM_VIEW_HEIGHT_EXPECTED: Float = 115f
+
+        private const val ITEM_MESSAGE_ANIM_DISMISS_DURATION: Long = 300
+        private const val ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION: Long = 150
+        private const val MIN_DISTANCE_SWIPE_LEFT: Long = -275
     }
 }
