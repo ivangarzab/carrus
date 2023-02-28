@@ -8,11 +8,13 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
@@ -137,7 +139,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                             false
                         }
                         else -> {
-                            showAddServiceMenuOption(false)
+                            showAddServiceMenuOption(
+                                binding.overviewAddFab.isVisible.not()
+                            )
                             true
                         }
                     }
@@ -214,6 +218,19 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 }
             }
 
+            binding.overviewAppBarLayout.apply {
+                layoutParams = CoordinatorLayout.LayoutParams(
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT,
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        when (it.imageUri == null) {
+                            true -> SIZE_TOP_VIEW_PICTURELESS
+                            false -> SIZE_TOP_VIEW_PICTUREFULL
+                        },
+                        resources.displayMetrics
+                    ).toInt()
+                )
+            }
             it.imageUri?.let { uri ->
                 try {
                     binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
@@ -380,4 +397,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             R.color.background
         )
     )
+
+    companion object {
+        private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f
+        private const val SIZE_TOP_VIEW_PICTURELESS: Float = 170f
+    }
 }
