@@ -47,6 +47,31 @@ class MessageQueueTest {
     }
 
     @Test
+    fun test_isEmpty_base() {
+        assertEquals(TRUE, messageQueue.isEmpty())
+    }
+
+    @Test
+    fun test_isEmpty_add_one() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        assertEquals(FALSE, messageQueue.isEmpty())
+    }
+
+    @Test
+    fun test_isEmpty_add_two() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        assertEquals(FALSE, messageQueue.isEmpty())
+    }
+
+    @Test
+    fun test_isEmpty_add_one_pop() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.pop()
+        assertEquals(TRUE, messageQueue.isEmpty())
+    }
+
+    @Test
     fun test_size_base() {
         assertEquals(ANSWER_0, messageQueue.size())
     }

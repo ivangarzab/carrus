@@ -19,7 +19,9 @@ class MessageQueue {
 
     fun size() = queue.size
 
-    fun isNotEmpty(): Boolean = queue.size != 0
+    fun isEmpty() = size() == 0
+
+    fun isNotEmpty(): Boolean = isEmpty().not()
 
     fun add(data: MessageData) {
         queue.add(data)
