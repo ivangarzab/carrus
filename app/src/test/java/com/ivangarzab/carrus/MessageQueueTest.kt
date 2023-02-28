@@ -10,6 +10,8 @@ import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
 
 /**
+ * Tests for [MessageQueue] class.
+ *
  * Created by Ivan Garza Bermea.
  */
 class MessageQueueTest {
