@@ -47,7 +47,6 @@ android {
 def gson_version = '2.9.1'
 def leak_canary_version = '2.10'
 dependencies {
-    implementation 'androidx.core:core-ktx:+'
     testImplementation 'junit:junit:4.13.2'
     testImplementation "com.google.code.gson:gson:$gson_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
