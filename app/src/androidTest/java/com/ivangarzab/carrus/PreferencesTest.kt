@@ -202,6 +202,7 @@ class PreferencesTest {
         private const val TEST_LONG: Long = 6L
         private const val TEST_BOOLEAN: Boolean = true
         private val TEST_SERVICE: Service = Service(
+            id = "",
             name = "test",
             repairDate = Calendar.getInstance(),
             dueDate = Calendar.getInstance()

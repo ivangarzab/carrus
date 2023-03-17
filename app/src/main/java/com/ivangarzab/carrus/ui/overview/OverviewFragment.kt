@@ -33,6 +33,8 @@ import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
+import com.ivangarzab.carrus.util.managers.MessageData
+import com.ivangarzab.carrus.util.managers.MessageType
 import timber.log.Timber
 
 
@@ -65,78 +67,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            binding.overviewContent.apply {
-                when (state.serviceSortingType) {
-                    SortingCallback.SortingType.NONE -> onSortingViews(
-                        overviewServiceSortNoneCard,
-                        overviewServiceSortNoneLabel
-                    )
-                    SortingCallback.SortingType.NAME -> onSortingViews(
-                        overviewServiceSortNameCard,
-                        overviewServiceSortNameLabel
-                    )
-                    SortingCallback.SortingType.DATE -> onSortingViews(
-                        overviewServiceSortDateCard,
-                        overviewServiceSortDateLabel
-                    )
-                }
-            }
+            processStateChange(state)
+        }
 
-            binding.car = state.car
-            state.car?.let {
-                Timber.d("Got new Car state: ${state.car}")
-                setLightStatusBar(false)
-                if (state.notificationPermissionState &&
-                    it.services.isNotEmpty() &&
-                    prefs.isAlarmPastDueActive.not()
-                ) {
-                    viewModel.schedulePastDueAlarm()
-                } else {
-                    Timber.v("No need to schedule 'Past Due' alarm")
-                }
-
-                binding.overviewContent.apply {
-                    overviewContentServiceList.apply {
-                        adapter = ServiceListAdapter(
-                            resources = requireContext().resources,
-                            theme = requireContext().theme,
-                            services = it.services,
-                            onItemClicked = {
-                                // TODO: Go through the list of ServiceItemState's,
-                                //  and make sure there only always 1 expanded state at a time.
-                            },
-                            onEditClicked = { service ->
-                                navigateToEditServiceBottomSheet(service)
-                            },
-                            onDeleteClicked = { service ->
-                                viewModel.onServiceDeleted(service)
-                            }
-                        )
-                    }
-                }
-
-                binding.overviewAppBarLayout.apply {
-                    layoutParams = CoordinatorLayout.LayoutParams(
-                        CoordinatorLayout.LayoutParams.MATCH_PARENT,
-                        TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP,
-                            when (it.imageUri == null) {
-                                true -> SIZE_TOP_VIEW_PICTURELESS
-                                false -> SIZE_TOP_VIEW_PICTUREFULL
-                            },
-                            resources.displayMetrics
-                        ).toInt()
-                    )
-                }
-                it.imageUri?.let { uri ->
-                    try {
-                        binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
-                    } catch (e: Exception) {
-                        // Make sure we don't crash if there are any problems accessing the image file
-                        Timber.w("Caught exception while parsing imageUrl", e)
-                    }
-                }
-            } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
+        binding.overviewToolbarImage.setOnLongClickListener {
+            insertTestMessage()
+            true
         }
     }
 
@@ -228,6 +164,92 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     true
                 }
             }
+        }
+    }
+
+    private fun processStateChange(state: OverviewViewModel.OverviewState) {
+        binding.overviewContent.apply {
+            when (state.serviceSortingType) {
+                SortingCallback.SortingType.NONE -> onSortingViews(
+                    overviewServiceSortNoneCard,
+                    overviewServiceSortNoneLabel
+                )
+                SortingCallback.SortingType.NAME -> onSortingViews(
+                    overviewServiceSortNameCard,
+                    overviewServiceSortNameLabel
+                )
+                SortingCallback.SortingType.DATE -> onSortingViews(
+                    overviewServiceSortDateCard,
+                    overviewServiceSortDateLabel
+                )
+            }
+        }
+
+        binding.car = state.car
+        state.car?.let {
+            Timber.d("Got new Car state: ${state.car}")
+            setLightStatusBar(false)
+            if (state.notificationPermissionState &&
+                it.services.isNotEmpty() &&
+                prefs.isAlarmPastDueActive.not()
+            ) {
+                viewModel.schedulePastDueAlarm()
+            } else {
+                Timber.v("No need to schedule 'Past Due' alarm")
+            }
+
+            binding.overviewContent.apply {
+                overviewContentServiceList.apply {
+                    adapter = ServiceListAdapter(
+                        resources = requireContext().resources,
+                        theme = requireContext().theme,
+                        services = it.services,
+                        onItemClicked = {
+                            // TODO: Go through the list of ServiceItemState's,
+                            //  and make sure there only always 1 expanded state at a time.
+                        },
+                        onEditClicked = { service ->
+                            navigateToEditServiceBottomSheet(service)
+                        },
+                        onDeleteClicked = { service ->
+                            viewModel.onServiceDeleted(service)
+                        }
+                    )
+                }
+            }
+
+            binding.overviewAppBarLayout.apply {
+                layoutParams = CoordinatorLayout.LayoutParams(
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT,
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        when (it.imageUri == null) {
+                            true -> SIZE_TOP_VIEW_PICTURELESS
+                            false -> SIZE_TOP_VIEW_PICTUREFULL
+                        },
+                        resources.displayMetrics
+                    ).toInt()
+                )
+            }
+            it.imageUri?.let { uri ->
+                try {
+                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
+                } catch (e: Exception) {
+                    // Make sure we don't crash if there are any problems accessing the image file
+                    Timber.w("Caught exception while parsing imageUrl", e)
+                }
+            }
+        } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
+    }
+
+    private fun insertTestMessage() {
+        binding.overviewContent.overviewMessagesLayout.apply {
+            addMessage( //TODO: It would be best to simply pass in an enum type
+                MessageData(
+                    type = MessageType.INFO,
+                    text = "This is our first test message inside the stacking layout!"
+                )
+            )
         }
     }
 
