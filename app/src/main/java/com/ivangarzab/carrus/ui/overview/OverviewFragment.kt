@@ -24,6 +24,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
@@ -397,6 +398,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             R.color.background
         )
     )
+
+    private fun startInAppReviewFlow() {
+        with(ReviewManagerFactory.create(requireContext())) {
+            requestReviewFlow()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        launchReviewFlow(requireActivity(), task.result)
+                            .addOnCompleteListener { _ ->
+                                // The flow has finished. The API does not indicate whether the user
+                                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                                // matter the result, we continue our app flow.
+                            }
+                    } else {
+                        Timber.w("There was a problem requesting the review flow ${task.exception}")
+                    }
+                }
+        }
+    }
 
     companion object {
         private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f
