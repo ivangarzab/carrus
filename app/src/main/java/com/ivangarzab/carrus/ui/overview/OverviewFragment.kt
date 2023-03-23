@@ -49,6 +49,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
+    private var serviceListAdapter: ServiceListAdapter? = null
+
     private val notificationPermissionRequestLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -165,6 +167,26 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 }
             }
         }
+
+        setupServicesList()
+    }
+
+    private fun setupServicesList() {
+        serviceListAdapter = ServiceListAdapter(
+            resources = requireContext().resources,
+            theme = requireContext().theme,
+            services = emptyList()
+        ).apply {
+            setOnEditClickedListener { service ->
+                navigateToEditServiceBottomSheet(service)
+            }
+            setOnDeleteClickedListener { service ->
+                viewModel.onServiceDeleted(service)
+            }
+        }
+        binding.overviewContent.overviewContentServiceList.apply {
+                adapter = serviceListAdapter
+        }
     }
 
     private fun processStateChange(state: OverviewViewModel.OverviewState) {
@@ -198,25 +220,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                 Timber.v("No need to schedule 'Past Due' alarm")
             }
 
-            binding.overviewContent.apply {
-                overviewContentServiceList.apply {
-                    adapter = ServiceListAdapter(
-                        resources = requireContext().resources,
-                        theme = requireContext().theme,
-                        services = it.services,
-                        onItemClicked = {
-                            // TODO: Go through the list of ServiceItemState's,
-                            //  and make sure there only always 1 expanded state at a time.
-                        },
-                        onEditClicked = { service ->
-                            navigateToEditServiceBottomSheet(service)
-                        },
-                        onDeleteClicked = { service ->
-                            viewModel.onServiceDeleted(service)
-                        }
-                    )
-                }
-            }
+            serviceListAdapter?.updateContent(it.services)
 
             binding.overviewAppBarLayout.apply {
                 layoutParams = CoordinatorLayout.LayoutParams(
