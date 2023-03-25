@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.*
 import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
-import com.ivangarzab.carrus.util.managers.Message
 import com.ivangarzab.carrus.util.managers.MessageQueue
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
