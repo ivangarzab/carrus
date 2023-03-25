@@ -10,6 +10,9 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.MessageData
+import com.ivangarzab.carrus.util.managers.MessageQueue
+import com.ivangarzab.carrus.util.managers.MessageType
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -22,13 +25,22 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class OverviewState(
         val car: Car? = null,
-        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
-        val notificationPermissionState: Boolean = false
+        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE
     ) : Parcelable
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
         STATE,
         OverviewState()
+    )
+
+    @Parcelize
+    data class QueueState(
+        val messageQueue: MessageQueue = MessageQueue()
+    ) : Parcelable
+
+    val queueState: LiveData<QueueState> = savedState.getLiveData(
+        QUEUE_STATE,
+        QueueState()
     )
 
     // Pair<repairDate, dueDate>
@@ -82,8 +94,39 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         alarms.schedulePastDueAlarm()
     }
 
-    fun toggleNotificationPermissionState(granted: Boolean) = setState(state, savedState, STATE) {
-        copy(notificationPermissionState = granted)
+    fun onPermissionActivityResult(isGranted: Boolean) {
+        Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
+        if (isGranted.not()) addNotificationPermissionMessage()
+    }
+
+    private fun addNotificationPermissionMessage() {
+        setState(queueState, savedState, QUEUE_STATE) {
+            copy(
+                messageQueue = messageQueue.apply {
+                    add(
+                        MessageData(
+                            type = MessageType.WARNING,
+                            text = "Please grant us notification permissions to maximize your experience."
+                        )
+                    )
+                }
+            )
+        }
+    }
+
+    fun addTestMessage() {
+        setState(queueState, savedState, QUEUE_STATE) {
+            copy(
+                messageQueue = messageQueue.apply {
+                    add(
+                        MessageData(
+                            type = MessageType.INFO,
+                            text = "This is our first test message inside the stacking layout!"
+                        )
+                    )
+                }
+            )
+        }
     }
 
     fun onSortingByType(type: SortingCallback.SortingType) {
@@ -137,5 +180,6 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     companion object {
         private const val STATE: String = "OverviewViewModel.STATE"
+        private const val QUEUE_STATE: String = "OverviewViewModel.QUEUE_STATE"
     }
 }

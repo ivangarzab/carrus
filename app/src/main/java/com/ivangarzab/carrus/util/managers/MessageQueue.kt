@@ -1,5 +1,8 @@
 package com.ivangarzab.carrus.util.managers
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Created by Ivan Garza Bermea.
  */
@@ -14,7 +17,8 @@ data class MessageData(
     val text: String
 )
 
-class MessageQueue {
+@Parcelize
+class MessageQueue : Parcelable {
     private var queue: MutableList<MessageData> = mutableListOf()
 
     fun size() = queue.size

@@ -2,7 +2,8 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.pm.PackageManager
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -33,8 +34,6 @@ import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
-import com.ivangarzab.carrus.util.managers.MessageData
-import com.ivangarzab.carrus.util.managers.MessageType
 import timber.log.Timber
 
 
@@ -51,17 +50,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private var serviceListAdapter: ServiceListAdapter? = null
 
-    private val notificationPermissionRequestLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                viewModel.toggleNotificationPermissionState(isGranted)
-            } else {
-                Timber.d("Notification permissions denied")
-                // TODO: Implement denial case
-            }
-        }
+    private var hasNotificationPermissionPrompted = false
+    private val notificationPermissionRequestLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasNotificationPermissionPrompted = true
+        viewModel.onPermissionActivityResult(isGranted)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,18 +68,17 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         }
 
         binding.overviewToolbarImage.setOnLongClickListener {
-            insertTestMessage()
+            viewModel.addTestMessage()
             true
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (Build.VERSION.SDK_INT >= 33) {
+        if (Build.VERSION.SDK_INT >= 33 && hasNotificationPermissionPrompted.not()) {
             attemptToRequestNotificationPermission()
         } else {
-            Timber.v("We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
-            viewModel.toggleNotificationPermissionState(true)
+            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
         }
     }
 
@@ -132,6 +126,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     }
 
     private fun setupViews() {
+        setupServicesList()
         binding.apply {
             overviewAppBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
                 binding.overviewToolbarLayout.clipToOutline =
@@ -165,10 +160,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     viewModel.setupEasterEggForTesting()
                     true
                 }
+                overviewMessagesLayout.feedData(viewLifecycleOwner, viewModel.queueState)
             }
         }
-
-        setupServicesList()
     }
 
     private fun setupServicesList() {
@@ -211,7 +205,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
             setLightStatusBar(false)
-            if (state.notificationPermissionState &&
+            if (areNotificationsEnabled() &&
                 it.services.isNotEmpty() &&
                 prefs.isAlarmPastDueActive.not()
             ) {
@@ -246,17 +240,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
     }
 
-    private fun insertTestMessage() {
-        binding.overviewContent.overviewMessagesLayout.apply {
-            addMessage( //TODO: It would be best to simply pass in an enum type
-                MessageData(
-                    type = MessageType.INFO,
-                    text = "This is our first test message inside the stacking layout!"
-                )
-            )
-        }
-    }
-
     private fun showAddServiceMenuOption(visible: Boolean) = binding
         .overviewToolbar
         .menu
@@ -265,18 +248,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             isVisible = visible
         }
 
+    private fun areNotificationsEnabled(): Boolean = (requireContext().getSystemService(
+        Context.NOTIFICATION_SERVICE
+    ) as NotificationManager).areNotificationsEnabled()
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun attemptToRequestNotificationPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
+        if (areNotificationsEnabled().not()) {
+            notificationPermissionRequestLauncher.launch(
                 Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED -> {
-                notificationPermissionRequestLauncher.launch(
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-            }
-            else -> viewModel.toggleNotificationPermissionState(true)
+            )
+        } else {
+            Timber.v("Notification permission already granted!")
         }
     }
 

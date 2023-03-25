@@ -7,8 +7,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
+import com.ivangarzab.carrus.ui.overview.OverviewViewModel
 import com.ivangarzab.carrus.util.extensions.bind
 import com.ivangarzab.carrus.util.managers.MessageData
 import com.ivangarzab.carrus.util.managers.MessageQueue
@@ -31,16 +34,18 @@ class StackingMessagesView @JvmOverloads constructor(
         true
     )
 
-    private val messageQueue: MessageQueue = MessageQueue()
+    private var messageQueue: MessageQueue = MessageQueue()
 
-    fun addMessage(data: MessageData) {
-        Timber.v("Got a new message to queue!")
-        if (messageQueue.size() == 0 && isContainerEmpty()) {
-            // Only expand if the queue is empty and there's nothing in the container
-            expandView()
+    fun feedData(owner: LifecycleOwner, dataObservable: LiveData<OverviewViewModel.QueueState>) {
+        dataObservable.observe(owner) {
+            Timber.d("Got a message queue update!")
+            if (it.messageQueue.size() > 0 && isContainerEmpty()) {
+                // Only expand if the queue is empty and there's nothing in the container
+                expandView()
+            }
+            this.messageQueue = it.messageQueue
+            processMessageQueue()
         }
-        messageQueue.add(data)
-        processMessageQueue()
     }
 
     private fun processMessageQueue() {
@@ -137,9 +142,5 @@ class StackingMessagesView @JvmOverloads constructor(
         private const val ANIM_VIEW_HEIGHT_DURATION_MS: Long = 300
         private const val ANIM_VIEW_HEIGHT_NULL_STATE: Long = -100
         private const val ANIM_VIEW_HEIGHT_EXPECTED: Float = 115f
-
-        private const val ITEM_MESSAGE_ANIM_DISMISS_DURATION: Long = 300
-        private const val ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION: Long = 150
-        private const val MIN_DISTANCE_SWIPE_LEFT: Long = -275
     }
 }
