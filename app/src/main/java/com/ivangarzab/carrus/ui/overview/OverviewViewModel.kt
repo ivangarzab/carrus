@@ -10,9 +10,8 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
-import com.ivangarzab.carrus.util.managers.MessageData
+import com.ivangarzab.carrus.util.managers.Message
 import com.ivangarzab.carrus.util.managers.MessageQueue
-import com.ivangarzab.carrus.util.managers.MessageType
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -100,30 +99,22 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     }
 
     private fun addNotificationPermissionMessage() {
-        setState(queueState, savedState, QUEUE_STATE) {
-            copy(
-                messageQueue = messageQueue.apply {
-                    add(
-                        MessageData(
-                            type = MessageType.WARNING,
-                            text = "Please grant us notification permissions to maximize your experience."
-                        )
-                    )
-                }
-            )
-        }
+        Timber.v("Adding 'Missing Notification Message' to the queue")
+        addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
     }
 
-    fun addTestMessage() {
+    fun addTestMessage() = addMessage(Message.TEST)
+
+    private fun addMessage(message: Message) {
+        queueState.value?.let {
+            if (it.messageQueue.contains(message.data.id)) {
+                return // skip dupes
+            }
+        }
         setState(queueState, savedState, QUEUE_STATE) {
             copy(
                 messageQueue = messageQueue.apply {
-                    add(
-                        MessageData(
-                            type = MessageType.INFO,
-                            text = "This is our first test message inside the stacking layout!"
-                        )
-                    )
+                    add(message.data)
                 }
             )
         }
