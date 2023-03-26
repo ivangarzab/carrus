@@ -57,6 +57,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     ) { isGranted ->
         hasNotificationPermissionPrompted = true
         viewModel.onPermissionActivityResult(isGranted)
+        if (isGranted.not()) findNavController().navigate(
+            OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -22,6 +22,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="settings">Settings</string>
+    <string name="goto_settings">Go To Settings</string>
     <string name="on">on</string>
     <string name="price_money">$%.2f</string>
     <string name="dollar_sign">$</string>
@@ -31,6 +32,7 @@
     <string name="due">Due</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="days">Days</string>
+    <string name="not_now">Not now</string>
 
     <!-- Sorting -->
     <string name="none">none</string>
@@ -95,4 +97,9 @@
     <string name="notification_past_due_title">You have past due services!</string>
     <string name="notification_past_due_service_one">Remember that the service \'%s\' is past due.</string>
     <string name="notification_past_due_service_multiple">There are two or more services that are past due.</string>
+
+    <!-- Permission: Notification -->
+    <string name="missing_permission_interstitial_notification_title">One last thing…</string>
+    <string name="missing_permission_interstitial_notification_subtitle">Please enable notification permission directly from your settings</string>
+    <string name="missing_permission_interstitial_notification_content">1. Click the Settings button below\n2. Click on Notifications\n3. Enable notifications using the toggle</string>
 </resources>
