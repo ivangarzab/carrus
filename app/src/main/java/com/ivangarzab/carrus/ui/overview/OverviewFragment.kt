@@ -32,6 +32,7 @@ import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
+import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
@@ -70,15 +71,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         binding.overviewToolbarImage.setOnLongClickListener {
             viewModel.addTestMessage()
             true
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Build.VERSION.SDK_INT >= 33 && hasNotificationPermissionPrompted.not()) {
-            attemptToRequestNotificationPermission()
-        } else {
-            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
         }
     }
 
@@ -160,7 +152,17 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     viewModel.setupEasterEggForTesting()
                     true
                 }
-                overviewMessagesLayout.feedData(viewLifecycleOwner, viewModel.queueState)
+                overviewMessagesLayout.apply {
+                    feedData(viewLifecycleOwner, viewModel.queueState)
+                    setOnClickListener { id ->
+                        Timber.d("Got a message click with id=$id")
+                        when (id) {
+                            "100" -> if (Build.VERSION.SDK_INT >= 33) {
+                                attemptToRequestNotificationPermission()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -205,13 +207,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
             setLightStatusBar(false)
-            if (areNotificationsEnabled() &&
-                it.services.isNotEmpty() &&
-                prefs.isAlarmPastDueActive.not()
-            ) {
-                viewModel.schedulePastDueAlarm()
-            } else {
-                Timber.v("No need to schedule 'Past Due' alarm")
+            if (it.services.isNotEmpty()) {
+                when (requireContext().areNotificationsEnabled()) {
+                    true -> {
+                        if (prefs.isAlarmPastDueActive.not()) {
+                            // TODO: This should be moved into the VM
+                            viewModel.schedulePastDueAlarm()
+                        } else {
+                            Timber.v("No need to schedule 'Past Due' alarm")
+                        }
+                    }
+                    false -> {
+                        if (Build.VERSION.SDK_INT >= 33 && hasNotificationPermissionPrompted.not()) {
+                            viewModel.addNotificationPermissionMessage()
+                        } else {
+                            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
+                        }
+                    }
+                }
             }
 
             serviceListAdapter?.updateContent(it.services)
@@ -248,13 +261,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             isVisible = visible
         }
 
-    private fun areNotificationsEnabled(): Boolean = (requireContext().getSystemService(
-        Context.NOTIFICATION_SERVICE
-    ) as NotificationManager).areNotificationsEnabled()
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun attemptToRequestNotificationPermission() {
-        if (areNotificationsEnabled().not()) {
+        if (requireContext().areNotificationsEnabled().not()) {
             notificationPermissionRequestLauncher.launch(
                 Manifest.permission.POST_NOTIFICATIONS
             )

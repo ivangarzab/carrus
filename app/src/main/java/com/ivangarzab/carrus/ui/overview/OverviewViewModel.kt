@@ -95,10 +95,16 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onPermissionActivityResult(isGranted: Boolean) {
         Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
-        if (isGranted.not()) addNotificationPermissionMessage()
+        if (isGranted) {
+            queueState.value?.messageQueue?.remove(
+                Message.MISSING_PERMISSION_NOTIFICATION.data.id
+            )
+        } else {
+
+        }
     }
 
-    private fun addNotificationPermissionMessage() {
+    fun addNotificationPermissionMessage() {
         Timber.v("Adding 'Missing Notification Message' to the queue")
         addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
     }

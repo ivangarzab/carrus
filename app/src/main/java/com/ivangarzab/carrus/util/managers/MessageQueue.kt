@@ -26,6 +26,16 @@ class MessageQueue : Parcelable {
         return false
     }
 
+    fun remove(id: String): Boolean {
+        queue.forEachIndexed { index, message ->
+            if (message.id == id) {
+                queue.removeAt(index)
+                return true
+            }
+        }
+        return false
+    }
+
     fun add(data: MessageData) {
         queue.add(data)
     }

@@ -36,7 +36,13 @@ class StackingMessagesView @JvmOverloads constructor(
 
     private var messageQueue: MessageQueue = MessageQueue()
 
-    fun feedData(owner: LifecycleOwner, dataObservable: LiveData<OverviewViewModel.QueueState>) {
+    private var onClickListener: ((String) -> Unit)? = null
+    private var onDismissListener: ((String) -> Unit)? = null
+
+    fun feedData(
+        owner: LifecycleOwner,
+        dataObservable: LiveData<OverviewViewModel.QueueState>
+    ) {
         dataObservable.observe(owner) {
             Timber.d("Got a message queue update!")
             if (it.messageQueue.size() > 0 && isContainerEmpty()) {
@@ -46,6 +52,14 @@ class StackingMessagesView @JvmOverloads constructor(
             this.messageQueue = it.messageQueue
             processMessageQueue()
         }
+    }
+
+    fun setOnClickListener(onClick: (id: String) -> Unit) {
+        this.onClickListener = onClick
+    }
+
+    fun setOnDismissListener(onDismiss: (id: String) -> Unit) {
+        this.onDismissListener = onDismiss
     }
 
     private fun processMessageQueue() {
@@ -70,21 +84,30 @@ class StackingMessagesView @JvmOverloads constructor(
     private fun showMessage(message: MessageData) {
         Timber.v("Showing message: $message")
         binding.stackingMessagesContainer.apply {
-            addView(
-                ItemMessageBinding.inflate(
-                    layoutInflater,
-                    this,
-                    false
-                ).apply {
-                    bind(message.text, resources) { onMessageDismissed() }
-                }.root
-            )
+            addView(getMessageItem(message))
         }
     }
 
-    private fun onMessageDismissed() {
+    private fun getMessageItem(
+        message: MessageData
+    ): View = ItemMessageBinding.inflate(
+        layoutInflater,
+        this,
+        false
+    ).apply {
+        bind(
+            message = message,
+            resources = resources,
+            onClickListener = onClickListener,
+            onCloseClickListener = { onMessageDismissed(it) }
+        )
+    }.root
+
+    private fun onMessageDismissed(id: String) {
+        Timber.v("Dismissing message with id=$id")
         binding.stackingMessagesContainer.removeAllViews()
         processMessageQueue()
+        onDismissListener?.let { it(id) }
     }
 
     private fun processAlertBadge() {
