@@ -33,6 +33,7 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
+import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
 import com.ivangarzab.carrus.util.extensions.setLightStatusBar
 import com.ivangarzab.carrus.util.extensions.updateMargins
 import timber.log.Timber
@@ -288,7 +289,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             setView(bindingDialog.detailsModalRoot)
             setCancelable(true)
         }.create().also {
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.clearBackgroundForRoundedCorners()
         }
         bindingDialog.apply {
             vinNo = car.vinNo

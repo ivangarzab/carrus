@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentInterstitialNotificationsBinding
+import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
 
 /**
  * Created by Ivan Garza Bermea.
@@ -37,7 +38,7 @@ class PermissionNotificationInterstitial : DialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        this.dialog?.clearBackgroundForRoundedCorners()
         binding.apply {
             this.setSettingsClickListener { onSettingsClicked() }
             this.setNotNowClickListener { dismiss() }
