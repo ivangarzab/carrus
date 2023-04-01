@@ -109,6 +109,11 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
     }
 
+    fun removeNotificationPermissionMessage() {
+        Timber.v("Removing 'Missing Notification Message' from queue")
+        removeMessage(Message.MISSING_PERMISSION_NOTIFICATION)
+    }
+
     fun addTestMessage() = addMessage(Message.TEST)
 
     private fun addMessage(message: Message) {
@@ -123,6 +128,22 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
                     add(message.data)
                 }
             )
+        }
+    }
+
+    private fun removeMessage(message: Message) {
+        with (message.data) {
+            queueState.value?.let {
+                if (it.messageQueue.contains(id)) {
+                    setState(queueState, savedState, QUEUE_STATE) {
+                        copy(
+                            messageQueue = messageQueue.apply {
+                                remove(id)
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 
