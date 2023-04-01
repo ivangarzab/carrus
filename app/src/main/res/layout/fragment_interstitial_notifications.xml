@@ -50,7 +50,7 @@
             android:id="@+id/interstitialContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_4"
+            android:layout_marginTop="@dimen/base_8"
             android:paddingStart="@dimen/base_24"
             android:paddingEnd="@dimen/base_24"
             android:text="@string/missing_permission_interstitial_notification_content"
@@ -64,17 +64,17 @@
 
         <Button
             android:id="@+id/interstitialSettingsButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="?android:colorBackground"
+            android:layout_marginTop="@dimen/base_16"
+            android:backgroundTint="@color/indigo"
             android:text="@string/goto_settings"
-            android:textColor="?android:textColor"
+            android:textColor="@color/white"
             android:onClick="@{settingsClickListener}"
             app:layout_constraintTop_toBottomOf="@+id/interstitialContent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/interstitialNotNowButton"
-            tools:textColor="@color/black"/>
+            app:layout_constraintBottom_toTopOf="@+id/interstitialNotNowButton" />
 
         <TextView
             android:id="@+id/interstitialNotNowButton"
