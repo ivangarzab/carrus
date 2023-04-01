@@ -5,6 +5,15 @@
 
     <data>
         <variable
+            name="title"
+            type="String" />
+        <variable
+            name="subTitle"
+            type="String" />
+        <variable
+            name="body"
+            type="String" />
+        <variable
             name="settingsClickListener"
             type="android.view.View.OnClickListener" />
         <variable
@@ -25,25 +34,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="@string/missing_permission_interstitial_notification_title"
+            android:text="@{title}"
             android:textSize="@dimen/text_22"
             android:textColor="?android:textColor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/missing_permission_interstitial_notification_title"
             tools:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/interstitialSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/missing_permission_interstitial_notification_subtitle"
+            android:text="@{subTitle}"
             android:textSize="@dimen/text_16"
             android:textColor="?android:textColor"
             android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/interstitialTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/missing_permission_interstitial_notification_subtitle"
             tools:textColor="@color/black"/>
 
         <TextView
@@ -53,13 +64,14 @@
             android:layout_marginTop="@dimen/base_8"
             android:paddingStart="@dimen/base_24"
             android:paddingEnd="@dimen/base_24"
-            android:text="@string/missing_permission_interstitial_notification_content"
+            android:text="@{body}"
             android:textSize="@dimen/text_16"
             android:textColor="?android:textColor"
             app:layout_constraintTop_toBottomOf="@+id/interstitialSubtitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/interstitialSettingsButton"
+            tools:text="@string/missing_permission_interstitial_notification_content"
             tools:textColor="@color/black"/>
 
         <Button

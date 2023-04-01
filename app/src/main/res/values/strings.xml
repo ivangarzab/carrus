@@ -98,8 +98,13 @@
     <string name="notification_past_due_service_one">Remember that the service \'%s\' is past due.</string>
     <string name="notification_past_due_service_multiple">There are two or more services that are past due.</string>
 
-    <!-- Permission: Notification -->
-    <string name="missing_permission_interstitial_notification_title">One last thing…</string>
-    <string name="missing_permission_interstitial_notification_subtitle">Please enable notification permission directly from your settings</string>
+    <!-- Permission Interstitial: Notifications -->
+    <string name="missing_permission_interstitial_notification_title">We cannot notify you!</string>
+    <string name="missing_permission_interstitial_notification_subtitle">Please enable notification permission directly from your settings to continue</string>
     <string name="missing_permission_interstitial_notification_content">1. Click the Settings button below\n2. Click on Notifications\n3. Enable notifications using the toggle</string>
+
+    <!-- Permission Interstitial: Alarms -->
+    <string name="missing_permission_interstitial_alarm_title">We cannot set alarms!</string>
+    <string name="missing_permission_interstitial_alarm_subtitle">Please enable the alarms permission directly from your settings to continue</string>
+    <string name="missing_permission_interstitial_alarm_content">1. Click the Settings button below\n2. Click on Notifications\n3. Enable notifications using the toggle</string>
 </resources>
