@@ -64,7 +64,7 @@
         android:id="@+id/permissionNotificationModal"
         android:name="com.ivangarzab.carrus.ui.interstitials.PermissionNotificationInterstitial"
         android:label="modal_permission_notification"
-        tools:layout="@layout/fragment_interstitial_notifications">
+        tools:layout="@layout/modal_interstitial_permission">
     </dialog>
     <fragment
         android:id="@+id/settingsFragment"

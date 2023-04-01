@@ -1,8 +1,6 @@
 package com.ivangarzab.carrus.ui.interstitials
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -11,24 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.databinding.FragmentInterstitialNotificationsBinding
+import com.ivangarzab.carrus.databinding.ModalInterstitialPermissionBinding
 import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class PermissionNotificationInterstitial : DialogFragment(
-    R.layout.fragment_interstitial_notifications
+    R.layout.modal_interstitial_permission
 ) {
 
-    private lateinit var binding: FragmentInterstitialNotificationsBinding
+    private lateinit var binding: ModalInterstitialPermissionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInterstitialNotificationsBinding.inflate(
+        binding = ModalInterstitialPermissionBinding.inflate(
             inflater,
             container,
             false
