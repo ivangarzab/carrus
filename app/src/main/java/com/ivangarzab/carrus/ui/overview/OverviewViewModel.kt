@@ -98,7 +98,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         if (isGranted) {
             queueState.value?.messageQueue?.remove(
                 Message.MISSING_PERMISSION_NOTIFICATION.data.id
-            )
+            ) //TODO: Duplicate removal code
         } else {
 
         }
@@ -112,6 +112,25 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     fun removeNotificationPermissionMessage() {
         Timber.v("Removing 'Missing Notification Message' from queue")
         removeMessage(Message.MISSING_PERMISSION_NOTIFICATION)
+    }
+
+    fun onAlarmPermissionActivityResult(isGranted: Boolean) {
+        Timber.d("Alarm permissions ${if (isGranted) "granted" else "denied"}")
+        if (isGranted) {
+            // TODO: If in the queue, remove from queue
+        } else {
+
+        }
+    }
+
+    fun addAlarmPermissionMessage() {
+        Timber.v("Adding 'Missing Notification Message' to the queue")
+        addMessage(Message.MISSING_PERMISSION_ALARM)
+    }
+
+    fun removeAlarmPermissionMessage() {
+        Timber.v("Removing 'Missing Notification Message' from queue")
+        removeMessage(Message.MISSING_PERMISSION_ALARM)
     }
 
     fun addTestMessage() = addMessage(Message.TEST)

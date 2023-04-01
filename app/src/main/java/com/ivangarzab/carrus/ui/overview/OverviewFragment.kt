@@ -32,10 +32,7 @@ import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
-import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
-import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
-import com.ivangarzab.carrus.util.extensions.setLightStatusBar
-import com.ivangarzab.carrus.util.extensions.updateMargins
+import com.ivangarzab.carrus.util.extensions.*
 import timber.log.Timber
 
 
@@ -52,20 +49,33 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private var serviceListAdapter: ServiceListAdapter? = null
 
-    private var hasNotificationPermissionPrompted = false
+    private var hasNotificationPermissionPrompted = false //TODO: Move to state
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        hasNotificationPermissionPrompted = true
+        hasNotificationPermissionPrompted = true //TODO: Handle this inside the VM
         viewModel.onPermissionActivityResult(isGranted)
         if (isGranted.not()) {
             findNavController().navigate(
                 OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
             )
         } else {
-            viewModel.removeNotificationPermissionMessage()
+            viewModel.removeNotificationPermissionMessage() // TODO: Do this inside VM instead
         }
     }
+
+    private var hasAlarmPermissionPrompted = false //TODO: Move to state
+    /*private val alarmPermissionRequestLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasAlarmPermissionPrompted = true //TODO: Handle this inside the VM
+        viewModel.onAlarmPermissionActivityResult(isGranted)
+        if (isGranted.not()) {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
+            )
+        }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -165,8 +175,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     setOnClickListener { id ->
                         Timber.d("Got a message click with id=$id")
                         when (id) {
-                            "100" -> if (Build.VERSION.SDK_INT >= 33) {
+                            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 attemptToRequestNotificationPermission()
+                            }
+                            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                attemptToRequestAlarmsPermission()
                             }
                         }
                     }
@@ -211,6 +224,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             }
         }
 
+        if (requireContext().canScheduleExactAlarms().not() &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            hasAlarmPermissionPrompted.not()
+        ) {
+            viewModel.addAlarmPermissionMessage()
+        }
+
         binding.car = state.car
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
@@ -226,7 +246,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         }
                     }
                     false -> {
-                        if (Build.VERSION.SDK_INT >= 33 && hasNotificationPermissionPrompted.not()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && hasNotificationPermissionPrompted.not()) {
                             viewModel.addNotificationPermissionMessage()
                         } else {
                             Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
@@ -277,6 +297,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             )
         } else {
             Timber.v("Notification permission already granted!")
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun attemptToRequestAlarmsPermission() {
+        if (requireContext().canScheduleExactAlarms().not()) {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToAlarmPermissionModal()
+            )
+        } else {
+            Timber.v("Alarms permission already granted!")
         }
     }
 

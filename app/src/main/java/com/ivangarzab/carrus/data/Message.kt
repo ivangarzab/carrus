@@ -19,6 +19,13 @@ enum class Message(
             type = MessageType.WARNING,
             text = "Please grant us notification permissions to maximize your experience."
         )
+    ),
+    MISSING_PERMISSION_ALARM(
+        MessageData(
+            id = "101",
+            type = MessageType.WARNING,
+            text = "Please grant us alarm permissions so that we can notify you when a service is due."
+        )
     )
 }
 
