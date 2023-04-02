@@ -1,8 +1,6 @@
 package com.ivangarzab.carrus
 
-import com.ivangarzab.carrus.data.MessageData
 import com.ivangarzab.carrus.util.managers.MessageQueue
-import com.ivangarzab.carrus.data.MessageType
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -134,7 +132,7 @@ class MessageQueueTest {
     fun test_add_three_pop() {
         messageQueue.add(TEST_MESSAGE_DATA_1) // first
         messageQueue.add(TEST_MESSAGE_DATA_2) // second
-        messageQueue.add(MessageData("3", MessageType.INFO, "3")) // third
+        messageQueue.add(TEST_MESSAGE_DATA_3) // third
         assertEquals(
             TEST_MESSAGE_DATA_1,
             messageQueue.pop()
@@ -145,7 +143,7 @@ class MessageQueueTest {
     fun test_add_three_pop_pop() {
         messageQueue.add(TEST_MESSAGE_DATA_1) // first
         messageQueue.add(TEST_MESSAGE_DATA_2) // second
-        messageQueue.add(MessageData("3", MessageType.INFO, "3")) // third
+        messageQueue.add(TEST_MESSAGE_DATA_3) // third
         messageQueue.pop()
         assertEquals(
             TEST_MESSAGE_DATA_2,
@@ -200,22 +198,5 @@ class MessageQueueTest {
         val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
         assertEquals(TRUE, result)
         assertEquals(ANSWER_1, messageQueue.size())
-    }
-
-    companion object {
-        private const val ANSWER_0 = 0
-        private const val ANSWER_1 = 1
-        private const val ANSWER_2 = 2
-
-        private val TEST_MESSAGE_DATA_1 = MessageData(
-            id = "1",
-            type = MessageType.INFO,
-            text = "One"
-        )
-        private val TEST_MESSAGE_DATA_2 = MessageData(
-            id = "2",
-            type = MessageType.WARNING,
-            text = "Two"
-        )
     }
 }

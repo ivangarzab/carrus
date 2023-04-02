@@ -2,14 +2,16 @@ package com.ivangarzab.carrus.util.managers
 
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.MessageData
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @Parcelize
-class MessageQueue : Parcelable {
-    private var queue: MutableList<MessageData> = mutableListOf()
+open class MessageQueue : Parcelable {
+    @IgnoredOnParcel
+    open var queue: MutableList<MessageData> = mutableListOf()
 
     fun size() = queue.size
 
@@ -36,10 +38,19 @@ class MessageQueue : Parcelable {
         return false
     }
 
-    fun add(data: MessageData) {
+    open fun add(data: MessageData) {
         queue.add(data)
     }
 
     @Throws(NoSuchElementException::class)
     fun pop(): MessageData = queue.removeFirst()
+}
+
+class UniqueMessageQueue : MessageQueue() {
+    override fun add(data: MessageData) {
+        if (contains(data.id)) {
+            return // skip
+        }
+        super.add(data)
+    }
 }
