@@ -153,6 +153,55 @@ class MessageQueueTest {
         )
     }
 
+    @Test
+    fun test_remove_empty_list_false() {
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            FALSE,
+            result
+        )
+    }
+
+    @Test
+    fun test_remove_list_size_1_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            TRUE,
+            result
+        )
+    }
+
+    @Test
+    fun test_remove_list_size_2_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.add(TEST_MESSAGE_DATA_2)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            TRUE,
+            result
+        )
+    }
+
+    @Test
+    fun test_remove_invalid_item_false() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_2.id)
+        assertEquals(
+            FALSE,
+            result
+        )
+    }
+
+    @Test
+    fun test_remove_duplicate_item_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(TRUE, result)
+        assertEquals(ANSWER_1, messageQueue.size())
+    }
+
     companion object {
         private const val ANSWER_0 = 0
         private const val ANSWER_1 = 1
