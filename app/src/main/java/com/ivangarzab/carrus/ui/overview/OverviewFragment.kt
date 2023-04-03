@@ -45,11 +45,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private var serviceListAdapter: ServiceListAdapter? = null
 
-    private var hasNotificationPermissionPrompted = false //TODO: Move to state
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        hasNotificationPermissionPrompted = true //TODO: Handle this inside the VM
         viewModel.onNotificationPermissionActivityResult(isGranted)
         if (isGranted.not()) {
             findNavController().navigate(
@@ -57,8 +55,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             )
         }
     }
-
-    private var hasAlarmPermissionPrompted = false //TODO: Move to state
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -212,7 +208,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
         if (requireContext().canScheduleExactAlarms().not() &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            hasAlarmPermissionPrompted.not()
+            state.hasPromptedForPermissionAlarm.not()
         ) {
             viewModel.addAlarmPermissionMessage()
         }
@@ -224,15 +220,17 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             if (it.services.isNotEmpty()) {
                 when (requireContext().areNotificationsEnabled()) {
                     true -> {
+                        // TODO: This should be moved into the VM
                         if (prefs.isAlarmPastDueActive.not()) {
-                            // TODO: This should be moved into the VM
                             viewModel.schedulePastDueAlarm()
                         } else {
                             Timber.v("No need to schedule 'Past Due' alarm")
                         }
                     }
                     false -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && hasNotificationPermissionPrompted.not()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                            state.hasPromptedForPermissionNotification.not()
+                        ) {
                             viewModel.addNotificationPermissionMessage()
                         } else {
                             Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")

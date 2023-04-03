@@ -24,7 +24,9 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     @Parcelize
     data class OverviewState(
         val car: Car? = null,
-        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE
+        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
+        val hasPromptedForPermissionNotification: Boolean = false,
+        val hasPromptedForPermissionAlarm: Boolean = false
     ) : Parcelable
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
@@ -96,14 +98,15 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
         Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
-        if (isGranted) {
-            removeNotificationPermissionMessage()
-        }
+        if (isGranted) { removeNotificationPermissionMessage() }
     }
 
     fun addNotificationPermissionMessage() {
         Timber.v("Adding 'Missing Alarms Permissions' message to the queue")
         addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
+        setState(state, savedState, STATE) {
+            copy(hasPromptedForPermissionNotification = true)
+        }
     }
 
     private fun removeNotificationPermissionMessage() {
@@ -114,6 +117,9 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     fun addAlarmPermissionMessage() {
         Timber.v("Adding 'Missing Alarms Permission' message to the queue")
         addMessage(Message.MISSING_PERMISSION_ALARM)
+        setState(state, savedState, STATE) {
+            copy(hasPromptedForPermissionAlarm = true)
+        }
     }
 
     fun removeAlarmPermissionMessage() {
