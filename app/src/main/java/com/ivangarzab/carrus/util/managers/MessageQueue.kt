@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.util.managers
 
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.MessageData
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -10,7 +9,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 open class MessageQueue : Parcelable {
-    @IgnoredOnParcel
+
     open var queue: MutableList<MessageData> = mutableListOf()
 
     fun size() = queue.size
