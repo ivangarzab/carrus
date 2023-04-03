@@ -199,4 +199,23 @@ class MessageQueueTest {
         assertEquals(TRUE, result)
         assertEquals(ANSWER_1, messageQueue.size())
     }
+
+    @Test(expected = NoSuchElementException::class)
+    fun `test get from empty list`() {
+        messageQueue.get()
+    }
+
+    @Test
+    fun `test get with list size = 1`() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.get()
+        assertEquals(TEST_MESSAGE_DATA_1, result)
+    }
+
+    @Test
+    fun `test get with list size = 2`() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.get()
+        assertEquals(TEST_MESSAGE_DATA_1, result)
+    }
 }

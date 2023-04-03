@@ -42,5 +42,11 @@ open class MessageQueue : Parcelable {
     }
 
     @Throws(NoSuchElementException::class)
+    fun get(): MessageData = when (queue.isEmpty()) {
+        true -> throw NoSuchElementException()
+        false -> queue[0]
+    }
+
+    @Throws(NoSuchElementException::class)
     fun pop(): MessageData = queue.removeFirst()
 }
