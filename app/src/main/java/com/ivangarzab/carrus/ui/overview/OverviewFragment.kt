@@ -2,10 +2,6 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.NotificationManager
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -54,28 +50,15 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         hasNotificationPermissionPrompted = true //TODO: Handle this inside the VM
-        viewModel.onPermissionActivityResult(isGranted)
+        viewModel.onNotificationPermissionActivityResult(isGranted)
         if (isGranted.not()) {
             findNavController().navigate(
                 OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
             )
-        } else {
-            viewModel.removeNotificationPermissionMessage() // TODO: Do this inside VM instead
         }
     }
 
     private var hasAlarmPermissionPrompted = false //TODO: Move to state
-    /*private val alarmPermissionRequestLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        hasAlarmPermissionPrompted = true //TODO: Handle this inside the VM
-        viewModel.onAlarmPermissionActivityResult(isGranted)
-        if (isGranted.not()) {
-            findNavController().navigate(
-                OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
-            )
-        }
-    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -182,6 +165,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                                 attemptToRequestAlarmsPermission()
                             }
                         }
+                    }
+                    setOnDismissListener {
+                        viewModel.onMessageDismissed()
                     }
                 }
             }

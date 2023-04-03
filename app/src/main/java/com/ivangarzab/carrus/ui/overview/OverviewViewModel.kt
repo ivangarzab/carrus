@@ -11,7 +11,7 @@ import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
-import com.ivangarzab.carrus.util.managers.MessageQueue
+import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -34,7 +34,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     @Parcelize
     data class QueueState(
-        val messageQueue: MessageQueue = MessageQueue()
+        val messageQueue: UniqueMessageQueue = UniqueMessageQueue()
     ) : Parcelable
 
     val queueState: LiveData<QueueState> = savedState.getLiveData(
@@ -59,7 +59,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceCreated(service: Service) {
         Timber.d("New Service created: $service")
-        prefs.apply {
+        prefs.apply { // TODO: This work should be done by the Repository
             addService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
         }
@@ -67,6 +67,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceUpdate(service: Service) {
         Timber.d("Service being updated: $service")
+        // TODO: This work should be done by the Repository
         prefs.defaultCar?.let { car ->
             carRepository.saveCarData(
                 car.copy(
@@ -83,7 +84,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
-        prefs.apply {
+        prefs.apply { // TODO: This work should be done by the Repository
             deleteService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
         }
@@ -93,74 +94,57 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         alarms.schedulePastDueAlarm()
     }
 
-    fun onPermissionActivityResult(isGranted: Boolean) {
+    fun onNotificationPermissionActivityResult(isGranted: Boolean) {
         Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
         if (isGranted) {
-            queueState.value?.messageQueue?.remove(
-                Message.MISSING_PERMISSION_NOTIFICATION.data.id
-            ) //TODO: Duplicate removal code
-        } else {
-
+            removeNotificationPermissionMessage()
         }
     }
 
     fun addNotificationPermissionMessage() {
-        Timber.v("Adding 'Missing Notification Message' to the queue")
+        Timber.v("Adding 'Missing Alarms Permissions' message to the queue")
         addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
     }
 
-    fun removeNotificationPermissionMessage() {
-        Timber.v("Removing 'Missing Notification Message' from queue")
+    private fun removeNotificationPermissionMessage() {
+        Timber.v("Removing 'Missing Notifications Permission' message from queue")
         removeMessage(Message.MISSING_PERMISSION_NOTIFICATION)
     }
 
-    fun onAlarmPermissionActivityResult(isGranted: Boolean) {
-        Timber.d("Alarm permissions ${if (isGranted) "granted" else "denied"}")
-        if (isGranted) {
-            // TODO: If in the queue, remove from queue
-        } else {
-
-        }
-    }
-
     fun addAlarmPermissionMessage() {
-        Timber.v("Adding 'Missing Notification Message' to the queue")
+        Timber.v("Adding 'Missing Alarms Permission' message to the queue")
         addMessage(Message.MISSING_PERMISSION_ALARM)
     }
 
     fun removeAlarmPermissionMessage() {
-        Timber.v("Removing 'Missing Notification Message' from queue")
+        Timber.v("Removing 'Missing Alarms Permission' message from queue")
         removeMessage(Message.MISSING_PERMISSION_ALARM)
     }
 
     fun addTestMessage() = addMessage(Message.TEST)
+
+    fun onMessageDismissed() {
+        queueState.value?.let {
+            updateQueueState(it.messageQueue.apply { pop() })
+        }
+    }
 
     private fun addMessage(message: Message) {
         queueState.value?.let {
             if (it.messageQueue.contains(message.data.id)) {
                 return // skip dupes
             }
-        }
-        setState(queueState, savedState, QUEUE_STATE) {
-            copy(
-                messageQueue = messageQueue.apply {
-                    add(message.data)
-                }
-            )
+            Timber.d("Added message with id=${message.data.id} from queue")
+            updateQueueState(it.messageQueue.apply { add(message.data) })
         }
     }
 
     private fun removeMessage(message: Message) {
-        with (message.data) {
+        with(message.data) {
             queueState.value?.let {
                 if (it.messageQueue.contains(id)) {
-                    setState(queueState, savedState, QUEUE_STATE) {
-                        copy(
-                            messageQueue = messageQueue.apply {
-                                remove(id)
-                            }
-                        )
-                    }
+                    Timber.d("Removed message with id=${message.data.id} from queue")
+                    updateQueueState(it.messageQueue.apply { remove(id) })
                 }
             }
         }
@@ -206,6 +190,10 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
+
+    private fun updateQueueState(queue: UniqueMessageQueue) {
+        setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
+    }
 
     fun setupEasterEggForTesting() {
         state.value?.car?.let {

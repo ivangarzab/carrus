@@ -14,6 +14,8 @@ import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
 import com.ivangarzab.carrus.ui.overview.OverviewViewModel
 import com.ivangarzab.carrus.util.extensions.bind
+import com.ivangarzab.carrus.util.extensions.fadeIn
+import com.ivangarzab.carrus.util.extensions.fadeOut
 import com.ivangarzab.carrus.util.managers.MessageQueue
 import timber.log.Timber
 
@@ -66,7 +68,7 @@ class StackingMessagesView @JvmOverloads constructor(
         if (messageQueue.isNotEmpty()) {
             try {
                 if (isContainerEmpty()) {
-                    showMessage(messageQueue.pop())
+                    showMessage(messageQueue.get())
                 }
             } catch (e: NoSuchElementException) {
                 Timber.w("Unable to get next available message from queue")
@@ -106,16 +108,15 @@ class StackingMessagesView @JvmOverloads constructor(
     private fun onMessageDismissed(id: String) {
         Timber.v("Dismissing message with id=$id")
         binding.stackingMessagesContainer.removeAllViews()
-        processMessageQueue()
         onDismissListener?.let { it(id) }
     }
 
     private fun processAlertBadge() {
         messageQueue.size().let { size ->
             Timber.v("Processing alert badge with queue size: $size")
-            binding.apply {
+            with(binding) {
                 when (size) {
-                    0 -> stackingMessagesBadge.visibility = View.GONE
+                    0, 1 -> stackingMessagesBadge.visibility = View.GONE
                     else -> {
                         stackingMessagesBadge.visibility = View.VISIBLE
                         alertsNo = if (size > 6) "6+" else size.toString()
