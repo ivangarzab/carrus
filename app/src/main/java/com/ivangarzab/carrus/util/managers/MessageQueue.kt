@@ -44,12 +44,3 @@ open class MessageQueue : Parcelable {
     @Throws(NoSuchElementException::class)
     fun pop(): MessageData = queue.removeFirst()
 }
-
-class UniqueMessageQueue : MessageQueue() {
-    override fun add(data: MessageData) {
-        if (contains(data.id)) {
-            return // skip
-        }
-        super.add(data)
-    }
-}
