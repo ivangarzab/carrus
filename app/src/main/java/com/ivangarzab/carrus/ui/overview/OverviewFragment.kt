@@ -1,7 +1,12 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -211,6 +216,15 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             state.hasPromptedForPermissionAlarm.not()
         ) {
             viewModel.addAlarmPermissionMessage()
+            Timber.d("Registering alarm permission state changed broadcast receiver")
+            ContextCompat.registerReceiver(
+                requireContext(),
+                AlarmPermissionStateChangedReceiver(),
+                IntentFilter(
+                    AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+                ),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
         }
 
         binding.car = state.car
@@ -417,6 +431,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             R.color.background
         )
     )
+
+    inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                    Timber.d("Received alarm permission state changed broadcast")
+                    viewModel.removeAlarmPermissionMessage()
+                    requireContext().unregisterReceiver(this)
+                }
+            }
+        }
+    }
 
     companion object {
         private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f
