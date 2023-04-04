@@ -7,6 +7,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -69,6 +70,8 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     // https://github.com/square/leakcanary
     implementation "com.squareup.leakcanary:plumber-android:$leak_canary_version"
