@@ -163,6 +163,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     viewModel.setupEasterEggForTesting()
                     true
                 }
+                overviewServicesLabel.setOnClickListener {
+                    findNavController().navigate(
+                        OverviewFragmentDirections.actionOverviewFragmentToMapFragment()
+                    )
+                }
             }
         }
     }
