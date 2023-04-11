@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
 import com.ivangarzab.carrus.util.delegates.viewBinding
@@ -20,32 +21,26 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("Attempting to fetch map async")
-        val mapFragment = requireActivity().supportFragmentManager.findFragmentById(
-            R.id.map_fragment
+        val mapFragment = childFragmentManager.findFragmentById(
+            R.id.mapFragment
         ) as? SupportMapFragment
         mapFragment?.getMapAsync { googleMap ->
-            Timber.d("Got an async map")
+            Timber.d("Got an async map response")
             setupMap(googleMap)
-        }
+        } ?: Timber.w("Unable to fetch map async due to nil support fragment")
     }
 
     private fun setupMap(googleMap: GoogleMap) {
         Timber.d("Setting up map")
-        val sf = LatLng(37.7749, -122.4194)
-        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        // Add a marker on the map coordinates.
-        /*googleMap.addMarker(
-        MarkerOptions()
-            .position(sf)
-            .title("San Francisco")
-        )*/
-        // Move the camera to the map coordinates and zoom in closer.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sf))
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15f))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.mapView.onDestroy()
+        with(googleMap) {
+            LatLng(37.778907199662164, -122.39121652883496).let { sf ->
+                addMarker(
+                    MarkerOptions()
+                        .position(sf)
+                        .title("San Francisco")
+                )
+                moveCamera(CameraUpdateFactory.newLatLng(sf))
+            }
+        }
     }
 }
