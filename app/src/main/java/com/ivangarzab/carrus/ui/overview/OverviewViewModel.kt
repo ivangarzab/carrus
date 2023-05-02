@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.*
 import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -23,12 +25,23 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     data class OverviewState(
         val car: Car? = null,
         val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
-        val notificationPermissionState: Boolean = false
+        val hasPromptedForPermissionNotification: Boolean = false,
+        val hasPromptedForPermissionAlarm: Boolean = false
     ) : Parcelable
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
         STATE,
         OverviewState()
+    )
+
+    @Parcelize
+    data class QueueState(
+        val messageQueue: UniqueMessageQueue = UniqueMessageQueue()
+    ) : Parcelable
+
+    val queueState: LiveData<QueueState> = savedState.getLiveData(
+        QUEUE_STATE,
+        QueueState()
     )
 
     // Pair<repairDate, dueDate>
@@ -48,7 +61,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceCreated(service: Service) {
         Timber.d("New Service created: $service")
-        prefs.apply {
+        prefs.apply { // TODO: This work should be done by the Repository
             addService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
         }
@@ -56,6 +69,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceUpdate(service: Service) {
         Timber.d("Service being updated: $service")
+        // TODO: This work should be done by the Repository
         prefs.defaultCar?.let { car ->
             carRepository.saveCarData(
                 car.copy(
@@ -72,7 +86,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
-        prefs.apply {
+        prefs.apply { // TODO: This work should be done by the Repository
             deleteService(service)
             defaultCar?.let { carRepository.saveCarData(it) }
         }
@@ -82,8 +96,64 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         alarms.schedulePastDueAlarm()
     }
 
-    fun toggleNotificationPermissionState(granted: Boolean) = setState(state, savedState, STATE) {
-        copy(notificationPermissionState = granted)
+    fun onNotificationPermissionActivityResult(isGranted: Boolean) {
+        Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
+        if (isGranted) { removeNotificationPermissionMessage() }
+    }
+
+    fun addNotificationPermissionMessage() {
+        Timber.v("Adding 'Missing Alarms Permissions' message to the queue")
+        addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
+        setState(state, savedState, STATE) {
+            copy(hasPromptedForPermissionNotification = true)
+        }
+    }
+
+    private fun removeNotificationPermissionMessage() {
+        Timber.v("Removing 'Missing Notifications Permission' message from queue")
+        removeMessage(Message.MISSING_PERMISSION_NOTIFICATION)
+    }
+
+    fun addAlarmPermissionMessage() {
+        Timber.v("Adding 'Missing Alarms Permission' message to the queue")
+        addMessage(Message.MISSING_PERMISSION_ALARM)
+        setState(state, savedState, STATE) {
+            copy(hasPromptedForPermissionAlarm = true)
+        }
+    }
+
+    fun removeAlarmPermissionMessage() {
+        Timber.v("Removing 'Missing Alarms Permission' message from queue")
+        removeMessage(Message.MISSING_PERMISSION_ALARM)
+    }
+
+    fun addTestMessage() = addMessage(Message.TEST)
+
+    fun onMessageDismissed() {
+        queueState.value?.let {
+            updateQueueState(it.messageQueue.apply { pop() })
+        }
+    }
+
+    private fun addMessage(message: Message) {
+        queueState.value?.let {
+            if (it.messageQueue.contains(message.data.id)) {
+                return // skip dupes
+            }
+            Timber.d("Added message with id=${message.data.id} from queue")
+            updateQueueState(it.messageQueue.apply { add(message.data) })
+        }
+    }
+
+    private fun removeMessage(message: Message) {
+        with(message.data) {
+            queueState.value?.let {
+                if (it.messageQueue.contains(id)) {
+                    Timber.d("Removed message with id=${message.data.id} from queue")
+                    updateQueueState(it.messageQueue.apply { remove(id) })
+                }
+            }
+        }
     }
 
     fun onSortingByType(type: SortingCallback.SortingType) {
@@ -127,6 +197,10 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
 
+    private fun updateQueueState(queue: UniqueMessageQueue) {
+        setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
+    }
+
     fun setupEasterEggForTesting() {
         state.value?.car?.let {
             carRepository.saveCarData(it.copy(
@@ -137,5 +211,6 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
 
     companion object {
         private const val STATE: String = "OverviewViewModel.STATE"
+        private const val QUEUE_STATE: String = "OverviewViewModel.QUEUE_STATE"
     }
 }

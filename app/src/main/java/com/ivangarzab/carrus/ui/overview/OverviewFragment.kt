@@ -1,10 +1,12 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.AlertDialog
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -31,10 +33,7 @@ import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
-import com.ivangarzab.carrus.util.extensions.setLightStatusBar
-import com.ivangarzab.carrus.util.extensions.updateMargins
-import com.ivangarzab.carrus.util.managers.MessageData
-import com.ivangarzab.carrus.util.managers.MessageType
+import com.ivangarzab.carrus.util.extensions.*
 import timber.log.Timber
 
 
@@ -49,17 +48,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
-    private val notificationPermissionRequestLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                viewModel.toggleNotificationPermissionState(isGranted)
-            } else {
-                Timber.d("Notification permissions denied")
-                // TODO: Implement denial case
-            }
+    private var serviceListAdapter: ServiceListAdapter? = null
+
+    private val notificationPermissionRequestLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        viewModel.onNotificationPermissionActivityResult(isGranted)
+        if (isGranted.not()) {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToPermissionNotificationModal()
+            )
         }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,18 +71,8 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         }
 
         binding.overviewToolbarImage.setOnLongClickListener {
-            insertTestMessage()
+            viewModel.addTestMessage()
             true
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Build.VERSION.SDK_INT >= 33) {
-            attemptToRequestNotificationPermission()
-        } else {
-            Timber.v("We don't need Notification permission when sdk=${Build.VERSION.SDK_INT}")
-            viewModel.toggleNotificationPermissionState(true)
         }
     }
 
@@ -130,6 +120,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     }
 
     private fun setupViews() {
+        setupServicesList()
         binding.apply {
             overviewAppBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
                 binding.overviewToolbarLayout.clipToOutline =
@@ -163,7 +154,42 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     viewModel.setupEasterEggForTesting()
                     true
                 }
+                overviewMessagesLayout.apply {
+                    feedData(viewLifecycleOwner, viewModel.queueState)
+                    setOnClickListener { id ->
+                        Timber.d("Got a message click with id=$id")
+                        when (id) {
+                            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                attemptToRequestNotificationPermission()
+                            }
+                            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                attemptToRequestAlarmsPermission()
+                            }
+                        }
+                    }
+                    setOnDismissListener {
+                        viewModel.onMessageDismissed()
+                    }
+                }
             }
+        }
+    }
+
+    private fun setupServicesList() {
+        serviceListAdapter = ServiceListAdapter(
+            resources = requireContext().resources,
+            theme = requireContext().theme,
+            services = emptyList()
+        ).apply {
+            setOnEditClickedListener { service ->
+                navigateToEditServiceBottomSheet(service)
+            }
+            setOnDeleteClickedListener { service ->
+                viewModel.onServiceDeleted(service)
+            }
+        }
+        binding.overviewContent.overviewContentServiceList.apply {
+                adapter = serviceListAdapter
         }
     }
 
@@ -185,38 +211,49 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             }
         }
 
+        if (requireContext().canScheduleExactAlarms().not() &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            state.hasPromptedForPermissionAlarm.not()
+        ) {
+            viewModel.addAlarmPermissionMessage()
+            Timber.d("Registering alarm permission state changed broadcast receiver")
+            ContextCompat.registerReceiver(
+                requireContext(),
+                AlarmPermissionStateChangedReceiver(),
+                IntentFilter(
+                    AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+                ),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+        }
+
         binding.car = state.car
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
             setLightStatusBar(false)
-            if (state.notificationPermissionState &&
-                it.services.isNotEmpty() &&
-                prefs.isAlarmPastDueActive.not()
-            ) {
-                viewModel.schedulePastDueAlarm()
-            } else {
-                Timber.v("No need to schedule 'Past Due' alarm")
-            }
-
-            binding.overviewContent.apply {
-                overviewContentServiceList.apply {
-                    adapter = ServiceListAdapter(
-                        resources = requireContext().resources,
-                        theme = requireContext().theme,
-                        services = it.services,
-                        onItemClicked = {
-                            // TODO: Go through the list of ServiceItemState's,
-                            //  and make sure there only always 1 expanded state at a time.
-                        },
-                        onEditClicked = { service ->
-                            navigateToEditServiceBottomSheet(service)
-                        },
-                        onDeleteClicked = { service ->
-                            viewModel.onServiceDeleted(service)
+            if (it.services.isNotEmpty()) {
+                when (requireContext().areNotificationsEnabled()) {
+                    true -> {
+                        // TODO: This should be moved into the VM
+                        if (prefs.isAlarmPastDueActive.not()) {
+                            viewModel.schedulePastDueAlarm()
+                        } else {
+                            Timber.v("No need to schedule 'Past Due' alarm")
                         }
-                    )
+                    }
+                    false -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                            state.hasPromptedForPermissionNotification.not()
+                        ) {
+                            viewModel.addNotificationPermissionMessage()
+                        } else {
+                            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
+                        }
+                    }
                 }
             }
+
+            serviceListAdapter?.updateContent(it.services)
 
             binding.overviewAppBarLayout.apply {
                 layoutParams = CoordinatorLayout.LayoutParams(
@@ -242,17 +279,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
     }
 
-    private fun insertTestMessage() {
-        binding.overviewContent.overviewMessagesLayout.apply {
-            addMessage( //TODO: It would be best to simply pass in an enum type
-                MessageData(
-                    type = MessageType.INFO,
-                    text = "This is our first test message inside the stacking layout!"
-                )
-            )
-        }
-    }
-
     private fun showAddServiceMenuOption(visible: Boolean) = binding
         .overviewToolbar
         .menu
@@ -263,16 +289,24 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun attemptToRequestNotificationPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
+        if (requireContext().areNotificationsEnabled().not()) {
+            notificationPermissionRequestLauncher.launch(
                 Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED -> {
-                notificationPermissionRequestLauncher.launch(
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-            }
-            else -> viewModel.toggleNotificationPermissionState(true)
+            )
+        } else {
+            Timber.v("Notification permission already granted!")
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun attemptToRequestAlarmsPermission() {
+        if (requireContext().canScheduleExactAlarms().not()) {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToAlarmPermissionModal()
+            )
+        } else {
+            Timber.v("Alarms permission already granted!")
         }
     }
 
@@ -289,7 +323,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             setView(bindingDialog.detailsModalRoot)
             setCancelable(true)
         }.create().also {
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.clearBackgroundForRoundedCorners()
         }
         bindingDialog.apply {
             vinNo = car.vinNo
@@ -397,6 +431,18 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             R.color.background
         )
     )
+
+    inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                    Timber.d("Received alarm permission state changed broadcast")
+                    viewModel.removeAlarmPermissionMessage()
+                    requireContext().unregisterReceiver(this)
+                }
+            }
+        }
+    }
 
     companion object {
         private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f

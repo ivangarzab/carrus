@@ -26,11 +26,11 @@ import java.util.concurrent.TimeUnit
 class ServiceListAdapter(
     private val resources: Resources,
     private val theme: Resources.Theme,
-    private val services: List<Service>,
-    val onItemClicked: (Service) -> Unit,
-    val onEditClicked: (Service) -> Unit,
-    val onDeleteClicked: (Service) -> Unit
+    private var services: List<Service>
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
+
+    var onEditClicked: ((Service) -> Unit)? = null
+    var onDeleteClicked: ((Service) -> Unit)? = null
 
     inner class ServiceListViewHolder(val binding: ItemServiceBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -68,12 +68,25 @@ class ServiceListAdapter(
 
                         binding.root.setOnClickListener { onExpandToggle(binding, this) }
                         binding.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
-                        binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked(this) }
-                        binding.serviceItemEditIcon.setOnClickListener { onEditClicked(this) }
+                        binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked?.let { it(this) } }
+                        binding.serviceItemEditIcon.setOnClickListener { onEditClicked?.let { it(this) } }
                     }
                 }
             }
         }
+    }
+
+    fun setOnEditClickedListener(onEditClicked: (Service) -> Unit) {
+        this.onEditClicked = onEditClicked
+    }
+
+    fun setOnDeleteClickedListener(onDeleteClicked: (Service) -> Unit) {
+        this.onDeleteClicked = onDeleteClicked
+    }
+
+    fun updateContent(services: List<Service>) {
+        this.services = services
+        notifyDataSetChanged()
     }
 
     private fun onExpandToggle(binding: ItemServiceBinding, service: Service) {
@@ -89,7 +102,7 @@ class ServiceListAdapter(
                 state.copy(expanded = it.not())
             }
         }
-        onItemClicked(service)
+//        onItemClicked(service)
     }
 
     private fun generateItemServiceState(position: Int, data: Service): ItemServiceState =
