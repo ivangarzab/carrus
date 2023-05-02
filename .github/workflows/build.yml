@@ -27,6 +27,12 @@ jobs:
     - run: echo "🖥️ The workflow is now ready to test your code."
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - run: echo "Running Unit Test for sanity."  
+    - name: Unit Test
+      run: ./gradlew testDebugUnitTest
+    - name: Android Test Report
+      uses: asadmansr/android-test-report-action@v1.2.0
+      if: ${{ always() }}
     - run: echo "🐛 Building Debug APK."  
     - name: Build with Gradle
       run: ./gradlew build

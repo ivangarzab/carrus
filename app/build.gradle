@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -15,19 +16,20 @@ android {
         applicationId "com.ivangarzab.carrus"
         minSdk 26
         targetSdk 33
-        versionCode 3
-        versionName "1.0.0-alpha03"
+        versionCode 4
+        versionName "1.0.0-alpha04"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-
         }
     }
     compileOptions {

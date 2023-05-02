@@ -86,6 +86,12 @@ class CreateViewModel(
         }
     }
 
+    fun onImageDeleted() {
+        setState(state, savedState, STATE) {
+            copy(imageUri = null)
+        }
+    }
+
     fun onExpandToggle() {
         setState(state, savedState, STATE) {
             copy(isExpanded = isExpanded.not())
