@@ -1,6 +1,6 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.util.managers.MessageQueue
+import com.ivangarzab.carrus.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test

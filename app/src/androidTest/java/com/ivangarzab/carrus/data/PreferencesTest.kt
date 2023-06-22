@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.carrus.data
 
 import android.content.Context
 import android.content.SharedPreferences
