@@ -7,12 +7,12 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.data.isPastDue
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.AlarmScheduler
 import com.ivangarzab.carrus.util.NotificationController
 import com.ivangarzab.carrus.util.NotificationData
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
+import com.ivangarzab.carrus.util.extensions.isPastDue
 import timber.log.Timber
 
 /**
