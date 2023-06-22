@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus
 
 import android.app.Application
+import com.google.android.libraries.places.api.Places
 import com.ivangarzab.carrus.data.Preferences
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.AlarmScheduler
@@ -41,6 +42,8 @@ open class App : Application() {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
         }
+
+        Places.initialize(this, BuildConfig.GOOGLE_MAPS_API_KEY)
     }
 
     companion object {

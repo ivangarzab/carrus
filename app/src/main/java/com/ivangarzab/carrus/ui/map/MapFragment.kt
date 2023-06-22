@@ -8,6 +8,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
 import com.ivangarzab.carrus.util.delegates.viewBinding
@@ -17,6 +19,8 @@ import timber.log.Timber
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding: FragmentMapBinding by viewBinding()
+
+    private lateinit var placesClient: PlacesClient
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +32,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             Timber.d("Got an async map response")
             setupMap(googleMap)
         } ?: Timber.w("Unable to fetch map async due to nil support fragment")
+
+        placesClient = Places.createClient(requireActivity())
     }
 
     private fun setupMap(googleMap: GoogleMap) {

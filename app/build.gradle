@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.maps.android:places-ktx:2.0.0'
 
     // https://github.com/square/leakcanary
     implementation "com.squareup.leakcanary:plumber-android:$leak_canary_version"
