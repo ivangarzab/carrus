@@ -40,18 +40,6 @@ data class Car(
         { it.milesPerGallon },
     )
 
-    fun isEqualTo(other: Car) = this.uid == other.uid &&
-            this.nickname == other.nickname &&
-            this.make == other.make &&
-            this.model == other.model &&
-            this.year == other.year &&
-            this.licenseNo == other.licenseNo &&
-            this.vinNo == other.vinNo &&
-            this.tirePressure == other.tirePressure &&
-            this.totalMiles == other.totalMiles &&
-            this.milesPerGallon == other.milesPerGallon
-    //TODO: Compare Service list as well
-
     override fun toString(): String {
         return "Car(" +
                 "\nnickname='$nickname'" +

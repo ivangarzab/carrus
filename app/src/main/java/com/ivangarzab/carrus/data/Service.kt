@@ -30,18 +30,6 @@ data class Service(
         { it.cost },
     )
 
-    fun isEqualTo(other: Service): Boolean = this.id == other.id &&
-            this.name == other.name &&
-            this.repairDate.timeInMillis == other.repairDate.timeInMillis &&
-            this.dueDate.timeInMillis == other.dueDate.timeInMillis &&
-            (if (this.brand != null && other.brand != null) {
-                this.brand == other.brand
-            } else true) &&
-            (if (this.type != null && other.type != null) {
-                this.type == other.type
-            } else true) &&
-            this.cost == other.cost
-
     override fun toString(): String =
         "Service(" +
                 "\nname='$name'" +
