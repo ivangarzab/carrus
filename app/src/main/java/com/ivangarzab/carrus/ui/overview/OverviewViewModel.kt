@@ -55,41 +55,24 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         }
     }
 
-    fun verifyServiceData(
-        name: String
-    ): Boolean = name.isNotBlank() && datesInMillis.first != 0L && datesInMillis.second != 0L
+    fun verifyServiceData(name: String): Boolean =
+        name.isNotBlank() &&
+                datesInMillis.first != 0L &&
+                datesInMillis.second != 0L
 
     fun onServiceCreated(service: Service) {
         Timber.d("New Service created: $service")
-        prefs.apply { // TODO: This work should be done by the Repository
-            addService(service)
-            defaultCar?.let { carRepository.saveCarData(it) }
-        }
+        carRepository.addCarService(service)
     }
 
     fun onServiceUpdate(service: Service) {
         Timber.d("Service being updated: $service")
-        // TODO: This work should be done by the Repository
-        prefs.defaultCar?.let { car ->
-            carRepository.saveCarData(
-                car.copy(
-                    services = car.services.map {
-                        when (it.id == service.id) {
-                            true -> service
-                            false -> it
-                        }
-                    }
-                )
-            )
-        }
+        carRepository.updateCarService(service)
     }
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
-        prefs.apply { // TODO: This work should be done by the Repository
-            deleteService(service)
-            defaultCar?.let { carRepository.saveCarData(it) }
-        }
+        carRepository.removeCarService(service)
     }
 
     fun schedulePastDueAlarm() {
@@ -101,6 +84,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         if (isGranted) { removeNotificationPermissionMessage() }
     }
 
+    //////////////////////// MOVE THIS INTO A MessagesRepository ////////////////////////////
     fun addNotificationPermissionMessage() {
         Timber.v("Adding 'Missing Alarms Permissions' message to the queue")
         addMessage(Message.MISSING_PERMISSION_NOTIFICATION)
@@ -155,7 +139,9 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
             }
         }
     }
+    //////////////////////// MOVE THIS INTO A MessagesRepository ////////////////////////////
 
+    ///////////////// MOVE THIS INTO Extension Functions or Helper class ////////////////////
     fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
             SortingCallback.SortingType.NONE -> resetServicesSort()
@@ -193,6 +179,7 @@ class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() 
             )
         }
     }
+    ///////////////// MOVE THIS INTO Extension Functions or Helper class ////////////////////
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
