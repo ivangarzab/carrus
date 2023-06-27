@@ -12,8 +12,8 @@ import androidx.transition.TransitionManager
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.data.getDetails
-import com.ivangarzab.carrus.data.isPastDue
+import com.ivangarzab.carrus.util.extensions.getDetails
+import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.databinding.ItemServiceBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.getShortenedDate

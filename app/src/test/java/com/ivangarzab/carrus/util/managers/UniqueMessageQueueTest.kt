@@ -1,6 +1,9 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
+import com.ivangarzab.carrus.ANSWER_1
+import com.ivangarzab.carrus.ANSWER_2
+import com.ivangarzab.carrus.TEST_MESSAGE_DATA_1
+import com.ivangarzab.carrus.TEST_MESSAGE_DATA_2
 import junit.framework.TestCase
 import org.junit.Test
 
