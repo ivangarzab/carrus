@@ -37,7 +37,7 @@ open class App : Application() {
         appScope = CoroutineScope(
             appGlobalJob + Dispatchers.Default
         )
-        if (BuildConfig.BUILD_TYPE != "release") {
+        if (isRelease().not()) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
         }
@@ -47,6 +47,8 @@ open class App : Application() {
         var preferences: Preferences? = null
         var appScope: CoroutineScope? = null
         var alarmScheduler: AlarmScheduler? = null
+
+        fun isRelease(): Boolean = BuildConfig.BUILD_TYPE == "release"
     }
 }
 

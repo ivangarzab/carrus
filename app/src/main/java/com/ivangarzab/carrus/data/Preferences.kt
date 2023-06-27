@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import com.google.gson.Gson
+import com.ivangarzab.carrus.App.Companion.isRelease
 import timber.log.Timber
 import java.util.*
 
@@ -16,7 +17,7 @@ import java.util.*
 class Preferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
-        DEFAULT_SHARED_PREFS,
+        if (isRelease()) DEFAULT_SHARED_PREFS else TEST_SHARED_PREFS,
         Context.MODE_PRIVATE
     )
 
@@ -33,16 +34,6 @@ class Preferences(context: Context) {
             false -> null
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)
-    fun addService(service: Service) {
-        defaultCar = defaultCar?.apply {
-            services = services.toMutableList().apply { add(service) }
-        }
-    }
-    fun deleteService(service: Service) {
-        defaultCar = defaultCar?.apply {
-            services = services.toMutableList().apply { remove(service) }
-        }
-    }
 
     var isAlarmPastDueActive: Boolean
         get() = sharedPreferences.get(KEY_ALARM_PAST_DUE_INTENT, false)
@@ -95,6 +86,7 @@ class Preferences(context: Context) {
 
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carrus.preferences"
+        private const val TEST_SHARED_PREFS = "com.ivangarzab.carrus.preferences-test"
         private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"

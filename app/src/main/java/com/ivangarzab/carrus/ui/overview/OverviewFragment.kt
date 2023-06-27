@@ -26,6 +26,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
@@ -149,10 +150,12 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                         orientation = RecyclerView.VERTICAL
                     }
                 }
-                // EASTER EGG: Test Car Service data
-                overviewServicesLabel.setOnLongClickListener {
-                    viewModel.setupEasterEggForTesting()
-                    true
+                if (isRelease().not()) {
+                    // EASTER EGG: Test Car Service data
+                    overviewServicesLabel.setOnLongClickListener {
+                        viewModel.setupEasterEggForTesting()
+                        true
+                    }
                 }
                 overviewMessagesLayout.apply {
                     feedData(viewLifecycleOwner, viewModel.queueState)
