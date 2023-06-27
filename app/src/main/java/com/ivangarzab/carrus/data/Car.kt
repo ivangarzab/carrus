@@ -23,9 +23,34 @@ data class Car(
     val milesPerGallon: String,
     var services: List<Service>,
     val imageUri: String? = null
-) : Parcelable {
+) : Parcelable, Comparable<Car> {
 
     fun toJson(): String = Gson().toJson(this)
+
+    override fun compareTo(other: Car): Int = compareValuesBy(this, other,
+        { it.uid },
+        { it.nickname },
+        { it.make },
+        { it.model },
+        { it.year },
+        { it.licenseNo },
+        { it.vinNo },
+        { it.tirePressure },
+        { it.totalMiles },
+        { it.milesPerGallon },
+    )
+
+    fun isEqualTo(other: Car) = this.uid == other.uid &&
+            this.nickname == other.nickname &&
+            this.make == other.make &&
+            this.model == other.model &&
+            this.year == other.year &&
+            this.licenseNo == other.licenseNo &&
+            this.vinNo == other.vinNo &&
+            this.tirePressure == other.tirePressure &&
+            this.totalMiles == other.totalMiles &&
+            this.milesPerGallon == other.milesPerGallon
+    //TODO: Compare Service list as well
 
     override fun toString(): String {
         return "Car(" +
@@ -72,65 +97,3 @@ data class Car(
         )
     }
 }
-
-@Parcelize
-data class Service(
-    val version: Int = VERSION_SERVICE,
-    val id: String,
-    val name: String,
-    val repairDate: Calendar,
-    val dueDate: Calendar,
-    val brand: String? = null,
-    val type: String? = null,
-    val cost: Float = 0.00f
-): Parcelable {
-    override fun toString(): String =
-        "Service(" +
-                "\nname='$name'" +
-                "\nrepairDate='${repairDate.getFormattedDate()}'" +
-                "\ndueDate='${dueDate.getFormattedDate()}'" +
-                "\nbrand='$brand'" +
-                "\ntype='$type'" +
-                "\ncost='$cost'" +
-                "\n)"
-}
-const val VERSION_SERVICE: Int = 1
-
-val serviceList: List<Service> = listOf(
-    Service(
-        id = "1",
-        name = "Oil Change",
-        repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1672550100000 },
-        brand = "Armor All",
-        type = "Synthetic",
-        cost = 79.99f
-    ),
-    Service(
-        id = "2",
-        name = "Window Wipes",
-        repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
-        brand = "Walmart",
-        type = "6'', long",
-        cost = 25.00f
-    ),
-    Service(
-        id = "3",
-        name = "Tires",
-        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 },
-        brand = "Michelin",
-        type = "24''",
-        cost = 500.69f
-    ),
-    Service(
-        id = "4",
-        name = "Rims",
-        repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
-        brand = "Auto Zone Express",
-        type = "24'', black",
-        cost = 420.00f
-    )
-)
