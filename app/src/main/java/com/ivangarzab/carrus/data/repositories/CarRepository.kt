@@ -16,7 +16,7 @@ import javax.inject.Inject
  */
 class CarRepository @Inject constructor() {
 
-    private val carDataChannel = MutableStateFlow(fetchCarData())
+    private val carDataChannel = MutableStateFlow<Car?>(Car.empty)
 
     private fun updateCarDataChannel(car: Car?) = appScope.launch {
         carDataChannel.value = car

@@ -1,36 +1,38 @@
 package com.ivangarzab.carrus.ui.create
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.TestCase.assertEquals
+import com.ivangarzab.carrus.data.repositories.CarRepository
+import junit.framework.TestCase
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+/**
+ * Created by Ivan Garza Bermea.
+ */
 class CreateViewModelTest {
 
-    private val viewModel: CreateViewModel = CreateViewModel(
-        savedState = SavedStateHandle()
+    private val viewModel = CreateViewModel(
+        SavedStateHandle(),
+        carRepository = CarRepository()
     )
 
     @Test
     fun test_verifyData_true() {
-        assertEquals(true, viewModel.verifyData(MAKE, MODEL, YEAR))
+        TestCase.assertEquals(true, viewModel.verifyData(MAKE, MODEL, YEAR))
     }
 
     @Test
     fun test_verifyData_bogus_make_false() {
-        assertEquals(false, viewModel.verifyData(EMPTY, MODEL, YEAR))
+        TestCase.assertEquals(false, viewModel.verifyData(EMPTY, MODEL, YEAR))
     }
 
     @Test
     fun test_verifyData_bogus_model_false() {
-        assertEquals(false, viewModel.verifyData(MAKE, EMPTY, YEAR))
+        TestCase.assertEquals(false, viewModel.verifyData(MAKE, EMPTY, YEAR))
     }
 
     @Test
     fun test_verifyData_bogus_year_false() {
-        assertEquals(false, viewModel.verifyData(MAKE, MODEL, EMPTY))
+        TestCase.assertEquals(false, viewModel.verifyData(MAKE, MODEL, EMPTY))
     }
 
     companion object {
