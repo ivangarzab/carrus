@@ -278,7 +278,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     Timber.w("Caught exception while parsing imageUrl", e)
                 }
             }
-        } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
+        } ?: setLightStatusBar(viewModel.isNight().not())
     }
 
     private fun showAddServiceMenuOption(visible: Boolean) = binding
@@ -387,13 +387,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         )
     ).also {
         // Switch color, if needed
-       prefs.darkMode?.let { darkMode ->
-           if (darkMode.not()) {
-               label.setTextColor(
-                   requireContext().getColor(R.color.white)
-               )
-           }
-       }
+        if (viewModel.isNight().not()) {
+            label.setTextColor(
+                requireContext().getColor(R.color.white)
+            )
+        }
     }
 
     private fun processSortingViews(
@@ -409,7 +407,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             }
         }
         // if needed, return text color to normal
-        prefs.darkMode?.let { darkMode ->
+        viewModel.isNight()?.let { darkMode ->
             if (darkMode.not()) {
                 listOf(
                     overviewServiceSortNoneLabel,

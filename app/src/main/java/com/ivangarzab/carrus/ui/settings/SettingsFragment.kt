@@ -82,9 +82,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        prefs.darkMode?.let {
-            binding.settingsDarkModeOption.settingsOptionToggle.isChecked = it
-        }
+        binding.settingsDarkModeOption.settingsOptionToggle.isChecked = viewModel.isNight()
     }
 
     private fun setupWindow() {

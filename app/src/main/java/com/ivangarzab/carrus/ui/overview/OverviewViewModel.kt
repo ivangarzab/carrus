@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,11 +10,13 @@ import com.ivangarzab.carrus.*
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -25,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
-    private val carRepository: CarRepository
+    private val carRepository: CarRepository,
+    private val appSettingsRepository: AppSettingsRepository
     ) : ViewModel() {
 
     @Parcelize
@@ -51,13 +55,22 @@ class OverviewViewModel @Inject constructor(
         QueueState()
     )
 
+    private val _nightThemeState: MutableLiveData<Boolean> = MutableLiveData(false)
+    val nightThemeState: LiveData<Boolean> = _nightThemeState
+
     // Pair<repairDate, dueDate>
     var datesInMillis: Pair<Long, Long> = Pair(0, 0)
 
     init {
         viewModelScope.launch {
             carRepository.observeCarData().collect {
+                Timber.d("Got a car update: $it")
                 updateCarState(it)
+            }
+        }
+        viewModelScope.launch {
+            appSettingsRepository.observeNightThemeData().collect {
+                _nightThemeState.value = it
             }
         }
     }
@@ -146,9 +159,9 @@ class OverviewViewModel @Inject constructor(
             }
         }
     }
-    //////////////////////// MOVE THIS INTO A MessagesRepository ////////////////////////////
+    //^^^^^^^^^^^^^^^^^^^^^^ MOVE THIS INTO A MessagesRepository ^^^^^^^^^^^^^^^^^^^^^^^^^//
 
-    ///////////////// MOVE THIS INTO Extension Functions or Helper class ////////////////////
+    //vvvvvvvvvvvvvvv MOVE THIS INTO Extension Functions or Helper class vvvvvvvvvvvvvvvvv//
     fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
             SortingCallback.SortingType.NONE -> resetServicesSort()
@@ -186,7 +199,7 @@ class OverviewViewModel @Inject constructor(
             )
         }
     }
-    ///////////////// MOVE THIS INTO Extension Functions or Helper class ////////////////////
+    //^^^^^^^^^^^^^^ MOVE THIS INTO Extension Functions or Helper class ^^^^^^^^^^^^^^^^//
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
@@ -194,6 +207,8 @@ class OverviewViewModel @Inject constructor(
     private fun updateQueueState(queue: UniqueMessageQueue) {
         setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
     }
+
+    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
 
     fun setupEasterEggForTesting() {
         state.value?.car?.let {

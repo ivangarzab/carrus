@@ -39,12 +39,12 @@ class MainActivity : AppCompatActivity() {
     fun getBindingRoot() = binding.root
 
     private fun setDarkMode() {
-        prefs.darkMode?.let {
+        /*prefs.darkMode?.let {
             when (it) {
                 true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        }
+        }*/
     }
 
     companion object {

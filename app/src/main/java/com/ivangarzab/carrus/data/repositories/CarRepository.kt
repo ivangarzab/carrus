@@ -7,6 +7,7 @@ import com.ivangarzab.carrus.prefs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,9 +17,10 @@ import javax.inject.Inject
  */
 class CarRepository @Inject constructor() {
 
-    private val carDataChannel = MutableStateFlow<Car?>(Car.empty)
+    private val carDataChannel = MutableStateFlow<Car?>(null)
 
     private fun updateCarDataChannel(car: Car?) = appScope.launch {
+        Timber.v("Updating car data state flow")
         carDataChannel.value = car
     }
 

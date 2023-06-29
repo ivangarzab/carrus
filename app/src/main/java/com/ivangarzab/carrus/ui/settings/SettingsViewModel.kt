@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.setState
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
-    private val carRepository: CarRepository
+    private val carRepository: CarRepository,
+    private val appSettingsRepository: AppSettingsRepository
     ) : ViewModel() {
 
     @Parcelize
@@ -50,10 +52,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
+
     fun onDarkModeToggleClicked(checked: Boolean) {
         Timber.v("Dark mode toggle was checked to: $checked")
-        prefs.darkMode = checked
-        setDefaultNightMode(checked)
+        appSettingsRepository.setNightThemeSetting(checked)
     }
 
     fun onDeleteCarDataClicked() {
@@ -72,13 +75,6 @@ class SettingsViewModel @Inject constructor(
                 alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
             }
         } ?: Timber.v("There are no services to delete from car data")
-    }
-
-    private fun setDefaultNightMode(isNight: Boolean) {
-        when (isNight) {
-            true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
     }
 
     fun onAlarmTimePicked(alarmTime: String) {

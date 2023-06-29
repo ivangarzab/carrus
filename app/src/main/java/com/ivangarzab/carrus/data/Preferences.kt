@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
 import timber.log.Timber
@@ -70,17 +69,6 @@ class Preferences(context: Context) {
                     }
                 )
             }
-        }
-
-        // Get Night Mode state on first install
-        if (darkMode == null) {
-            val nightModeFlags: Int = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            darkMode = when (nightModeFlags) {
-                Configuration.UI_MODE_NIGHT_YES -> true
-                Configuration.UI_MODE_NIGHT_NO -> false
-                else -> false
-            }
-            Timber.i("Dark Mode set to: $darkMode")
         }
     }
 
