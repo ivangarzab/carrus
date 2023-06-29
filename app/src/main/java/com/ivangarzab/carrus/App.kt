@@ -2,8 +2,8 @@ package com.ivangarzab.carrus
 
 import android.app.Application
 import com.ivangarzab.carrus.data.Preferences
-import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.AlarmScheduler
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,6 +26,7 @@ val appScope: CoroutineScope by lazy {
     App.appScope!!
 }
 
+@HiltAndroidApp
 open class App : Application() {
 
     private val appGlobalJob: Job = Job()
@@ -51,6 +52,3 @@ open class App : Application() {
         fun isRelease(): Boolean = BuildConfig.BUILD_TYPE == "release"
     }
 }
-
-//TODO: distribute this thru injection
-val carRepository: CarRepository = CarRepository()

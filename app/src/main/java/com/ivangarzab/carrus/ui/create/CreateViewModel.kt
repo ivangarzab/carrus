@@ -6,18 +6,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.*
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.extensions.setState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class CreateViewModel(
-    private val savedState: SavedStateHandle
+@HiltViewModel
+class CreateViewModel @Inject constructor(
+    private val savedState: SavedStateHandle,
+    private val carRepository: CarRepository
     ) : ViewModel() {
 
     @Parcelize

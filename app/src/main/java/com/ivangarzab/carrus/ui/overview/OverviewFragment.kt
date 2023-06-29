@@ -21,8 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,17 +34,17 @@ import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
-    private val viewModel: OverviewViewModel by activityViewModels {
-        SavedStateViewModelFactory(requireActivity().application, this)
-    }
+    private val viewModel: OverviewViewModel by viewModels()
 
     private val binding: FragmentOverviewBinding by viewBinding()
 
