@@ -22,11 +22,13 @@ import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.writeInFile
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding: FragmentSettingsBinding by viewBinding()

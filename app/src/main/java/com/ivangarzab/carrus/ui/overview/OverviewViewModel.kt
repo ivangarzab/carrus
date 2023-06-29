@@ -9,17 +9,24 @@ import com.ivangarzab.carrus.*
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewViewModel(private val savedState: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class OverviewViewModel @Inject constructor(
+    private val savedState: SavedStateHandle,
+    private val carRepository: CarRepository
+    ) : ViewModel() {
 
     @Parcelize
     data class OverviewState(

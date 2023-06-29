@@ -8,19 +8,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.ivangarzab.carrus.alarms
-import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.setState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val savedState: SavedStateHandle,
+    private val carRepository: CarRepository
+    ) : ViewModel() {
 
     @Parcelize
     data class SettingsState(

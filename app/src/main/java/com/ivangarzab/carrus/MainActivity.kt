@@ -7,7 +7,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
 import com.ivangarzab.carrus.databinding.ActivityMainBinding
 import com.ivangarzab.carrus.util.extensions.updateMargins
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

@@ -5,22 +5,28 @@ import android.content.Context
 import android.content.Intent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.alarms
-import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.AlarmScheduler
 import com.ivangarzab.carrus.util.NotificationController
 import com.ivangarzab.carrus.util.NotificationData
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class AlarmBroadcastReceiver : BroadcastReceiver() {
     private lateinit var context: Context
     private lateinit var notificationController: NotificationController
+
+    @Inject
+    lateinit var carRepository: CarRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
