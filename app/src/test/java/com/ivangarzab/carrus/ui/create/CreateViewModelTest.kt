@@ -1,8 +1,12 @@
 package com.ivangarzab.carrus.ui.create
 
 import androidx.lifecycle.SavedStateHandle
+import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import io.mockk.every
+import io.mockk.mockk
 import junit.framework.TestCase
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -10,10 +14,18 @@ import org.junit.Test
  */
 class CreateViewModelTest {
 
-    private val viewModel = CreateViewModel(
-        SavedStateHandle(),
-        carRepository = CarRepository()
-    )
+    private lateinit var viewModel: CreateViewModel
+
+    @Before
+    fun setup() {
+        val carRepository: CarRepository = mockk()
+        viewModel = CreateViewModel(
+            SavedStateHandle(),
+            carRepository = carRepository
+        )
+
+        every { carRepository.fetchCarData() } returns Car.empty
+    }
 
     @Test
     fun test_verifyData_true() {
