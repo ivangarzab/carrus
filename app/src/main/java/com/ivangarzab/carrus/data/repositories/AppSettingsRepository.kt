@@ -26,6 +26,8 @@ class AppSettingsRepository @Inject constructor(
         )
     }
 
+    fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
+
     fun observeNightThemeData(): Flow<Boolean> = nightThemeFlow.asStateFlow()
 
     fun setNightThemeSetting(isNight: Boolean) {
@@ -38,8 +40,6 @@ class AppSettingsRepository @Inject constructor(
         true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
-
-    fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
     private fun getNightThemeSettingFromSystem(context: Context): Boolean =
         when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
