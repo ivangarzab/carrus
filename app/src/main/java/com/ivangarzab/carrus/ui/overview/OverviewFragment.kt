@@ -181,6 +181,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         serviceListAdapter = ServiceListAdapter(
             resources = requireContext().resources,
             theme = requireContext().theme,
+            dueDateFormat = viewModel.getDueDateFormat(),
             services = emptyList()
         ).apply {
             setOnEditClickedListener { service ->

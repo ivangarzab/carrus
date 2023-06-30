@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.databinding.FragmentSettingsBinding
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
@@ -146,7 +145,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             settingsDueDateFormatOption.root.setOnClickListener {
                 showDueDateFormatPickerDialog { optionPicked ->
-                    viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
+                    viewModel.onDueDateFormatPicked(optionPicked)
                 }
             }
 
@@ -184,8 +183,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 minValue = 0
                 maxValue = options.size - 1
                 displayedValues = options
-                value = if (options.contains(prefs.dueDateFormat.value)) {
-                    options.indexOf(prefs.dueDateFormat.value)
+                value = if (options.contains(viewModel.getDueDateFormat().value)) {
+                    options.indexOf(viewModel.getDueDateFormat().value)
                 } else {
                     0
                 }

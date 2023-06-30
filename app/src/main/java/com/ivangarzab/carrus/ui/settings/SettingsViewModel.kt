@@ -43,7 +43,7 @@ class SettingsViewModel @Inject constructor(
 
     init {
         updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "$DEFAULT_ALARM_TIME")
-        updateDueDateFormatState(prefs.dueDateFormat)
+        updateDueDateFormatState(appSettingsRepository.fetchDueDateFormatSetting())
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -83,12 +83,16 @@ class SettingsViewModel @Inject constructor(
         updateAlarmTimeState(alarmTime)
     }
 
-    fun onDueDateFormatPicked(option: DueDateFormat) {
-        Timber.d("Due Date format changed to: '$option'")
-        prefs.dueDateFormat = option
-        updateDueDateFormatState(option)
+    fun onDueDateFormatPicked(option: String) {
+        DueDateFormat.get(option).let { dueDateFormat ->
+            Timber.d("Due Date format changed to: '$dueDateFormat'")
+            appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
+            updateDueDateFormatState(dueDateFormat)
+        }
 
     }
+
+    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
 
     fun getTimeString(hour: Int): String = "$hour:00 ${
         when (hour) {

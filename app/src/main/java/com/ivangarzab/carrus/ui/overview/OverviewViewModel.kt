@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
@@ -58,9 +59,6 @@ class OverviewViewModel @Inject constructor(
     private val _nightThemeState: MutableLiveData<Boolean> = MutableLiveData(false)
     val nightThemeState: LiveData<Boolean> = _nightThemeState
 
-    /** Pair<repairDate, dueDate> */
-    var datesInMillis: Pair<Long, Long> = Pair(0, 0)
-
     init {
         viewModelScope.launch {
             carRepository.observeCarData()
@@ -77,20 +75,7 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    fun verifyServiceData(name: String): Boolean =
-        name.isNotBlank() &&
-                datesInMillis.first != 0L &&
-                datesInMillis.second != 0L
-
-    fun onServiceCreated(service: Service) {
-        Timber.d("New Service created: $service")
-        carRepository.addCarService(service)
-    }
-
-    fun onServiceUpdate(service: Service) {
-        Timber.d("Service being updated: $service")
-        carRepository.updateCarService(service)
-    }
+    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
