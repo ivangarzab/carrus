@@ -3,6 +3,8 @@ package com.ivangarzab.carrus.data.repositories
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.ivangarzab.carrus.BuildConfig
+import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.prefs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,8 @@ class AppSettingsRepository @Inject constructor(
 
     private val nightThemeFlow = MutableStateFlow(false)
 
+    private val dueDateFormatFlow = MutableStateFlow(DueDateFormat.DAYS)
+
     init {
         setNightThemeSetting(
             fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context)
@@ -28,13 +32,13 @@ class AppSettingsRepository @Inject constructor(
 
     fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
-    fun observeNightThemeData(): Flow<Boolean> = nightThemeFlow.asStateFlow()
-
     fun setNightThemeSetting(isNight: Boolean) {
         Timber.d("Setting night theme to: $isNight")
         prefs.darkMode = isNight
         setAppDefaultNightTheme(isNight)
     }
+
+    fun observeNightThemeData(): Flow<Boolean> = nightThemeFlow.asStateFlow()
 
     private fun setAppDefaultNightTheme(isNight: Boolean) = when (isNight) {
         true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -49,4 +53,19 @@ class AppSettingsRepository @Inject constructor(
         }.also { result ->
             Timber.i("Night theme set to: $result")
         }
+
+    fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
+
+    fun fetchDueDateFormatSetting(): DueDateFormat = prefs.dueDateFormat
+
+    fun setDueDateFormatSetting(format: DueDateFormat) {
+        Timber.v("Setting due date format setting: ${format.value}")
+        prefs.dueDateFormat = format
+    }
+
+    fun observeDueDateFormatData(): Flow<DueDateFormat> = dueDateFormatFlow.asStateFlow()
+
+    private fun updateDueDateFormatFlow(format: DueDateFormat) {
+        dueDateFormatFlow.value = format
+    }
 }
