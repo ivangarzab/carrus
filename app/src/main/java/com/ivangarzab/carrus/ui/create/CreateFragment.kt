@@ -87,7 +87,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
         viewModel.apply {
             onSubmit.observe(viewLifecycleOwner) { success ->
-                if (success) findNavController().popBackStack()
+                if (success) {
+                    Timber.v("Navigating back to Overview fragment")
+                    findNavController().navigate(
+                        CreateFragmentDirections.actionCreateFragmentToOverviewFragment()
+                    )
+                }
             }
             state.observe(viewLifecycleOwner) {
                 it?.let { state ->

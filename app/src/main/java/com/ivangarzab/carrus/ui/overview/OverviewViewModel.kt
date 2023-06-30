@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ivangarzab.carrus.*
+import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
@@ -16,7 +16,7 @@ import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -58,15 +58,17 @@ class OverviewViewModel @Inject constructor(
     private val _nightThemeState: MutableLiveData<Boolean> = MutableLiveData(false)
     val nightThemeState: LiveData<Boolean> = _nightThemeState
 
-    // Pair<repairDate, dueDate>
+    /** Pair<repairDate, dueDate> */
     var datesInMillis: Pair<Long, Long> = Pair(0, 0)
 
     init {
         viewModelScope.launch {
-            carRepository.observeCarData().collect {
-                Timber.d("Got a car update: $it")
-                updateCarState(it)
-            }
+            carRepository.observeCarData()
+                .catch { Timber.d("Something went wrong collecting the car data") }
+                .collect {
+                    Timber.d("Got a car update from the repository: $it")
+                    updateCarState(it)
+                }
         }
         viewModelScope.launch {
             appSettingsRepository.observeNightThemeData().collect {

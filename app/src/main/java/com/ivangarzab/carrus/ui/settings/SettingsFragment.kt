@@ -106,7 +106,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             setNavigationIcon(R.drawable.ic_arrow_back_white)
             navigationIcon?.setTint(Color.WHITE)
             setNavigationOnClickListener {
-                findNavController().popBackStack()
+                Timber.v("Navigating back to the Overview fragment")
+                findNavController().navigate(
+                    SettingsFragmentDirections.actionSettingsFragmentToOverviewFragment()
+                )
             }
         }
     }

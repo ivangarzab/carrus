@@ -196,6 +196,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     }
 
     private fun processStateChange(state: OverviewViewModel.OverviewState) {
+        Timber.v("Processing overview state change")
         binding.overviewContent.apply {
             when (state.serviceSortingType) {
                 SortingCallback.SortingType.NONE -> onSortingViews(

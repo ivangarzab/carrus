@@ -1,7 +1,6 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
