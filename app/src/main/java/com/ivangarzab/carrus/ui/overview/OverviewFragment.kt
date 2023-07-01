@@ -409,7 +409,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             }
         }
         // if needed, return text color to normal
-        viewModel.isNight()?.let { darkMode ->
+        viewModel.isNight().let { darkMode ->
             if (darkMode.not()) {
                 listOf(
                     overviewServiceSortNoneLabel,

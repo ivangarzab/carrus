@@ -12,7 +12,7 @@ enum class TimeFormat(
 
     companion object {
         fun get(value: String): TimeFormat = when (value) {
-            "24 hours" -> HR24
+            HR24.value -> HR24
             else -> HR12
         }
     }

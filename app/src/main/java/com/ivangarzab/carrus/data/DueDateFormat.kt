@@ -14,9 +14,9 @@ enum class DueDateFormat(
 
     companion object {
         fun get(value: String): DueDateFormat = when (value) {
-            "weeks" -> WEEKS
-            "months" -> MONTHS
-            "due date" -> DATE
+            WEEKS.value -> WEEKS
+            MONTHS.value -> MONTHS
+            DATE.value -> DATE
             else -> DAYS
         }
     }
