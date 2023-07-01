@@ -82,6 +82,6 @@ jobs:
         - name: Run Instrumented Test in Firebase Test Lab
           uses: asadmansr/Firebase-Test-Lab-Action@v1.0
           with:
-            arg-spec: 'android-test.yml:android-pixel-4'
+            arg-spec: 'android-test.yml:android-pixel-5'
           env:
             SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
