@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.ui.overview
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.serviceList
@@ -30,7 +32,8 @@ import javax.inject.Inject
 class OverviewViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
-    private val appSettingsRepository: AppSettingsRepository
+    private val appSettingsRepository: AppSettingsRepository,
+    private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
 
     @Parcelize
@@ -187,6 +190,32 @@ class OverviewViewModel @Inject constructor(
         }
     }
     //^^^^^^^^^^^^^^ MOVE THIS INTO Extension Functions or Helper class ^^^^^^^^^^^^^^^^//
+
+    fun processCarServicesListForNotification(
+        services: List<Service>,
+        areNotificationsEnabled: Boolean
+    ) {
+        if (services.isNotEmpty()) {
+            when (areNotificationsEnabled) {
+                true -> {
+                    if (alarmSettingsRepository.isPastDueAlarmActive().not()) {
+                        schedulePastDueAlarm()
+                    } else {
+                        Timber.v("'Past Due' alarm is already scheduled")
+                    }
+                }
+                false -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        state.value?.hasPromptedForPermissionNotification?.not() == true
+                    ) {
+                        addNotificationPermissionMessage()
+                    } else {
+                        Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
+                    }
+                }
+            }
+        }
+    }
 
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }

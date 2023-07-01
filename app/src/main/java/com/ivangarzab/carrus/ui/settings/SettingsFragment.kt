@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.databinding.FragmentSettingsBinding
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
@@ -71,7 +71,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             binding.apply {
                 car = state.car
                 alarmTime = viewModel.getTimeString(
-                    state.alarmTime?.toInt() ?: SettingsViewModel.DEFAULT_ALARM_TIME
+                    state.alarmTime?.toInt() ?: DEFAULT_ALARM_TIME
                 )
                 versionNumber = "v${BuildConfig.VERSION_NAME}"
                 dueDateFormat = state.dueDateFormat.value
@@ -161,7 +161,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             minValue = 0
             maxValue = 23
             displayedValues = viewModel.pickerOptionsAlarmTime
-            value = (prefs.alarmPastDueTime ?: SettingsViewModel.DEFAULT_ALARM_TIME) - 1
+            value = viewModel.getAlarmTime()
         }
         AlertDialog.Builder(requireContext()).apply {
             setView(numberPicker)

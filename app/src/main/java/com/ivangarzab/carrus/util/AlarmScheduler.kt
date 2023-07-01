@@ -1,25 +1,30 @@
 package com.ivangarzab.carrus.util
 
-import android.app.*
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.SystemClock
-import com.ivangarzab.carrus.*
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.receivers.AlarmBroadcastReceiver
-import com.ivangarzab.carrus.ui.settings.SettingsViewModel.Companion.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class AlarmScheduler(
-    context: Context
+@InstallIn
+class AlarmScheduler @Inject constructor(
+    @ApplicationContext context: Context,
+    private val settingsRepository: AlarmSettingsRepository
 ) {
     private val weakContext: WeakReference<Context> = WeakReference(context)
 
@@ -27,20 +32,24 @@ class AlarmScheduler(
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun schedulePastDueAlarm(force: Boolean = false) {
-        if (force.not() && prefs.isAlarmPastDueActive) {
+        if (force.not() && settingsRepository.isPastDueAlarmActive()) {
             Timber.v("'PastDueService' alarm is already scheduled")
 //            return // skip dupes
             cancelPastDueAlarm()
         }
 
-        getPastDueAlarmPendingIntent()?.let {
-            if (alarmManager.isAbleToScheduleExactAlarms()) {
-                prefs.isAlarmPastDueActive = true
-                Timber.d("Scheduling 'PastDue' alarm")
-                setAlarmBroadcastReceiverEnableState(true)
-                scheduleDefaultDailyAlarm(it)
-            } else {
-                Timber.w("Unable to schedule 'PastDue' alarm due to missing permissions")
+        getPastDueAlarmPendingIntent()?.let { intent ->
+            alarmManager.isAbleToScheduleExactAlarms().let {
+                if (it) {
+                    Timber.d("Scheduling 'PastDue' alarm")
+                    setAlarmBroadcastReceiverEnableState(true)
+                    scheduleTestAlarm(intent)
+//                    scheduleDefaultDailyAlarm(intent) //TODO: Check for the alarm frequency
+                    settingsRepository.togglePastDueAlarmActive(true)
+                } else {
+                    Timber.w("Unable to schedule 'PastDue' alarm due to missing permissions")
+                }
+                settingsRepository.toggleAlarmFeature(it)
             }
         } ?: Timber.w("Unable to schedule 'PastDue' alarm for an unknown reason")
     }
@@ -51,7 +60,7 @@ class AlarmScheduler(
             alarmManager.cancel(it)
             it.cancel()
         } ?: Timber.w("Unable to cancel 'PastDue' alarm")
-        prefs.isAlarmPastDueActive = false
+        settingsRepository.togglePastDueAlarmActive(false)
     }
 
     private fun getPastDueAlarmPendingIntent(): PendingIntent? {
@@ -69,7 +78,7 @@ class AlarmScheduler(
     }
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
-        val alarmTime: Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME // 7am is the default
+        val alarmTime: Int = settingsRepository.getAlarmTime()
         alarmManager.setRepeating(
             AlarmManager.RTC,
             Calendar.getInstance().apply {

@@ -6,8 +6,8 @@ import android.content.Intent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.AlarmScheduler
 import com.ivangarzab.carrus.util.NotificationController
 import com.ivangarzab.carrus.util.NotificationData
@@ -21,12 +21,12 @@ import javax.inject.Inject
  * Created by Ivan Garza Bermea.
  */
 @AndroidEntryPoint
-class AlarmBroadcastReceiver : BroadcastReceiver() {
+class AlarmBroadcastReceiver @Inject constructor(
+    val carRepository: CarRepository,
+    private val alarmSettingsRepository: AlarmSettingsRepository
+) : BroadcastReceiver() {
     private lateinit var context: Context
     private lateinit var notificationController: NotificationController
-
-    @Inject
-    lateinit var carRepository: CarRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
@@ -43,8 +43,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun handleDeviceRebootAction() {
-        if (prefs.isAlarmPastDueActive) {
+    private fun handleDeviceRebootAction() = with(alarmSettingsRepository) {
+        if (isAlarmFeatureOn() && isPastDueAlarmActive()) {
             Timber.d("Rescheduling 'PastDue' alarm")
             alarms.schedulePastDueAlarm()
         } else {
