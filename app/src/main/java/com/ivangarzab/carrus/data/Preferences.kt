@@ -53,6 +53,16 @@ class Preferences(context: Context) {
         }
         set(value) = sharedPreferences.set(KEY_FORMAT_DUE_DATE, value)
 
+    var timeFormat: TimeFormat
+        get() = sharedPreferences.get(KEY_FORMAT_TIME, TimeFormat.HR12.value).let {
+            TimeFormat.get(it)
+        }
+        set(value) = sharedPreferences.set(KEY_FORMAT_TIME, value)
+
+    var leftHandedMode: Boolean
+        get() = sharedPreferences.get(KEY_LEFTY, false)
+        set(value) = sharedPreferences.set(KEY_LEFTY, value)
+
     init {
         defaultCar?.let { car ->
             Timber.d("Default car from a past version: $car")
@@ -80,6 +90,8 @@ class Preferences(context: Context) {
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
         private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
         private const val KEY_FORMAT_DUE_DATE = "format-due-date"
+        private const val KEY_FORMAT_TIME = "format-time"
+        private const val KEY_LEFTY = "left-handed-mode"
     }
 }
 
@@ -107,6 +119,7 @@ operator fun SharedPreferences.set(
     is Long -> edit { it.putLong(key, value) }
     is Car -> edit { it.putString(key, value.toJson()) }
     is DueDateFormat -> edit { it.putString(key, value.value)}
+    is TimeFormat -> edit { it.putString(key, value.value)}
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
 
@@ -129,6 +142,9 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     }
     DueDateFormat::class -> getString(key, defaultValue as String).let {
         DueDateFormat.get(it ?: DueDateFormat.DAYS.name) as T
+    }
+    TimeFormat::class -> getString(key, defaultValue as String).let {
+        TimeFormat.get(it ?: TimeFormat.HR12.name) as T
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }

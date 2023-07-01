@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.prefs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -24,11 +25,19 @@ class AppSettingsRepository @Inject constructor(
 
     private val dueDateFormatFlow = MutableStateFlow(DueDateFormat.DAYS)
 
+    private val timeFormatFlow = MutableStateFlow(TimeFormat.HR12)
+
+    private val leftHandedModeFlow = MutableStateFlow(false)
+
     init {
         setNightThemeSetting(
             fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context)
         )
     }
+
+    fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
+
+    /** Night Theme/Dark Mode **/
 
     fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
@@ -54,13 +63,14 @@ class AppSettingsRepository @Inject constructor(
             Timber.i("Night theme set to: $result")
         }
 
-    fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
+    /** Due Date Format functions **/
 
     fun fetchDueDateFormatSetting(): DueDateFormat = prefs.dueDateFormat
 
     fun setDueDateFormatSetting(format: DueDateFormat) {
         Timber.v("Setting due date format setting: ${format.value}")
         prefs.dueDateFormat = format
+        updateDueDateFormatFlow(format)
     }
 
     fun observeDueDateFormatData(): Flow<DueDateFormat> = dueDateFormatFlow.asStateFlow()
@@ -68,4 +78,33 @@ class AppSettingsRepository @Inject constructor(
     private fun updateDueDateFormatFlow(format: DueDateFormat) {
         dueDateFormatFlow.value = format
     }
+
+    /** Time Format functions **/
+
+    fun fetchTimeFormatSetting(): TimeFormat = prefs.timeFormat.also {
+        Timber.v("Got time format: ${it.name}")
+    }
+
+    fun setTimeFormatSetting(format: TimeFormat) {
+        Timber.v("Setting due date format setting: ${format.value}")
+        prefs.timeFormat = format
+        updateTimeFormatFlow(format)
+    }
+
+    fun observeTimeFormatData(): Flow<TimeFormat> = timeFormatFlow.asStateFlow()
+
+    private fun updateTimeFormatFlow(format: TimeFormat) {
+        timeFormatFlow.value = format
+    }
+
+    /** Left-handed Mode functions **/
+
+    fun fetchLeftHandedSetting(): Boolean = prefs.leftHandedMode
+
+    fun setLeftHandedSetting(isLeftHanded: Boolean) {
+        Timber.v("Setting left-handed mode: $isLeftHanded")
+        prefs.leftHandedMode = isLeftHanded
+    }
+
+    fun observeLeftHandedData(): Flow<Boolean> = leftHandedModeFlow.asStateFlow()
 }

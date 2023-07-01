@@ -4,6 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.prefs
 import org.junit.Before
 import org.junit.Test
@@ -21,6 +22,8 @@ class AppSettingsRepositoryTest {
     fun setup() {
         prefs.darkMode = null
         prefs.dueDateFormat = DueDateFormat.DAYS
+        prefs.timeFormat = TimeFormat.HR12
+        prefs.leftHandedMode = false
     }
 
     @Test
@@ -100,5 +103,71 @@ class AppSettingsRepositoryTest {
         setDueDateFormatSetting(DueDateFormat.MONTHS)
         assertThat(fetchDueDateFormatSetting())
             .isSameInstanceAs(DueDateFormat.MONTHS)
+    }
+
+    @Test
+    fun test_setTimeFormatSetting_base() {
+        assertThat(prefs.timeFormat)
+            .isSameInstanceAs(TimeFormat.HR12)
+    }
+
+    @Test
+    fun test_setTimeFormatSetting_hr24_success() = with(repository) {
+        setTimeFormatSetting(TimeFormat.HR24)
+        assertThat(prefs.timeFormat)
+            .isSameInstanceAs(TimeFormat.HR24)
+    }
+
+    @Test
+    fun test_setTimeFormatSetting_hr24_fail() = with(repository) {
+        setTimeFormatSetting(TimeFormat.HR24)
+        assertThat(prefs.timeFormat)
+            .isNotSameInstanceAs(TimeFormat.HR12)
+    }
+
+    @Test
+    fun test_fetchTimeFormatSetting_hr12_base() = with(repository) {
+        assertThat(fetchTimeFormatSetting())
+            .isSameInstanceAs(TimeFormat.HR12)
+    }
+
+    @Test
+    fun test_fetchTimeFormatSetting_hr24_success() = with(repository) {
+        setTimeFormatSetting(TimeFormat.HR24)
+        assertThat(fetchTimeFormatSetting())
+            .isSameInstanceAs(TimeFormat.HR24)
+    }
+
+    @Test
+    fun test_setLeftHandedSetting_base() =
+        assertThat(prefs.leftHandedMode)
+            .isFalse()
+
+    @Test
+    fun test_setLeftHandedSetting_true() = with(repository) {
+        setLeftHandedSetting(true)
+        assertThat(prefs.leftHandedMode)
+            .isTrue()
+    }
+
+    @Test
+    fun test_setLeftHandedSetting_false() = with(repository) {
+        setLeftHandedSetting(false)
+        assertThat(prefs.leftHandedMode)
+            .isFalse()
+    }
+
+    @Test
+    fun test_fetchLeftHandedSettings_true() = with(repository) {
+        setLeftHandedSetting(true)
+        assertThat(fetchLeftHandedSetting())
+            .isTrue()
+    }
+
+    @Test
+    fun test_fetchLeftHandedSettings_false() = with(repository) {
+        setLeftHandedSetting(false)
+        assertThat(fetchLeftHandedSetting())
+            .isFalse()
     }
 }
