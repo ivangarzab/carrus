@@ -61,6 +61,8 @@ jobs:
         path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 
   android-test:
+      name: Android Instrumented Tests
+      needs: build
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@3
