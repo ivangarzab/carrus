@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus
 
 import com.ivangarzab.carrus.data.Service
-import java.util.*
+import java.util.Calendar
 
 val TEST_SERVICE: Service = Service(
     version = 1,
@@ -17,9 +17,9 @@ val TEST_SERVICE: Service = Service(
 val TEST_SERVICE_EMPTY: Service = Service(
     version = 1,
     id = "0",
-    name = "Empty",
-    repairDate = Calendar.getInstance(),
-    dueDate = Calendar.getInstance(),
+    name = "",
+    repairDate = Calendar.getInstance().apply { timeInMillis = 0L },
+    dueDate = Calendar.getInstance().apply { timeInMillis = 0L },
     brand = null,
     type = null,
     cost = 0.0f

@@ -106,7 +106,6 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             type = data.type ?: "",
             price = data.cost.toString()
         )
-        viewModel.datesInMillis = Pair(data.repairDate.timeInMillis, data.dueDate.timeInMillis)
     }
 
     private fun getServiceFromContent(
@@ -116,10 +115,10 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             id = id.ifBlank { UUID.randomUUID().toString() },
             name = it.serviceModalNameInput.text.toString(),
             repairDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.datesInMillis.first
+                timeInMillis = viewModel.getRepairDateInMillis()
             },
             dueDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.datesInMillis.second
+                timeInMillis = viewModel.getDueDateInMillis()
             },
             brand = it.serviceModalBrandInput.text.toString(),
             type = it.serviceModalTypeInput.text.toString(),
@@ -135,11 +134,10 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         showDatePickerDialog(
             date = Calendar.getInstance(),
             onDateSelected = { year, month, day ->
-                viewModel.datesInMillis = Pair(
-                    first = Calendar.getInstance().apply {
+                viewModel.setNewRepairDateInMillis(
+                    Calendar.getInstance().apply {
                         set(year, month, day)
-                    }.timeInMillis,
-                    second = viewModel.datesInMillis.second
+                    }.timeInMillis
                 )
                 binding.serviceModalRepairDateInput.setText(
                     getString(R.string.service_date_format, month, day, year)
@@ -153,9 +151,8 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                 add(Calendar.DAY_OF_MONTH, DEFAULT_DUE_DATE_ADDITION)
             },
             onDateSelected = { year, month, day ->
-                viewModel.datesInMillis = Pair(
-                    first = viewModel.datesInMillis.first,
-                    second = Calendar.getInstance().apply {
+                viewModel.setNewDueDateInMillis(
+                    Calendar.getInstance().apply {
                         set(year, month, day)
                     }.timeInMillis
                 )

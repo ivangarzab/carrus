@@ -8,6 +8,7 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.util.Calendar
 import javax.inject.Inject
 
 /**
@@ -26,21 +27,15 @@ class ServiceModalViewModel @Inject constructor(
     private val _state = MutableLiveData<ServiceModalState>(null)
     val state: LiveData<ServiceModalState> = _state
 
-    private val _onSubmission = LiveEvent<Boolean>()
-    val onSubmission: LiveData<Boolean> = _onSubmission
-
-    private val _onDataRequest = LiveEvent<Pair<Boolean, DataRequest>>()
-    val onDataRequest: LiveData<Pair<Boolean, DataRequest>> = _onDataRequest
-
     data class DataRequest(
         val type: Type = Type.EDIT,
         val id: String = ""
     )
+    private val _onDataRequest = LiveEvent<Pair<Boolean, DataRequest>>()
+    val onDataRequest: LiveData<Pair<Boolean, DataRequest>> = _onDataRequest
 
-    /**
-     * Pair<repairDate, dueDate>
-     */
-    var datesInMillis: Pair<Long, Long> = Pair(0, 0)
+    private val _onSubmission = LiveEvent<Boolean>()
+    val onSubmission: LiveData<Boolean> = _onSubmission
 
     fun setArgsData(data: Service?) {
         setState(ServiceModalState(
@@ -60,7 +55,7 @@ class ServiceModalViewModel @Inject constructor(
 
     fun onSubmitData(data: Service) {
         Timber.v("Got service data submission")
-        _onSubmission.value = when (verifyServiceData(data.name)) {
+        _onSubmission.value = when (verifyServiceData(data)) {
             true -> {
                 when (state.value?.type) {
                     Type.CREATE -> onServiceCreated(data)
@@ -73,10 +68,34 @@ class ServiceModalViewModel @Inject constructor(
         }
     }
 
-    private fun verifyServiceData(name: String): Boolean =
-        name.isNotBlank() &&
-                datesInMillis.first != 0L &&
-                datesInMillis.second != 0L
+    fun getRepairDateInMillis(): Long = state.value?.data?.repairDate?.timeInMillis ?: 0L
+
+    fun setNewRepairDateInMillis(dateInMillis: Long) = state.value?.let {
+        setState(it.copy(
+            data = it.data?.copy(
+                repairDate = Calendar.getInstance().apply {
+                    timeInMillis = dateInMillis
+                }
+            )
+        ))
+    }
+
+    fun getDueDateInMillis(): Long = state.value?.data?.dueDate?.timeInMillis ?: 0L
+
+    fun setNewDueDateInMillis(dateInMillis: Long) = state.value?.let {
+        setState(it.copy(
+            data = it.data?.copy(
+                dueDate = Calendar.getInstance().apply {
+                    timeInMillis = dateInMillis
+                }
+            )
+        ))
+    }
+
+    private fun verifyServiceData(data: Service): Boolean =
+        data.name.isNotBlank() &&
+                data.repairDate.timeInMillis != 0L &&
+                data.dueDate.timeInMillis != 0L
 
     private fun onServiceCreated(service: Service) {
         carRepository.addCarService(service)
