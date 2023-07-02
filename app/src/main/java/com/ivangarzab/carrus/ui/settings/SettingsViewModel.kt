@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.extensions.setState
@@ -27,6 +27,7 @@ class SettingsViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
+    private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
 
@@ -76,7 +77,7 @@ class SettingsViewModel @Inject constructor(
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
-                alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
+                alarmsRepository.cancelAllAlarms()
             }
         } ?: Timber.v("There are no services to delete from car data")
     }
@@ -84,7 +85,8 @@ class SettingsViewModel @Inject constructor(
     fun onAlarmTimePicked(alarmTime: String) {
         Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
         alarmSettingsRepository.setAlarmTime(alarmTime)
-        alarms.schedulePastDueAlarm(true)
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
     }
 

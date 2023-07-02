@@ -47,7 +47,7 @@ val serviceList: List<Service> = listOf(
         id = "1",
         name = "Oil Change",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1672550100000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1672590100000 },
         brand = "Armor All",
         type = "Synthetic",
         cost = 79.99f
@@ -56,7 +56,7 @@ val serviceList: List<Service> = listOf(
         id = "2",
         name = "Window Wipes",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1669882020000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
         brand = "Walmart",
         type = "6'', long",
         cost = 25.00f
@@ -65,7 +65,7 @@ val serviceList: List<Service> = listOf(
         id = "3",
         name = "Tires",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1662016020000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1662916020000 },
         brand = "Michelin",
         type = "24''",
         cost = 500.69f
@@ -74,7 +74,7 @@ val serviceList: List<Service> = listOf(
         id = "4",
         name = "Rims",
         repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-        dueDate = Calendar.getInstance().apply { timeInMillis = 1667276100000 },
+        dueDate = Calendar.getInstance().apply { timeInMillis = 1697276100000 },
         brand = "Auto Zone Express",
         type = "24'', black",
         cost = 420.00f

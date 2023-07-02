@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.AlarmScheduler
 import com.ivangarzab.carrus.util.NotificationController
@@ -21,12 +21,13 @@ import javax.inject.Inject
  * Created by Ivan Garza Bermea.
  */
 @AndroidEntryPoint
-class AlarmBroadcastReceiver @Inject constructor(
-    val carRepository: CarRepository,
-    private val alarmSettingsRepository: AlarmSettingsRepository
-) : BroadcastReceiver() {
+class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
     private lateinit var context: Context
     private lateinit var notificationController: NotificationController
+
+    @Inject lateinit var carRepository: CarRepository
+    @Inject lateinit var alarmsRepository: AlarmsRepository
+    @Inject lateinit var alarmSettingsRepository: AlarmSettingsRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
@@ -37,6 +38,7 @@ class AlarmBroadcastReceiver @Inject constructor(
             Timber.d("We got an alarm intent with action: ${it.action}")
             when (it.action) {
                 INTENT_ACTION_BOOT_COMPLETED -> handleDeviceRebootAction()
+                //TODO: Fix
                 AlarmScheduler.INTENT_ACTION_ALARM_PAST_DUE -> handlePastDueAlarmIntent()
                 else -> "Unable to recognize alarm intent action"
             }
@@ -46,7 +48,7 @@ class AlarmBroadcastReceiver @Inject constructor(
     private fun handleDeviceRebootAction() = with(alarmSettingsRepository) {
         if (isAlarmFeatureOn() && isPastDueAlarmActive()) {
             Timber.d("Rescheduling 'PastDue' alarm")
-            alarms.schedulePastDueAlarm()
+            alarmsRepository.schedulePastDueAlarm()
         } else {
             Timber.w("Unable to find 'PastDue' alarm Intent")
         }

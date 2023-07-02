@@ -52,7 +52,9 @@ class Preferences(context: Context) {
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
 
     var alarmFrequency: AlarmFrequency
-        get() = sharedPreferences.get(KEY_ALARM_PAST_FREQUENCY, AlarmFrequency.DAILY)
+        get() = sharedPreferences.get(KEY_ALARM_PAST_FREQUENCY, AlarmFrequency.DAILY.name).let {
+            AlarmFrequency.get(it)
+        }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_FREQUENCY, value)
 
     var dueDateFormat: DueDateFormat

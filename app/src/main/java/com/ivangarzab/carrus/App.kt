@@ -2,7 +2,6 @@ package com.ivangarzab.carrus
 
 import android.app.Application
 import com.ivangarzab.carrus.data.Preferences
-import com.ivangarzab.carrus.util.AlarmScheduler
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,13 +14,9 @@ import timber.log.Timber
 // Global instance of our shared preferences
 val prefs: Preferences by lazy {
     App.preferences!!
-}
+} //TODO: Rework this solution
 
-val alarms: AlarmScheduler by lazy {
-    App.alarmScheduler!!
-}
-
-// Global instance of our Application coroutine Scope -- this should replace the use of GlobalScope
+// Global instance of our Application coroutine scope
 val appScope: CoroutineScope by lazy {
     App.appScope!!
 }
@@ -34,7 +29,6 @@ open class App : Application() {
     override fun onCreate() {
         super.onCreate()
         preferences = Preferences(applicationContext)
-        alarmScheduler = AlarmScheduler(applicationContext)
         appScope = CoroutineScope(
             appGlobalJob + Dispatchers.Default
         )
@@ -47,7 +41,6 @@ open class App : Application() {
     companion object {
         var preferences: Preferences? = null
         var appScope: CoroutineScope? = null
-        var alarmScheduler: AlarmScheduler? = null
 
         fun isRelease(): Boolean = BuildConfig.BUILD_TYPE == "release"
     }

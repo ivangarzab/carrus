@@ -31,7 +31,7 @@ class AlarmSettingsRepository @Inject constructor(
         toggleAlarmFeature(
             (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
                 .isAbleToScheduleExactAlarms()
-        )
+        ) //TODO: Can we listen for these changes?
     }
 
     private val alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
@@ -47,9 +47,9 @@ class AlarmSettingsRepository @Inject constructor(
     fun toggleAlarmFeature(isEnabled: Boolean) {
         Timber.v("Toggling alarm feature ${if (isEnabled) "ON" else "OFF"}")
         prefs.isAlarmFeatureOn = isEnabled
-        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
+        /*updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
             isAlarmFeatureEnabled = isEnabled
-        ))
+        ))*/
     }
 
     fun getAlarmTime(): Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME
@@ -61,6 +61,8 @@ class AlarmSettingsRepository @Inject constructor(
             alarmTime = value
         ))
     }
+
+    fun getAlarmFrequency(): AlarmFrequency = prefs.alarmFrequency
 
     fun setAlarmFrequency(frequency: AlarmFrequency) {
         Timber.v("Setting alarm frequency to ${frequency.value}")

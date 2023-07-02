@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.serviceList
@@ -33,6 +33,7 @@ class OverviewViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
+    private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
 
@@ -83,10 +84,6 @@ class OverviewViewModel @Inject constructor(
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
-    }
-
-    fun schedulePastDueAlarm() {
-        alarms.schedulePastDueAlarm()
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -199,7 +196,7 @@ class OverviewViewModel @Inject constructor(
             when (areNotificationsEnabled) {
                 true -> {
                     if (alarmSettingsRepository.isPastDueAlarmActive().not()) {
-                        schedulePastDueAlarm()
+                        alarmsRepository.schedulePastDueAlarm()
                     } else {
                         Timber.v("'Past Due' alarm is already scheduled")
                     }
