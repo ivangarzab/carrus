@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import timber.log.Timber
 import java.util.*
 

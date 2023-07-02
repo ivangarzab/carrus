@@ -2,7 +2,7 @@ package com.ivangarzab.carrus.data.repositories
 
 import android.app.AlarmManager
 import android.content.Context
-import com.ivangarzab.carrus.data.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,10 +21,11 @@ class AlarmSettingsRepository @Inject constructor(
 
     data class AlarmSettingsState(
         val isAlarmFeatureEnabled: Boolean = false,
-        val isAlarmActive: Boolean = false,
         val alarmTime: String = "",
         val frequency: AlarmFrequency = AlarmFrequency.DAILY
     )
+
+    private val alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
 
     init {
         // Make sure the alarm permissions are granted for devices running Android 11 =<
@@ -34,8 +35,6 @@ class AlarmSettingsRepository @Inject constructor(
         ) //TODO: Can we listen for these changes?
     }
 
-    private val alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
-
     private fun updateAlarmSettingsFlow(data: AlarmSettingsState) {
         alarmSettingsFlow.value = data
     }
@@ -44,12 +43,12 @@ class AlarmSettingsRepository @Inject constructor(
 
     fun isAlarmFeatureOn(): Boolean = prefs.isAlarmFeatureOn
 
-    fun toggleAlarmFeature(isEnabled: Boolean) {
+    private fun toggleAlarmFeature(isEnabled: Boolean) {
         Timber.v("Toggling alarm feature ${if (isEnabled) "ON" else "OFF"}")
         prefs.isAlarmFeatureOn = isEnabled
-        /*updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
+        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
             isAlarmFeatureEnabled = isEnabled
-        ))*/
+        ))
     }
 
     fun getAlarmTime(): Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME
@@ -69,16 +68,6 @@ class AlarmSettingsRepository @Inject constructor(
         prefs.alarmFrequency = frequency
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
             frequency = frequency
-        ))
-    }
-
-    fun isPastDueAlarmActive(): Boolean = prefs.isAlarmPastDueActive
-
-    fun togglePastDueAlarmActive(isActive: Boolean) {
-        Timber.v("Toggling alarm feature ${if (isActive) "ON" else "OFF"}")
-        prefs.isAlarmPastDueActive = isActive
-        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
-            isAlarmActive = isActive
         ))
     }
 }

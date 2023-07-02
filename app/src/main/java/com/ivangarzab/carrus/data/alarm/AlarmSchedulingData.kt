@@ -1,6 +1,4 @@
-package com.ivangarzab.carrus.util.alarms
-
-import com.ivangarzab.carrus.data.AlarmFrequency
+package com.ivangarzab.carrus.data.alarm
 
 /**
  * The purpose of this enumeration class is to serve as a data holder for either scheduling or
@@ -9,7 +7,7 @@ import com.ivangarzab.carrus.data.AlarmFrequency
  * Created by Ivan Garza Bermea.
  */
 data class AlarmSchedulingData(
-    val type: AlarmType,
+    val type: Alarm,
     val frequency: AlarmFrequency,
     val triggerTime: Long, // Calendar.timeInMillis
     val intentRequestCode: Int,

@@ -11,7 +11,6 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
@@ -33,8 +32,7 @@ class OverviewViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
-    private val alarmsRepository: AlarmsRepository,
-    private val alarmSettingsRepository: AlarmSettingsRepository
+    private val alarmsRepository: AlarmsRepository
     ) : ViewModel() {
 
     @Parcelize
@@ -195,7 +193,7 @@ class OverviewViewModel @Inject constructor(
         if (services.isNotEmpty()) {
             when (areNotificationsEnabled) {
                 true -> {
-                    if (alarmSettingsRepository.isPastDueAlarmActive().not()) {
+                    if (alarmsRepository.isPastDueAlarmActive().not()) {
                         alarmsRepository.schedulePastDueAlarm()
                     } else {
                         Timber.v("'Past Due' alarm is already scheduled")

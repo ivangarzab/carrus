@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.SystemClock
+import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.receivers.AlarmBroadcastReceiver
-import com.ivangarzab.carrus.util.alarms.AlarmSchedulingData
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.Calendar
@@ -37,27 +37,6 @@ class AlarmScheduler(
         onDone(true)
     } ?: onDone(false)
 
-
-   /* fun schedulePastDueAlarm(force: Boolean = false) {
-        *//*if (force.not() && prefs.isAlarmPastDueActive) {
-            Timber.v("'PastDueService' alarm is already scheduled")
-//            return // skip dupes
-            cancelPastDueAlarm()
-        }*//*
-
-//        getPastDueAlarmPendingIntent()?.let {
-            if (alarmManager.isAbleToScheduleExactAlarms()) {
-                prefs.isAlarmPastDueActive = true
-                Timber.d("Scheduling 'PastDue' alarm")
-                setAlarmBroadcastReceiverEnableState(true)
-                scheduleDefaultDailyAlarm(it)
-            }*//* else {
-                Timber.w("Unable to schedule 'PastDue' alarm due to missing permissions")
-            }*//*
-        //} ?: Timber.w("Unable to schedule 'PastDue' alarm for an unknown reason")
-    }*/
-
-
     fun cancelAlarm(
         alarmData: AlarmSchedulingData,
         onDone: (Boolean) -> Unit
@@ -69,14 +48,6 @@ class AlarmScheduler(
             onDone(true)
         } ?: onDone(false)
     }
- /*   fun cancelPastDueAlarm() {
-        setAlarmBroadcastReceiverEnableState(false)
-        getPastDueAlarmPendingIntent()?.let {
-            alarmManager.cancel(it)
-            it.cancel()
-        } ?: Timber.w("Unable to cancel 'PastDue' alarm")
-        prefs.isAlarmPastDueActive = false
-    }*/
 
 
     private fun getAlarmPendingIntent(data: AlarmSchedulingData): PendingIntent? {
@@ -92,19 +63,6 @@ class AlarmScheduler(
             }
         }
     }
-    /*private fun getPastDueAlarmPendingIntent(): PendingIntent? {
-        return weakContext.get()?.let {
-            Intent(it, AlarmBroadcastReceiver::class.java).let { intent ->
-                intent.action = INTENT_ACTION_ALARM_PAST_DUE
-                PendingIntent.getBroadcast(
-                    it,
-                    REQUEST_CODE_ALARM_PAST_DUE,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            }
-        }
-    }*/
 
     private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
         val alarmTime: Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME // 7am is the default
@@ -148,10 +106,5 @@ class AlarmScheduler(
                 PackageManager.DONT_KILL_APP
             )
         }
-    }
-
-    companion object {
-        const val REQUEST_CODE_ALARM_PAST_DUE: Int = 200
-        const val INTENT_ACTION_ALARM_PAST_DUE: String = "alarm-past-due"
     }
 }

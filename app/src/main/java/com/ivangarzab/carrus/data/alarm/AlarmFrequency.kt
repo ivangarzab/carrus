@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data
+package com.ivangarzab.carrus.data.alarm
 
 /**
  * Created by Ivan Garza Bermea.
