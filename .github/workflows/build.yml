@@ -1,4 +1,4 @@
-name: Sanity Check
+name: Build & Test
 run-name: ${{ github.actor }} is running a 'build' workflow
 
 on:
@@ -47,17 +47,18 @@ jobs:
     - name: Upload App APK
       uses: actions/upload-artifact@v1
       with:
-        name: app-debug.apk
+        name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
 
     - run: echo "Assemble 🐛 Android Test APK."
     - name: Assemble Android Test APK
       run: ./gradlew assembleDebugAndroidTest
+
     - run: echo "Uploading 🦋 Android Test APK."
     - name: Upload Android Test APK
       uses: actions/upload-artifact@v1
       with:
-        name: app-debug-androidTest.apk
+        name: app-debug-androidTest
         path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 
   android-test:
@@ -65,23 +66,23 @@ jobs:
       needs: build
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@3
+        - uses: actions/checkout@v3
 
         - run: echo "Downloading APK artifacts💎"
         - name: Download app APK
           uses: actions/download-artifact@v1
           with:
-            name: app-debug.apk
+            name: app-debug
 
         - name: Download Android test APK
           uses: actions/download-artifact@v1
           with:
-            name: app-debug-androidTest.apk
+            name: app-debug-androidTest
 
         - run: echo "Running Android Tests in Firebase Test Lab 🔥"
         - name: Run Instrumented Test in Firebase Test Lab
           uses: asadmansr/Firebase-Test-Lab-Action@v1.0
           with:
-            arg-spec: 'android-test.yml:android-pixel-4'
+            arg-spec: './.github/android-test.yml:android-pixel-5'
           env:
             SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
