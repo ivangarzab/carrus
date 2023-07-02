@@ -41,7 +41,8 @@ jobs:
         signingKeyBase64: ${{ secrets.SIGNING_KEYSTORE }}
         alias: ${{ secrets.SIGNING_ALIAS }}
         keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-        keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}  
+        keyPassword: ${{ secrets.SIGNING_ALIAS_PASSWORD }}
+    - run: echo "✅ App Bundle is ready for upload."
       
     - run: echo "Build status report=${{ job.status }}."
     - name: Upload App Bundle
@@ -69,8 +70,8 @@ jobs:
        with:
          tag_name: ${{ github.ref_name }}
          release_name: v${{ github.ref_name }}
-         
-     - run: echo "✅ App Bundle is ready for upload."
+
+     - run: echo "Uploading App Bundle into GitHub Release."
      - name: Upload Release AAB
        id: upload_release_asset
        uses: actions/upload-release-asset@v1.0.1
