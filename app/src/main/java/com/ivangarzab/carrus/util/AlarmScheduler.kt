@@ -33,7 +33,7 @@ class AlarmScheduler(
     ) = getAlarmPendingIntent(alarmData)?.let {
         Timber.d("Scheduling ${alarmData.type.name} alarm")
         setAlarmBroadcastReceiverEnableState(true)
-        scheduleTestAlarm(it) //scheduleDefaultDailyAlarm(it)
+        scheduleDefaultDailyAlarm(it)
         onDone(true)
     } ?: onDone(false)
 

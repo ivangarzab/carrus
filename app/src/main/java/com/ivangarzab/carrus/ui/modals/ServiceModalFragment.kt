@@ -14,6 +14,7 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.ModalServiceBinding
 import com.ivangarzab.carrus.ui.overview.ModalServiceState
 import com.ivangarzab.carrus.util.extensions.dismissKeyboard
+import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,12 +115,12 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
             name = it.serviceModalNameInput.text.toString(),
-            repairDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.getRepairDateInMillis()
-            },
-            dueDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.getDueDateInMillis()
-            },
+            repairDate = it.serviceModalRepairDateInput.text
+                .toString()
+                .getCalendarFromShortenedDate(),
+            dueDate = it.serviceModalDueDateInput.text
+                .toString()
+                .getCalendarFromShortenedDate(),
             brand = it.serviceModalBrandInput.text.toString(),
             type = it.serviceModalTypeInput.text.toString(),
             cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
