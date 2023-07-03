@@ -10,8 +10,11 @@ class StringExtensionsTest {
 
     @Test
     fun test_getCalendarFromShortenerDate_success() {
-        assertThat(TEST_DATE.getCalendarFromShortenedDate().timeInMillis)
-            .isEqualTo(ANSWER_SHORTENED_DATE)
+        TEST_DATE.getCalendarFromShortenedDate().timeInMillis.let {
+            println("Comparing TEST_DATE=$it to answer=$ANSWER_SHORTENED_DATE")
+            assertThat(it)
+                .isEqualTo(ANSWER_SHORTENED_DATE)
+        }
     }
 
     @Test
@@ -20,11 +23,11 @@ class StringExtensionsTest {
             .isLessThan(0L)
     }
 
-    /*@Test
+    @Test
     fun test_getCalendarFromShortenerDate_bad_date_failure() {
         assertThat(TEST_DATE_BAD.getCalendarFromShortenedDate().timeInMillis)
             .isLessThan(0L)
-    } TODO: This test fails for on CI/CD pipeline */
+    }
 
     @Test
     fun test_getCalendarFromShortenerDate_empty_string_failure() {
