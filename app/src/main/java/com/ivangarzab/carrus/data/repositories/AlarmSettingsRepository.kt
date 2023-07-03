@@ -53,11 +53,11 @@ class AlarmSettingsRepository @Inject constructor(
 
     fun getAlarmTime(): Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME
 
-    fun setAlarmTime(value: String) = value.toInt().let { alarmTime ->
+    fun setAlarmTime(alarmTime: Int) {
         Timber.v("Setting alarm time to $alarmTime")
         prefs.alarmPastDueTime = alarmTime
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
-            alarmTime = value
+            alarmTime = alarmTime.toString()
         ))
     }
 

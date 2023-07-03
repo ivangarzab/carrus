@@ -89,7 +89,7 @@ class AlarmsRepository @Inject constructor(
     }
 
     fun cancelAllAlarms() {
-        //TODO: Check for all active alarms and cancel them
+        prefs.isAlarmPastDueActive = false
     }
 
     fun isPastDueAlarmActive(): Boolean = getIsAlarmActiveFlag(Alarm.PAST_DUE)

@@ -84,7 +84,7 @@ class SettingsViewModel @Inject constructor(
 
     fun onAlarmTimePicked(alarmTime: String) {
         Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
-        alarmSettingsRepository.setAlarmTime(alarmTime)
+        alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
         //TODO: Revisit and reconsider this next call
         alarmsRepository.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
