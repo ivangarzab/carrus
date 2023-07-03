@@ -15,18 +15,19 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.databinding.FragmentSettingsBinding
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.writeInFile
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding: FragmentSettingsBinding by viewBinding()
@@ -36,9 +37,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val createDocumentsContract = registerForActivityResult(
         ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
     ) { uri ->
+        //TODO: Move all this into the VM
         Timber.d("Got result from create document contract: ${uri ?: "<nil>"}")
         uri?.let {
             viewModel.getExportData()?.let {
+                //TODO: Send this piece into a working thread
                 uri.writeInFile(requireContext().contentResolver, it)
             } ?: toast("Unable to export data")
         } ?: Timber.w("Error fetching uri")
@@ -47,12 +50,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val openDocumentContract = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
+        //TODO: Move all this into the VM
         Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
         uri?.let {
             it.readFromFile(requireContext().contentResolver).let { data ->
                 data?.let {
                     viewModel.onImportData(data).let { success ->
-                        if (success.not()) toast("Unable to import data")
+                        toast(when (success) {
+                            true -> "Data import successful"
+                            false -> "Unable to import data"
+                        })
                     }
                 } ?: Timber.w("Unable to parse data from file with uri: $uri")
             }
@@ -65,24 +72,29 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         setupToolbar()
         setupViews()
 
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            Timber.d("Got new Car state: ${state.car ?: "null"}")
-            binding.apply {
-                car = state.car
-                alarmTime = viewModel.getTimeString(
-                    state.alarmTime?.toInt() ?: SettingsViewModel.DEFAULT_ALARM_TIME
-                )
-                versionNumber = "v${BuildConfig.VERSION_NAME}"
-                dueDateFormat = state.dueDateFormat.value
+        viewModel.state.observe(viewLifecycleOwner) {
+            Timber.d("Got new Car state: ${it.car ?: "null"}")
+            it?.let { state ->
+                binding.apply {
+                    car = state.car
+                    state.alarmTime?.let {time ->
+                        alarmTime = viewModel.getTimeString(
+                            when (time.isBlank()) {
+                                true -> DEFAULT_ALARM_TIME
+                                false -> time.toInt()
+                            }
+                        )
+                    }
+                    versionNumber = "v${BuildConfig.VERSION_NAME}"
+                    dueDateFormat = state.dueDateFormat.value
+                }
             }
         }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        prefs.darkMode?.let {
-            binding.settingsDarkModeOption.settingsOptionToggle.isChecked = it
-        }
+        binding.settingsDarkModeOption.settingsOptionToggle.isChecked = viewModel.isNight()
     }
 
     private fun setupWindow() {
@@ -106,7 +118,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             setNavigationIcon(R.drawable.ic_arrow_back_white)
             navigationIcon?.setTint(Color.WHITE)
             setNavigationOnClickListener {
-                findNavController().popBackStack()
+                Timber.v("Navigating back to the Overview fragment")
+                findNavController().navigate(
+                    SettingsFragmentDirections.actionSettingsFragmentToOverviewFragment()
+                )
             }
         }
     }
@@ -143,7 +158,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             settingsDueDateFormatOption.root.setOnClickListener {
                 showDueDateFormatPickerDialog { optionPicked ->
-                    viewModel.onDueDateFormatPicked(DueDateFormat.get(optionPicked))
+                    viewModel.onDueDateFormatPicked(optionPicked)
                 }
             }
 
@@ -159,7 +174,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             minValue = 0
             maxValue = 23
             displayedValues = viewModel.pickerOptionsAlarmTime
-            value = (prefs.alarmPastDueTime ?: SettingsViewModel.DEFAULT_ALARM_TIME) - 1
+            value = viewModel.getAlarmTime()
         }
         AlertDialog.Builder(requireContext()).apply {
             setView(numberPicker)
@@ -181,8 +196,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 minValue = 0
                 maxValue = options.size - 1
                 displayedValues = options
-                value = if (options.contains(prefs.dueDateFormat.value)) {
-                    options.indexOf(prefs.dueDateFormat.value)
+                value = if (options.contains(viewModel.getDueDateFormat().value)) {
+                    options.indexOf(viewModel.getDueDateFormat().value)
                 } else {
                     0
                 }

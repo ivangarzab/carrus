@@ -27,11 +27,13 @@ import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.markRequired
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private val viewModel: CreateViewModel by viewModels()
@@ -85,7 +87,12 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
         viewModel.apply {
             onSubmit.observe(viewLifecycleOwner) { success ->
-                if (success) findNavController().popBackStack()
+                if (success) {
+                    Timber.v("Navigating back to Overview fragment")
+                    findNavController().navigate(
+                        CreateFragmentDirections.actionCreateFragmentToOverviewFragment()
+                    )
+                }
             }
             state.observe(viewLifecycleOwner) {
                 it?.let { state ->

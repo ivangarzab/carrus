@@ -18,11 +18,11 @@ jobs:
     
     - run: echo "💡 The ${{ github.repository }} repository has been cloned."
     - run: echo "Setting up JDK" 
-    - name: set up JDK 11
+    - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
-        distribution: 'temurin'
+        java-version: '17'
+        distribution: 'coretto'
         cache: gradle
         
     - run: echo "🖥️ The workflow is now ready to test your code."

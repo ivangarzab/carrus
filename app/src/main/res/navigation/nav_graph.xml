@@ -55,6 +55,13 @@
             app:argType="com.ivangarzab.carrus.data.Car"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_createFragment_to_overviewFragment"
+            app:destination="@id/overviewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <dialog
         android:id="@+id/newServiceModal"
@@ -66,6 +73,13 @@
             app:argType="com.ivangarzab.carrus.data.Service"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_newServiceModal_to_overviewFragment"
+            app:destination="@id/overviewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </dialog>
     <dialog
         android:id="@+id/permissionNotificationModal"
@@ -83,5 +97,13 @@
         android:id="@+id/settingsFragment"
         android:name="com.ivangarzab.carrus.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_overviewFragment"
+            app:destination="@id/overviewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>
