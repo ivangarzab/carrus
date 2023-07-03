@@ -32,6 +32,5 @@ class StringExtensionsTest {
         private const val TEST_SHORTENED_DATE_BAD = "13/42/1965"
 
         private const val ANSWER_SHORTENED_DATE = 1697151600000
-        private const val ANSWER_SHORTENED_DATE_BAD = -119923200000
     }
 }
