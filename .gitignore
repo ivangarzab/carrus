@@ -76,4 +76,4 @@ lint/tmp/
 
 # Rule exclusion
 !.idea/codeStyles
-!.idea/dictionaries
+!.idea/dictionaries/carrus_dictionary.xml
