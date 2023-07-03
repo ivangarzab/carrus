@@ -45,7 +45,13 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
     private val viewModel: OverviewViewModel by viewModels()
 
-    private val binding: FragmentOverviewBinding by viewBinding()
+    private val binding: FragmentOverviewBinding by viewBinding {
+        serviceListAdapter?.let {
+            it.onEditClicked = null
+            it.onDeleteClicked = null
+            serviceListAdapter = null
+        }
+    }
 
     private var serviceListAdapter: ServiceListAdapter? = null
 
@@ -350,6 +356,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 
+    //TODO: Move into VM
     override fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
         viewModel.onSortingByType(type)
@@ -416,6 +423,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         )
     )
 
+    //TODO: Move into the AlarmSettingsRepository, or add it into its own Repository
     inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
