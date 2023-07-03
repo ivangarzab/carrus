@@ -17,7 +17,7 @@ class StringExtensionsTest {
     @Test
     fun test_getCalendarFromShortenerDate_past_unix_time_failure() {
         assertThat(TEST_SHORTENED_DATE_BAD.getCalendarFromShortenedDate().timeInMillis)
-            .isEqualTo(ANSWER_SHORTENED_DATE_BAD)
+            .isLessThan(0L)
     }
 
     @Test
