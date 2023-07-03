@@ -50,20 +50,20 @@ android {
     }
 }
 
-def gson_version = '2.9.1'
-def leak_canary_version = '2.10'
-def truth_version = '1.1.4'
+def GsonVersion = '2.9.1'
+def leakCanaryVersion = '2.12'
+def truthVersion = '1.1.4'
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "com.google.code.gson:gson:$gson_version"
-    testImplementation "com.google.truth:truth:$truth_version"
+    testImplementation "com.google.code.gson:gson:$GsonVersion"
+    testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
-    androidTestImplementation "com.google.truth:truth:$truth_version"
+    androidTestImplementation "com.google.truth:truth:$truthVersion"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.google.android.material:material:1.9.0'
-    implementation "com.google.code.gson:gson:$gson_version"
+    implementation "com.google.code.gson:gson:$GsonVersion"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -81,8 +81,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // https://github.com/square/leakcanary
-    implementation "com.squareup.leakcanary:plumber-android:$leak_canary_version"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_canary_version"
+    implementation "com.squareup.leakcanary:plumber-android:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
     // https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
