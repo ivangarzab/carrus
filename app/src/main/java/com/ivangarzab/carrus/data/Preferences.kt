@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import timber.log.Timber
 import java.util.*
 
@@ -34,6 +35,10 @@ class Preferences(context: Context) {
         }
         set(value) = sharedPreferences.set(KEY_DEFAULT_CAR, value)
 
+    var isAlarmFeatureOn: Boolean
+        get() = sharedPreferences.get(KEY_ALARM_FEATURE_FLAG, true)
+        set(value) = sharedPreferences.set(KEY_ALARM_FEATURE_FLAG, value)
+
     var isAlarmPastDueActive: Boolean
         get() = sharedPreferences.get(KEY_ALARM_PAST_DUE_INTENT, false)
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_INTENT, value)
@@ -46,6 +51,12 @@ class Preferences(context: Context) {
             }
         }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
+
+    var alarmFrequency: AlarmFrequency
+        get() = sharedPreferences.get(KEY_ALARM_PAST_FREQUENCY, AlarmFrequency.DAILY.name).let {
+            AlarmFrequency.get(it)
+        }
+        set(value) = sharedPreferences.set(KEY_ALARM_PAST_FREQUENCY, value)
 
     var dueDateFormat: DueDateFormat
         get() = sharedPreferences.get(KEY_FORMAT_DUE_DATE, DueDateFormat.DAYS.name).let {
@@ -85,13 +96,17 @@ class Preferences(context: Context) {
     companion object {
         private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carrus.preferences"
         private const val TEST_SHARED_PREFS = "com.ivangarzab.carrus.preferences-test"
-        private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_DEFAULT_CAR = "default-car"
-        private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
-        private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
+        // App Settings
+        private const val KEY_DARK_MODE = "dark-mode"
         private const val KEY_FORMAT_DUE_DATE = "format-due-date"
         private const val KEY_FORMAT_TIME = "format-time"
         private const val KEY_LEFTY = "left-handed-mode"
+        // Alarm Settings
+        private const val KEY_ALARM_FEATURE_FLAG = "alarm-feature-flag"
+        private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
+        private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
+        private const val KEY_ALARM_PAST_FREQUENCY = "alarm-past-due-frequency"
     }
 }
 
@@ -120,6 +135,7 @@ operator fun SharedPreferences.set(
     is Car -> edit { it.putString(key, value.toJson()) }
     is DueDateFormat -> edit { it.putString(key, value.value)}
     is TimeFormat -> edit { it.putString(key, value.value)}
+    is AlarmFrequency -> edit { it.putString(key, value.value)}
     else -> throw UnsupportedOperationException("Only native types are supported")
 }
 
@@ -145,6 +161,9 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     }
     TimeFormat::class -> getString(key, defaultValue as String).let {
         TimeFormat.get(it ?: TimeFormat.HR12.name) as T
+    }
+    AlarmFrequency::class -> getString(key, defaultValue as String).let {
+        AlarmFrequency.get(it ?: AlarmFrequency.DAILY.name) as T
     }
     else -> throw UnsupportedOperationException("Only native types are supported")
 }

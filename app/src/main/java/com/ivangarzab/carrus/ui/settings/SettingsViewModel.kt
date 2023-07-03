@@ -6,12 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.ivangarzab.carrus.alarms
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.setState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +26,9 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
-    private val appSettingsRepository: AppSettingsRepository
+    private val appSettingsRepository: AppSettingsRepository,
+    private val alarmsRepository: AlarmsRepository,
+    private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
 
     @Parcelize
@@ -42,11 +44,15 @@ class SettingsViewModel @Inject constructor(
     )
 
     init {
-        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "$DEFAULT_ALARM_TIME")
         updateDueDateFormatState(appSettingsRepository.fetchDueDateFormatSetting())
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
+            }
+        }
+        viewModelScope.launch {
+            alarmSettingsRepository.observeAlarmSettingsData().collect {
+                updateAlarmTimeState(it.alarmTime)
             }
         }
     }
@@ -71,15 +77,16 @@ class SettingsViewModel @Inject constructor(
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
-                alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
+                alarmsRepository.cancelAllAlarms()
             }
         } ?: Timber.v("There are no services to delete from car data")
     }
 
     fun onAlarmTimePicked(alarmTime: String) {
         Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
-        prefs.alarmPastDueTime = alarmTime.toInt()
-        alarms.schedulePastDueAlarm(true)
+        alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
     }
 
@@ -130,6 +137,8 @@ class SettingsViewModel @Inject constructor(
         setState(state, savedState, STATE) { copy(dueDateFormat = format) }
     }
 
+    fun getAlarmTime() = alarmSettingsRepository.getAlarmTime()
+
     val pickerOptionsAlarmTime = arrayOf(
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
         "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
@@ -139,7 +148,6 @@ class SettingsViewModel @Inject constructor(
     )
 
     companion object {
-        const val DEFAULT_ALARM_TIME: Int = 7
         private const val STATE: String = "SettingsViewModel.STATE"
     }
 }

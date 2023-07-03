@@ -31,7 +31,6 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -235,27 +234,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
             setLightStatusBar(false)
-            if (it.services.isNotEmpty()) {
-                when (requireContext().areNotificationsEnabled()) {
-                    true -> {
-                        // TODO: This should be moved into the VM
-                        if (prefs.isAlarmPastDueActive.not()) {
-                            viewModel.schedulePastDueAlarm()
-                        } else {
-                            Timber.v("No need to schedule 'Past Due' alarm")
-                        }
-                    }
-                    false -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                            state.hasPromptedForPermissionNotification.not()
-                        ) {
-                            viewModel.addNotificationPermissionMessage()
-                        } else {
-                            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
-                        }
-                    }
-                }
-            }
+            viewModel.processCarServicesListForNotification(
+                services = it.services,
+                areNotificationsEnabled = requireContext().areNotificationsEnabled()
+            )
 
             serviceListAdapter?.updateContent(it.services)
 
