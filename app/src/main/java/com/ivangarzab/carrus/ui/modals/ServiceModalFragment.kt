@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.R
@@ -16,6 +15,8 @@ import com.ivangarzab.carrus.ui.overview.ModalServiceState
 import com.ivangarzab.carrus.util.extensions.dismissKeyboard
 import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import com.ivangarzab.carrus.util.extensions.navigateBackToOverviewScreen
+import com.ivangarzab.carrus.util.extensions.onBackPressed
 import com.ivangarzab.carrus.util.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -49,6 +50,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed { navigateBackToOverviewScreen() }
         with(viewModel) {
             setArgsData(args.service)
             state.observe(viewLifecycleOwner) { state ->
@@ -69,9 +71,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             }
             onSubmission.observe(viewLifecycleOwner) { submitSuccess ->
                 when (submitSuccess) {
-                    true -> findNavController().navigate(
-                        ServiceModalFragmentDirections.actionNewServiceModalToOverviewFragment()
-                    )
+                    true -> navigateBackToOverviewScreen()
                     false -> toast("Missing required data")
                 }
             }
