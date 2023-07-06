@@ -25,8 +25,6 @@ import com.ivangarzab.carrus.databinding.FragmentCreateBinding
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.markRequired
-import com.ivangarzab.carrus.util.extensions.navigateBackToOverviewScreen
-import com.ivangarzab.carrus.util.extensions.onBackPressed
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,7 +72,6 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
         setupWindow()
         setupToolbar()
         setupViews()
-        onBackPressed { navigateBackToOverviewScreen() }
 
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
@@ -92,7 +89,7 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
             onSubmit.observe(viewLifecycleOwner) { success ->
                 if (success) {
                     Timber.v("Navigating back to Overview fragment")
-                    navigateBackToOverviewScreen()
+                    findNavController().popBackStack()
                 }
             }
             state.observe(viewLifecycleOwner) {

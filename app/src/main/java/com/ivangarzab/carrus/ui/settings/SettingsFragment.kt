@@ -11,14 +11,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.databinding.FragmentSettingsBinding
 import com.ivangarzab.carrus.util.delegates.viewBinding
-import com.ivangarzab.carrus.util.extensions.navigateBackToOverviewScreen
-import com.ivangarzab.carrus.util.extensions.onBackPressed
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.extensions.writeInFile
@@ -72,7 +71,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         setupWindow()
         setupToolbar()
         setupViews()
-        onBackPressed { navigateBackToOverviewScreen() }
 
         viewModel.state.observe(viewLifecycleOwner) {
             Timber.d("Got new Car state: ${it.car ?: "null"}")
@@ -121,7 +119,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             navigationIcon?.setTint(Color.WHITE)
             setNavigationOnClickListener {
                 Timber.v("Navigating back to the Overview fragment")
-                navigateBackToOverviewScreen()
+                findNavController().popBackStack()
             }
         }
     }
