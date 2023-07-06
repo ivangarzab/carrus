@@ -7,7 +7,7 @@ import timber.log.Timber
  *
  * Use to log events containing a "π" character meant for testing a specific path.
  */
-fun Timber.t(
+fun Timber.Forest.t(
     msg: String,
     vararg args: Any?
 ) {
@@ -17,7 +17,7 @@ fun Timber.t(
 /**
  * Use to log an analytical event both locally and into the cloud.
  */
-fun Timber.a(
+fun Timber.Forest.a(
     eventName: String,
     vararg params: Any?
 ) {
