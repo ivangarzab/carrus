@@ -5,29 +5,32 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.prefs
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@Singleton
 class CarRepository @Inject constructor() {
 
-    private val carDataChannel = MutableSharedFlow<Car?>(replay = 1)
+    private val carDataChannel = MutableStateFlow<Car?>(null)
 
     init {
         updateCarDataChannel(fetchCarData())
     }
 
     private fun updateCarDataChannel(car: Car?) = appScope.launch {
-        Timber.v("Updating car data state flow: $car")
-        carDataChannel.emit(car)
+        carDataChannel.value = car
     }
 
-    fun observeCarData(): Flow<Car?> = carDataChannel.asSharedFlow()
+    fun observeCarData(): Flow<Car?> {
+        return carDataChannel.asStateFlow()
+    }
 
     fun fetchCarData(): Car? = prefs.defaultCar
 

@@ -69,9 +69,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             }
             onSubmission.observe(viewLifecycleOwner) { submitSuccess ->
                 when (submitSuccess) {
-                    true -> findNavController().navigate(
-                        ServiceModalFragmentDirections.actionNewServiceModalToOverviewFragment()
-                    )
+                    true -> findNavController().popBackStack()
                     false -> toast("Missing required data")
                 }
             }

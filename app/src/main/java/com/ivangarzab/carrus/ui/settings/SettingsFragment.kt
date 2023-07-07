@@ -119,9 +119,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             navigationIcon?.setTint(Color.WHITE)
             setNavigationOnClickListener {
                 Timber.v("Navigating back to the Overview fragment")
-                findNavController().navigate(
-                    SettingsFragmentDirections.actionSettingsFragmentToOverviewFragment()
-                )
+                findNavController().popBackStack()
             }
         }
     }
