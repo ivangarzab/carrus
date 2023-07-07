@@ -76,7 +76,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         }
 
         binding.overviewToolbarImage.setOnLongClickListener {
-            viewModel.addTestMessage()
+            if (isRelease().not()) {
+                viewModel.addTestMessage()
+            }
             true
         }
     }
