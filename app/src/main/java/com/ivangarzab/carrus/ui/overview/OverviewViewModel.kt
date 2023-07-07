@@ -18,8 +18,10 @@ import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
+import com.ivangarzab.carrus.util.managers.asUniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -77,6 +79,11 @@ class OverviewViewModel @Inject constructor(
                 _nightThemeState.value = it
             }
         }
+        viewModelScope.launch {
+            messageQueueRepository.observeMessageQueueFlow().collect {
+                updateQueueState(it.asUniqueMessageQueue())
+            }
+        }
     }
 
     fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
@@ -124,7 +131,6 @@ class OverviewViewModel @Inject constructor(
 
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
 
-    //vvvvvvvvvvvvvvv MOVE THIS INTO Extension Functions or Helper class vvvvvvvvvvvvvvvvv//
     fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
             SortingCallback.SortingType.NONE -> resetServicesSort()
@@ -162,7 +168,6 @@ class OverviewViewModel @Inject constructor(
             )
         }
     }
-    //^^^^^^^^^^^^^^ MOVE THIS INTO Extension Functions or Helper class ^^^^^^^^^^^^^^^^//
 
     fun processCarServicesListForNotification(
         services: List<Service>,

@@ -5,7 +5,6 @@ import com.ivangarzab.carrus.ONE
 import com.ivangarzab.carrus.TWO
 import com.ivangarzab.carrus.ZERO
 import com.ivangarzab.carrus.data.Message
-import org.junit.Before
 import org.junit.Test
 
 /**
@@ -16,11 +15,6 @@ class MessageQueueRepositoryTest {
     private val repository = MessageQueueRepository()
 
     private val queue = repository.observeMessageQueueFlow().value
-
-    @Before
-    fun setup() {
-
-    }
 
     @Test
     fun test_observeMessageQueueFlow_size_base() {

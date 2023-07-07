@@ -50,3 +50,12 @@ open class MessageQueue : Parcelable {
     @Throws(NoSuchElementException::class)
     fun pop(): MessageData = queue.removeFirst()
 }
+
+fun MessageQueue.asUniqueMessageQueue() = UniqueMessageQueue()
+    .apply {
+        this@asUniqueMessageQueue
+            .queue
+            .forEach {
+                add(it)
+            }
+    }
