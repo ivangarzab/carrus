@@ -64,6 +64,7 @@ jobs:
          
      - name: Generate Change Log
        run: ./tools/changelog-generation.sh
+       shell: bash
          
      - name: Create Release
        id: create_release
