@@ -6,6 +6,7 @@ import android.view.View
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 
 /**
@@ -40,3 +41,10 @@ fun Fragment.setLightStatusBar(light: Boolean) {
         )
     }
 }
+
+fun Fragment.onBackPressed(operation: () -> Unit) =
+    requireActivity().onBackPressedDispatcher.addCallback(
+        this.viewLifecycleOwner
+    ) {
+        operation()
+    }
