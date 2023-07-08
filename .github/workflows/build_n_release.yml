@@ -63,7 +63,7 @@ jobs:
          name: aab
          
      - name: Generate Change Log
-       run: ./tools/changelog-generation.sh
+       run: tools/changelog-generation.sh
        shell: bash
          
      - name: Create Release
