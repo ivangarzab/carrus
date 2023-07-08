@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'coretto'
+        distribution: 'corretto'
         cache: gradle
         
     - run: echo "🖥️ The workflow is now ready to test your code."
