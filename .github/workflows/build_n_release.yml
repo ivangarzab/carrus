@@ -61,9 +61,9 @@ jobs:
        uses: actions/download-artifact@v1
        with:
          name: aab
-         
+
      - name: Generate Change Log
-       run: tools/changelog-generation.sh
+       run: ./.github/scripts/changelog_generation.sh
        shell: bash
          
      - name: Create Release
