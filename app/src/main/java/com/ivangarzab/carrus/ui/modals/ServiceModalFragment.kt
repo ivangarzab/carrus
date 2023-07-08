@@ -19,7 +19,10 @@ import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 /**
@@ -115,12 +118,14 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
             name = it.serviceModalNameInput.text.toString(),
-            repairDate = it.serviceModalRepairDateInput.text
-                .toString()
-                .getCalendarFromShortenedDate(),
-            dueDate = it.serviceModalDueDateInput.text
-                .toString()
-                .getCalendarFromShortenedDate(),
+            repairDate = Calendar.getInstance().apply {
+                time = SimpleDateFormat("MM/dd/yy", Locale.US)
+                    .parse(it.serviceModalRepairDateInput.text.toString()) as Date
+            },
+            dueDate = Calendar.getInstance().apply {
+                time = SimpleDateFormat("MM/dd/yy", Locale.US)
+                    .parse(it.serviceModalDueDateInput.text.toString()) as Date
+            },
             brand = it.serviceModalBrandInput.text.toString(),
             type = it.serviceModalTypeInput.text.toString(),
             cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
