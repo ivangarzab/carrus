@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script wil automatically create a change log text file, from the last release on, 
-# and locate it in carrus/build/outputs/changelog/changelog.txt.
+# and locate it in carrus/app/build/outputs/changelog/changelog.txt.
 
 echo "Generating Change Log..."
 LAST_TAG=$(git describe --tags --abbrev=0)
