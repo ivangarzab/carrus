@@ -21,7 +21,6 @@ import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import com.ivangarzab.carrus.util.managers.asUniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -37,7 +36,7 @@ class OverviewViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val messageQueueRepository: MessageQueueRepository
-    ) : ViewModel() {
+    ) : ViewModel(), SortingCallback {
 
     @Parcelize
     data class OverviewState(
@@ -131,7 +130,7 @@ class OverviewViewModel @Inject constructor(
 
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
 
-    fun onSortingByType(type: SortingCallback.SortingType) {
+    private fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
             SortingCallback.SortingType.NONE -> resetServicesSort()
             SortingCallback.SortingType.NAME -> sortServicesByName()
@@ -203,6 +202,11 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
+
+    override fun onSort(type: SortingCallback.SortingType) {
+        Timber.v("Got a sorting request with type=$type")
+        onSortingByType(type)
+    }
 
     fun setupEasterEggForTesting() {
         state.value?.car?.let {
