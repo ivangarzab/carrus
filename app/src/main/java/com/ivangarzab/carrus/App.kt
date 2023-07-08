@@ -2,12 +2,11 @@ package com.ivangarzab.carrus
 
 import android.app.Application
 import com.ivangarzab.carrus.data.Preferences
-import com.ivangarzab.carrus.util.managers.CrashlyticsLeakUploader
+import com.ivangarzab.carrus.util.managers.LeakUploader
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import leakcanary.LeakCanary
 import timber.log.Timber
 
 /**
@@ -37,14 +36,13 @@ open class App : Application() {
         if (isRelease().not()) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
+            setupLeakCanary()
         }
-        setupLeakCanary()
     }
 
     open fun setupLeakCanary() {
-        LeakCanary.config = LeakCanary.config.run {
-            copy(eventListeners = eventListeners + CrashlyticsLeakUploader())
-        }
+        Timber.v("Setting up leak event listener")
+        LeakUploader().setupCrashlyticsLeakUploader()
     }
 
     companion object {
