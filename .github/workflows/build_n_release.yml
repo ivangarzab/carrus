@@ -33,6 +33,8 @@ jobs:
     - name: Bundle 'release' with Gradle
       run: ./gradlew bundleRelease
 
+    - run: chmod +x .github/scripts/changelog_generation.sh
+      shell: bash
     - name: Generate Change Log
       run: ./.github/scripts/changelog_generation.sh
       shell: bash
