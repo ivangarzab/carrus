@@ -1,26 +1,35 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.ivangarzab.carrus.alarms
-import com.ivangarzab.carrus.carRepository
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmsRepository
+import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.extensions.setState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val savedState: SavedStateHandle,
+    private val carRepository: CarRepository,
+    private val appSettingsRepository: AppSettingsRepository,
+    private val alarmsRepository: AlarmsRepository,
+    private val alarmSettingsRepository: AlarmSettingsRepository
+    ) : ViewModel() {
 
     @Parcelize
     data class SettingsState(
@@ -35,19 +44,24 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     )
 
     init {
-        updateAlarmTimeState(prefs.alarmPastDueTime?.toString() ?: "$DEFAULT_ALARM_TIME")
-        updateDueDateFormatState(prefs.dueDateFormat)
+        updateDueDateFormatState(appSettingsRepository.fetchDueDateFormatSetting())
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
             }
         }
+        viewModelScope.launch {
+            alarmSettingsRepository.observeAlarmSettingsData().collect {
+                updateAlarmTimeState(it.alarmTime)
+            }
+        }
     }
+
+    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
 
     fun onDarkModeToggleClicked(checked: Boolean) {
         Timber.v("Dark mode toggle was checked to: $checked")
-        prefs.darkMode = checked
-        setDefaultNightMode(checked)
+        appSettingsRepository.setNightThemeSetting(checked)
     }
 
     fun onDeleteCarDataClicked() {
@@ -63,31 +77,29 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
-                alarms.cancelPastDueAlarm() // Make sure to cancel any scheduled alarms
+                alarmsRepository.cancelAllAlarms()
             }
         } ?: Timber.v("There are no services to delete from car data")
     }
 
-    private fun setDefaultNightMode(isNight: Boolean) {
-        when (isNight) {
-            true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
-
     fun onAlarmTimePicked(alarmTime: String) {
         Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
-        prefs.alarmPastDueTime = alarmTime.toInt()
-        alarms.schedulePastDueAlarm(true)
+        alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
     }
 
-    fun onDueDateFormatPicked(option: DueDateFormat) {
-        Timber.d("Due Date format changed to: '$option'")
-        prefs.dueDateFormat = option
-        updateDueDateFormatState(option)
+    fun onDueDateFormatPicked(option: String) {
+        DueDateFormat.get(option).let { dueDateFormat ->
+            Timber.d("Due Date format changed to: '$dueDateFormat'")
+            appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
+            updateDueDateFormatState(dueDateFormat)
+        }
 
     }
+
+    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
 
     fun getTimeString(hour: Int): String = "$hour:00 ${
         when (hour) {
@@ -125,6 +137,8 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
         setState(state, savedState, STATE) { copy(dueDateFormat = format) }
     }
 
+    fun getAlarmTime() = alarmSettingsRepository.getAlarmTime()
+
     val pickerOptionsAlarmTime = arrayOf(
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
         "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
@@ -134,7 +148,6 @@ class SettingsViewModel(private val savedState: SavedStateHandle) : ViewModel() 
     )
 
     companion object {
-        const val DEFAULT_ALARM_TIME: Int = 7
         private const val STATE: String = "SettingsViewModel.STATE"
     }
 }

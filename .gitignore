@@ -14,8 +14,6 @@
 bin/
 gen/
 out/
-#  Uncomment the following line in case you need and you don't have the release build type files in your app
-release/
 
 # Gradle files
 .gradle/
@@ -73,3 +71,7 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Rule exclusion
+!.idea/codeStyles
+!.idea/dictionaries/carrus_dictionary.xml

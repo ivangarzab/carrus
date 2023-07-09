@@ -12,12 +12,11 @@ import androidx.transition.TransitionManager
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.data.getDetails
-import com.ivangarzab.carrus.data.isPastDue
 import com.ivangarzab.carrus.databinding.ItemServiceBinding
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.extensions.getDetails
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
-import java.util.*
+import com.ivangarzab.carrus.util.extensions.isPastDue
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 /**
@@ -26,6 +25,7 @@ import java.util.concurrent.TimeUnit
 class ServiceListAdapter(
     private val resources: Resources,
     private val theme: Resources.Theme,
+    private val dueDateFormat: DueDateFormat,
     private var services: List<Service>
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
@@ -119,7 +119,7 @@ class ServiceListAdapter(
                         TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
                             when (daysLeft) {
                                 0L -> resources.getString(R.string.tomorrow)
-                                else -> when (prefs.dueDateFormat) {
+                                else -> when (dueDateFormat) {
                                     DueDateFormat.DATE -> data.dueDate.getShortenedDate()
                                     DueDateFormat.WEEKS -> resources.getString(R.string.service_due_date_week_format, String.format("%.1f", daysLeft / MULTIPLIER_DAYS_TO_WEEKS))
                                     DueDateFormat.MONTHS -> resources.getString(R.string.service_due_date_months_format, String.format("%.2f", daysLeft / MULTIPLIER_DAYS_TO_MONTHS))

@@ -21,32 +21,37 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
+@AndroidEntryPoint
+class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
-    private val viewModel: OverviewViewModel by activityViewModels {
-        SavedStateViewModelFactory(requireActivity().application, this)
+    private val viewModel: OverviewViewModel by viewModels()
+
+    private val binding: FragmentOverviewBinding by viewBinding {
+        serviceListAdapter?.let {
+            it.onEditClicked = null
+            it.onDeleteClicked = null
+            serviceListAdapter = null
+        }
     }
-
-    private val binding: FragmentOverviewBinding by viewBinding()
 
     private var serviceListAdapter: ServiceListAdapter? = null
 
@@ -71,7 +76,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         }
 
         binding.overviewToolbarImage.setOnLongClickListener {
-            viewModel.addTestMessage()
+            if (isRelease().not()) {
+                viewModel.addTestMessage()
+            }
             true
         }
     }
@@ -142,17 +149,19 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
             // Content binding
             overviewContent.apply {
-                sortingCallback = this@OverviewFragment
+                sortingCallback = viewModel
                 overviewContentServiceList.apply {
                     // Set up recycler view
                     layoutManager = LinearLayoutManager(requireContext()).apply {
                         orientation = RecyclerView.VERTICAL
                     }
                 }
-                // EASTER EGG: Test Car Service data
-                overviewServicesLabel.setOnLongClickListener {
-                    viewModel.setupEasterEggForTesting()
-                    true
+                if (isRelease().not()) {
+                    // EASTER EGG: Test Car Service data
+                    overviewServicesLabel.setOnLongClickListener {
+                        viewModel.setupEasterEggForTesting()
+                        true
+                    }
                 }
                 overviewMessagesLayout.apply {
                     feedData(viewLifecycleOwner, viewModel.queueState)
@@ -179,6 +188,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         serviceListAdapter = ServiceListAdapter(
             resources = requireContext().resources,
             theme = requireContext().theme,
+            dueDateFormat = viewModel.getDueDateFormat(),
             services = emptyList()
         ).apply {
             setOnEditClickedListener { service ->
@@ -194,6 +204,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     }
 
     private fun processStateChange(state: OverviewViewModel.OverviewState) {
+        Timber.v("Processing overview state change")
         binding.overviewContent.apply {
             when (state.serviceSortingType) {
                 SortingCallback.SortingType.NONE -> onSortingViews(
@@ -231,27 +242,10 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
             setLightStatusBar(false)
-            if (it.services.isNotEmpty()) {
-                when (requireContext().areNotificationsEnabled()) {
-                    true -> {
-                        // TODO: This should be moved into the VM
-                        if (prefs.isAlarmPastDueActive.not()) {
-                            viewModel.schedulePastDueAlarm()
-                        } else {
-                            Timber.v("No need to schedule 'Past Due' alarm")
-                        }
-                    }
-                    false -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                            state.hasPromptedForPermissionNotification.not()
-                        ) {
-                            viewModel.addNotificationPermissionMessage()
-                        } else {
-                            Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
-                        }
-                    }
-                }
-            }
+            viewModel.processCarServicesListForNotification(
+                services = it.services,
+                areNotificationsEnabled = requireContext().areNotificationsEnabled()
+            )
 
             serviceListAdapter?.updateContent(it.services)
 
@@ -276,7 +270,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
                     Timber.w("Caught exception while parsing imageUrl", e)
                 }
             }
-        } ?: setLightStatusBar(prefs.darkMode?.not() ?: true)
+        } ?: setLightStatusBar(viewModel.isNight().not())
     }
 
     private fun showAddServiceMenuOption(visible: Boolean) = binding
@@ -364,11 +358,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 
-    override fun onSort(type: SortingCallback.SortingType) {
-        Timber.v("Got a sorting request with type=$type")
-        viewModel.onSortingByType(type)
-    }
-
     private fun onSortingViews(current: View, label: TextView) {
         processSortingViews(current)
         highlightSelectedSortingView(current, label)
@@ -385,13 +374,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         )
     ).also {
         // Switch color, if needed
-       prefs.darkMode?.let { darkMode ->
-           if (darkMode.not()) {
-               label.setTextColor(
-                   requireContext().getColor(R.color.white)
-               )
-           }
-       }
+        if (viewModel.isNight().not()) {
+            label.setTextColor(
+                requireContext().getColor(R.color.white)
+            )
+        }
     }
 
     private fun processSortingViews(
@@ -407,7 +394,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
             }
         }
         // if needed, return text color to normal
-        prefs.darkMode?.let { darkMode ->
+        viewModel.isNight().let { darkMode ->
             if (darkMode.not()) {
                 listOf(
                     overviewServiceSortNoneLabel,
@@ -432,6 +419,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         )
     )
 
+    //TODO: Move into the AlarmSettingsRepository, or add it into its own Repository
     inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
