@@ -44,12 +44,17 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding = true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packagingOptions {
         resources.excludes.add("META-INF/*")
     }
 }
 
+def activityVersion = '1.7.2'
 def gsonVersion = '2.9.1'
 def leakCanaryVersion = '2.12'
 def truthVersion = '1.1.4'
@@ -69,12 +74,28 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation "androidx.activity:activity-ktx:$activityVersion"
+    implementation "androidx.activity:activity-compose:$activityVersion"
     implementation 'androidx.fragment:fragment-ktx:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // https://developer.android.com/jetpack/compose/bom
+    def composeBom = platform('androidx.compose:compose-bom:2023.05.01')
+    implementation composeBom
+    androidTestImplementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose'
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     // https://firebase.google.com/support/release-notes/android
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
