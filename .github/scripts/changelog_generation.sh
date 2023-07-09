@@ -10,10 +10,10 @@
 LAST_TAG=$(git describe --abbrev=0 --tags "$(git rev-list --tags --skip=1 --max-count=1)")
 CURRENT_TAG=$(git describe --tags --abbrev=0)
 echo "Generating Change Log for tag $CURRENT_TAG"
-GIT_HISTORY=$(git log "$LAST_TAG".."$CURRENT_TAG" --oneline --no-merges --pretty=format:\"%s\")
+GIT_HISTORY=$(git log "$LAST_TAG".."$CURRENT_TAG" --oneline --no-merges --pretty=format:'- %s')
 
 # TODO: Conditional check to ensure we need to create a new directory; skip next line otherwise
 mkdir ./app/build/outputs/changelog
 
 printf 'Change Log for release v%s:\n%s' "$CURRENT_TAG" "$GIT_HISTORY" > ./app/build/outputs/changelog/changelog.txt
-echo "Change Log generated."
+echo "Change Log generated"
