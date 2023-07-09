@@ -163,7 +163,7 @@
                         android:autofillHints="false"
                         android:hint="@string/make"
                         android:text="@{state.make}"
-                        android:inputType="text" />
+                        android:inputType="textCapSentences" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -184,7 +184,7 @@
                         android:autofillHints="false"
                         android:hint="@string/model"
                         android:text="@{state.model}"
-                        android:inputType="text" />
+                        android:inputType="textCapSentences" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -259,7 +259,7 @@
                         android:autofillHints="false"
                         android:hint="@string/nickname"
                         android:text="@{state.nickname}"
-                        android:inputType="text" />
+                        android:inputType="textCapSentences" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

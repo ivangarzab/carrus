@@ -13,10 +13,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@Singleton
 class AppSettingsRepository @Inject constructor(
     @ApplicationContext context: Context
 ) {

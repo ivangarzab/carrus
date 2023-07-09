@@ -14,7 +14,7 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.ModalServiceBinding
 import com.ivangarzab.carrus.ui.overview.ModalServiceState
 import com.ivangarzab.carrus.util.extensions.dismissKeyboard
-import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
+import com.ivangarzab.carrus.util.extensions.getCalendarDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
@@ -113,12 +113,8 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
             name = it.serviceModalNameInput.text.toString(),
-            repairDate = it.serviceModalRepairDateInput.text
-                .toString()
-                .getCalendarFromShortenedDate(),
-            dueDate = it.serviceModalDueDateInput.text
-                .toString()
-                .getCalendarFromShortenedDate(),
+            repairDate = it.serviceModalRepairDateInput.getCalendarDate(),
+            dueDate = it.serviceModalDueDateInput.getCalendarDate(),
             brand = it.serviceModalBrandInput.text.toString(),
             type = it.serviceModalTypeInput.text.toString(),
             cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
@@ -139,7 +135,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                     }.timeInMillis
                 )
                 binding.serviceModalRepairDateInput.setText(
-                    getString(R.string.service_date_format, month, day, year)
+                    getString(R.string.service_date_format, month + 1, day, year)
                 )
             }
         )
@@ -156,7 +152,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                     }.timeInMillis
                 )
                 binding.serviceModalDueDateInput.setText(
-                    getString(R.string.service_date_format, month, day, year)
+                    getString(R.string.service_date_format, month + 1, day, year)
                 )
             }
         )

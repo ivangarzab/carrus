@@ -50,12 +50,12 @@ android {
     }
 }
 
-def GsonVersion = '2.9.1'
+def gsonVersion = '2.9.1'
 def leakCanaryVersion = '2.12'
 def truthVersion = '1.1.4'
 dependencies {
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "com.google.code.gson:gson:$GsonVersion"
+    testImplementation "com.google.code.gson:gson:$gsonVersion"
     testImplementation "com.google.truth:truth:$truthVersion"
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     androidTestImplementation "com.google.truth:truth:$truthVersion"
@@ -63,7 +63,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.google.android.material:material:1.9.0'
-    implementation "com.google.code.gson:gson:$GsonVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core-ktx:1.9.0'

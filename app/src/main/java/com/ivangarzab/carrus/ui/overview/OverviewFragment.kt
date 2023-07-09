@@ -41,7 +41,7 @@ import timber.log.Timber
  * Created by Ivan Garza Bermea.
  */
 @AndroidEntryPoint
-class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
+class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     private val viewModel: OverviewViewModel by viewModels()
 
@@ -76,7 +76,9 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
         }
 
         binding.overviewToolbarImage.setOnLongClickListener {
-            viewModel.addTestMessage()
+            if (isRelease().not()) {
+                viewModel.addTestMessage()
+            }
             true
         }
     }
@@ -147,7 +149,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
 
             // Content binding
             overviewContent.apply {
-                sortingCallback = this@OverviewFragment
+                sortingCallback = viewModel
                 overviewContentServiceList.apply {
                     // Set up recycler view
                     layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -355,12 +357,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview), SortingCallback {
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
-
-    //TODO: Move into VM
-    override fun onSort(type: SortingCallback.SortingType) {
-        Timber.v("Got a sorting request with type=$type")
-        viewModel.onSortingByType(type)
-    }
 
     private fun onSortingViews(current: View, label: TextView) {
         processSortingViews(current)

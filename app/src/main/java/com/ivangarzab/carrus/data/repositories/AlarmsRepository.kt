@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The purpose of this file is to hold and manage information about particular alarms, as well as
@@ -16,6 +17,7 @@ import javax.inject.Inject
  *
  * Created by Ivan Garza Bermea.
  */
+@Singleton
 class AlarmsRepository @Inject constructor(
     @ApplicationContext context: Context,
     private val alarmSettingsRepository: AlarmSettingsRepository
