@@ -151,7 +151,8 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
                 with(Car.default) {
                     viewModel.apply {
                         onUpdateStateData(
-                            nickname, make, model, year, licenseNo, vinNo, tirePressure, totalMiles, milesPerGallon
+                            nickname, make, model, year, licenseNo,
+                            vinNo, tirePressure, totalMiles, milesPerGallon
                         )
                         onSubmitData()
                     }
@@ -219,15 +220,15 @@ class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private fun submitAllData() = with(binding) {
         viewModel.onUpdateStateData(
-            nickname = createNicknameInput.text.toString(),
-            make = createMakeInput.text.toString(),
-            model = createModelInput.text.toString(),
-            year = createYearInput.text.toString(),
-            licenseNo = createLicenseInput.text.toString(),
-            vinNo = createVinNumberInput.text.toString(),
-            tirePressure = createTirePressureInput.text.toString(),
-            totalMiles = createOdometerInput.text.toString(),
-            milesPerGallon = createMiPerGalInput.text.toString()
+            nickname = createNicknameInput.text.toString().trim(),
+            make = createMakeInput.text.toString().trim(),
+            model = createModelInput.text.toString().trim(),
+            year = createYearInput.text.toString().trim(),
+            licenseNo = createLicenseInput.text.toString().trim(),
+            vinNo = createVinNumberInput.text.toString().trim(),
+            tirePressure = createTirePressureInput.text.toString().trim(),
+            totalMiles = createOdometerInput.text.toString().trim(),
+            milesPerGallon = createMiPerGalInput.text.toString().trim()
         )
     }
 
