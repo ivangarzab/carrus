@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.NegativeButton
+import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.ui.compose.theme.NegativeButton
-import com.ivangarzab.carrus.ui.compose.theme.PositiveButton
 import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialData
 import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialDataPreview
 
