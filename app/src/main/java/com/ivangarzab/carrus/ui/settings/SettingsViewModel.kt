@@ -13,6 +13,7 @@ import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -114,16 +115,12 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onImportData(data: String): Boolean {
-        return try {
-            Gson().fromJson(data, Car::class.java).let { car ->
-                Timber.d("Got car data to import: $car")
-                carRepository.saveCarData(car)
-            }
-            true
-        } catch (e: Exception) {
-            Timber.w("Unable to import data", e)
-            false
+        CarImporter.importFromJson(data)?.let { car ->
+            carRepository.saveCarData(car)
+            return true
         }
+        Timber.w("Unable to import car data",)
+        return false
     }
 
     private fun updateCarState(car: Car?) =
