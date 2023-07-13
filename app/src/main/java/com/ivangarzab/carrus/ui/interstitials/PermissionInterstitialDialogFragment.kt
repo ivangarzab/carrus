@@ -4,48 +4,44 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.DialogFragment
-import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.ModalInterstitialPermissionBinding
+import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
 
 /**
  * Created by Ivan Garza Bermea.
  */
-abstract class PermissionInterstitial : DialogFragment(
-    R.layout.modal_interstitial_permission
-) {
+abstract class PermissionInterstitial<T : PermissionInterstitialViewModel> :
+    DialogFragment() {
 
     private lateinit var binding: ModalInterstitialPermissionBinding
+
+    lateinit var viewModel: T
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ModalInterstitialPermissionBinding.inflate(
-            inflater,
-            container,
-            false
-        )
-        return binding.root
+        return ComposeView(requireActivity()).apply {
+            setContent {
+                AppTheme {
+                    PermissionInterstitialScreen(
+                        viewModel = viewModel,
+                        positiveButtonClick = { onSettingsClicked() },
+                        negativeButtonClick = { dismiss() }
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.dialog?.clearBackgroundForRoundedCorners()
-        binding.apply {
-            this.setSettingsClickListener { onSettingsClicked() }
-            this.setNotNowClickListener { dismiss() }
-        }
     }
-
-    open fun feedData(data: PermissionInterstitialData) =
-        binding.apply {
-            title = getString(data.title)
-            subTitle = getString(data.subtitle)
-            body = getString(data.body)
-        }
 
     abstract fun onSettingsClicked()
 }
