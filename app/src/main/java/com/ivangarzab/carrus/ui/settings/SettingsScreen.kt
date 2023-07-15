@@ -33,6 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.settings.data.SettingsState
+import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 
 /**
  * Created by Ivan Garza Bermea.
@@ -49,9 +51,9 @@ fun SettingsScreenStateful(
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit
 ) {
-    val state: SettingsViewModel.SettingsState by viewModel
+    val state: SettingsState by viewModel
         .state
-        .observeAsState(initial = SettingsViewModel.SettingsState())
+        .observeAsState(initial = SettingsState())
 
     AppTheme {
         SettingsScreen(
@@ -73,7 +75,7 @@ fun SettingsScreenStateful(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SettingsScreen(
-    @PreviewParameter(SettingsStatePreview::class) state: SettingsViewModel.SettingsState,
+    @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onBackPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmTimeClicked: () -> Unit = { },

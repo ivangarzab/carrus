@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.settings.data.SettingsState
+import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 
 /**
  * Created by Ivan Garza Bermea.
@@ -37,7 +39,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Composable
 fun SettingsScreenContent(
     modifier: Modifier = Modifier,
-    @PreviewParameter(SettingsStatePreview::class) state: SettingsViewModel.SettingsState,
+    @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmTimeClicked: () -> Unit = { },
     onDueDateFormatClicked: () -> Unit = { },

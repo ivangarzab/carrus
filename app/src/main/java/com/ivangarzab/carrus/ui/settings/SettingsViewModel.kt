@@ -1,6 +1,5 @@
 package com.ivangarzab.carrus.ui.settings
 
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -12,10 +11,10 @@ import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.extensions.setState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,13 +29,6 @@ class SettingsViewModel @Inject constructor(
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
-
-    @Parcelize
-    data class SettingsState(
-        val car: Car? = null,
-        val alarmTime: String? = null,
-        val dueDateFormat: DueDateFormat = DueDateFormat.DAYS
-    ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
         STATE,
