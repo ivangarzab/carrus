@@ -170,42 +170,45 @@ private fun SettingsScreenContentItemBase(
     option: @Composable (() -> Unit)? = null
 ) {
     AppTheme {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 16.dp,
-                    bottom = 16.dp,
-                    start = 32.dp,
-                    end = 32.dp
-                )
-                .background(color = MaterialTheme.colorScheme.background)
-                .clickable { onClick() }
+        Box(Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background)
+            .clickable { onClick() }
         ) {
-            Column(
-                Modifier.weight(2f)
+            Row(
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp,
+                        bottom = 16.dp,
+                        start = 32.dp,
+                        end = 32.dp
+                    )
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-//                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.Light
-                )
-            }
-            option?.let {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterVertically),
-                    contentAlignment = Alignment.Center
+                Column(
+                    Modifier.weight(2f)
                 ) {
-                    option()
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+//                    fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Light
+                    )
+                }
+                option?.let {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        option()
+                    }
                 }
             }
         }
