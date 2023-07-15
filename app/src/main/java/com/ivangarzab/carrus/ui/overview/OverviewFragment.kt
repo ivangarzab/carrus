@@ -26,7 +26,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivangarzab.carrus.App.Companion.isRelease
-import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
@@ -84,7 +83,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
     }
 
     private fun setupWindow() {
-        ViewCompat.setOnApplyWindowInsetsListener(
+        /*ViewCompat.setOnApplyWindowInsetsListener(
             (requireActivity() as MainActivity).getBindingRoot()
         ) { _, windowInsets ->
             windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
@@ -96,7 +95,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 )
             }
             WindowInsetsCompat.CONSUMED
-        }
+        }*/
     }
 
     private fun setupToolbar() {

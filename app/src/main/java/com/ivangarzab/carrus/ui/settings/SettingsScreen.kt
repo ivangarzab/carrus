@@ -20,31 +20,76 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 
 /**
  * Created by Ivan Garza Bermea.
  */
+
+@Composable
+fun SettingsScreenStateful(
+    viewModel: SettingsViewModel = viewModel(),
+    onBackPressed: () -> Unit,
+    onAlarmTimeClicked: () -> Unit,
+    onDueDateFormatClicked: () -> Unit,
+    onDeleteCarServicesClicked: () -> Unit,
+    onDeleteCarDataClicked: () -> Unit,
+    onImportClicked: () -> Unit,
+    onExportClicked: () -> Unit
+) {
+    val state: SettingsViewModel.SettingsState by viewModel
+        .state
+        .observeAsState(initial = SettingsViewModel.SettingsState())
+
+    AppTheme {
+        SettingsScreen(
+            state = state,
+            onBackPressed = { onBackPressed() },
+            onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
+            onAlarmTimeClicked = { onAlarmTimeClicked() },
+            onDueDateFormatClicked = { onDueDateFormatClicked() },
+            onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
+            onDeleteCarDataClicked = { onDeleteCarDataClicked() },
+            onImportClicked = { onImportClicked() },
+            onExportClicked = { onExportClicked() }
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    @PreviewParameter(SettingsStatePreview::class) state: SettingsViewModel.SettingsState,
+    onBackPressed: () -> Unit = { },
+    onDarkModeToggle: (Boolean) -> Unit = { },
+    onAlarmTimeClicked: () -> Unit = { },
+    onDueDateFormatClicked: () -> Unit = { },
+    onDeleteCarServicesClicked: () -> Unit = { },
+    onDeleteCarDataClicked: () -> Unit = { },
+    onImportClicked: () -> Unit = { },
+    onExportClicked: () -> Unit = { }
+) {
     AppTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     modifier = Modifier
                         .statusBarsPadding()
-                        .fillMaxWidth()
-                        .padding(top = 42.dp),
+                        .fillMaxWidth(),
                     title = {
                         Text(
                             text = stringResource(id = R.string.settings),
@@ -63,7 +108,7 @@ fun SettingsScreen() {
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { onBackPressed() }) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back arrow",
@@ -79,17 +124,22 @@ fun SettingsScreen() {
             },
             content = { paddingValues ->
                 SettingsScreenContent(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                    //TODO: Call the VM directly for all listeners
+                    state = state,
+                    modifier = Modifier.padding(paddingValues),
+                    onDarkModeToggle = { onDarkModeToggle(it) },
+                    onAlarmTimeClicked = { onAlarmTimeClicked() },
+                    onDueDateFormatClicked = { onDueDateFormatClicked() },
+                    onDeleteCarDataClicked = { onDeleteCarDataClicked() },
+                    onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
+                    onImportClicked = { onImportClicked() },
+                    onExportClicked = { onExportClicked() }
                 )
             },
             bottomBar = {
                 SettingsScreenBottomBar(
                     modifier = Modifier
-                        .padding(bottom = 24.dp)
                         .navigationBarsPadding(),
-                    versionName = "0.0.0-test"
+                    versionName = BuildConfig.VERSION_NAME
                 )
             }
         )

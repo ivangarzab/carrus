@@ -2,10 +2,11 @@ package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,10 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 
 /**
@@ -33,55 +37,76 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Composable
 fun SettingsScreenContent(
     modifier: Modifier = Modifier,
-    onDarkModeToggle: () -> Unit = { },
-    importClick: () -> Unit = { },
-    exportClick: () -> Unit = { }
+    @PreviewParameter(SettingsStatePreview::class) state: SettingsViewModel.SettingsState,
+    onDarkModeToggle: (Boolean) -> Unit = { },
+    onAlarmTimeClicked: () -> Unit = { },
+    onDueDateFormatClicked: () -> Unit = { },
+    onDeleteCarServicesClicked: () -> Unit = { },
+    onDeleteCarDataClicked: () -> Unit = { },
+    onImportClicked: () -> Unit = { },
+    onExportClicked: () -> Unit = { }
 ) {
     AppTheme {
         LazyColumn(
             modifier.background(color = MaterialTheme.colorScheme.background)
         ) {
-            item {
+            item { // Dark Mode Toggle
                 SettingsScreenContentItemSwitch(
                     title = stringResource(id = R.string.setting_dark_mode_title),
                     subTitle = stringResource(id = R.string.setting_dark_mode_subtitle),
-                    onToggle = { onDarkModeToggle() }
+                    isChecked = isSystemInDarkTheme(),
+                    onToggle = { onDarkModeToggle(it) }
                 )
             }
+
             item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-            item {
+            item { // Alarm Time
                 SettingsScreenContentItemText(
                     title = stringResource(id = R.string.setting_alarm_time_title),
-                    subTitle = stringResource(id = R.string.setting_alarm_time_subtitle),
-                    content = "6"
+                    subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
+                    content = if (state.alarmTime.isNullOrBlank()) {
+                        DEFAULT_ALARM_TIME.toString()
+                    } else {
+                        state.alarmTime
+                    },
+                    onClick = { onAlarmTimeClicked() }
                 )
             }
-            item {
+            item { // Due Date Format
                 SettingsScreenContentItemText(
                     title = stringResource(id = R.string.settings_due_date_format_title),
-                    subTitle = stringResource(id = R.string.settings_due_date_format_subtitle),
-                    content = "days"
+                    subtitle = stringResource(id = R.string.settings_due_date_format_subtitle),
+                    content = state.dueDateFormat.value,
+                    onClick = { onDueDateFormatClicked() }
                 )
             }
+
+            if (state.car != null) {
+                item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
+                if (state.car.services.isNotEmpty()) {
+                    item { // Delete Car Services
+                        SettingsScreenContentItemBase(
+                            title = stringResource(id = R.string.setting_delete_all_services_title),
+                            subtitle = stringResource(id = R.string.setting_delete_all_services_subtitle),
+                            onClick = { onDeleteCarServicesClicked() }
+                        )
+                    }
+                }
+                item { // Delete Car Data
+                    SettingsScreenContentItemBase(
+                        title = stringResource(id = R.string.setting_delete_car_data_title),
+                        subtitle = stringResource(id = R.string.setting_delete_car_data_subtitle),
+                        onClick = { onDeleteCarDataClicked() }
+                    )
+                }
+            }
+
             item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-            item {
-                SettingsScreenContentItemBase(
-                    title = stringResource(id = R.string.setting_delete_all_services_title),
-                    subTitle = stringResource(id = R.string.setting_delete_all_services_subtitle)
-                )
-            }
-            item {
-                SettingsScreenContentItemBase(
-                    title = stringResource(id = R.string.setting_delete_car_data_title),
-                    subTitle = stringResource(id = R.string.setting_delete_car_data_subtitle)
-                )
-            }
-            item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-            item {
+            item { // Import/Export Buttons
                 SettingsScreenContentBottom(
                     modifier = Modifier.fillMaxWidth(),
-                    importClick = importClick,
-                    exportClick = exportClick
+                    onImportClicked = onImportClicked,
+                    onExportClicked = onExportClicked
                 )
             }
         }
@@ -93,15 +118,21 @@ fun SettingsScreenContent(
 @Composable
 private fun SettingsScreenContentItemText(
     title: String = "Title",
-    subTitle: String = "This is a very long subtitle for explanation.",
-    content: String = "6"
+    subtitle: String = "This is a very long subtitle for explanation.",
+    content: String = "due date",
+    onClick: () -> Unit = { }
 ) {
-    SettingsScreenContentItemBase(title, subTitle) {
+    SettingsScreenContentItemBase(
+        title = title,
+        subtitle = subtitle,
+        onClick = { onClick() }
+    ) {
         Text(
             modifier = Modifier.padding(end = 16.dp),
             text = content,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
     }
@@ -113,12 +144,16 @@ private fun SettingsScreenContentItemText(
 private fun SettingsScreenContentItemSwitch(
     title: String = "Title",
     subTitle: String = "This is a very long subtitle for explanation.",
-    onToggle: () -> Unit = { }
+    isChecked: Boolean = true,
+    onToggle: (Boolean) -> Unit = { }
 ) {
-    SettingsScreenContentItemBase(title, subTitle) {
+    SettingsScreenContentItemBase(
+        title = title,
+        subtitle = subTitle
+    ) {
         Switch(
-            checked = false,
-            onCheckedChange = { onToggle() }
+            checked = isChecked,
+            onCheckedChange = { onToggle(it) }
         )
     }
 }
@@ -128,12 +163,13 @@ private fun SettingsScreenContentItemSwitch(
 @Composable
 private fun SettingsScreenContentItemBase(
     title: String = "Title",
-    subTitle: String = "This is a very long subtitle for explanation.",
+    subtitle: String = "This is a very long subtitle for explanation.",
+    onClick: () -> Unit = { },
     option: @Composable (() -> Unit)? = null
 ) {
     AppTheme {
         Row(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     top = 16.dp,
@@ -142,6 +178,7 @@ private fun SettingsScreenContentItemBase(
                     end = 32.dp
                 )
                 .background(color = MaterialTheme.colorScheme.background)
+                .clickable { onClick() }
         ) {
             Column(
                 Modifier.weight(2f)
@@ -149,12 +186,14 @@ private fun SettingsScreenContentItemBase(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+//                    fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = subTitle,
+                    text = subtitle,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Light
                 )
             }
             option?.let {
@@ -176,8 +215,8 @@ private fun SettingsScreenContentItemBase(
 @Composable
 fun SettingsScreenContentBottom(
     modifier: Modifier = Modifier,
-    importClick: () -> Unit = { },
-    exportClick: () -> Unit = { }
+    onImportClicked: () -> Unit = { },
+    onExportClicked: () -> Unit = { }
 ) {
     AppTheme {
         Row(
@@ -189,17 +228,17 @@ fun SettingsScreenContentBottom(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
                     .weight(1f),
-                onClick = { exportClick() }
+                onClick = { onExportClicked() }
             ) {
-                Text(text = "EXPORT DATA")
+                Text(text = stringResource(id = R.string.settings_export_data))
             }
             Button(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp)
                     .weight(1f),
-                onClick = { importClick() }
+                onClick = { onImportClicked() }
             ) {
-                Text(text = "IMPORT DATA")
+                Text(text = stringResource(id = R.string.settings_import_data))
             }
         }
     }
