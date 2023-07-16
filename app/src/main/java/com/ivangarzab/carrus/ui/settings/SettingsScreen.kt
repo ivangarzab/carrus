@@ -2,28 +2,18 @@ package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.BuildConfig
-import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
@@ -70,7 +60,6 @@ fun SettingsScreenStateful(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -88,40 +77,10 @@ fun SettingsScreen(
     AppTheme {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .fillMaxWidth(),
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.settings),
-                            color = if (isSystemInDarkTheme()) {
-                                MaterialTheme.colorScheme.onBackground
-                            } else {
-                                MaterialTheme.colorScheme.onPrimary
-                            }
-                        )
-                    },
-                    colors = if (isSystemInDarkTheme()) {
-                        TopAppBarDefaults.topAppBarColors()
-                    } else {
-                        TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { onBackPressed() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back arrow",
-                                tint = if (isSystemInDarkTheme()) {
-                                    MaterialTheme.colorScheme.onBackground
-                                } else {
-                                    MaterialTheme.colorScheme.onPrimary
-                                }
-                            )
-                        }
-                    }
+                TopBar(
+                    title = "Settings",
+                    isNavigationIconEnabled = true,
+                    onNavigationIconClicked = { onBackPressed() }
                 )
             },
             content = { paddingValues ->
