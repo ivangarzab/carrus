@@ -1,18 +1,17 @@
 package com.ivangarzab.carrus.ui.create
 
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.ivangarzab.carrus.data.*
+import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -23,23 +22,6 @@ class CreateViewModel @Inject constructor(
     private val savedState: SavedStateHandle,
     private val carRepository: CarRepository
     ) : ViewModel() {
-
-    @Parcelize
-    data class CarModalState(
-        val isExpanded: Boolean = false,
-        val title: String = "Add a Car",
-        val actionButton: String = "Submit",
-        val nickname: String = "",
-        val make: String = "",
-        val model: String = "",
-        val year: String = "",
-        val licenseNo: String = "",
-        val vinNo: String = "",
-        val tirePressure: String = "",
-        val totalMiles: String = "",
-        val milesPerGallon: String = "",
-        val imageUri: String? = null
-    ) : Parcelable
 
     val state: LiveData<CarModalState> = savedState.getLiveData(
         STATE,
@@ -93,12 +75,6 @@ class CreateViewModel @Inject constructor(
     fun onImageDeleted() {
         setState(state, savedState, STATE) {
             copy(imageUri = null)
-        }
-    }
-
-    fun onExpandToggle() {
-        setState(state, savedState, STATE) {
-            copy(isExpanded = isExpanded.not())
         }
     }
 

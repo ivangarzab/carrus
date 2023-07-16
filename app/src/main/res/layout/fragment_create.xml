@@ -21,7 +21,7 @@
             type="android.view.View.OnClickListener" />
         <variable
             name="state"
-            type="com.ivangarzab.carrus.ui.create.CreateViewModel.CarModalState" />
+            type="com.ivangarzab.carrus.ui.create.data.CarModalState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +43,6 @@
                 android:id="@+id/createToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@{state.title}"
                 app:popupTheme="@style/Theme.Carrus.PopupOverlay"
                 tools:title="Add a Car"/>
 
