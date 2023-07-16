@@ -1,20 +1,26 @@
 package com.ivangarzab.carrus.ui.settings
 
+import android.content.ContentResolver
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.extensions.writeInFile
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -110,16 +116,33 @@ class SettingsViewModel @Inject constructor(
         }
     }"
 
-    fun getExportData(): String? = carRepository.fetchCarData()?.let { data ->
-        Gson().toJson(data)
-    }
+    fun onExportData(
+        contentResolver: ContentResolver,
+        uri: Uri
+    ): Boolean = carRepository.fetchCarData()?.let { data ->
+        Gson().toJson(data)?.let { json ->
+            appScope.launch(Dispatchers.IO) {
+                uri.writeInFile(contentResolver, json)
+            }
+            true
+        } ?: false
+    } ?: false
 
-    fun onImportData(data: String): Boolean {
-        CarImporter.importFromJson(data)?.let { car ->
-            carRepository.saveCarData(car)
-            return true
+    fun onImportData(
+        contentResolver: ContentResolver,
+        uri: Uri
+    ): Boolean {
+        uri.readFromFile(contentResolver).let { data ->
+            data?.let {
+                CarImporter.importFromJson(data)?.let { car ->
+                    carRepository.saveCarData(car)
+                    return true
+                }
+                Timber.w("Unable to import car data",)
+                return false
+            } ?: Timber.w("Unable to parse data from file with uri: $uri")
         }
-        Timber.w("Unable to import car data",)
+        Timber.w("Unable to import data from uri path")
         return false
     }
 
