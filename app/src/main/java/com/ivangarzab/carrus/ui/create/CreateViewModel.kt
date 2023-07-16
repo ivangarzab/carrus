@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
+import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
@@ -32,13 +33,20 @@ class CreateViewModel @Inject constructor(
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
 
+    val onVerify: LiveEvent<Boolean> = LiveEvent()
+
     fun verifyData(
         make: String,
         model: String,
         year: String
-    ): Boolean = make.isNotBlank() && model.isNotBlank() && year.isNotBlank()
+    ) {
+        (make.isNotBlank() && model.isNotBlank() && year.isNotBlank()).let { result ->
+            onVerify.value = result
+            if (result) onSubmitData()
+        }
+    }
 
-    fun onSubmitData() {
+    private fun onSubmitData() {
         state.value?.let { state ->
             Timber.v("Saving car data")
             Car(
