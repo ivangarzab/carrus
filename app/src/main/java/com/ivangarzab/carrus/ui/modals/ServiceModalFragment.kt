@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.R
@@ -15,25 +14,25 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.ModalServiceBinding
 import com.ivangarzab.carrus.ui.overview.ModalServiceState
 import com.ivangarzab.carrus.util.extensions.dismissKeyboard
-import com.ivangarzab.carrus.util.extensions.toast
-import com.ivangarzab.carrus.ui.overview.OverviewViewModel
+import com.ivangarzab.carrus.util.extensions.getCalendarDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
-import java.util.*
+import com.ivangarzab.carrus.util.extensions.toast
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.util.Calendar
+import java.util.UUID
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class ServiceModalFragment : BottomSheetDialogFragment() {
 
-    private val viewModel: OverviewViewModel by activityViewModels {
-        SavedStateViewModelFactory(requireActivity().application, this)
-    }
+    private val viewModel: ServiceModalViewModel by viewModels()
 
     private lateinit var binding: ModalServiceBinding
 
     private val args: ServiceModalFragmentArgs by navArgs()
-    private enum class Type { CREATE, EDIT }
-    private lateinit var type: Type
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,36 +49,43 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        type = args.service?.let {
-            setupContent(it)
-            Type.EDIT
-        } ?: Type.CREATE
+        with(viewModel) {
+            setArgsData(args.service)
+            state.observe(viewLifecycleOwner) { state ->
+                state.data?.let { setupContent(it) }
+            }
 
-        binding.apply {
-            setActionClickListener {
-                val name = serviceModalNameInput.text.toString()
-                when (viewModel.verifyServiceData(
-                    name = name
-                )) {
-                    true -> {
-                        when (type) {
-                            Type.CREATE -> viewModel.onServiceCreated(
-                                getServiceFromContent()
-                            ).also { this@ServiceModalFragment.dismiss() }
-                            Type.EDIT -> args.service?.let {
-                                viewModel.onServiceUpdate(
-                                    getServiceFromContent(it.id)
-                                ).also { this@ServiceModalFragment.dismiss() }
-                            }
+            onDataRequest.observe(viewLifecycleOwner) { dataRequest ->
+                if (dataRequest.first) {
+                    onSubmitData(
+                        when (dataRequest.second.type) {
+                            ServiceModalViewModel.Type.CREATE -> getServiceFromContent()
+                            ServiceModalViewModel.Type.EDIT -> getServiceFromContent(
+                                dataRequest.second.id
+                            )
                         }
-                    }
+                    )
+                }
+            }
+            onSubmission.observe(viewLifecycleOwner) { submitSuccess ->
+                when (submitSuccess) {
+                    true -> findNavController().popBackStack()
                     false -> toast("Missing required data")
                 }
             }
+        }
+
+        binding.apply {
+            setActionClickListener {
+                Timber.v("Got action button click action")
+                viewModel.onActionButtonClicked()
+            }
             setRepairDateClickListener {
+                Timber.v("Got repair date button click action")
                 showRepairDatePickerDialog()
             }
             setDueDateClickListener {
+                Timber.v("Got due date button click action")
                 showDueDatePickerDialog()
             }
         }
@@ -99,7 +105,6 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             type = data.type ?: "",
             price = data.cost.toString()
         )
-        viewModel.datesInMillis = Pair(data.repairDate.timeInMillis, data.dueDate.timeInMillis)
     }
 
     private fun getServiceFromContent(
@@ -107,15 +112,11 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
     ): Service = binding.let {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
-            name = it.serviceModalNameInput.text.toString(),
-            repairDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.datesInMillis.first
-            },
-            dueDate = Calendar.getInstance().apply {
-                timeInMillis = viewModel.datesInMillis.second
-            },
-            brand = it.serviceModalBrandInput.text.toString(),
-            type = it.serviceModalTypeInput.text.toString(),
+            name = it.serviceModalNameInput.text.toString().trim(),
+            repairDate = it.serviceModalRepairDateInput.getCalendarDate(),
+            dueDate = it.serviceModalDueDateInput.getCalendarDate(),
+            brand = it.serviceModalBrandInput.text.toString().trim(),
+            type = it.serviceModalTypeInput.text.toString().trim(),
             cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
                 nonNullString.isNotEmpty()
             }?.run {
@@ -128,14 +129,13 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         showDatePickerDialog(
             date = Calendar.getInstance(),
             onDateSelected = { year, month, day ->
-                viewModel.datesInMillis = Pair(
-                    first = Calendar.getInstance().apply {
+                viewModel.setNewRepairDateInMillis(
+                    Calendar.getInstance().apply {
                         set(year, month, day)
-                    }.timeInMillis,
-                    second = viewModel.datesInMillis.second
+                    }.timeInMillis
                 )
                 binding.serviceModalRepairDateInput.setText(
-                    getString(R.string.service_date_format, month, day, year)
+                    getString(R.string.service_date_format, month + 1, day, year)
                 )
             }
         )
@@ -146,14 +146,13 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                 add(Calendar.DAY_OF_MONTH, DEFAULT_DUE_DATE_ADDITION)
             },
             onDateSelected = { year, month, day ->
-                viewModel.datesInMillis = Pair(
-                    first = viewModel.datesInMillis.first,
-                    second = Calendar.getInstance().apply {
+                viewModel.setNewDueDateInMillis(
+                    Calendar.getInstance().apply {
                         set(year, month, day)
                     }.timeInMillis
                 )
                 binding.serviceModalDueDateInput.setText(
-                    getString(R.string.service_date_format, month, day, year)
+                    getString(R.string.service_date_format, month + 1, day, year)
                 )
             }
         )

@@ -2,12 +2,13 @@ package com.ivangarzab.carrus
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.*
 import com.ivangarzab.carrus.databinding.ActivityMainBinding
 import com.ivangarzab.carrus.util.extensions.updateMargins
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindow()
-        setDarkMode()
     }
 
     private fun setupWindow() {
@@ -35,15 +35,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getBindingRoot() = binding.root
-
-    private fun setDarkMode() {
-        prefs.darkMode?.let {
-            when (it) {
-                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-    }
 
     companion object {
         const val REQUEST_CODE: Int = 1

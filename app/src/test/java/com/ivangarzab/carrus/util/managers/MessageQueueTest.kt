@@ -1,8 +1,6 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.util.managers.MessageData
-import com.ivangarzab.carrus.util.managers.MessageQueue
-import com.ivangarzab.carrus.util.managers.MessageType
+import com.ivangarzab.carrus.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -134,7 +132,7 @@ class MessageQueueTest {
     fun test_add_three_pop() {
         messageQueue.add(TEST_MESSAGE_DATA_1) // first
         messageQueue.add(TEST_MESSAGE_DATA_2) // second
-        messageQueue.add(MessageData(MessageType.INFO, "3")) // third
+        messageQueue.add(TEST_MESSAGE_DATA_3) // third
         assertEquals(
             TEST_MESSAGE_DATA_1,
             messageQueue.pop()
@@ -145,7 +143,7 @@ class MessageQueueTest {
     fun test_add_three_pop_pop() {
         messageQueue.add(TEST_MESSAGE_DATA_1) // first
         messageQueue.add(TEST_MESSAGE_DATA_2) // second
-        messageQueue.add(MessageData(MessageType.INFO, "3")) // third
+        messageQueue.add(TEST_MESSAGE_DATA_3) // third
         messageQueue.pop()
         assertEquals(
             TEST_MESSAGE_DATA_2,
@@ -153,18 +151,71 @@ class MessageQueueTest {
         )
     }
 
-    companion object {
-        private const val ANSWER_0 = 0
-        private const val ANSWER_1 = 1
-        private const val ANSWER_2 = 2
+    @Test
+    fun test_remove_empty_list_false() {
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            FALSE,
+            result
+        )
+    }
 
-        private val TEST_MESSAGE_DATA_1 = MessageData(
-            type = MessageType.INFO,
-            text = "One"
+    @Test
+    fun test_remove_list_size_1_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            TRUE,
+            result
         )
-        private val TEST_MESSAGE_DATA_2 = MessageData(
-            type = MessageType.WARNING,
-            text = "Two"
+    }
+
+    @Test
+    fun test_remove_list_size_2_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.add(TEST_MESSAGE_DATA_2)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(
+            TRUE,
+            result
         )
+    }
+
+    @Test
+    fun test_remove_invalid_item_false() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_2.id)
+        assertEquals(
+            FALSE,
+            result
+        )
+    }
+
+    @Test
+    fun test_remove_duplicate_item_true() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
+        assertEquals(TRUE, result)
+        assertEquals(ANSWER_1, messageQueue.size())
+    }
+
+    @Test(expected = NoSuchElementException::class)
+    fun `test get from empty list`() {
+        messageQueue.get()
+    }
+
+    @Test
+    fun `test get with list size = 1`() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.get()
+        assertEquals(TEST_MESSAGE_DATA_1, result)
+    }
+
+    @Test
+    fun `test get with list size = 2`() {
+        messageQueue.add(TEST_MESSAGE_DATA_1)
+        val result = messageQueue.get()
+        assertEquals(TEST_MESSAGE_DATA_1, result)
     }
 }

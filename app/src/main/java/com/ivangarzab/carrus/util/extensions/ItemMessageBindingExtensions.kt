@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.res.Resources
 import android.view.MotionEvent
 import android.view.View
+import com.ivangarzab.carrus.data.MessageData
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import timber.log.Timber
 import java.lang.Float.max
@@ -14,23 +15,28 @@ import java.lang.Float.min
  * Created by Ivan Garza Bermea.
  */
 fun ItemMessageBinding.bind(
-    message: String,
+    message: MessageData,
     resources: Resources,
-    onCloseClickListener: View.OnClickListener? = null
+    onClickListener: ((id: String) -> Unit)? = null,
+    onCloseClickListener: ((id: String) -> Unit)? = null
 ) {
-    this.message = message
-    this.setCloseButtonClickListener {view ->
+    this.message = message.text
+    this.setCloseButtonClickListener {_ ->
         root.animate()
             .alpha(0f)
             .setDuration(ITEM_MESSAGE_ANIM_DISMISS_DURATION)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    onCloseClickListener?.onClick(view)
+                    onCloseClickListener?.let { it(message.id) }
                 }
             })
     }
 
-    root.setOnTouchListener { v, event ->
+    root.setOnClickListener {
+        onClickListener?.let { it(message.id) }
+    }
+
+    /*root.setOnTouchListener { v, event ->
         // variables to store current configuration of quote card.
         val displayMetrics = resources.displayMetrics
         val cardWidth = root.width
@@ -47,7 +53,7 @@ fun ItemMessageBinding.bind(
                         .setDuration(ITEM_MESSAGE_ANIM_DISMISS_DURATION)
                         .setListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                onCloseClickListener?.onClick(this@bind.root)
+                                onCloseClickListener?.let { it(message.id) }
                             }
                         })
                         .start()
@@ -78,7 +84,7 @@ fun ItemMessageBinding.bind(
         }
         v.performClick()
         true
-    }
+    }*/
 }
 private const val ITEM_MESSAGE_ANIM_DISMISS_DURATION: Long = 300
 private const val ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION: Long = 150

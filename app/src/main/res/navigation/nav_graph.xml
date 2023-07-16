@@ -24,6 +24,20 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
+            android:id="@+id/action_overviewFragment_to_permissionNotificationModal"
+            app:destination="@id/permissionNotificationModal"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_overviewFragment_to_alarmPermissionModal"
+            app:destination="@id/alarmPermissionModal"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
             android:id="@+id/action_overviewFragment_to_settingsFragment"
             app:destination="@id/settingsFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
@@ -59,6 +73,18 @@
             app:argType="com.ivangarzab.carrus.data.Service"
             app:nullable="true"
             android:defaultValue="@null" />
+    </dialog>
+    <dialog
+        android:id="@+id/permissionNotificationModal"
+        android:name="com.ivangarzab.carrus.ui.interstitials.PermissionNotificationInterstitial"
+        android:label="modal_permission_notification"
+        tools:layout="@layout/modal_interstitial_permission">
+    </dialog>
+    <dialog
+        android:id="@+id/alarmPermissionModal"
+        android:name="com.ivangarzab.carrus.ui.interstitials.PermissionAlarmInterstitial"
+        android:label="modal_permission_alarm"
+        tools:layout="@layout/modal_interstitial_permission">
     </dialog>
     <fragment
         android:id="@+id/settingsFragment"

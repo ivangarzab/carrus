@@ -7,10 +7,15 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import com.ivangarzab.carrus.data.MessageData
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
+import com.ivangarzab.carrus.ui.overview.OverviewViewModel
 import com.ivangarzab.carrus.util.extensions.bind
-import com.ivangarzab.carrus.util.managers.MessageData
+import com.ivangarzab.carrus.util.extensions.fadeIn
+import com.ivangarzab.carrus.util.extensions.fadeOut
 import com.ivangarzab.carrus.util.managers.MessageQueue
 import timber.log.Timber
 
@@ -31,23 +36,39 @@ class StackingMessagesView @JvmOverloads constructor(
         true
     )
 
-    private val messageQueue: MessageQueue = MessageQueue()
+    private var messageQueue: MessageQueue = MessageQueue()
 
-    fun addMessage(data: MessageData) {
-        Timber.v("Got a new message to queue!")
-        if (messageQueue.size() == 0 && isContainerEmpty()) {
-            // Only expand if the queue is empty and there's nothing in the container
-            expandView()
+    private var onClickListener: ((String) -> Unit)? = null
+    private var onDismissListener: ((String) -> Unit)? = null
+
+    fun feedData(
+        owner: LifecycleOwner,
+        dataObservable: LiveData<OverviewViewModel.QueueState>
+    ) {
+        dataObservable.observe(owner) {
+            Timber.d("Got a message queue update!")
+            if (it.messageQueue.size() > 0 && isContainerEmpty()) {
+                // Only expand if the queue is empty and there's nothing in the container
+                expandView()
+            }
+            this.messageQueue = it.messageQueue
+            processMessageQueue()
         }
-        messageQueue.add(data)
-        processMessageQueue()
+    }
+
+    fun setOnClickListener(onClick: (id: String) -> Unit) {
+        this.onClickListener = onClick
+    }
+
+    fun setOnDismissListener(onDismiss: (id: String) -> Unit) {
+        this.onDismissListener = onDismiss
     }
 
     private fun processMessageQueue() {
         if (messageQueue.isNotEmpty()) {
             try {
                 if (isContainerEmpty()) {
-                    showMessage(messageQueue.pop())
+                    showMessage(messageQueue.get())
                 }
             } catch (e: NoSuchElementException) {
                 Timber.w("Unable to get next available message from queue")
@@ -65,29 +86,37 @@ class StackingMessagesView @JvmOverloads constructor(
     private fun showMessage(message: MessageData) {
         Timber.v("Showing message: $message")
         binding.stackingMessagesContainer.apply {
-            addView(
-                ItemMessageBinding.inflate(
-                    layoutInflater,
-                    this,
-                    false
-                ).apply {
-                    bind(message.text, resources) { onMessageDismissed() }
-                }.root
-            )
+            addView(getMessageItem(message))
         }
     }
 
-    private fun onMessageDismissed() {
+    private fun getMessageItem(
+        message: MessageData
+    ): View = ItemMessageBinding.inflate(
+        layoutInflater,
+        this,
+        false
+    ).apply {
+        bind(
+            message = message,
+            resources = resources,
+            onClickListener = onClickListener,
+            onCloseClickListener = { onMessageDismissed(it) }
+        )
+    }.root
+
+    private fun onMessageDismissed(id: String) {
+        Timber.v("Dismissing message with id=$id")
         binding.stackingMessagesContainer.removeAllViews()
-        processMessageQueue()
+        onDismissListener?.let { it(id) }
     }
 
     private fun processAlertBadge() {
         messageQueue.size().let { size ->
             Timber.v("Processing alert badge with queue size: $size")
-            binding.apply {
+            with(binding) {
                 when (size) {
-                    0 -> stackingMessagesBadge.visibility = View.GONE
+                    0, 1 -> stackingMessagesBadge.visibility = View.GONE
                     else -> {
                         stackingMessagesBadge.visibility = View.VISIBLE
                         alertsNo = if (size > 6) "6+" else size.toString()
@@ -137,9 +166,5 @@ class StackingMessagesView @JvmOverloads constructor(
         private const val ANIM_VIEW_HEIGHT_DURATION_MS: Long = 300
         private const val ANIM_VIEW_HEIGHT_NULL_STATE: Long = -100
         private const val ANIM_VIEW_HEIGHT_EXPECTED: Float = 115f
-
-        private const val ITEM_MESSAGE_ANIM_DISMISS_DURATION: Long = 300
-        private const val ITEM_MESSAGE_ANIM_BOUNCE_BACK_DURATION: Long = 150
-        private const val MIN_DISTANCE_SWIPE_LEFT: Long = -275
     }
 }
