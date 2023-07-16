@@ -2,6 +2,9 @@ package com.ivangarzab.carrus.ui.map
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -10,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
 import com.ivangarzab.carrus.util.delegates.viewBinding
@@ -24,6 +28,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupWindow()
+
         Timber.d("Attempting to fetch map async")
         val mapFragment = childFragmentManager.findFragmentById(
             R.id.mapFragment
@@ -46,6 +52,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                         .title("San Francisco")
                 )
                 moveCamera(CameraUpdateFactory.newLatLng(sf))
+            }
+        }
+    }
+
+    private fun setupWindow() {
+        ViewCompat.setOnApplyWindowInsetsListener(
+            (requireActivity() as MainActivity).getBindingRoot()
+        ) { _, windowInsets ->
+            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let {insets ->
+                binding.mapRoot.apply {
+                    updatePadding(bottom = insets.bottom)
+                }
+                WindowInsetsCompat.CONSUMED
             }
         }
     }
