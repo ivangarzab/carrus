@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.ModalServiceBinding
-import com.ivangarzab.carrus.ui.overview.ModalServiceState
+import com.ivangarzab.carrus.ui.overview.data.ModalServiceState
 import com.ivangarzab.carrus.util.extensions.dismissKeyboard
 import com.ivangarzab.carrus.util.extensions.getCalendarDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate

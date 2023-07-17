@@ -9,7 +9,7 @@
             type="android.view.View"/>
         <variable
             name="state"
-            type="com.ivangarzab.carrus.ui.overview.ItemServiceState" />
+            type="com.ivangarzab.carrus.ui.overview.data.ItemServiceState" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
