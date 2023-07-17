@@ -1,13 +1,19 @@
 package com.ivangarzab.carrus.ui.create
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -19,7 +25,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -29,6 +40,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
@@ -70,6 +83,7 @@ fun CreateScreenStateful(
             onBackPressed = { onBackPressed() },
             onImportClicked = { onImportClicked() },
             onAddImageClicked = { onAddImageClicked() },
+            onDeleteImageClicked = { viewModel.onImageDeleted() },
             onActionButtonClicked = { make, model, year ->
                 viewModel.verifyData(make, model, year)
             }
@@ -86,6 +100,7 @@ private fun CreateScreen(
     onBackPressed: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
+    onDeleteImageClicked: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> }
 ) {
     AppTheme {
@@ -105,6 +120,7 @@ private fun CreateScreen(
                 state = state,
                 onUpdateState = onUpdateState,
                 onAddImageClicked = onAddImageClicked,
+                onDeleteImageClicked = onDeleteImageClicked,
                 onActionButtonClicked = { p1, p2, p3 ->
                     onActionButtonClicked(p1, p2, p3)
                 }
@@ -121,6 +137,7 @@ private fun CreateScreenContent(
     @PreviewParameter(CarModalStatePreview::class) state: CarModalState,
     onUpdateState: (CarModalState) -> Unit = { },
     onAddImageClicked: () -> Unit = { },
+    onDeleteImageClicked: () -> Unit = { },
     onUpdateAllData: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> }
 ) {
@@ -139,10 +156,65 @@ private fun CreateScreenContent(
                 modifier = Modifier
                     .padding(16.dp)
             ) {
-                BigButton(
-                    text = stringResource(id = R.string.add_a_photo),
-                    onClick = { onAddImageClicked() }
-                )
+                if (state.imageUri == null) {
+                    BigButton(
+                        text = stringResource(id = R.string.add_a_photo),
+                        onClick = { onAddImageClicked() }
+                    )
+                } else {
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(data = state.imageUri)
+                                    .build()
+                            ),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = "Car image"
+                        )
+                        IconButton(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .align(Alignment.BottomStart)
+                                .background(
+                                    color = colorResource(id = R.color.black_30_percent),
+                                    shape = CircleShape
+                                ),
+                            onClick = onAddImageClicked
+                        ) {
+                            Icon(
+                                modifier = Modifier.padding(4.dp),
+                                painter = painterResource(id = R.drawable.ic_image_upload),
+                                contentDescription = "Add image icon button",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        IconButton(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .align(Alignment.BottomEnd)
+                                .background(
+                                    color = colorResource(id = R.color.black_30_percent),
+                                    shape = CircleShape
+                                ),
+                            onClick = onDeleteImageClicked
+                        ) {
+                            Icon(
+                                modifier = Modifier.padding(4.dp),
+                                painter = painterResource(id = R.drawable.ic_delete_trash),
+                                contentDescription = "Delete image icon button",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
+
                 CreateTextField(
                     modifier = Modifier
                         .fillMaxWidth()

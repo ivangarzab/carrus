@@ -1,5 +1,8 @@
 package com.ivangarzab.carrus.ui.create
 
+import android.content.ContentResolver
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -74,7 +77,11 @@ class CreateViewModel @Inject constructor(
         onSubmit.postValue(true)
     }
 
-    fun onImageUriReceived(uri: String) {
+    fun onImageUriReceived(contentResolver: ContentResolver, uri: String) {
+        contentResolver.takePersistableUriPermission(
+            Uri.parse(uri),
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
         setState(state, savedState, STATE) {
             copy(imageUri = uri)
         }
