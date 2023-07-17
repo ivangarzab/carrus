@@ -112,11 +112,11 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
     ): Service = binding.let {
         Service(
             id = id.ifBlank { UUID.randomUUID().toString() },
-            name = it.serviceModalNameInput.text.toString(),
+            name = it.serviceModalNameInput.text.toString().trim(),
             repairDate = it.serviceModalRepairDateInput.getCalendarDate(),
             dueDate = it.serviceModalDueDateInput.getCalendarDate(),
-            brand = it.serviceModalBrandInput.text.toString(),
-            type = it.serviceModalTypeInput.text.toString(),
+            brand = it.serviceModalBrandInput.text.toString().trim(),
+            type = it.serviceModalTypeInput.text.toString().trim(),
             cost = it.serviceModalPriceInput.text?.toString()?.takeIf { nonNullString ->
                 nonNullString.isNotEmpty()
             }?.run {

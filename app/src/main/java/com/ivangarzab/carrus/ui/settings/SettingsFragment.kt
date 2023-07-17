@@ -13,11 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.util.extensions.readFromFile
+import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
-import com.ivangarzab.carrus.util.extensions.writeInFile
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.util.Calendar
 
 /**
  * Created by Ivan Garza Bermea.
@@ -30,33 +30,30 @@ class SettingsFragment : Fragment() {
     private val createDocumentsContract = registerForActivityResult(
         ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
     ) { uri ->
-        //TODO: Move all this into the VM
-        Timber.d("Got result from create document contract: ${uri ?: "<nil>"}")
         uri?.let {
-            viewModel.getExportData()?.let {
-                //TODO: Send this piece into a working thread
-                uri.writeInFile(requireContext().contentResolver, it)
-            } ?: toast("Unable to export data")
+            Timber.d("Got result uri from create document contract: $uri")
+            when(viewModel.onExportData(
+                requireContext().contentResolver, it
+            )) {
+                true -> { /* No-op */ }
+                false -> toast("Unable to export data")
+            }
         } ?: Timber.w("Error fetching uri")
     }
 
     private val openDocumentContract = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
-        //TODO: Move all this into the VM
-        Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
         uri?.let {
-            it.readFromFile(requireContext().contentResolver).let { data ->
-                data?.let {
-                    viewModel.onImportData(data).let { success ->
-                        toast(when (success) {
-                            true -> "Data import successful"
-                            false -> "Unable to import data"
-                        })
-                    }
-                } ?: Timber.w("Unable to parse data from file with uri: $uri")
-            }
-        } ?: Timber.w("Unable to read from file with uri: $uri")
+            Timber.d("Got result uri from open document contract: $it")
+            toast(when (viewModel.onImportData(
+                requireContext().contentResolver, it
+            )) {
+                true -> "Data import successful"
+                false -> "Unable to import data"
+            })
+
+        } ?: Timber.w("Unable to read from file with uri")
     }
 
     override fun onCreateView(
@@ -95,7 +92,7 @@ class SettingsFragment : Fragment() {
                         )
                     },
                     onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
-                    onExportClicked = { createDocumentsContract.launch(DEFAULT_EXPORT_FILE_NAME) }
+                    onExportClicked = { createDocumentsContract.launch(generateExportFileName()) }
                 )
             }
         }
@@ -165,8 +162,12 @@ class SettingsFragment : Fragment() {
         }.create().show()
     }
 
+    private fun generateExportFileName(): String =
+        EXPORT_FILE_NAME_PREFIX + Calendar.getInstance().getShortenedDate() + EXPORT_FILE_NAME_SUFFIX
+
     companion object {
-        private const val DEFAULT_EXPORT_FILE_NAME = "carrus-backup.txt"
+        private const val EXPORT_FILE_NAME_PREFIX = "carrus-backup-"
+        private const val EXPORT_FILE_NAME_SUFFIX = ".txt"
     }
 }
 
