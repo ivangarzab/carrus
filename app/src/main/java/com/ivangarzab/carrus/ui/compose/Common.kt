@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.ui.compose
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -134,7 +135,8 @@ fun TopBar(
             actions = {
                 if (isActionIconEnabled) {
                     Text(
-                        modifier = Modifier,
+                        modifier = Modifier
+                            .clickable { onActionIconClicked() },
                         text = "IMPORT",
                         color = if (isSystemInDarkTheme()) {
                             MaterialTheme.colorScheme.onBackground

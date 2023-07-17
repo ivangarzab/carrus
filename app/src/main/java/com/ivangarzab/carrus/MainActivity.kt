@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        //TODO: Migrate the next 3 lines into Compose
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindow()
@@ -22,19 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupWindow() {
         WindowCompat.setDecorFitsSystemWindows(window, FULL_SCREEN)
-        /* TODO: Delete once we're fully migrated to Compose
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
-            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                view.updateMargins(
-                    bottom = insets.bottom
-                )
-            }
-            // Return the insets in order for this to keep being passed down to descendant views
-            windowInsets
-        }*/
     }
-
-    fun getBindingRoot() = binding.root
 
     companion object {
         const val REQUEST_CODE: Int = 1

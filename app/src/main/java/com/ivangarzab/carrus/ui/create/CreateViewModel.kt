@@ -38,6 +38,13 @@ class CreateViewModel @Inject constructor(
 
     val onVerify: LiveEvent<Boolean> = LiveEvent()
 
+    fun init(data: Car?) {
+        type = data?.let {
+            onSetupContent(it)
+            Type.EDIT
+        } ?: Type.CREATE
+    }
+
     fun verifyData(
         make: String,
         model: String,
@@ -119,7 +126,7 @@ class CreateViewModel @Inject constructor(
         }
     }
 
-    fun onSetupContent(car: Car) {
+    private fun onSetupContent(car: Car) {
         setState(state, savedState, STATE) {
             copy(
                 title = "Edit Car",
