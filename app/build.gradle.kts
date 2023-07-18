@@ -48,14 +48,14 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/*")
     }
 }
 
 val gsonVersion = "2.9.1"
 val leakCanaryVersion = "2.12"
-val truthVersion = "1.1.4"
+val truthVersion = "1.1.5"
 dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.code.gson:gson:$gsonVersion")
@@ -69,7 +69,7 @@ dependencies {
     implementation("com.google.code.gson:gson:$gsonVersion")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.activity:activity-ktx:1.7.2")
@@ -78,7 +78,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     val navVersion: String by rootProject.extra
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
 
     // https://firebase.google.com/support/release-notes/android
     implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
