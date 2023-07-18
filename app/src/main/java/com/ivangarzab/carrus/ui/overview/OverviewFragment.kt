@@ -30,6 +30,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
+import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +68,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupWindow()
         setupToolbar()
         setupViews()
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -80,22 +80,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             }
             true
         }
-    }
-
-    private fun setupWindow() {
-        /*ViewCompat.setOnApplyWindowInsetsListener(
-            (requireActivity() as MainActivity).getBindingRoot()
-        ) { _, windowInsets ->
-            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                binding.overviewToolbar.updateMargins(
-                    top = insets.top
-                )
-                binding.overviewContent.overviewContentServiceList.updateMargins(
-                    bottom = insets.bottom
-                )
-            }
-            WindowInsetsCompat.CONSUMED
-        }*/
     }
 
     private fun setupToolbar() {
@@ -202,7 +186,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
-    private fun processStateChange(state: OverviewViewModel.OverviewState) {
+    private fun processStateChange(state: OverviewState) {
         Timber.v("Processing overview state change")
         binding.overviewContent.apply {
             when (state.serviceSortingType) {
