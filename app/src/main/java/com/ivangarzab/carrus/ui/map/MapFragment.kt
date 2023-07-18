@@ -24,7 +24,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding: FragmentMapBinding by viewBinding()
 
-    private lateinit var placesClient: PlacesClient
+    private val placesClient: PlacesClient = Places.createClient(requireActivity())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,8 +38,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             Timber.d("Got an async map response")
             setupMap(googleMap)
         } ?: Timber.w("Unable to fetch map async due to nil support fragment")
+    }
 
-        placesClient = Places.createClient(requireActivity())
+    private fun setupWindow() {
+        ViewCompat.setOnApplyWindowInsetsListener(
+            (requireActivity() as MainActivity).getBindingRoot()
+        ) { _, windowInsets ->
+            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let {insets ->
+                binding.mapRoot.apply {
+                    updatePadding(bottom = insets.bottom)
+                }
+                WindowInsetsCompat.CONSUMED
+            }
+        }
     }
 
     private fun setupMap(googleMap: GoogleMap) {
@@ -52,19 +63,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                         .title("San Francisco")
                 )
                 moveCamera(CameraUpdateFactory.newLatLng(sf))
-            }
-        }
-    }
-
-    private fun setupWindow() {
-        ViewCompat.setOnApplyWindowInsetsListener(
-            (requireActivity() as MainActivity).getBindingRoot()
-        ) { _, windowInsets ->
-            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let {insets ->
-                binding.mapRoot.apply {
-                    updatePadding(bottom = insets.bottom)
-                }
-                WindowInsetsCompat.CONSUMED
             }
         }
     }
