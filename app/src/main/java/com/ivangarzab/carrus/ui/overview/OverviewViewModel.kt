@@ -14,7 +14,6 @@ import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
-import com.ivangarzab.carrus.data.serviceList
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.setState
@@ -198,7 +197,7 @@ class OverviewViewModel @Inject constructor(
     fun setupEasterEggForTesting() {
         state.value?.car?.let {
             carRepository.saveCarData(it.copy(
-                services = serviceList
+                services = Service.serviceList
             ))
         }
     }

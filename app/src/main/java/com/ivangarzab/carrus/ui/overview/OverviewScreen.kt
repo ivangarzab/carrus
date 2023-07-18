@@ -48,7 +48,7 @@ fun OverviewScreen() {
 fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
-    serviceList: List<Service> = emptyList()
+    serviceList: List<Service> = Service.serviceList
 ) {
     AppTheme {
         LazyColumn(modifier = modifier) {
@@ -90,7 +90,14 @@ fun OverviewScreenContent(
             }
             if (serviceList.isNotEmpty()) {
                 itemsIndexed(serviceList) { index, item ->
-
+                    OverviewServiceItemStateful(
+                        modifier = Modifier
+                            .padding(start = 8.dp, end = 8.dp),
+                        index,
+                        serviceList[index],
+                        onEditClicked = { },
+                        onDeleteClicked = { }
+                    )
                 }
             } else {
                 item {
