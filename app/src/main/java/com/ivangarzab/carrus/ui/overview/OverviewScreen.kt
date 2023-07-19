@@ -9,13 +9,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,18 +39,75 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 /**
  * Created by Ivan Garza Bermea.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
  @Composable
 fun OverviewScreen() {
+    val scrollBehavior = TopAppBarDefaults
+        .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     AppTheme {
         Scaffold(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                OverviewScreenTopBar(scrollBehavior)
+            },
+            content = { paddingValues ->
+                OverviewScreenContent(
+                    modifier = Modifier.padding(paddingValues)
+                )
+            },
+            bottomBar = {
+                OverviewScreenBottomBar()
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun OverviewScreenTopBar(
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+) {
+    AppTheme {
+        LargeTopAppBar(
+            title = { Text("Test Top App Bar Title") },
+            actions = {
+                Icon(
+                    imageVector = Icons.Default.AccountBox,
+                    contentDescription = ""
+                )
+            },
+            scrollBehavior = scrollBehavior
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun OverviewScreenBottomBar() {
+    AppTheme {
+        BottomAppBar(
             modifier = Modifier,
-        ) { paddingValues ->
-            OverviewScreenContent(
-                modifier = Modifier.padding(paddingValues)
-            )
-        }
+            actions = { },
+            floatingActionButton = {
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = {  }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_add),
+                        contentDescription = "Add Service floating action button"
+                    )
+                }
+            }
+        )
     }
 }
 
