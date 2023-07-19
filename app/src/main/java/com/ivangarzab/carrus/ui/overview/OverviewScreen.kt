@@ -43,7 +43,9 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
  @Composable
-fun OverviewScreen() {
+fun OverviewScreen(
+    title: String = "Test Top App Bar Title",
+) {
     val scrollBehavior = TopAppBarDefaults
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -52,7 +54,10 @@ fun OverviewScreen() {
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                OverviewScreenTopBar(scrollBehavior)
+                OverviewScreenTopBar(
+                    title = title,
+                    scrollBehavior = scrollBehavior
+                )
             },
             content = { paddingValues ->
                 OverviewScreenContent(
@@ -62,27 +67,6 @@ fun OverviewScreen() {
             bottomBar = {
                 OverviewScreenBottomBar()
             }
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun OverviewScreenTopBar(
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-) {
-    AppTheme {
-        LargeTopAppBar(
-            title = { Text("Test Top App Bar Title") },
-            actions = {
-                Icon(
-                    imageVector = Icons.Default.AccountBox,
-                    contentDescription = ""
-                )
-            },
-            scrollBehavior = scrollBehavior
         )
     }
 }
