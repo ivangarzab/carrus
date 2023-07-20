@@ -40,4 +40,14 @@
     <color name="black_20_percent">#33000000</color>
     <color name="black_10_percent">#1A000000</color>
 
+    <color name="indigo_90_percent">#E63F00FF</color>
+    <color name="indigo_80_percent">#CC3F00FF</color>
+    <color name="indigo_70_percent">#B33F00FF</color>
+    <color name="indigo_60_percent">#993F00FF</color>
+    <color name="indigo_50_percent">#803F00FF</color>
+    <color name="indigo_40_percent">#663F00FF</color>
+    <color name="indigo_30_percent">#4D3F00FF</color>
+    <color name="indigo_20_percent">#333F00FF</color>
+    <color name="indigo_10_percent">#1A3F00FF</color>
+
 </resources>

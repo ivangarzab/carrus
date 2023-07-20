@@ -97,15 +97,18 @@ private fun OverviewScreen(
                     OverviewScreenTopBar(
                         title = state.car.let {
                             it.nickname.ifBlank {
-                                "${it.make} + ${it.model}"
+                                "${it.make} ${it.model}"
                             }
                         },
+                        imageUri = state.car.imageUri,
                         scrollBehavior = scrollBehavior
                     )
                 },
                 content = { paddingValues ->
                     OverviewScreenContent(
-                        modifier = Modifier.padding(paddingValues),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
                         serviceList = state.car.services
                     )
                 },

@@ -78,6 +78,7 @@ dependencies {
     implementation "androidx.activity:activity-compose:$activityVersion"
     implementation 'androidx.fragment:fragment-ktx:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
