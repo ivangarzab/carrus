@@ -114,7 +114,10 @@ private fun OverviewScreen(
                 },
                 bottomBar = {
                     OverviewScreenBottomBar(
-                        actionButtonClicked = onFloatingActionButtonClicked
+                        actionButtonClicked = onFloatingActionButtonClicked,
+                        settingsButtonClicked = onSettingsButtonClicked,
+                        carEditButtonClicked = onEditButtonClicked,
+                        carDetailsButtonClicked = onDetailsButtonClicked
                     )
                 }
             )

@@ -91,11 +91,11 @@ fun OverviewScreenTopBar(
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = if (isSystemInDarkTheme()) {
                         imageUri?.let {
-                            colorResource(id = R.color.black_80_percent)
+                            colorResource(id = R.color.black_40_percent)
                         } ?: MaterialTheme.colorScheme.surface
                     } else {
                         imageUri?.let {
-                            colorResource(id = R.color.indigo_40_percent)
+                            colorResource(id = R.color.indigo_30_percent)
                         } ?: MaterialTheme.colorScheme.primary
                     }
                 ),
