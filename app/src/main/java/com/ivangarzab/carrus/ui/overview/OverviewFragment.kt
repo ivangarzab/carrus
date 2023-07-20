@@ -13,9 +13,11 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.ComposeView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
@@ -30,6 +32,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
+import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
@@ -66,70 +69,43 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ComposeView(requireActivity()).apply {
+        setContent {
+            AppTheme {
+                OverviewScreenStateful(
+                    onFloatingActionButtonClicked = { navigateToNewServiceBottomSheet() },
+                    onCarEditButtonClicked = { navigateToEditFragment() },
+                    onCarDetailsButtonClicked = { showCarDetailsDialog() },
+                    onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
+                    onSettingsButtonClicked = { navigateToSettingsFragment() },
+                    onAddCarClicked = { navigateToCreateFragment() }
+                )
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
-        setupViews()
-        viewModel.state.observe(viewLifecycleOwner) { state ->
+//        setupViews()
+        /*viewModel.state.observe(viewLifecycleOwner) { state ->
             processStateChange(state)
-        }
+        }*/
 
-        binding.overviewToolbarImage.setOnLongClickListener {
+        /*binding.overviewToolbarImage.setOnLongClickListener {
             if (isRelease().not()) {
                 viewModel.addTestMessage()
             }
             true
-        }
-    }
-
-    private fun setupToolbar() {
-        binding.apply {
-            overviewToolbar.inflateMenu(R.menu.menu_overview)
-            overviewToolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.action_details -> {
-                        showCarDetailsDialog()
-                        true
-                    }
-                    R.id.action_edit -> {
-                        navigateToEditFragment()
-                        true
-                    }
-                    R.id.action_settings -> {
-                        navigateToSettingsFragment()
-                        true
-                    }
-                    R.id.action_add_component -> {
-                        navigateToNewServiceBottomSheet()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
+        }*///TODO: Move into Compose
     }
 
     private fun setupViews() {
         setupServicesList()
         binding.apply {
-            overviewAppBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
-                binding.overviewToolbarLayout.clipToOutline =
-                    when (binding.overviewAppBarLayout.totalScrollRange + verticalOffset) {
-                        0 -> {
-                            showAddServiceMenuOption(true)
-                            false
-                        }
-                        else -> {
-                            showAddServiceMenuOption(
-                                binding.overviewAddFab.isVisible.not()
-                            )
-                            true
-                        }
-                    }
-            }
-            setAddCarClickListener { navigateToCreateFragment() }
-            setAddComponentClickListener { navigateToNewServiceBottomSheet() }
-
             // Content binding
             overviewContent.apply {
                 sortingCallback = viewModel

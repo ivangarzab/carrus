@@ -57,7 +57,8 @@ fun OverviewScreenBottomBar(
                 }
             },
             actions = {
-                 val iconSize: Dp = 32.dp
+                val iconSize: Dp = 32.dp
+                val iconTint = MaterialTheme.colorScheme.primary
                 val iconModifier: Modifier = Modifier.padding(start = 3.dp)
                 IconButton(
                     modifier = iconModifier,
@@ -66,6 +67,7 @@ fun OverviewScreenBottomBar(
                     Icon(
                         modifier = Modifier.size(iconSize),
                         painter = painterResource(id = R.drawable.ic_edit),
+                        tint = iconTint,
                         contentDescription = "Edit icon button"
                     )
                 }
@@ -76,6 +78,7 @@ fun OverviewScreenBottomBar(
                     Icon(
                         modifier = Modifier.size(iconSize),
                         imageVector = Icons.Filled.CheckCircle,
+                        tint = iconTint,
                         contentDescription = "Car details icon button"
                     )
                 }
@@ -86,6 +89,7 @@ fun OverviewScreenBottomBar(
                     Icon(
                         modifier = Modifier.size(iconSize),
                         imageVector = Icons.Filled.Settings,
+                        tint = iconTint,
                         contentDescription = "Edit Car icon button"
                     )
                 }

@@ -98,7 +98,6 @@ fun TopBar(
     AppTheme {
         TopAppBar(
             modifier = Modifier
-                .statusBarsPadding()
                 .fillMaxWidth(),
             title = {
                 Text(

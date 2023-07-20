@@ -27,8 +27,8 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import java.lang.Float.min
 
 /**
  * Created by Ivan Garza Bermea.
@@ -62,9 +62,10 @@ fun OverviewScreenTopBar(
                             bottom.linkTo(topbar.bottom)
                         }
                         .graphicsLayer {
-                            alpha = 1f - ((scrollBehavior.state.heightOffset /
-                                    scrollBehavior.state.heightOffsetLimit) * 1.2f)
-                            translationY = scrollBehavior.state.heightOffset
+                            val scrollState = scrollBehavior.state
+                            alpha = 1f - ((scrollState.heightOffset /
+                                    scrollState.heightOffsetLimit) * 1.2f)
+                            translationY = 0.2f * scrollState.heightOffset
                         },
                     painter = rememberAsyncImagePainter(
                         ImageRequest
@@ -82,8 +83,7 @@ fun OverviewScreenTopBar(
                     .clip(clipSpecs),
                 title = {
                     Text(
-                        modifier = Modifier
-                            .alpha(1.0f),
+                        modifier = Modifier,
                         text = title,
                         color = Color.White
                     )
@@ -91,15 +91,29 @@ fun OverviewScreenTopBar(
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = if (isSystemInDarkTheme()) {
                         imageUri?.let {
-                            colorResource(id = R.color.black_40_percent)
+                            val scrollState = scrollBehavior.state
+                            MaterialTheme.colorScheme.surface.copy(
+                                alpha = min(
+                                    1f,
+                                    (scrollState.heightOffset / scrollState.heightOffsetLimit)
+                                            + 0.4f
+                                )
+                            )
                         } ?: MaterialTheme.colorScheme.surface
                     } else {
                         imageUri?.let {
-                            colorResource(id = R.color.indigo_30_percent)
+                            val scrollState = scrollBehavior.state
+                            MaterialTheme.colorScheme.primary.copy(
+                                alpha = min(
+                                    1f,
+                                    (scrollState.heightOffset / scrollState.heightOffsetLimit)
+                                            + 0.4f
+                                )
+                            )
                         } ?: MaterialTheme.colorScheme.primary
                     }
                 ),
-                actions = { },
+                actions = { /* Empty composable */ },
                 scrollBehavior = scrollBehavior
             )
         }

@@ -8,8 +8,9 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 /**
  * Created by Ivan Garza Bermea.
@@ -86,6 +87,7 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
+    val fullScreen = false
 
     val colorScheme = when {
         /*dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -97,15 +99,12 @@ fun AppTheme(
     }
 
     if (!view.isInEditMode) {
-        val window = (view.context as Activity).window
-        window.statusBarColor = if (isSystemInDarkTheme()) {
-            colorScheme.surface.toArgb()
-        } else {
-            colorScheme.primary.toArgb()
+        SideEffect {
+            // This block will be applied on configuration changes, e.g. changing to dark mode
+            // while running the app
+            val window = (view.context as Activity).window
+            WindowCompat.setDecorFitsSystemWindows(window, fullScreen)
         }
-        /*SideEffect {
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }*/
     }
 
     MaterialTheme(
