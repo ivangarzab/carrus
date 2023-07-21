@@ -21,7 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 
@@ -34,10 +36,12 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     serviceList: List<Service> = Service.serviceList,
+    dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    addServiceList: () -> Unit = { }
 ) {
     AppTheme {
         LazyColumn(modifier = modifier) {
@@ -49,7 +53,9 @@ fun OverviewScreenContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        modifier = Modifier,
+                        modifier = Modifier.clickable {
+                            if (App.isRelease().not()) addServiceList()
+                        },
                         text = stringResource(id = R.string.services),
                         style = MaterialTheme.typography.headlineSmall,
                         fontStyle = FontStyle.Italic
@@ -68,12 +74,13 @@ fun OverviewScreenContent(
                 )
             }
             if (serviceList.isNotEmpty()) {
-                itemsIndexed(serviceList) { index, item ->
+                itemsIndexed(serviceList) { index, _ ->
                     OverviewServiceItemStateful(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp),
-                        index,
-                        serviceList[index],
+                        index = index,
+                        data = serviceList[index],
+                        dueDateFormat = dueDateFormat,
                         onEditClicked = onServiceEditButtonClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked
                     )

@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -146,7 +147,7 @@ private fun SettingsScreenContentItemText(
 private fun SettingsScreenContentItemSwitch(
     title: String = "Title",
     subTitle: String = "This is a very long subtitle for explanation.",
-    isChecked: Boolean = true,
+    isChecked: Boolean = false,
     onToggle: (Boolean) -> Unit = { }
 ) {
     SettingsScreenContentItemBase(
@@ -155,7 +156,10 @@ private fun SettingsScreenContentItemSwitch(
     ) {
         Switch(
             checked = isChecked,
-            onCheckedChange = { onToggle(it) }
+            onCheckedChange = { onToggle(it) },
+            colors = SwitchDefaults.colors(
+                uncheckedThumbColor = MaterialTheme.colorScheme.primary
+            )
         )
     }
 }
@@ -170,10 +174,11 @@ private fun SettingsScreenContentItemBase(
     option: @Composable (() -> Unit)? = null
 ) {
     AppTheme {
-        Box(Modifier
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.background)
-            .clickable { onClick() }
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background)
+                .clickable { onClick() }
         ) {
             Row(
                 modifier = Modifier

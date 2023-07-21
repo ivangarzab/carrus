@@ -7,34 +7,25 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.databinding.FragmentOverviewBinding
 import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
-import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -44,19 +35,9 @@ import timber.log.Timber
  * Created by Ivan Garza Bermea.
  */
 @AndroidEntryPoint
-class OverviewFragment : Fragment(R.layout.fragment_overview) {
+class OverviewFragment : Fragment() {
 
     private val viewModel: OverviewViewModel by viewModels()
-
-    private val binding: FragmentOverviewBinding by viewBinding {
-        serviceListAdapter?.let {
-            it.onEditClicked = null
-            it.onDeleteClicked = null
-            serviceListAdapter = null
-        }
-    }
-
-    private var serviceListAdapter: ServiceListAdapter? = null
 
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -88,40 +69,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        setupViews()
-        /*viewModel.state.observe(viewLifecycleOwner) { state ->
-            processStateChange(state)
-        }*/
-
-        /*binding.overviewToolbarImage.setOnLongClickListener {
-            if (isRelease().not()) {
-                viewModel.addTestMessage()
-            }
-            true
-        }*///TODO: Move into Compose
-    }
-
     private fun setupViews() {
-        setupServicesList()
-        binding.apply {
+        /*binding.apply {
             // Content binding
             overviewContent.apply {
-                sortingCallback = viewModel
-                overviewContentServiceList.apply {
-                    // Set up recycler view
-                    layoutManager = LinearLayoutManager(requireContext()).apply {
-                        orientation = RecyclerView.VERTICAL
-                    }
-                }
-                if (isRelease().not()) {
-                    // EASTER EGG: Test Car Service data
-                    overviewServicesLabel.setOnLongClickListener {
-                        viewModel.setupEasterEggForTesting()
-                        true
-                    }
-                }
+                //TODO: Move into Compose
                 overviewMessagesLayout.apply {
                     feedData(viewLifecycleOwner, viewModel.queueState)
                     setOnClickListener { id ->
@@ -140,47 +92,11 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                     }
                 }
             }
-        }
-    }
-
-    private fun setupServicesList() {
-        serviceListAdapter = ServiceListAdapter(
-            resources = requireContext().resources,
-            theme = requireContext().theme,
-            dueDateFormat = viewModel.getDueDateFormat(),
-            services = emptyList()
-        ).apply {
-            setOnEditClickedListener { service ->
-                navigateToEditServiceBottomSheet(service)
-            }
-            setOnDeleteClickedListener { service ->
-                viewModel.onServiceDeleted(service)
-            }
-        }
-        binding.overviewContent.overviewContentServiceList.apply {
-                adapter = serviceListAdapter
-        }
+        }*/
     }
 
     private fun processStateChange(state: OverviewState) {
         Timber.v("Processing overview state change")
-        binding.overviewContent.apply {
-            when (state.serviceSortingType) {
-                SortingCallback.SortingType.NONE -> onSortingViews(
-                    overviewServiceSortNoneCard,
-                    overviewServiceSortNoneLabel
-                )
-                SortingCallback.SortingType.NAME -> onSortingViews(
-                    overviewServiceSortNameCard,
-                    overviewServiceSortNameLabel
-                )
-                SortingCallback.SortingType.DATE -> onSortingViews(
-                    overviewServiceSortDateCard,
-                    overviewServiceSortDateLabel
-                )
-            }
-        }
-
         if (requireContext().canScheduleExactAlarms().not() &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
             state.hasPromptedForPermissionAlarm.not()
@@ -197,48 +113,14 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
             )
         }
 
-        binding.car = state.car
         state.car?.let {
             Timber.d("Got new Car state: ${state.car}")
-            setLightStatusBar(false)
             viewModel.processCarServicesListForNotification(
                 services = it.services,
                 areNotificationsEnabled = requireContext().areNotificationsEnabled()
             )
-
-            serviceListAdapter?.updateContent(it.services)
-
-            binding.overviewAppBarLayout.apply {
-                layoutParams = CoordinatorLayout.LayoutParams(
-                    CoordinatorLayout.LayoutParams.MATCH_PARENT,
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        when (it.imageUri == null) {
-                            true -> SIZE_TOP_VIEW_PICTURELESS
-                            false -> SIZE_TOP_VIEW_PICTUREFULL
-                        },
-                        resources.displayMetrics
-                    ).toInt()
-                )
-            }
-            it.imageUri?.let { uri ->
-                try {
-                    binding.overviewToolbarImage.setImageURI(Uri.parse(uri))
-                } catch (e: Exception) {
-                    // Make sure we don't crash if there are any problems accessing the image file
-                    Timber.w("Caught exception while parsing imageUrl", e)
-                }
-            }
-        } ?: setLightStatusBar(viewModel.isNight().not())
-    }
-
-    private fun showAddServiceMenuOption(visible: Boolean) = binding
-        .overviewToolbar
-        .menu
-        .findItem(R.id.action_add_component)
-        .apply {
-            isVisible = visible
         }
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun attemptToRequestNotificationPermission() {
@@ -317,67 +199,6 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
 
-    private fun onSortingViews(current: View, label: TextView) {
-        processSortingViews(current)
-        highlightSelectedSortingView(current, label)
-    }
-
-    private fun highlightSelectedSortingView(
-        view: View,
-        label: TextView
-    ) = ViewCompat.setBackgroundTintList(
-        view,
-        ContextCompat.getColorStateList(
-            requireContext(),
-            R.color.indigo
-        )
-    ).also {
-        // Switch color, if needed
-        if (viewModel.isNight().not()) {
-            label.setTextColor(
-                requireContext().getColor(R.color.white)
-            )
-        }
-    }
-
-    private fun processSortingViews(
-        current: View
-    ) = binding.overviewContent.apply {
-        listOf(
-            overviewServiceSortNoneCard,
-            overviewServiceSortNameCard,
-            overviewServiceSortDateCard
-        ).forEach { target ->
-            if (target != current) {
-                unhighlightSortingView(target)
-            }
-        }
-        // if needed, return text color to normal
-        viewModel.isNight().let { darkMode ->
-            if (darkMode.not()) {
-                listOf(
-                    overviewServiceSortNoneLabel,
-                    overviewServiceSortNameLabel,
-                    overviewServiceSortDateLabel
-                ).forEach {
-                    it.setTextColor(
-                        requireContext().getColor(R.color.black)
-                    )
-                }
-            }
-        }
-    }
-
-    private fun unhighlightSortingView(
-        view: View
-    ) = ViewCompat.setBackgroundTintList(
-        view,
-        ContextCompat.getColorStateList(
-            requireContext(),
-            R.color.background
-        )
-    )
-
     //TODO: Move into the AlarmSettingsRepository, or add it into its own Repository
     inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -389,10 +210,5 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val SIZE_TOP_VIEW_PICTUREFULL: Float = 260f
-        private const val SIZE_TOP_VIEW_PICTURELESS: Float = 170f
     }
 }

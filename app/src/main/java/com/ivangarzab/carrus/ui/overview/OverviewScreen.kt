@@ -52,7 +52,10 @@ fun OverviewScreenStateful(
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
-            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)}
+            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)},
+            //Easter eggs for testing
+            addTestMessage = { viewModel.addTestMessage() },
+            addServiceList = { viewModel.setupEasterEggForTesting() }
         )
     }
 }
@@ -71,6 +74,8 @@ private fun OverviewScreen(
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    addTestMessage: () -> Unit = { },
+    addServiceList: () -> Unit = { }
 ) {
     val scrollBehavior = TopAppBarDefaults
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -88,7 +93,8 @@ private fun OverviewScreen(
                             }
                         },
                         imageUri = state.car.imageUri,
-                        scrollBehavior = scrollBehavior
+                        scrollBehavior = scrollBehavior,
+                        addTestMessage = addTestMessage
                     )
                 },
                 content = { paddingValues ->
@@ -97,10 +103,12 @@ private fun OverviewScreen(
                             .fillMaxSize()
                             .padding(paddingValues),
                         serviceList = state.car.services,
+                        dueDateFormat = state.dueDateFormat,
                         sortingType = state.serviceSortingType,
                         onSortRequest = onSortRequest,
                         onServiceEditButtonClicked = onServiceEditButtonClicked,
-                        onServiceDeleteButtonClicked = onServiceDeleteButtonClicked
+                        onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
+                        addServiceList = addServiceList
                     )
                 },
                 bottomBar = {

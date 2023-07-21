@@ -3,8 +3,7 @@ package com.ivangarzab.carrus.ui.create
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.FlingBehavior
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -90,6 +91,25 @@ fun CreateScreenStateful(
             onDeleteImageClicked = { viewModel.onImageDeleted() },
             onActionButtonClicked = { make, model, year ->
                 viewModel.verifyData(make, model, year)
+            },
+            addTestCarData = {
+                if (isRelease().not()) {
+                    viewModel.apply {
+                        with(Car.default) {
+                            onUpdateStateData(
+                                nickname = nickname,
+                                make = make,
+                                model = model,
+                                year = year,
+                                licenseNo = licenseNo,
+                                vinNo = vinNo,
+                                tirePressure = tirePressure,
+                                totalMiles = totalMiles,
+                                milesPerGallon = milesPerGallon
+                            )
+                        }
+                    }
+                }
             }
         )
     }
@@ -105,7 +125,9 @@ private fun CreateScreen(
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
-    onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> }
+    onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
+    // Easter egg
+    addTestCarData: () -> Unit = { }
 ) {
     AppTheme {
         Scaffold(
@@ -143,7 +165,9 @@ private fun CreateScreenContent(
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
     onUpdateAllData: () -> Unit = { },
-    onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> }
+    onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
+    //Easter egg
+    addTestCarData: () -> Unit = { }
 ) {
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
@@ -176,7 +200,8 @@ private fun CreateScreenContent(
                     ) {
                         Image(
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxSize()
+                                .clickable { addTestCarData() },
                             painter = rememberAsyncImagePainter(
                                 ImageRequest
                                     .Builder(LocalContext.current)

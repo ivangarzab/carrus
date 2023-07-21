@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,15 +23,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import com.ivangarzab.carrus.util.extensions.isPastDue
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Ivan Garza Bermea.
@@ -43,6 +49,7 @@ fun OverviewServiceItemStateful(
     modifier: Modifier = Modifier,
     index: Int = -1,
     data: Service = Service.empty,
+    dueDateFormat: DueDateFormat,
     onEditClicked: (Service) -> Unit = { },
     onDeleteClicked: (Service) -> Unit = { }
 ) {
@@ -55,6 +62,7 @@ fun OverviewServiceItemStateful(
             modifier = modifier,
             index = index,
             data = data,
+            dueDateFormat = dueDateFormat,
             isExpanded = isExpanded,
             onEditClicked = { onEditClicked(it) },
             onDeleteClicked = { onDeleteClicked(it) }
@@ -71,6 +79,7 @@ fun OverviewServiceItem(
     modifier: Modifier = Modifier,
     index: Int = -1,
     data: Service = Service.empty,
+    dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     isExpanded: Boolean = true,
     onEditClicked: (Service) -> Unit = { },
     onDeleteClicked: (Service) -> Unit = { },
@@ -81,9 +90,6 @@ fun OverviewServiceItem(
             modifier = modifier
                 .padding(top = 6.dp, bottom = 6.dp)
                 .clickable { onExpandClicked() },
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp
-            )
         ) {
             Column(modifier = modifier
                 .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
@@ -97,13 +103,59 @@ fun OverviewServiceItem(
                         fontSize = 20.sp,
                         fontStyle = FontStyle.Italic
                     )
-                    Text(
+                    Box(
                         modifier = Modifier
                             .weight(2f)
                             .align(Alignment.CenterVertically),
-                        text = data.dueDate.getShortenedDate(), //TODO: Set up logic in VM
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd),
+                            text = when (data.isPastDue()) {
+                                true -> stringResource(id = R.string.due).uppercase(Locale.ROOT)
+                                false -> (data.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
+                                    TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
+                                        when (daysLeft) {
+                                            0L -> stringResource(R.string.tomorrow)
+                                            else -> when (dueDateFormat) {
+                                                DueDateFormat.DATE -> data.dueDate.getShortenedDate()
+                                                DueDateFormat.WEEKS -> stringResource(
+                                                    R.string.service_due_date_week_format,
+                                                    String.format(
+                                                        "%.1f",
+                                                        daysLeft / MULTIPLIER_DAYS_TO_WEEKS
+                                                    )
+                                                )
+
+                                                DueDateFormat.MONTHS -> stringResource(
+                                                    R.string.service_due_date_months_format,
+                                                    String.format(
+                                                        "%.2f",
+                                                        daysLeft / MULTIPLIER_DAYS_TO_MONTHS
+                                                    )
+                                                )
+
+                                                else -> "$daysLeft ${stringResource(R.string.days).lowercase()}"
+                                            }
+                                        }
+                                    } //TODO: Set up logic in VM
+                                }
+                            },
+                            style = MaterialTheme.typography.titleMedium,
+                            fontStyle = when (data.isPastDue()) {
+                                true -> FontStyle.Italic
+                                false -> null
+                            },
+                            fontWeight = when (data.isPastDue()) {
+                                true -> FontWeight.Bold
+                                false -> null
+                            },
+                            color = when (data.isPastDue()) {
+                                true -> MaterialTheme.colorScheme.error
+                                false -> MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    }
                     IconButton(
                         modifier = Modifier.weight(1f),
                         onClick = onExpandClicked
@@ -114,6 +166,7 @@ fun OverviewServiceItem(
                         )
                     }
                 }
+
                 if (isExpanded) {
                     Row {
                         Text(
@@ -173,3 +226,6 @@ fun OverviewServiceItem(
         }
     }
 }
+
+private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
+private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f

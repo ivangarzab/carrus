@@ -60,6 +60,11 @@ class OverviewViewModel @Inject constructor(
                 }
         }
         viewModelScope.launch {
+            appSettingsRepository.observeDueDateFormatData().collect {
+                setState(state, savedState, STATE) { copy(dueDateFormat = it) }
+            }
+        }
+        viewModelScope.launch {
             appSettingsRepository.observeNightThemeData().collect {
                 _nightThemeState.value = it
             }

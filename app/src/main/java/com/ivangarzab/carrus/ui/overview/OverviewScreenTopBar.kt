@@ -1,7 +1,9 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +26,7 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import java.lang.Float.min
 
@@ -36,9 +39,11 @@ import java.lang.Float.min
 @Composable
 fun OverviewScreenTopBar(
     title: String = "Test Top App Bar Title",
+    plates: String = "DH9 L474",
     imageUri: String? = null,
     actions: @Composable RowScope.() -> Unit = { },
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+    addTestMessage: () -> Unit = { }
 ) {
     val clipSpecs = RoundedCornerShape(
         bottomStart = 32.dp,
@@ -68,20 +73,32 @@ fun OverviewScreenTopBar(
                         .Builder(LocalContext.current)
                         .data(data = imageUri)
                         .build(),
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Crop, //TODO: Create custom ContentScale
                     contentDescription = "Top App Bar background image"
                 )
             }
             LargeTopAppBar(
                 modifier = Modifier
                     .constrainAs(topbar) { /* No-op */ }
-                    .clip(clipSpecs),
+                    .clip(clipSpecs)
+                    .clickable { if (App.isRelease().not()) addTestMessage() },
                 title = {
-                    Text(
-                        modifier = Modifier,
-                        text = title,
-                        color = Color.White
-                    )
+                    Column {
+                        val scrollState = scrollBehavior.state
+                        if (scrollState.heightOffset == 0.0f) {
+                            Text(
+                                modifier = Modifier,
+                                text = plates,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = Color.White
+                            )
+                        }
+                        Text(
+                            modifier = Modifier,
+                            text = title,
+                            color = Color.White
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = if (isSystemInDarkTheme()) {
