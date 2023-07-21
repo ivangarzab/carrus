@@ -32,7 +32,6 @@ fun OverviewScreenStateful(
     onCarDetailsButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
-    onServiceDeleteButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit
 ) {
     val state: OverviewState by viewModel
@@ -51,7 +50,9 @@ fun OverviewScreenStateful(
             onDetailsButtonClicked = onCarDetailsButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onAddCarClicked = onAddCarClicked,
-            onSortRequest = { viewModel.onSort(it) }
+            onSortRequest = { viewModel.onSort(it) },
+            onServiceEditButtonClicked = onServiceEditButtonClicked,
+            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)}
         )
     }
 }
@@ -67,7 +68,9 @@ private fun OverviewScreen(
     onDetailsButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
-    onSortRequest: (SortingCallback.SortingType) -> Unit = { }
+    onSortRequest: (SortingCallback.SortingType) -> Unit = { },
+    onServiceEditButtonClicked: (Service) -> Unit = { },
+    onServiceDeleteButtonClicked: (Service) -> Unit = { },
 ) {
     val scrollBehavior = TopAppBarDefaults
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -95,7 +98,9 @@ private fun OverviewScreen(
                             .padding(paddingValues),
                         serviceList = state.car.services,
                         sortingType = state.serviceSortingType,
-                        onSortRequest = onSortRequest
+                        onSortRequest = onSortRequest,
+                        onServiceEditButtonClicked = onServiceEditButtonClicked,
+                        onServiceDeleteButtonClicked = onServiceDeleteButtonClicked
                     )
                 },
                 bottomBar = {

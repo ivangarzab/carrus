@@ -35,7 +35,9 @@ fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     serviceList: List<Service> = Service.serviceList,
     sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
-    onSortRequest: (SortingCallback.SortingType) -> Unit = { }
+    onSortRequest: (SortingCallback.SortingType) -> Unit = { },
+    onServiceEditButtonClicked: (Service) -> Unit = { },
+    onServiceDeleteButtonClicked: (Service) -> Unit = { },
 ) {
     AppTheme {
         LazyColumn(modifier = modifier) {
@@ -72,8 +74,8 @@ fun OverviewScreenContent(
                             .padding(start = 8.dp, end = 8.dp),
                         index,
                         serviceList[index],
-                        onEditClicked = { },
-                        onDeleteClicked = { }
+                        onEditClicked = onServiceEditButtonClicked,
+                        onDeleteClicked = onServiceDeleteButtonClicked
                     )
                 }
             } else {

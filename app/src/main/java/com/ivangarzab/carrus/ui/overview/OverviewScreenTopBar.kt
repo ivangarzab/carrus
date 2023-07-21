@@ -1,7 +1,6 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,18 +13,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import java.lang.Float.min
@@ -54,32 +51,30 @@ fun OverviewScreenTopBar(
             val topbar: ConstrainedLayoutReference = createRef()
 
             imageUri?.let {
-                Image(
+                AsyncImage(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(clipSpecs)
                         .constrainAs(image) {
                             bottom.linkTo(topbar.bottom)
                         }
+                        .fillMaxWidth()
+                        .clip(clipSpecs)
                         .graphicsLayer {
                             val scrollState = scrollBehavior.state
                             alpha = 1f - ((scrollState.heightOffset /
                                     scrollState.heightOffsetLimit) * 1.2f)
                             translationY = 0.2f * scrollState.heightOffset
                         },
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest
-                            .Builder(LocalContext.current)
-                            .data(data = imageUri)
-                            .build()
-                    ),
+                    model = ImageRequest
+                        .Builder(LocalContext.current)
+                        .data(data = imageUri)
+                        .build(),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Top App Bar background image"
                 )
             }
             LargeTopAppBar(
                 modifier = Modifier
-                    .constrainAs(topbar) { }
+                    .constrainAs(topbar) { /* No-op */ }
                     .clip(clipSpecs),
                 title = {
                     Text(

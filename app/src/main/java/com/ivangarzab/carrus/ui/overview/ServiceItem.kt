@@ -43,15 +43,22 @@ fun OverviewServiceItemStateful(
     modifier: Modifier = Modifier,
     index: Int = -1,
     data: Service = Service.empty,
-    onEditClicked: () -> Unit = { },
-    onDeleteClicked: () -> Unit = { }
+    onEditClicked: (Service) -> Unit = { },
+    onDeleteClicked: (Service) -> Unit = { }
 ) {
     var isExpanded: Boolean by rememberSaveable {
         mutableStateOf(value = false)
     }
 
     AppTheme {
-        OverviewServiceItem(modifier, data, isExpanded, onEditClicked, onDeleteClicked) {
+        OverviewServiceItem(
+            modifier = modifier,
+            index = index,
+            data = data,
+            isExpanded = isExpanded,
+            onEditClicked = { onEditClicked(it) },
+            onDeleteClicked = { onDeleteClicked(it) }
+        ) {
             isExpanded = isExpanded.not()
         }
     }
@@ -62,10 +69,11 @@ fun OverviewServiceItemStateful(
 @Composable
 fun OverviewServiceItem(
     modifier: Modifier = Modifier,
+    index: Int = -1,
     data: Service = Service.empty,
     isExpanded: Boolean = true,
-    onEditClicked: () -> Unit = { },
-    onDeleteClicked: () -> Unit = { },
+    onEditClicked: (Service) -> Unit = { },
+    onDeleteClicked: (Service) -> Unit = { },
     onExpandClicked: () -> Unit = { }
 ) {
     AppTheme {
@@ -137,7 +145,7 @@ fun OverviewServiceItem(
                     ) {
                         IconButton(
                             modifier = Modifier.align(Alignment.CenterStart),
-                            onClick = onEditClicked
+                            onClick = { onEditClicked(data) }
                         ) {
                             Icon(
                                 modifier = Modifier.padding(6.dp),
@@ -149,7 +157,7 @@ fun OverviewServiceItem(
                         }
                         IconButton(
                             modifier = Modifier.align(Alignment.CenterEnd),
-                            onClick = onDeleteClicked
+                            onClick = { onDeleteClicked(data) }
                         ) {
                             Icon(
                                 modifier = Modifier.padding(6.dp),
