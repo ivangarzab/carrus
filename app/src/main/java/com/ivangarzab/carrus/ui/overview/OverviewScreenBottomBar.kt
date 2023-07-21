@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
@@ -66,7 +68,7 @@ fun OverviewScreenBottomBar(
                 ) {
                     Icon(
                         modifier = Modifier.size(iconSize),
-                        painter = painterResource(id = R.drawable.ic_edit),
+                        imageVector = Icons.Filled.Edit,
                         tint = iconTint,
                         contentDescription = "Edit icon button"
                     )
@@ -77,7 +79,7 @@ fun OverviewScreenBottomBar(
                 ) {
                     Icon(
                         modifier = Modifier.size(iconSize),
-                        imageVector = Icons.Filled.CheckCircle,
+                        imageVector = Icons.Filled.Info,
                         tint = iconTint,
                         contentDescription = "Car details icon button"
                     )

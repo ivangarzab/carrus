@@ -1,9 +1,11 @@
 package com.ivangarzab.carrus.ui.create
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +50,8 @@ import coil.request.ImageRequest
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.ui.compose.BigNeutralButton
+import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -149,12 +153,14 @@ private fun CreateScreen(
                 onDeleteImageClicked = onDeleteImageClicked,
                 onActionButtonClicked = { p1, p2, p3 ->
                     onActionButtonClicked(p1, p2, p3)
-                }
+                },
+                addTestCarData = addTestCarData
             )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -189,7 +195,7 @@ private fun CreateScreenContent(
                     )
             ) {
                 if (state.imageUri == null) {
-                    BigButton(
+                    BigNeutralButton(
                         text = stringResource(id = R.string.add_a_photo),
                         onClick = { onAddImageClicked() }
                     )
@@ -201,7 +207,10 @@ private fun CreateScreenContent(
                         Image(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable { addTestCarData() },
+                                .combinedClickable(
+                                    onClick = { },
+                                    onLongClick = { addTestCarData() }
+                                ),
                             painter = rememberAsyncImagePainter(
                                 ImageRequest
                                     .Builder(LocalContext.current)
@@ -383,7 +392,7 @@ private fun CreateScreenContent(
                     }
                 }
 
-                BigButton(
+                BigNeutralButton(
                     modifier = Modifier.padding(top = verticalSeparation),
                     text = stringResource(id = if (isExpanded) {
                         R.string.less_details
@@ -394,7 +403,7 @@ private fun CreateScreenContent(
                         isExpanded = isExpanded.not()
                     }
                 )
-                PositiveButton(
+                BigPositiveButton(
                     modifier = Modifier.padding(top = verticalSeparation),
                     text = state.actionButton,
                     onClick = { onActionButtonClicked(
@@ -488,24 +497,5 @@ private fun CreateNumberField(
             isLastField = isLastField,
             updateListener = updateListener
         )
-    }
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun BigButton(
-    modifier: Modifier = Modifier,
-    text: String = "Big button",
-    onClick: () -> Unit = { }
-) {
-    AppTheme {
-        OutlinedButton(
-            modifier = modifier
-                .fillMaxWidth(),
-            onClick = { onClick() }
-        ) {
-            Text(text = text.capitalize(Locale.ROOT))
-        }
     }
 }

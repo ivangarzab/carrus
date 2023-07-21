@@ -15,6 +15,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
@@ -80,46 +81,52 @@ private fun OverviewScreen(
     val scrollBehavior = TopAppBarDefaults
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
+    val systemUiController = rememberSystemUiController()
+
     AppTheme {
-        state.car?.let {
-            Scaffold(
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                topBar = {
-                    OverviewScreenTopBar(
-                        title = state.car.let {
-                            it.nickname.ifBlank {
+        if (state.car != null) {
+            state.car.let {
+                systemUiController.statusBarDarkContentEnabled = false
+                Scaffold(
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                    topBar = {
+                        OverviewScreenTopBar(
+                            title = it.nickname.ifBlank {
                                 "${it.make} ${it.model}"
-                            }
-                        },
-                        imageUri = state.car.imageUri,
-                        scrollBehavior = scrollBehavior,
-                        addTestMessage = addTestMessage
-                    )
-                },
-                content = { paddingValues ->
-                    OverviewScreenContent(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        serviceList = state.car.services,
-                        dueDateFormat = state.dueDateFormat,
-                        sortingType = state.serviceSortingType,
-                        onSortRequest = onSortRequest,
-                        onServiceEditButtonClicked = onServiceEditButtonClicked,
-                        onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
-                        addServiceList = addServiceList
-                    )
-                },
-                bottomBar = {
-                    OverviewScreenBottomBar(
-                        actionButtonClicked = onFloatingActionButtonClicked,
-                        settingsButtonClicked = onSettingsButtonClicked,
-                        carEditButtonClicked = onEditButtonClicked,
-                        carDetailsButtonClicked = onDetailsButtonClicked
-                    )
-                }
-            )
-        } ?: OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
+                            },
+                            imageUri = it.imageUri,
+                            scrollBehavior = scrollBehavior,
+                            addTestMessage = addTestMessage
+                        )
+                    },
+                    content = { paddingValues ->
+                        OverviewScreenContent(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues),
+                            serviceList = it.services,
+                            dueDateFormat = state.dueDateFormat,
+                            sortingType = state.serviceSortingType,
+                            onSortRequest = onSortRequest,
+                            onServiceEditButtonClicked = onServiceEditButtonClicked,
+                            onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
+                            addServiceList = addServiceList
+                        )
+                    },
+                    bottomBar = {
+                        OverviewScreenBottomBar(
+                            actionButtonClicked = onFloatingActionButtonClicked,
+                            settingsButtonClicked = onSettingsButtonClicked,
+                            carEditButtonClicked = onEditButtonClicked,
+                            carDetailsButtonClicked = onDetailsButtonClicked
+                        )
+                    }
+                )
+            }
+        } else {
+            systemUiController.statusBarDarkContentEnabled = true
+            OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
+        }
     }
 }

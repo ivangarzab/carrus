@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -22,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -36,6 +37,7 @@ import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
+import java.text.NumberFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -178,7 +180,7 @@ fun OverviewServiceItem(
                         Column(modifier = Modifier.weight(3f)) {
                             Text(
                                 modifier = Modifier.align(Alignment.End),
-                                text = data.cost.toString(),
+                                text = NumberFormat.getCurrencyInstance().format(data.cost),
                                 style = costAndDateTextStyle
                             )
                             Text(
@@ -202,9 +204,7 @@ fun OverviewServiceItem(
                         ) {
                             Icon(
                                 modifier = Modifier.padding(6.dp),
-                                painter = painterResource(
-                                    id = R.drawable.ic_edit
-                                ),
+                                imageVector = Icons.Filled.Edit,
                                 contentDescription = "Edit icon button"
                             )
                         }
@@ -214,9 +214,7 @@ fun OverviewServiceItem(
                         ) {
                             Icon(
                                 modifier = Modifier.padding(6.dp),
-                                painter = painterResource(
-                                    id = R.drawable.ic_delete_trash
-                                ),
+                                imageVector = Icons.Filled.Delete,
                                 contentDescription = "Edit icon button"
                             )
                         }

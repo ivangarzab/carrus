@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
@@ -35,7 +34,7 @@ class OverviewViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val messageQueueRepository: MessageQueueRepository
-    ) : ViewModel(), SortingCallback {
+    ) : ViewModel() {
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
         STATE,
@@ -46,9 +45,6 @@ class OverviewViewModel @Inject constructor(
         QUEUE_STATE,
         MessageQueueState()
     )
-
-    private val _nightThemeState: MutableLiveData<Boolean> = MutableLiveData(false)
-    val nightThemeState: LiveData<Boolean> = _nightThemeState
 
     init {
         viewModelScope.launch {
@@ -65,18 +61,11 @@ class OverviewViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            appSettingsRepository.observeNightThemeData().collect {
-                _nightThemeState.value = it
-            }
-        }
-        viewModelScope.launch {
             messageQueueRepository.observeMessageQueueFlow().collect {
                 updateQueueState(it.asUniqueMessageQueue())
             }
         }
     }
-
-    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
@@ -192,9 +181,7 @@ class OverviewViewModel @Inject constructor(
         setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
     }
 
-    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
-
-    override fun onSort(type: SortingCallback.SortingType) {
+    fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
         onSortingByType(type)
     }

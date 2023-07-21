@@ -1,7 +1,9 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -33,7 +35,7 @@ import java.lang.Float.min
 /**
  * Created by Ivan Garza Bermea.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -81,7 +83,10 @@ fun OverviewScreenTopBar(
                 modifier = Modifier
                     .constrainAs(topbar) { /* No-op */ }
                     .clip(clipSpecs)
-                    .clickable { if (App.isRelease().not()) addTestMessage() },
+                    .combinedClickable(
+                        onClick = { },
+                        onLongClick = { if (App.isRelease().not()) addTestMessage() }
+                    ),
                 title = {
                     Column {
                         val scrollState = scrollBehavior.state

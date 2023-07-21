@@ -1,8 +1,10 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +32,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 /**
  * Created by Ivan Garza Bermea.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -53,9 +56,10 @@ fun OverviewScreenContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        modifier = Modifier.clickable {
-                            if (App.isRelease().not()) addServiceList()
-                        },
+                        modifier = Modifier.combinedClickable(
+                            onClick = { },
+                            onLongClick = { if (App.isRelease().not()) addServiceList() }
+                        ),
                         text = stringResource(id = R.string.services),
                         style = MaterialTheme.typography.headlineSmall,
                         fontStyle = FontStyle.Italic
