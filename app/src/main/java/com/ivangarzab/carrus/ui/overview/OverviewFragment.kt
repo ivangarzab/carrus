@@ -70,17 +70,11 @@ class OverviewFragment : Fragment() {
         }
     }
 
-    private fun setupViews() {
-        /*binding.apply {
-            // Content binding
-            overviewContent.apply {
-                //TODO: Move into Compose
-                overviewMessagesLayout.apply {
-                    feedData(viewLifecycleOwner, viewModel.queueState)
-
-                }
-            }
-        }*/
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.state.observe(viewLifecycleOwner) {
+            processStateChange(it)
+        }
     }
 
     private fun onMessageClicked(id: String) { //TODO: Move into VM
@@ -95,7 +89,7 @@ class OverviewFragment : Fragment() {
         }
     }
 
-    private fun processStateChange(state: OverviewState) {
+    private fun processStateChange(state: OverviewState) { //TODO: Move into VM
         Timber.v("Processing overview state change")
         if (requireContext().canScheduleExactAlarms().not() &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
