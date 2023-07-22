@@ -74,7 +74,7 @@ fun OverviewScreenContent(
                             onLongClick = { if (App.isRelease().not()) addServiceList() }
                         ),
                         text = stringResource(id = R.string.services),
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         fontStyle = FontStyle.Italic
                     )
                 }

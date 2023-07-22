@@ -1,6 +1,13 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,6 +24,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +45,7 @@ import com.ivangarzab.carrus.util.managers.MessageQueue
 /**
  * Created by Ivan Garza Bermea.
  */
+@OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -45,32 +58,51 @@ fun StackingMessagesPanel(
     onDismissClicked: () -> Unit = { },
     onMessageClicked: (String) -> Unit = { }
 ) {
-    AppTheme {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            ConstraintLayout {
-                val message: ConstrainedLayoutReference = createRef()
-                val badge: ConstrainedLayoutReference = createRef()
+    var visible by rememberSaveable {
+        mutableStateOf(false)
+    }
+    visible = messageQueue.isNotEmpty()
 
-                if (messageQueue.isNotEmpty()) {
-                    MessageItem(
-                        modifier = Modifier
-                            .constrainAs(message) { }
-                            .padding(4.dp),
-                        message = messageQueue.get().text,
-                        onDeleteButtonClicked = onDismissClicked,
-                        onContentClicked = { onMessageClicked(messageQueue.get().id) }
-                    )
-                    if (messageQueue.size() > 1) {
-                        MessageQueueBadge(
-                            modifier = Modifier.constrainAs(badge) {
-                                top.linkTo(parent.top)
-                                end.linkTo(parent.end)
+    AppTheme {
+        AnimatedVisibility(
+            visible = visible,
+            enter = expandVertically(),
+            exit = shrinkVertically()
+        ) {
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+            ) {
+
+                ConstraintLayout {
+                    val message: ConstrainedLayoutReference = createRef()
+                    val badge: ConstrainedLayoutReference = createRef()
+                    if (messageQueue.isNotEmpty()) {
+                        MessageItem(
+                            modifier = Modifier
+                                .constrainAs(message) { }
+                                .padding(4.dp),
+                            visible = visible,
+                            message = messageQueue.get().text,
+                            onDeleteButtonClicked = {
+                                onDismissClicked()
                             },
-                            text = messageQueue.size().toString()
+                            onContentClicked = { onMessageClicked(messageQueue.get().id) }
                         )
+                        if (messageQueue.size() > 1) {
+                            MessageQueueBadge(
+                                modifier = Modifier
+                                    .constrainAs(badge) {
+                                        top.linkTo(parent.top)
+                                        end.linkTo(parent.end)
+                                    }
+                                    .animateEnterExit(
+                                        enter = scaleIn(),
+                                        exit = scaleOut()
+                                    ),
+                                text = messageQueue.size().toString()
+                            )
+                        }
                     }
                 }
             }
@@ -83,6 +115,7 @@ fun StackingMessagesPanel(
 @Composable
 fun MessageItem(
     modifier: Modifier = Modifier,
+    visible: Boolean = true,
     message: String = "Derive intentions ocean ubermensch prejudice. Pious transvaluation society" +
             " justice sea evil convictions sea insofar madness fearful Zarathustra.",
     onDeleteButtonClicked: () -> Unit = { },
@@ -130,6 +163,7 @@ fun MessageItem(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -137,18 +171,27 @@ fun MessageQueueBadge(
     modifier: Modifier = Modifier,
     text: String = "6"
 ) {
+    var value by remember {
+        mutableStateOf(text)
+    }
+    value = text
     AppTheme {
-        Text(
-            modifier = modifier
-                .size(24.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = CircleShape
-                ),
-            text = text,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        AnimatedContent(
+            modifier = modifier,
+            targetState = value
+        ) { targetValue ->
+            Text(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    ),
+                text = targetValue,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
