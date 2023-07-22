@@ -21,6 +21,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
+import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
  * Created by Ivan Garza Bermea.
@@ -33,7 +34,8 @@ fun OverviewScreenStateful(
     onCarDetailsButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
-    onAddCarClicked: () -> Unit
+    onAddCarClicked: () -> Unit,
+    onMessageClicked: (String) -> Unit
 ) {
     val state: OverviewState by viewModel
         .state
@@ -46,6 +48,7 @@ fun OverviewScreenStateful(
     AppTheme {
         OverviewScreen(
             state = state,
+            messageQueue = queueState.messageQueue,
             onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditButtonClicked = onCarEditButtonClicked,
             onDetailsButtonClicked = onCarDetailsButtonClicked,
@@ -54,9 +57,11 @@ fun OverviewScreenStateful(
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)},
+            onMessageContentClicked = { onMessageClicked(it) },
+            onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
+            addServiceList = { viewModel.setupEasterEggForTesting() },
             addTestMessage = { viewModel.addTestMessage() },
-            addServiceList = { viewModel.setupEasterEggForTesting() }
         )
     }
 }
@@ -67,6 +72,7 @@ fun OverviewScreenStateful(
 @Composable
 private fun OverviewScreen(
     @PreviewParameter(OverviewStatePreviewProvider::class) state: OverviewState,
+    messageQueue: MessageQueue = MessageQueue.test,
     onFloatingActionButtonClicked: () -> Unit = { },
     onEditButtonClicked: () -> Unit = { },
     onDetailsButtonClicked: () -> Unit = { },
@@ -75,8 +81,10 @@ private fun OverviewScreen(
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    onMessageDismissClicked: () -> Unit = { },
+    onMessageContentClicked: (String) -> Unit = { },
     addTestMessage: () -> Unit = { },
-    addServiceList: () -> Unit = { }
+    addServiceList: () -> Unit = { },
 ) {
     val scrollBehavior = TopAppBarDefaults
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -105,13 +113,16 @@ private fun OverviewScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(paddingValues),
+                            messageQueue = messageQueue,
                             serviceList = it.services,
                             dueDateFormat = state.dueDateFormat,
                             sortingType = state.serviceSortingType,
                             onSortRequest = onSortRequest,
                             onServiceEditButtonClicked = onServiceEditButtonClicked,
                             onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
-                            addServiceList = addServiceList
+                            addServiceList = addServiceList,
+                            onMessageContentClicked = { onMessageContentClicked(it) },
+                            onMessageDismissClicked = onMessageDismissClicked
                         )
                     },
                     bottomBar = {

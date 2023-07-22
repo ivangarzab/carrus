@@ -28,6 +28,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
  * Created by Ivan Garza Bermea.
@@ -38,16 +39,28 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Composable
 fun OverviewScreenContent(
     modifier: Modifier = Modifier,
+    messageQueue: MessageQueue = MessageQueue.test,
     serviceList: List<Service> = Service.serviceList,
     dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
-    addServiceList: () -> Unit = { }
+    addServiceList: () -> Unit = { },
+    onMessageDismissClicked: () -> Unit = { },
+    onMessageContentClicked: (String) -> Unit = { }
 ) {
     AppTheme {
         LazyColumn(modifier = modifier) {
+            item {
+                StackingMessagesPanel(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    messageQueue = messageQueue,
+                    onDismissClicked = onMessageDismissClicked,
+                    onMessageClicked = { onMessageContentClicked(it) }
+                )
+            }
             item {
                 Box(
                     modifier = Modifier

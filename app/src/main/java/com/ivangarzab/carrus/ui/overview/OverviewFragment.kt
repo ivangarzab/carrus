@@ -63,7 +63,8 @@ class OverviewFragment : Fragment() {
                     onCarDetailsButtonClicked = { showCarDetailsDialog() },
                     onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
                     onSettingsButtonClicked = { navigateToSettingsFragment() },
-                    onAddCarClicked = { navigateToCreateFragment() }
+                    onAddCarClicked = { navigateToCreateFragment() },
+                    onMessageClicked = { onMessageClicked(it) }
                 )
             }
         }
@@ -76,23 +77,22 @@ class OverviewFragment : Fragment() {
                 //TODO: Move into Compose
                 overviewMessagesLayout.apply {
                     feedData(viewLifecycleOwner, viewModel.queueState)
-                    setOnClickListener { id ->
-                        Timber.d("Got a message click with id=$id")
-                        when (id) {
-                            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                attemptToRequestNotificationPermission()
-                            }
-                            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                attemptToRequestAlarmsPermission()
-                            }
-                        }
-                    }
-                    setOnDismissListener {
-                        viewModel.onMessageDismissed()
-                    }
+
                 }
             }
         }*/
+    }
+
+    private fun onMessageClicked(id: String) { //TODO: Move into VM
+        Timber.d("Got a message click with id=$id")
+        when (id) {
+            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                attemptToRequestNotificationPermission()
+            }
+            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                attemptToRequestAlarmsPermission()
+            }
+        }
     }
 
     private fun processStateChange(state: OverviewState) {
