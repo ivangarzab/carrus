@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -72,8 +74,8 @@ fun StackingMessagesPanel(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
+                    .height(115.dp)
             ) {
-
                 ConstraintLayout {
                     val message: ConstrainedLayoutReference = createRef()
                     val badge: ConstrainedLayoutReference = createRef()
@@ -90,7 +92,7 @@ fun StackingMessagesPanel(
                             onContentClicked = { onMessageClicked(messageQueue.get().id) }
                         )
                         if (messageQueue.size() > 1) {
-                            MessageQueueBadge(
+                            StackingMessagesBadge(
                                 modifier = Modifier
                                     .constrainAs(badge) {
                                         top.linkTo(parent.top)
@@ -156,7 +158,8 @@ fun MessageItem(
                         ),
                     text = message,
                     fontStyle = FontStyle.Italic,
-                    maxLines = 3
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -167,7 +170,7 @@ fun MessageItem(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun MessageQueueBadge(
+fun StackingMessagesBadge(
     modifier: Modifier = Modifier,
     text: String = "6"
 ) {
