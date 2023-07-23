@@ -47,6 +47,7 @@ fun InfoDialog(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun TopBar(
+    modifier: Modifier = Modifier,
     title: String = "App Bar Title",
     isNavigationIconEnabled: Boolean = false,
     onNavigationIconClicked: () -> Unit = { },
@@ -56,7 +57,7 @@ fun TopBar(
 ) {
     AppTheme {
         TopAppBar(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth(),
             title = {
                 Text(

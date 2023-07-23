@@ -1,10 +1,15 @@
 package com.ivangarzab.carrus.ui.create
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,15 +20,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,14 +34,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -52,12 +54,12 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
-import com.ivangarzab.carrus.ui.compose.PositiveButton
+import com.ivangarzab.carrus.ui.compose.CreateNumberField
+import com.ivangarzab.carrus.ui.compose.CreateTextField
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
-import java.util.Locale
 
 /**
  * Created by Ivan Garza Bermea.
@@ -119,6 +121,7 @@ fun CreateScreenStateful(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -137,6 +140,10 @@ private fun CreateScreen(
         Scaffold(
             topBar = {
                 TopBar(
+                    modifier = Modifier.combinedClickable(
+                        onClick = { },
+                        onLongClick = { addTestCarData() }
+                    ),
                     title = state.title,
                     isNavigationIconEnabled = true,
                     onNavigationIconClicked = onBackPressed,
@@ -153,14 +160,12 @@ private fun CreateScreen(
                 onDeleteImageClicked = onDeleteImageClicked,
                 onActionButtonClicked = { p1, p2, p3 ->
                     onActionButtonClicked(p1, p2, p3)
-                },
-                addTestCarData = addTestCarData
+                }
             )
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -172,14 +177,16 @@ private fun CreateScreenContent(
     onDeleteImageClicked: () -> Unit = { },
     onUpdateAllData: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
-    //Easter egg
-    addTestCarData: () -> Unit = { }
 ) {
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
         mutableStateOf(value = false)
     }
+    var isImagePresent: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    isImagePresent = state.imageUri != null
 
     AppTheme {
         Box(
@@ -194,23 +201,36 @@ private fun CreateScreenContent(
                         enabled = true
                     )
             ) {
-                if (state.imageUri == null) {
+                AnimatedVisibility(
+                    visible = isImagePresent.not(),
+                    enter = slideInVertically(),
+                    exit = slideOutVertically()
+                ) {
                     BigNeutralButton(
                         text = stringResource(id = R.string.add_a_photo),
                         onClick = { onAddImageClicked() }
                     )
-                } else {
+                }
+                AnimatedVisibility(
+                    visible = isImagePresent,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                    val imageContainerShape: Shape = RoundedCornerShape(4.dp)
                     Box(modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .border(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = imageContainerShape,
+                            width = 1.dp
+                        )
+                        .clipToBounds()
                     ) {
                         Image(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .combinedClickable(
-                                    onClick = { },
-                                    onLongClick = { addTestCarData() }
-                                ),
+                                .clip(imageContainerShape),
                             painter = rememberAsyncImagePainter(
                                 ImageRequest
                                     .Builder(LocalContext.current)
@@ -328,67 +348,81 @@ private fun CreateScreenContent(
                     }
                 )
 
-                if (isExpanded) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = verticalSeparation)
-                    ) {
-                        CreateNumberField(
+                AnimatedVisibility(
+                    visible = isExpanded,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                    Column {
+                        Row(
                             modifier = Modifier
-                                .padding(end = spaceInBetween)
-                                .weight(3f),
-                            label = stringResource(id = R.string.total_miles),
-                            content = state.totalMiles,
-                            updateListener = {
-                                onUpdateState(state.copy(
-                                    totalMiles = it
-                                ))
-                            }
-                        )
-                        CreateNumberField(
+                                .fillMaxWidth()
+                                .padding(top = verticalSeparation)
+                        ) {
+                            CreateNumberField(
+                                modifier = Modifier
+                                    .padding(end = spaceInBetween)
+                                    .weight(3f),
+                                label = stringResource(id = R.string.total_miles),
+                                content = state.totalMiles,
+                                updateListener = {
+                                    onUpdateState(
+                                        state.copy(
+                                            totalMiles = it
+                                        )
+                                    )
+                                }
+                            )
+                            CreateNumberField(
+                                modifier = Modifier
+                                    .padding(start = spaceInBetween)
+                                    .weight(2f),
+                                label = stringResource(id = R.string.miles_per_gallon),
+                                content = state.milesPerGallon,
+                                updateListener = {
+                                    onUpdateState(
+                                        state.copy(
+                                            milesPerGallon = it
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                        Row(
                             modifier = Modifier
-                                .padding(start = spaceInBetween)
-                                .weight(2f),
-                            label = stringResource(id = R.string.miles_per_gallon),
-                            content = state.milesPerGallon,
-                            updateListener = {
-                                onUpdateState(state.copy(
-                                    milesPerGallon = it
-                                ))
-                            }
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = verticalSeparation)
-                    ) {
-                        CreateNumberField(
-                            modifier = Modifier
-                                .padding(end = spaceInBetween)
-                                .weight(2f),
-                            label = stringResource(id = R.string.tire_pressure),
-                            content = state.tirePressure,
-                            updateListener = {
-                                onUpdateState(state.copy(
-                                    tirePressure = it
-                                ))
-                            }
-                        )
-                        CreateTextField(
-                            modifier = Modifier
-                                .padding(start = spaceInBetween)
-                                .weight(3f),
-                            label = stringResource(id = R.string.vin_no),
-                            content = state.vinNo,
-                            isLastField = true,
-                            updateListener = {
-                                onUpdateState(state.copy(
-                                    vinNo = it
-                                ))
-                            }
-                        )
+                                .fillMaxWidth()
+                                .padding(top = verticalSeparation)
+                        ) {
+                            CreateNumberField(
+                                modifier = Modifier
+                                    .padding(end = spaceInBetween)
+                                    .weight(2f),
+                                label = stringResource(id = R.string.tire_pressure),
+                                content = state.tirePressure,
+                                updateListener = {
+                                    onUpdateState(
+                                        state.copy(
+                                            tirePressure = it
+                                        )
+                                    )
+                                }
+                            )
+                            CreateTextField(
+                                modifier = Modifier
+                                    .padding(start = spaceInBetween)
+                                    .weight(3f),
+                                label = stringResource(id = R.string.vin_no),
+                                content = state.vinNo,
+                                isLastField = true,
+                                updateListener = {
+                                    onUpdateState(
+                                        state.copy(
+                                            vinNo = it
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
 
@@ -414,88 +448,5 @@ private fun CreateScreenContent(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun BaseCreateField(
-    modifier: Modifier = Modifier,
-    label: String = "Test field",
-    content: String? = null,
-    isRequired: Boolean = false,
-    isLastField: Boolean = false,
-    keyboardOptions: KeyboardOptions? = null,
-    updateListener: (String) -> Unit = { }
-) {
-    AppTheme {
-        OutlinedTextField(
-            modifier = modifier
-                .background(color = MaterialTheme.colorScheme.background),
-            value = content ?: label,
-            label = {
-                Text(text = if (isRequired) "$label*" else label)
-            },
-            onValueChange = {
-                updateListener(it.trim())
-            },
-            singleLine = true,
-            keyboardOptions = (keyboardOptions ?: KeyboardOptions.Default).copy(
-                imeAction = if (isLastField) {
-                    ImeAction.Done
-                } else {
-                    ImeAction.Next
-                }
-            )
-        )
-    }
-}
-@Composable
-private fun CreateTextField(
-    modifier: Modifier = Modifier,
-    label: String = "Test field",
-    content: String? = null,
-    isRequired: Boolean = false,
-    isLastField: Boolean = false,
-    updateListener: (String) -> Unit = { }
-) {
-    AppTheme {
-        BaseCreateField(
-            modifier = modifier,
-            label = label,
-            content = content,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                keyboardType = KeyboardType.Text
-            ),
-            isRequired = isRequired,
-            isLastField = isLastField,
-            updateListener = updateListener
-        )
-    }
-}
-
-@Composable
-private fun CreateNumberField(
-    modifier: Modifier = Modifier,
-    label: String = "Test field",
-    content: String? = null,
-    isRequired: Boolean = false,
-    isLastField: Boolean = false,
-    updateListener: (String) -> Unit = { }
-) {
-    AppTheme {
-        BaseCreateField(
-            modifier = modifier,
-            label = label,
-            content = content,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            isRequired = isRequired,
-            isLastField = isLastField,
-            updateListener = updateListener
-        )
     }
 }

@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -71,16 +73,19 @@ private fun SortingButton(
     onClick: () -> Unit = { },
     text: String = "button"
 ) {
+    val selectionColor: Color by animateColorAsState(
+        targetValue = when (isSelected) {
+            true -> MaterialTheme.colorScheme.primary
+            false -> Color.Transparent
+        }
+    )
     AppTheme {
         OutlinedButton(
             modifier = modifier
                 .width(90.dp),
             onClick = onClick,
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = when (isSelected) {
-                    true -> MaterialTheme.colorScheme.primary
-                    false -> Color.Transparent
-                }
+                containerColor = selectionColor
             )
         ) {
             Text(

@@ -1,6 +1,11 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -158,8 +164,14 @@ fun OverviewServiceItem(
                             }
                         )
                     }
+
+                    val arrowRotationDegree: Float by animateFloatAsState(
+                        targetValue = if (isExpanded) 180f else 0f
+                    )
                     IconButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .rotate(arrowRotationDegree),
                         onClick = onExpandClicked
                     ) {
                         Icon(
@@ -169,54 +181,61 @@ fun OverviewServiceItem(
                     }
                 }
 
-                if (isExpanded) {
-                    Row {
-                        Text(
-                            modifier = Modifier.weight(7f),
-                            text = "${data.brand} - ${data.type}", //TODO: Format this dat in VM
-                            style = MaterialTheme.typography.bodyLarge
+                AnimatedVisibility(
+                    visible = isExpanded,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                    Column {
+                        Row {
+                            Text(
+                                modifier = Modifier.weight(7f),
+                                text = "${data.brand} - ${data.type}", //TODO: Format this dat in VM
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            val costAndDateTextStyle: TextStyle =
+                                MaterialTheme.typography.bodyMedium
+                            Column(modifier = Modifier.weight(3f)) {
+                                Text(
+                                    modifier = Modifier.align(Alignment.End),
+                                    text = NumberFormat.getCurrencyInstance().format(data.cost),
+                                    style = costAndDateTextStyle
+                                )
+                                Text(
+                                    modifier = Modifier.align(Alignment.End),
+                                    text = "on ${data.repairDate.getShortenedDate()}",
+                                    style = costAndDateTextStyle
+                                )
+                            }
+                        }
+                        Divider(
+                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outline
                         )
-                        val costAndDateTextStyle: TextStyle = MaterialTheme.typography.bodyMedium
-                        Column(modifier = Modifier.weight(3f)) {
-                            Text(
-                                modifier = Modifier.align(Alignment.End),
-                                text = NumberFormat.getCurrencyInstance().format(data.cost),
-                                style = costAndDateTextStyle
-                            )
-                            Text(
-                                modifier = Modifier.align(Alignment.End),
-                                text = "on ${data.repairDate.getShortenedDate()}",
-                                style = costAndDateTextStyle
-                            )
-                        }
-                    }
-                    Divider(
-                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        IconButton(
-                            modifier = Modifier.align(Alignment.CenterStart),
-                            onClick = { onEditClicked(data) }
+                        Box(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(
-                                modifier = Modifier.padding(6.dp),
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = "Edit icon button"
-                            )
-                        }
-                        IconButton(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            onClick = { onDeleteClicked(data) }
-                        ) {
-                            Icon(
-                                modifier = Modifier.padding(6.dp),
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "Edit icon button"
-                            )
+                            IconButton(
+                                modifier = Modifier.align(Alignment.CenterStart),
+                                onClick = { onEditClicked(data) }
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(6.dp),
+                                    imageVector = Icons.Filled.Edit,
+                                    contentDescription = "Edit icon button"
+                                )
+                            }
+                            IconButton(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                                onClick = { onDeleteClicked(data) }
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(6.dp),
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = "Edit icon button"
+                                )
+                            }
                         }
                     }
                 }

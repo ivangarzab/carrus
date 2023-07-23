@@ -1,6 +1,9 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,10 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,68 +56,78 @@ fun SettingsScreenContent(
     onExportClicked: () -> Unit = { }
 ) {
     AppTheme {
-        LazyColumn(
+        Column(
             modifier.background(color = MaterialTheme.colorScheme.background)
         ) {
-            item { // Dark Mode Toggle
-                SettingsScreenContentItemSwitch(
-                    title = stringResource(id = R.string.setting_dark_mode_title),
-                    subTitle = stringResource(id = R.string.setting_dark_mode_subtitle),
-                    isChecked = isSystemInDarkTheme(),
-                    onToggle = { onDarkModeToggle(it) }
+            var isThereCarData: Boolean by rememberSaveable {
+                mutableStateOf(value = false)
+            }
+            isThereCarData = state.car != null
+            var isThereCarServiceData: Boolean by rememberSaveable {
+                mutableStateOf(value = false)
+            }
+            isThereCarServiceData = state.car?.services?.isNotEmpty() ?: false
+
+            SettingsScreenContentItemSwitch(
+                title = stringResource(id = R.string.setting_dark_mode_title),
+                subTitle = stringResource(id = R.string.setting_dark_mode_subtitle),
+                isChecked = isSystemInDarkTheme(),
+                onToggle = { onDarkModeToggle(it) }
+            )
+
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+
+            SettingsScreenContentItemText(
+                title = stringResource(id = R.string.setting_alarm_time_title),
+                subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
+                content = if (state.alarmTime.isNullOrBlank()) {
+                    DEFAULT_ALARM_TIME.toString()
+                } else {
+                    state.alarmTime
+                },
+                onClick = { onAlarmTimeClicked() }
+            )
+            SettingsScreenContentItemText(
+                title = stringResource(id = R.string.settings_due_date_format_title),
+                subtitle = stringResource(id = R.string.settings_due_date_format_subtitle),
+                content = state.dueDateFormat.value,
+                onClick = { onDueDateFormatClicked() }
+            )
+
+            if (isThereCarData) {
+                Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            }
+            AnimatedVisibility(
+                visible = isThereCarServiceData,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                SettingsScreenContentItemBase(
+                    title = stringResource(id = R.string.setting_delete_all_services_title),
+                    subtitle = stringResource(id = R.string.setting_delete_all_services_subtitle),
+                    onClick = { onDeleteCarServicesClicked() }
                 )
             }
 
-            item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-            item { // Alarm Time
-                SettingsScreenContentItemText(
-                    title = stringResource(id = R.string.setting_alarm_time_title),
-                    subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
-                    content = if (state.alarmTime.isNullOrBlank()) {
-                        DEFAULT_ALARM_TIME.toString()
-                    } else {
-                        state.alarmTime
-                    },
-                    onClick = { onAlarmTimeClicked() }
-                )
-            }
-            item { // Due Date Format
-                SettingsScreenContentItemText(
-                    title = stringResource(id = R.string.settings_due_date_format_title),
-                    subtitle = stringResource(id = R.string.settings_due_date_format_subtitle),
-                    content = state.dueDateFormat.value,
-                    onClick = { onDueDateFormatClicked() }
+            AnimatedVisibility(
+                visible = isThereCarData,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                SettingsScreenContentItemBase(
+                    title = stringResource(id = R.string.setting_delete_car_data_title),
+                    subtitle = stringResource(id = R.string.setting_delete_car_data_subtitle),
+                    onClick = { onDeleteCarDataClicked() }
                 )
             }
 
-            if (state.car != null) {
-                item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-                if (state.car.services.isNotEmpty()) {
-                    item { // Delete Car Services
-                        SettingsScreenContentItemBase(
-                            title = stringResource(id = R.string.setting_delete_all_services_title),
-                            subtitle = stringResource(id = R.string.setting_delete_all_services_subtitle),
-                            onClick = { onDeleteCarServicesClicked() }
-                        )
-                    }
-                }
-                item { // Delete Car Data
-                    SettingsScreenContentItemBase(
-                        title = stringResource(id = R.string.setting_delete_car_data_title),
-                        subtitle = stringResource(id = R.string.setting_delete_car_data_subtitle),
-                        onClick = { onDeleteCarDataClicked() }
-                    )
-                }
-            }
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
-            item { Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface) }
-            item { // Import/Export Buttons
-                SettingsScreenContentBottom(
-                    modifier = Modifier.fillMaxWidth(),
-                    onImportClicked = onImportClicked,
-                    onExportClicked = onExportClicked
-                )
-            }
+            SettingsScreenContentBottom(
+                modifier = Modifier.fillMaxWidth(),
+                onImportClicked = onImportClicked,
+                onExportClicked = onExportClicked
+            )
         }
     }
 }
