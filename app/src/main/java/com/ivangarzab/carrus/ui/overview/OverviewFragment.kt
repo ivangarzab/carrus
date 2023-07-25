@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
 import android.app.AlarmManager
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,13 +16,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Service
-import com.ivangarzab.carrus.databinding.ModalDetailsBinding
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.*
@@ -60,7 +56,6 @@ class OverviewFragment : Fragment() {
                 OverviewScreenStateful(
                     onFloatingActionButtonClicked = { navigateToNewServiceBottomSheet() },
                     onCarEditButtonClicked = { navigateToEditFragment() },
-                    onCarDetailsButtonClicked = { showCarDetailsDialog() },
                     onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
                     onSettingsButtonClicked = { navigateToSettingsFragment() },
                     onAddCarClicked = { navigateToCreateFragment() },
@@ -137,36 +132,6 @@ class OverviewFragment : Fragment() {
         } else {
             Timber.v("Alarms permission already granted!")
         }
-    }
-
-    private fun showCarDetailsDialog() {
-        val car = viewModel.state.value?.car
-        car ?: return
-        val bindingDialog: ModalDetailsBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(requireContext()),
-            R.layout.modal_details,
-            null,
-            false
-        )
-        val dialog = AlertDialog.Builder(requireContext()).apply {
-            setView(bindingDialog.detailsModalRoot)
-            setCancelable(true)
-        }.create().also {
-            it.clearBackgroundForRoundedCorners()
-        }
-        bindingDialog.apply {
-            vinNo = car.vinNo
-            tirePressure = car.tirePressure
-            milesTotal = car.totalMiles
-            milesPerGallon = car.milesPerGallon
-            detailsModalButton.apply {
-                clipToOutline = true
-                setOnClickListener {
-                    dialog.dismiss()
-                }
-            }
-        }
-        dialog.show()
     }
 
     private fun navigateToNewServiceBottomSheet() = findNavController().navigate(

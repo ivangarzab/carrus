@@ -377,7 +377,7 @@ private fun CreateScreenContent(
                                 modifier = Modifier
                                     .padding(start = spaceInBetween)
                                     .weight(2f),
-                                label = stringResource(id = R.string.miles_per_gallon),
+                                label = stringResource(id = R.string.miles_per_gal),
                                 content = state.milesPerGallon,
                                 updateListener = {
                                     onUpdateState(

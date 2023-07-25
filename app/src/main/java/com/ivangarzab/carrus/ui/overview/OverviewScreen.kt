@@ -10,6 +10,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +34,6 @@ fun OverviewScreenStateful(
     viewModel: OverviewViewModel = viewModel(),
     onFloatingActionButtonClicked: () -> Unit,
     onCarEditButtonClicked: () -> Unit,
-    onCarDetailsButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit,
@@ -51,7 +53,6 @@ fun OverviewScreenStateful(
             messageQueue = queueState.messageQueue,
             onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditButtonClicked = onCarEditButtonClicked,
-            onDetailsButtonClicked = onCarDetailsButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
@@ -75,7 +76,6 @@ private fun OverviewScreen(
     messageQueue: MessageQueue = MessageQueue.test,
     onFloatingActionButtonClicked: () -> Unit = { },
     onEditButtonClicked: () -> Unit = { },
-    onDetailsButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
@@ -90,6 +90,10 @@ private fun OverviewScreen(
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val systemUiController = rememberSystemUiController()
+
+    var showCarDetailsDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     AppTheme {
         if (state.car != null) {
@@ -130,10 +134,24 @@ private fun OverviewScreen(
                             actionButtonClicked = onFloatingActionButtonClicked,
                             settingsButtonClicked = onSettingsButtonClicked,
                             carEditButtonClicked = onEditButtonClicked,
-                            carDetailsButtonClicked = onDetailsButtonClicked
+                            carDetailsButtonClicked = {
+                                showCarDetailsDialog = true
+                            }
                         )
                     }
                 )
+                // Dialog
+                if (showCarDetailsDialog) {
+                    CarDetailsDialog(
+                        vinNo = it.vinNo,
+                        tirePressure = it.tirePressure,
+                        milesTotal = it.milesPerGallon,
+                        milesPerGallon = it.milesPerGallon,
+                        onClick = {
+                            showCarDetailsDialog = false
+                        }
+                    )
+                }
             }
         } else {
             systemUiController.statusBarDarkContentEnabled = true

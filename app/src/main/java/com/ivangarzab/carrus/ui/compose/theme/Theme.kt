@@ -102,8 +102,10 @@ fun AppTheme(
         SideEffect {
             // This block will be applied on configuration changes, e.g. changing to dark mode
             // while running the app
-            val window = (view.context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, fullScreen)
+            if (view.context is Activity) {
+                val window = (view.context as Activity).window
+                WindowCompat.setDecorFitsSystemWindows(window, fullScreen)
+            }
         }
     }
 

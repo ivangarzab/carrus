@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.compose
+package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
@@ -13,6 +13,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.BigNegativeButton
+import com.ivangarzab.carrus.ui.compose.InfoDialog
 
 /**
  * Created by Ivan Garza Bermea.
@@ -21,13 +23,13 @@ import com.ivangarzab.carrus.R
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CarDetailsDialog(
-    vinNo: String = "---",
-    tirePressure: String = "---",
-    milesTotal: String = "---",
-    milesPerGallon: String = "---",
+    vinNo: String = "I123456789ABCDEFG",
+    tirePressure: String = "32",
+    milesTotal: String = "250000",
+    milesPerGallon: String = "26",
     onClick: () -> Unit = { }
 ) {
-    InfoDialog {
+    InfoDialog(onDismissed = onClick) {
         Text(
             text = "Details",
             style = MaterialTheme.typography.titleLarge,
@@ -35,27 +37,28 @@ fun CarDetailsDialog(
         )
         CarDetailsDialogRow(
             modifier = Modifier.padding(top = 24.dp),
+            labelText = stringResource(id = R.string.total_miles),
+            contentText = milesTotal + " " + stringResource(id = R.string.miles)
+        )
+        CarDetailsDialogRow(
+            modifier = Modifier.padding(top = 8.dp),
+            labelText = "Averaged",
+            contentText = milesPerGallon + " " + stringResource(id = R.string.miles_per_gal)
+        )
+        CarDetailsDialogRow(
+            modifier = Modifier.padding(top = 8.dp),
+            labelText = stringResource(id = R.string.tire_pressure),
+            contentText = tirePressure + " " + stringResource(id = R.string.psi)
+        )
+        CarDetailsDialogRow(
+            modifier = Modifier.padding(top = 8.dp),
             labelText = stringResource(id = R.string.vin_no),
             contentText = vinNo
         )
-        CarDetailsDialogRow(
-            modifier = Modifier.padding(top = 8.dp),
-            labelText = stringResource(id = R.string.total_miles),
-            contentText = milesTotal
-        )
-        CarDetailsDialogRow(
-            modifier = Modifier.padding(top = 8.dp),
-            labelText = stringResource(id = R.string.miles_per_gallon),
-            contentText = milesPerGallon
-        )
-        CarDetailsDialogRow(
-            modifier = Modifier.padding(top = 8.dp),
-            labelText = stringResource(id = R.string.total_miles),
-            contentText = milesTotal
-        )
-        NegativeButton(
-            modifier = Modifier.padding(top = 16.dp),
-            text = stringResource(id = R.string.ok)
+        BigNegativeButton(
+            modifier = Modifier.padding(top = 12.dp),
+            text = stringResource(id = R.string.ok),
+            onClick = onClick
         )
     }
 }
@@ -69,15 +72,13 @@ fun CarDetailsDialogRow(
     Row(modifier = modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier
-                .weight(weight = 1f, fill = true)
-                .padding(start = 8.dp),
+                .weight(weight = 3f),
             text = labelText,
             textAlign = TextAlign.Left
         )
         Text(
             modifier = Modifier
-                .weight(weight = 1f, fill = true)
-                .padding(end = 8.dp),
+                .weight(weight = 6f, fill = true),
             text = contentText,
             textAlign = TextAlign.End
         )
