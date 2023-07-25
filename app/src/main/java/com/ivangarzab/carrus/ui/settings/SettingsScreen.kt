@@ -13,6 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -25,6 +28,7 @@ import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
+import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
 
 /**
  * Created by Ivan Garza Bermea.
@@ -34,8 +38,6 @@ import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
-    onAlarmTimeClicked: () -> Unit,
-    onDueDateFormatClicked: () -> Unit,
     onDeleteCarServicesClicked: () -> Unit,
     onDeleteCarDataClicked: () -> Unit,
     onImportClicked: () -> Unit,
@@ -50,8 +52,8 @@ fun SettingsScreenStateful(
             state = state,
             onBackPressed = { onBackPressed() },
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
-            onAlarmTimeClicked = { onAlarmTimeClicked() },
-            onDueDateFormatClicked = { onDueDateFormatClicked() },
+            onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
+            onDueDateFormatSelected = { viewModel.onDueDateFormatPicked(it) },
             onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
             onDeleteCarDataClicked = { onDeleteCarDataClicked() },
             onImportClicked = { onImportClicked() },
@@ -67,13 +69,20 @@ fun SettingsScreen(
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onBackPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
-    onAlarmTimeClicked: () -> Unit = { },
-    onDueDateFormatClicked: () -> Unit = { },
+    onAlarmTimeSelected: (String) -> Unit = { },
+    onDueDateFormatSelected: (String) -> Unit = { },
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onExportClicked: () -> Unit = { }
 ) {
+    var showAlarmTimePickerDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showDueDateFormatPickerDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     AppTheme {
         Scaffold(
             topBar = {
@@ -88,8 +97,8 @@ fun SettingsScreen(
                     state = state,
                     modifier = Modifier.padding(paddingValues),
                     onDarkModeToggle = { onDarkModeToggle(it) },
-                    onAlarmTimeClicked = { onAlarmTimeClicked() },
-                    onDueDateFormatClicked = { onDueDateFormatClicked() },
+                    onAlarmTimeClicked = { showAlarmTimePickerDialog = true },
+                    onDueDateFormatClicked = { showDueDateFormatPickerDialog = true },
                     onDeleteCarDataClicked = { onDeleteCarDataClicked() },
                     onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
                     onImportClicked = { onImportClicked() },
@@ -104,6 +113,29 @@ fun SettingsScreen(
                 )
             }
         )
+        when {
+            showAlarmTimePickerDialog -> PickerDialog(
+                items = state.alarmTimeOptions,
+//                visibleItemCount = 6, TODO: Figure out how to dynamically calculate Picker size
+                onOptionSelected = {
+                    showAlarmTimePickerDialog = false
+                    onAlarmTimeSelected(it)
+                },
+                onDismissed = {
+                    showAlarmTimePickerDialog = false
+                }
+            )
+            showDueDateFormatPickerDialog -> PickerDialog(
+                items = state.dateFormatOptions,
+                onOptionSelected = {
+                    showDueDateFormatPickerDialog = false
+                    onDueDateFormatSelected(it)
+                },
+                onDismissed = {
+                    showDueDateFormatPickerDialog = false
+                }
+            )
+        }
     }
 }
 

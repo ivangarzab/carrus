@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.NumberPicker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -65,16 +64,6 @@ class SettingsFragment : Fragment() {
             AppTheme {
                 SettingsScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
-                    onAlarmTimeClicked = {
-                        showNumberPickerDialog { numberPicked ->
-                            viewModel.onAlarmTimePicked(numberPicked)
-                        }
-                    },
-                    onDueDateFormatClicked = {
-                        showDueDateFormatPickerDialog { optionPicked ->
-                            viewModel.onDueDateFormatPicked(optionPicked)
-                        }
-                    },
                     onDeleteCarServicesClicked = {
                         showConfirmationDialog(
                             title = getString(R.string.dialog_delete_services_title),
@@ -96,54 +85,6 @@ class SettingsFragment : Fragment() {
                 )
             }
         }
-    }
-
-    private fun showNumberPickerDialog(
-        onNumberPicked: (String) -> Unit
-    ) {
-        val numberPicker = NumberPicker(requireContext()).apply {
-            minValue = 0
-            maxValue = 23
-            displayedValues = viewModel.pickerOptionsAlarmTime
-            value = viewModel.getAlarmTime()
-        }
-        AlertDialog.Builder(requireContext()).apply {
-            setView(numberPicker)
-            setNegativeButton(R.string.cancel) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.submit) { dialog, _ ->
-                onNumberPicked(numberPicker.displayedValues[numberPicker.value])
-                dialog.dismiss()
-            }
-        }.create().show()
-    }
-
-    private fun showDueDateFormatPickerDialog(
-        onFormatPicked: (String) -> Unit
-    ) {
-        val optionPicker = NumberPicker(requireContext()).apply {
-            viewModel.pickerOptionsDueDateFormat.let { options ->
-                minValue = 0
-                maxValue = options.size - 1
-                displayedValues = options
-                value = if (options.contains(viewModel.getDueDateFormat().value)) {
-                    options.indexOf(viewModel.getDueDateFormat().value)
-                } else {
-                    0
-                }
-            }
-        }
-        AlertDialog.Builder(requireContext()).apply {
-            setView(optionPicker)
-            setNegativeButton(R.string.cancel) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.submit) { dialog, _ ->
-                onFormatPicked(optionPicker.displayedValues[optionPicker.value])
-                dialog.dismiss()
-            }
-        }.create().show()
     }
 
     private fun showConfirmationDialog(
