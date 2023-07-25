@@ -4,14 +4,11 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.ui.compose.InfoDialog
-import com.ivangarzab.carrus.ui.compose.NegativeButton
+import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.Picker
-import com.ivangarzab.carrus.ui.compose.PositiveButton
+import com.ivangarzab.carrus.ui.compose.PositiveAndNegativeButtons
 import com.ivangarzab.carrus.ui.compose.rememberPickerState
 
 /**
@@ -29,7 +26,7 @@ fun PickerDialog(
 ) {
     val currentItemState = rememberPickerState()
 
-    InfoDialog(
+    BaseDialog(
         onDismissed = onDismissed
     ) {
         Picker(
@@ -37,15 +34,10 @@ fun PickerDialog(
             items = items,
             visibleItemsCount = visibleItemCount
         )
-        PositiveButton(
+        PositiveAndNegativeButtons(
             modifier = Modifier.padding(top = 16.dp),
-            text = stringResource(id = R.string.submit),
-            onClick = { onOptionSelected(currentItemState.selectedItem) }
-        )
-        NegativeButton(
-            modifier = Modifier.padding(top = 6.dp),
-            text = stringResource(id = R.string.cancel),
-            onClick = onDismissed
+            onPositiveButtonClicked = { onOptionSelected(currentItemState.selectedItem) },
+            onNegativeButtonClicked = onDismissed
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.ivangarzab.carrus.ui.settings
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
@@ -64,43 +62,11 @@ class SettingsFragment : Fragment() {
             AppTheme {
                 SettingsScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
-                    onDeleteCarServicesClicked = {
-                        showConfirmationDialog(
-                            title = getString(R.string.dialog_delete_services_title),
-                            onActionConfirmed = {
-                                viewModel.onDeleteServicesClicked()
-                            }
-                        )
-                    },
-                    onDeleteCarDataClicked = {
-                        showConfirmationDialog(
-                            title = getString(R.string.dialog_delete_car_title),
-                            onActionConfirmed = {
-                                viewModel.onDeleteCarDataClicked()
-                            }
-                        )
-                    },
                     onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
                     onExportClicked = { createDocumentsContract.launch(generateExportFileName()) }
                 )
             }
         }
-    }
-
-    private fun showConfirmationDialog(
-        title: String,
-        onActionConfirmed: () -> Unit
-    ) {
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle(title)
-            setNegativeButton(R.string.no) { dialog, _ ->
-                dialog.dismiss()
-            }
-            setPositiveButton(R.string.yes) { dialog, _ ->
-                onActionConfirmed()
-                dialog.dismiss()
-            }
-        }.create().show()
     }
 
     private fun generateExportFileName(): String =

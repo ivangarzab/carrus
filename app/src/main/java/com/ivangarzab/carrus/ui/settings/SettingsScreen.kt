@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +25,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.BuildConfig
+import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
@@ -38,8 +41,6 @@ import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
 fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
-    onDeleteCarServicesClicked: () -> Unit,
-    onDeleteCarDataClicked: () -> Unit,
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit
 ) {
@@ -54,8 +55,8 @@ fun SettingsScreenStateful(
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
             onDueDateFormatSelected = { viewModel.onDueDateFormatPicked(it) },
-            onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
-            onDeleteCarDataClicked = { onDeleteCarDataClicked() },
+            onDeleteCarServicesClicked = { viewModel.onDeleteServicesClicked() },
+            onDeleteCarDataClicked = { viewModel.onDeleteCarDataClicked() },
             onImportClicked = { onImportClicked() },
             onExportClicked = { onExportClicked() }
         )
@@ -82,6 +83,12 @@ fun SettingsScreen(
     var showDueDateFormatPickerDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
+    var showDeleteCarDataDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showDeleteCarServicesDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     AppTheme {
         Scaffold(
@@ -99,8 +106,8 @@ fun SettingsScreen(
                     onDarkModeToggle = { onDarkModeToggle(it) },
                     onAlarmTimeClicked = { showAlarmTimePickerDialog = true },
                     onDueDateFormatClicked = { showDueDateFormatPickerDialog = true },
-                    onDeleteCarDataClicked = { onDeleteCarDataClicked() },
-                    onDeleteCarServicesClicked = { onDeleteCarServicesClicked() },
+                    onDeleteCarDataClicked = { showDeleteCarDataDialog = true },
+                    onDeleteCarServicesClicked = { showDeleteCarServicesDialog = true },
                     onImportClicked = { onImportClicked() },
                     onExportClicked = { onExportClicked() }
                 )
@@ -113,6 +120,7 @@ fun SettingsScreen(
                 )
             }
         )
+        // Dialogs
         when {
             showAlarmTimePickerDialog -> PickerDialog(
                 items = state.alarmTimeOptions,
@@ -135,6 +143,24 @@ fun SettingsScreen(
                     showDueDateFormatPickerDialog = false
                 }
             )
+            showDeleteCarDataDialog -> {
+                ConfirmationDialog(
+                    onConfirmationResult = {
+                        if (it) onDeleteCarDataClicked()
+                        showDeleteCarDataDialog = false
+                    },
+                    text = stringResource(id = R.string.dialog_delete_services_title)
+                )
+            }
+            showDeleteCarServicesDialog -> {
+                ConfirmationDialog(
+                    onConfirmationResult = {
+                        if (it) onDeleteCarServicesClicked()
+                        showDeleteCarServicesDialog = false
+                    },
+                    text = stringResource(id = R.string.dialog_delete_car_title)
+                )
+            }
         }
     }
 }

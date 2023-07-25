@@ -13,8 +13,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.BigNegativeButton
-import com.ivangarzab.carrus.ui.compose.InfoDialog
 
 /**
  * Created by Ivan Garza Bermea.
@@ -29,7 +29,7 @@ fun CarDetailsDialog(
     milesPerGallon: String = "26",
     onClick: () -> Unit = { }
 ) {
-    InfoDialog(onDismissed = onClick) {
+    BaseDialog(onDismissed = onClick) {
         Text(
             text = "Details",
             style = MaterialTheme.typography.titleLarge,
