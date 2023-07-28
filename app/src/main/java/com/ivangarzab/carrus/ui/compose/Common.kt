@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 
@@ -38,14 +39,24 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Composable
 fun BaseDialog(
     modifier: Modifier = Modifier,
+    isLarge: Boolean = false,
     onDismissed: () -> Unit = { },
     content: @Composable ColumnScope.() -> Unit = { }
 ) {
     AppTheme {
-        Dialog(onDismissRequest = onDismissed) {
-            Card {
+        Dialog(
+            onDismissRequest = onDismissed,
+            properties = if (isLarge) {
+                DialogProperties(usePlatformDefaultWidth = false)
+            } else {
+                DialogProperties()
+            }
+        ) {
+            Card(modifier = Modifier.padding(start = 12.dp, end = 12.dp)) {
                 Column(
-                    modifier = modifier.padding(28.dp),
+                    modifier = modifier.padding(
+                        if (isLarge) 12.dp else 28.dp
+                    ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     content()

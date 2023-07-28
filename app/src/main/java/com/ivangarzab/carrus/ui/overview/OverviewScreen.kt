@@ -95,6 +95,10 @@ private fun OverviewScreen(
         mutableStateOf(false)
     }
 
+    var showServiceModal: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    } //TODO: Start using this variables instead of the BottomSheetDialogFragment
+
     AppTheme {
         if (state.car != null) {
             state.car.let {
@@ -141,8 +145,8 @@ private fun OverviewScreen(
                     }
                 )
                 // Dialog
-                if (showCarDetailsDialog) {
-                    CarDetailsDialog(
+                when {
+                    showCarDetailsDialog -> CarDetailsDialog(
                         vinNo = it.vinNo,
                         tirePressure = it.tirePressure,
                         milesTotal = it.milesPerGallon,
@@ -151,6 +155,10 @@ private fun OverviewScreen(
                             showCarDetailsDialog = false
                         }
                     )
+                    showServiceModal -> ServiceBottomSheet(
+                        modifier = Modifier,
+                        onDismissed = { showServiceModal = false }
+                    ) //TODO: Start using this!
                 }
             }
         } else {

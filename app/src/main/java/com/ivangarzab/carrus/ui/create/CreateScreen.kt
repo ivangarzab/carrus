@@ -54,8 +54,8 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
-import com.ivangarzab.carrus.ui.compose.CreateNumberField
-import com.ivangarzab.carrus.ui.compose.CreateTextField
+import com.ivangarzab.carrus.ui.compose.NumberInputField
+import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.data.CarModalState
@@ -175,7 +175,6 @@ private fun CreateScreenContent(
     onUpdateState: (CarModalState) -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
-    onUpdateAllData: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
 ) {
     val verticalSeparation: Dp = 12.dp
@@ -277,7 +276,7 @@ private fun CreateScreenContent(
                     }
                 }
 
-                CreateTextField(
+                TextInputField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = verticalSeparation),
@@ -290,7 +289,7 @@ private fun CreateScreenContent(
                         ))
                     }
                 )
-                CreateTextField(
+                TextInputField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = verticalSeparation),
@@ -308,7 +307,7 @@ private fun CreateScreenContent(
                         .fillMaxWidth()
                         .padding(top = verticalSeparation)
                 ) {
-                    CreateNumberField(
+                    NumberInputField(
                         modifier = Modifier
                             .padding(end = spaceInBetween)
                             .weight(2f),
@@ -321,7 +320,7 @@ private fun CreateScreenContent(
                             ))
                         }
                     )
-                    CreateTextField(
+                    TextInputField(
                         modifier = Modifier
                             .padding(start = spaceInBetween)
                             .weight(3f),
@@ -334,7 +333,7 @@ private fun CreateScreenContent(
                         }
                     )
                 }
-                CreateTextField(
+                TextInputField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = verticalSeparation),
@@ -359,7 +358,7 @@ private fun CreateScreenContent(
                                 .fillMaxWidth()
                                 .padding(top = verticalSeparation)
                         ) {
-                            CreateNumberField(
+                            NumberInputField(
                                 modifier = Modifier
                                     .padding(end = spaceInBetween)
                                     .weight(3f),
@@ -373,7 +372,7 @@ private fun CreateScreenContent(
                                     )
                                 }
                             )
-                            CreateNumberField(
+                            NumberInputField(
                                 modifier = Modifier
                                     .padding(start = spaceInBetween)
                                     .weight(2f),
@@ -393,7 +392,7 @@ private fun CreateScreenContent(
                                 .fillMaxWidth()
                                 .padding(top = verticalSeparation)
                         ) {
-                            CreateNumberField(
+                            NumberInputField(
                                 modifier = Modifier
                                     .padding(end = spaceInBetween)
                                     .weight(2f),
@@ -407,7 +406,7 @@ private fun CreateScreenContent(
                                     )
                                 }
                             )
-                            CreateTextField(
+                            TextInputField(
                                 modifier = Modifier
                                     .padding(start = spaceInBetween)
                                     .weight(3f),

@@ -17,4 +17,15 @@ data class ModalServiceState(
 ) : Parcelable {
 
     fun isEmpty(): Boolean = name.isEmpty() && repairDate.isEmpty() && dueDate.isEmpty()
+
+    companion object {
+        val empty = ModalServiceState(
+            name = "",
+            repairDate = "",
+            dueDate = "",
+            brand = "",
+            type = "",
+            price = "",
+        )
+    }
 }
