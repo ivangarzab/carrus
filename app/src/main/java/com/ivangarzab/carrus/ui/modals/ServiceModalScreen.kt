@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -20,12 +21,11 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.NegativeButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
+import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel.Companion.DEFAULT_DUE_DATE_ADDITION
 import com.ivangarzab.carrus.ui.overview.ServiceBottomSheetContent
-import com.ivangarzab.carrus.ui.overview.data.ModalServiceState
-import com.ivangarzab.carrus.ui.overview.data.ModalServiceStatePreviewProvider
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -39,37 +39,20 @@ import java.util.TimeZone
 fun ServiceModalScreenStateful(
     viewModel: ServiceModalViewModel = viewModel(),
     args: ServiceModalFragmentArgs,
-    onActionButtonClicked: () -> Unit,
+    onSubmissionSuccess: (Boolean) -> Unit,
 ) {
     viewModel.setArgsData(args.service)
-    val state: ServiceModalViewModel.ServiceModalState by viewModel
+    val state: ServiceModalState by viewModel
         .state
-        .observeAsState(initial = ServiceModalViewModel.ServiceModalState(
-            type = args.service?.let { ServiceModalViewModel.Type.EDIT } ?: ServiceModalViewModel
-                .Type.CREATE,
-            data = args.service
-        ))
+        .observeAsState(initial = ServiceModalState())
+
+    viewModel.onSubmission.observe(LocalLifecycleOwner.current) { onSubmissionSuccess(it) }
 
     AppTheme {
         ServiceModalScreen(
-            state = state.data?.let {
-                ModalServiceState(
-                    name = it.name,
-                    repairDate = it.repairDate.getShortenedDate(),
-                    dueDate = it.dueDate.getShortenedDate(),
-                    brand = it.brand ?: "",
-                    type = it.type ?: "",
-                    price = it.cost.takeIf { cost ->
-                        cost > 0
-                    }?.let { cost ->
-                        NumberFormat.getCurrencyInstance().format(cost)
-                    } ?: "0.00"
-                )
-            } ?: ModalServiceState.empty,
-            onUpdateState = {
-                viewModel.onUpdateServiceData(it)
-            },
-            onActionButtonClicked = onActionButtonClicked
+            state = state,
+            onUpdateState = { viewModel.onUpdateServiceModalState(it) },
+            onActionButtonClicked = { viewModel.onActionButtonClicked() }
         )
     }
 }
@@ -79,8 +62,8 @@ fun ServiceModalScreenStateful(
 @Composable
 fun ServiceModalScreen(
     modifier: Modifier = Modifier,
-    @PreviewParameter(ModalServiceStatePreviewProvider::class) state: ModalServiceState,
-    onUpdateState: (ModalServiceState) -> Unit = { },
+    @PreviewParameter(ServiceModalStatePreviewProvider::class) state: ServiceModalState,
+    onUpdateState: (ServiceModalState) -> Unit = { },
     onActionButtonClicked: () -> Unit = { },
 ) {
     var showRepairDateDialog: Boolean by rememberSaveable {
@@ -116,7 +99,7 @@ fun ServiceModalScreen(
             showDueDateDialog -> {
                 CalendarDialog(
                     date = Calendar.getInstance().apply {
-                        add(Calendar.DAY_OF_MONTH, 7) //TODO: variable or move to VM
+                        add(Calendar.DAY_OF_MONTH, DEFAULT_DUE_DATE_ADDITION)
                     },
                     onDismissed = { showDueDateDialog = false },
                     onValueSelected = {
@@ -163,17 +146,15 @@ fun CalendarDialog(
                             clear()
                             // Set UTC date from picker
                             datePickerState.selectedDateMillis?.let {
-                                Calendar.getInstance(
-                                    TimeZone.getTimeZone("UTC")
-                                ).apply {
-                                    timeInMillis = it
-                                }.let { selectedDate ->
-                                    set(
-                                        selectedDate.get(Calendar.YEAR),
-                                        selectedDate.get(Calendar.MONTH),
-                                        selectedDate.get(Calendar.DAY_OF_MONTH)
-                                    )
-                                }
+                                Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                                    .apply { timeInMillis = it }
+                                    .let { selectedDate ->
+                                        set(
+                                            selectedDate.get(Calendar.YEAR),
+                                            selectedDate.get(Calendar.MONTH),
+                                            selectedDate.get(Calendar.DAY_OF_MONTH)
+                                        )
+                                    }
                             }
                         }
                     )

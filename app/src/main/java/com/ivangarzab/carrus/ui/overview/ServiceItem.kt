@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit
 fun OverviewServiceItemStateful(
     modifier: Modifier = Modifier,
     index: Int = -1,
-    data: Service = Service.empty,
+    data: Service = Service.empty, //TODO: Create and use ServiceItemState
     dueDateFormat: DueDateFormat,
     onEditClicked: (Service) -> Unit = { },
     onDeleteClicked: (Service) -> Unit = { }
@@ -82,7 +82,7 @@ fun OverviewServiceItemStateful(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun OverviewServiceItem(
+private fun OverviewServiceItem(
     modifier: Modifier = Modifier,
     index: Int = -1,
     data: Service = Service.empty,

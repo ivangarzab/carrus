@@ -15,6 +15,7 @@ import java.util.Locale
  * component, and convert it into a [Calendar] date, when applicable.  If the contents turn out
  *  to be blank, then a [Calendar] will be returned where [Calendar.getTimeInMillis] == 0.
  */
+@Deprecated("Use Compose instead")
 fun TextInputEditText.getCalendarDate(): Calendar = text.toString().let { content ->
     when (content.isNotBlank()) {
         true -> Calendar.getInstance().apply {

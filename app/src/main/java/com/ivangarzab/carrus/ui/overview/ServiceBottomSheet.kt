@@ -22,13 +22,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
+import com.ivangarzab.carrus.ui.compose.MoneyInputField
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TextInputField
+import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.modals.ServiceModalState
 import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
-import com.ivangarzab.carrus.ui.overview.data.ModalServiceState
-import com.ivangarzab.carrus.ui.overview.data.ModalServiceStatePreviewProvider
-import com.ivangarzab.carrus.util.extensions.getShortenedDate
 
 /**
  * Created by Ivan Garza Bermea.
@@ -39,14 +39,9 @@ fun ServiceBottomSheet(
     viewModel: ServiceModalViewModel = viewModel(),
     onDismissed: () -> Unit = { },
 ) {
-    val state: ServiceModalViewModel.ServiceModalState by viewModel
+    val state: ServiceModalState by viewModel
         .state
-        .observeAsState(
-            initial = ServiceModalViewModel.ServiceModalState(
-                type = ServiceModalViewModel.Type.CREATE,
-                data = null
-            )
-        )
+        .observeAsState(initial = ServiceModalState())
 
     AppTheme {
         BottomSheet(
@@ -55,16 +50,7 @@ fun ServiceBottomSheet(
         ) {
             ServiceBottomSheetContent(
                 modifier = Modifier,
-                state = state.data?.let {
-                    ModalServiceState(
-                        name = it.name,
-                        repairDate = it.repairDate.getShortenedDate(),
-                        dueDate = it.dueDate.getShortenedDate(),
-                        brand = it.brand ?: "",
-                        type = it.type ?: "",
-                        price = it.cost.toString()
-                    )
-                } ?: ModalServiceState.empty
+                state = state
             )
         }
     }
@@ -75,8 +61,8 @@ fun ServiceBottomSheet(
 @Composable
 fun ServiceBottomSheetContent(
     modifier: Modifier = Modifier,
-    @PreviewParameter(ModalServiceStatePreviewProvider::class) state: ModalServiceState,
-    onUpdateState: (ModalServiceState) -> Unit = { },
+    @PreviewParameter(ServiceModalStatePreviewProvider::class) state: ServiceModalState,
+    onUpdateState: (ServiceModalState) -> Unit = { },
     onRepairDateFieldClicked: () -> Unit = { },
     onDueDateFieldClicked: () -> Unit = { },
     onActionButtonClicked: () -> Unit = { }
@@ -106,7 +92,7 @@ fun ServiceBottomSheetContent(
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
                     label = stringResource(id = R.string.service_name),
-                    content = state.name,
+                    content = state.name ?: "",
                     isRequired = true,
                     updateListener = {
                         onUpdateState(
@@ -120,7 +106,7 @@ fun ServiceBottomSheetContent(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
-                    content = state.repairDate,
+                    content = state.repairDate ?: "",
                     label = stringResource(id = R.string.repair_date),
                     isRequired = true,
                     updateListener = { /* No-op */ },
@@ -130,7 +116,7 @@ fun ServiceBottomSheetContent(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
-                    content = state.dueDate,
+                    content = state.dueDate ?: "",
                     label = stringResource(id = R.string.due_date),
                     isRequired = true,
                     updateListener = { /* No-op */ },
@@ -141,7 +127,7 @@ fun ServiceBottomSheetContent(
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
                     label = stringResource(id = R.string.service_brand),
-                    content = state.brand,
+                    content = state.brand ?: "",
                     updateListener = {
                         onUpdateState(
                             state.copy(
@@ -155,7 +141,7 @@ fun ServiceBottomSheetContent(
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
                     label = stringResource(id = R.string.service_type),
-                    content = state.type,
+                    content = state.type ?: "",
                     updateListener = {
                         onUpdateState(
                             state.copy(
@@ -164,12 +150,12 @@ fun ServiceBottomSheetContent(
                         )
                     }
                 )
-                TextInputField(
+                MoneyInputField(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .fillMaxWidth(),
                     label = stringResource(id = R.string.service_price),
-                    content = state.price,
+                    content = state.price ?: "",
                     isLastField = true,
                     updateListener = {
                         onUpdateState(

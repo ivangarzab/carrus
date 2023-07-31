@@ -34,6 +34,7 @@ private fun BaseInputField(
     modifier: Modifier = Modifier,
     label: String = "Test field",
     content: String? = null,
+    prefix: String? = null,
     isReadOnly: Boolean = false,
     isRequired: Boolean = false,
     isLastField: Boolean = false,
@@ -47,6 +48,14 @@ private fun BaseInputField(
         OutlinedTextField(
             modifier = modifier,
             value = content ?: label,
+            prefix = {
+                prefix?.let {
+                    Text(
+                        text = it,
+                        style = textStyle ?: LocalTextStyle.current
+                    )
+                }
+            },
             label = {
                 Text(text = if (isRequired) "$label*" else label)
             },
@@ -118,10 +127,35 @@ fun NumberInputField(
 }
 
 @Composable
+fun MoneyInputField(
+    modifier: Modifier = Modifier,
+    label: String = "Test field",
+    content: String? = null,
+    isRequired: Boolean = false,
+    isLastField: Boolean = false,
+    updateListener: (String) -> Unit = { }
+) {
+    AppTheme {
+        BaseInputField(
+            modifier = modifier,
+            label = label,
+            content = content,
+            prefix = "$",
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+            isRequired = isRequired,
+            isLastField = isLastField,
+            updateListener = updateListener
+        )
+    }
+}
+
+@Composable
 fun CalendarInputField(
     modifier: Modifier = Modifier,
     label: String = "calendar date",
-    content: String = "09/12/1992",
+    content: String? = "09/12/1992",
     isRequired: Boolean = false,
     isLastField: Boolean = false,
     updateListener: (String) -> Unit = { },
