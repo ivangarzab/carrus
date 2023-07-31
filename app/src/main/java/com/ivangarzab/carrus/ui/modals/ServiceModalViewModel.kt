@@ -31,12 +31,12 @@ class ServiceModalViewModel @Inject constructor(
     val onSubmission: LiveData<Boolean> = _onSubmission
 
     enum class Type { CREATE, EDIT }
-    private lateinit var type: Type //TODO: Clear this out with inheritance
+    lateinit var modalType: Type //TODO: Clear this out with inheritance
 
     private var validatedService: Service? = null
 
     fun setArgsData(data: Service?) {
-        type = data?.let {
+        modalType = data?.let {
             setState(ServiceModalState(
                 name = data.name,
                 repairDate = data.repairDate.getShortenedDate(),
@@ -49,6 +49,8 @@ class ServiceModalViewModel @Inject constructor(
         } ?: Type.CREATE
     }
 
+    fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)
+
     fun onActionButtonClicked() {
         Timber.v("Action button clicked")
         attemptToValidateService()
@@ -56,7 +58,7 @@ class ServiceModalViewModel @Inject constructor(
             when (verifyServiceData(it)) {
                 true -> {
                     Timber.v("Submitting Service data")
-                    when (type) {
+                    when (modalType) {
                         Type.CREATE -> onServiceCreated(it)
                         Type.EDIT -> onServiceUpdate(it)
                     }
@@ -66,8 +68,6 @@ class ServiceModalViewModel @Inject constructor(
             }
         } ?: false
     }
-
-    fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)
 
     private fun verifyServiceData(data: Service): Boolean =
         data.name.isNotBlank() &&
