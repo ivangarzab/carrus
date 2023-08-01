@@ -37,7 +37,9 @@ class ServiceModalViewModel @Inject constructor(
 
     fun setArgsData(data: Service?) {
         modalType = data?.let {
+            validatedService = it
             setState(ServiceModalState(
+                title = "Update Service",
                 name = data.name,
                 repairDate = data.repairDate.getShortenedDate(),
                 dueDate = data.dueDate.getShortenedDate(),
@@ -46,7 +48,7 @@ class ServiceModalViewModel @Inject constructor(
                 price = "%.2f".format(data.cost)
             ))
             Type.EDIT
-        } ?: Type.CREATE
+        } ?: Type.CREATE.also { setState(ServiceModalState(title = "Create Service")) }
     }
 
     fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)
@@ -150,7 +152,6 @@ class ServiceModalViewModel @Inject constructor(
                 )
             }
         }
-        Timber.v("Validated Service: $validatedService")
     }
 
     companion object {

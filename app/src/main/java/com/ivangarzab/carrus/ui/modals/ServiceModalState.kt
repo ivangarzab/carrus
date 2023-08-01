@@ -4,6 +4,7 @@ package com.ivangarzab.carrus.ui.modals
  * Created by Ivan Garza Bermea.
  */
 data class ServiceModalState(
+    val title: String? = null,
     val name: String? = null,
     val repairDate: String? = null,
     val dueDate: String? = null,

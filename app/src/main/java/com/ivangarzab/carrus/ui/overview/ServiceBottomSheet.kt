@@ -83,7 +83,7 @@ fun ServiceBottomSheetContent(
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = 8.dp),
-                    text = stringResource(id = R.string.services),
+                    text = state.title ?: stringResource(id = R.string.services),
                     style = MaterialTheme.typography.titleLarge,
                     fontStyle = FontStyle.Italic,
                 )

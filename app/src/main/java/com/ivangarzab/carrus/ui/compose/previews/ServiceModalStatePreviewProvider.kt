@@ -9,6 +9,7 @@ import com.ivangarzab.carrus.ui.modals.ServiceModalState
 class ServiceModalStatePreviewProvider : PreviewParameterProvider<ServiceModalState> {
     override val values = sequenceOf(
         ServiceModalState(
+            title = "Create Service",
             name = "Test Service",
             repairDate = "9/12/92",
             dueDate = "9/99/99",
