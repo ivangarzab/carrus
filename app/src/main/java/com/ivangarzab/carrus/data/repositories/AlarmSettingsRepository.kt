@@ -23,6 +23,7 @@ class AlarmSettingsRepository @Inject constructor(
 
     data class AlarmSettingsState(
         val isAlarmFeatureEnabled: Boolean = false,
+        val areAlarmsEnabled: Boolean = false,
         val alarmTime: String = "",
         val frequency: AlarmFrequency = AlarmFrequency.DAILY
     )
@@ -35,6 +36,10 @@ class AlarmSettingsRepository @Inject constructor(
             (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
                 .isAbleToScheduleExactAlarms()
         ) //TODO: Can we listen for these changes?
+        // Extract initial data
+        setAreAlarmsEnabled(areAlarmsEnabled())
+        setAlarmTime(getAlarmTime())
+        setAlarmFrequency(getAlarmFrequency())
     }
 
     private fun updateAlarmSettingsFlow(data: AlarmSettingsState) {
@@ -70,6 +75,16 @@ class AlarmSettingsRepository @Inject constructor(
         prefs.alarmFrequency = frequency
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
             frequency = frequency
+        ))
+    }
+
+    fun areAlarmsEnabled(): Boolean = prefs.areAlarmsEnabled
+
+    fun setAreAlarmsEnabled(enabled: Boolean) {
+        Timber.v("Turning ${if (enabled) "ON" else "OFF"} alarms globally")
+        prefs.areAlarmsEnabled = enabled
+        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
+            areAlarmsEnabled = enabled
         ))
     }
 }

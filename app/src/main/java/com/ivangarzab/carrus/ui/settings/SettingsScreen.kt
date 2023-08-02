@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -53,7 +54,9 @@ fun SettingsScreenStateful(
             state = state,
             onBackPressed = { onBackPressed() },
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
+            onAlarmsToggle = { viewModel.onAlarmsEnabledToggleClicked(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
+            onAlarmFrequencyClicked = { viewModel.onAlarmFrequencyPicked(it) },
             onDueDateFormatSelected = { viewModel.onDueDateFormatPicked(it) },
             onDeleteCarServicesClicked = { viewModel.onDeleteServicesClicked() },
             onDeleteCarDataClicked = { viewModel.onDeleteCarDataClicked() },
@@ -70,7 +73,9 @@ fun SettingsScreen(
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onBackPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
+    onAlarmsToggle: (Boolean) -> Unit = { },
     onAlarmTimeSelected: (String) -> Unit = { },
+    onAlarmFrequencyClicked: (AlarmFrequency) -> Unit = { },
     onDueDateFormatSelected: (String) -> Unit = { },
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
@@ -90,6 +95,10 @@ fun SettingsScreen(
         mutableStateOf(false)
     }
 
+    var showAlarmFrequencyDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     AppTheme {
         Scaffold(
             topBar = {
@@ -104,7 +113,9 @@ fun SettingsScreen(
                     state = state,
                     modifier = Modifier.padding(paddingValues),
                     onDarkModeToggle = { onDarkModeToggle(it) },
+                    onAlarmsToggle = { onAlarmsToggle(it) },
                     onAlarmTimeClicked = { showAlarmTimePickerDialog = true },
+                    onAlarmFrequencyClicked = { showAlarmFrequencyDialog = true },
                     onDueDateFormatClicked = { showDueDateFormatPickerDialog = true },
                     onDeleteCarDataClicked = { showDeleteCarDataDialog = true },
                     onDeleteCarServicesClicked = { showDeleteCarServicesDialog = true },
@@ -161,6 +172,17 @@ fun SettingsScreen(
                     text = stringResource(id = R.string.dialog_delete_car_title)
                 )
             }
+
+            showAlarmFrequencyDialog -> PickerDialog(
+                items = state.alarmFrequencyOptions,
+                onOptionSelected = {
+                    showAlarmFrequencyDialog = false
+                    onAlarmFrequencyClicked(AlarmFrequency.get(it))
+                },
+                onDismissed = {
+                    showAlarmFrequencyDialog = false
+                }
+            )
         }
     }
 }

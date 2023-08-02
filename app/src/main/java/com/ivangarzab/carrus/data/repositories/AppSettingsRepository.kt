@@ -40,7 +40,7 @@ class AppSettingsRepository @Inject constructor(
     fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
 
     /** Night Theme/Dark Mode **/
-
+//TODO: I may not need this info after the Compose migration after all
     fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
     fun setNightThemeSetting(isNight: Boolean) {

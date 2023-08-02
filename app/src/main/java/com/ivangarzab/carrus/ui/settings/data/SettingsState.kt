@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.ui.settings.data
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -11,10 +12,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class SettingsState(
     val car: Car? = null,
-    val alarmTime: String? = null,
     val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
+    val dateFormatOptions: List<String> = pickerOptionsDueDateFormat,
+    val alarmsOn: Boolean = false,
+    val alarmTime: String? = null,
     val alarmTimeOptions: List<String> = pickerOptionsAlarmTime,
-    val dateFormatOptions: List<String> = pickerOptionsDueDateFormat
+    val alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY,
+    val alarmFrequencyOptions: List<String> = pickerOptionsAlarmFrequency,
 ) : Parcelable
 
 private val pickerOptionsAlarmTime = listOf(
@@ -22,5 +26,16 @@ private val pickerOptionsAlarmTime = listOf(
     "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
 )
 private val pickerOptionsDueDateFormat = listOf(
-    "days", "weeks", "months", "due date"
+    DueDateFormat.DAYS.value,
+    DueDateFormat.WEEKS.value,
+    DueDateFormat.MONTHS.value,
+    DueDateFormat.DATE.value
+)
+
+private val pickerOptionsAlarmFrequency = listOf(
+    AlarmFrequency.DAILY.value,
+    AlarmFrequency.OTHER_DAY.value,
+    AlarmFrequency.MONDAYS.value,
+    AlarmFrequency.FRIDAYS.value,
+    AlarmFrequency.SUNDAY.value
 )

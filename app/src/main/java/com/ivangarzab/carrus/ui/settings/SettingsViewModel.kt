@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
@@ -51,12 +52,13 @@ class SettingsViewModel @Inject constructor(
         }
         viewModelScope.launch {
             alarmSettingsRepository.observeAlarmSettingsData().collect {
+                // TODO: Get rid of this redundancy
+                updateAlarmsEnabledState(it.areAlarmsEnabled)
                 updateAlarmTimeState(it.alarmTime)
+                updateAlarmFrequencyState(it.frequency)
             }
         }
     }
-
-    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
 
     fun onDarkModeToggleClicked(checked: Boolean) {
         Timber.v("Dark mode toggle was checked to: $checked")
@@ -81,12 +83,24 @@ class SettingsViewModel @Inject constructor(
         } ?: Timber.v("There are no services to delete from car data")
     }
 
+    fun onAlarmsEnabledToggleClicked(enabled: Boolean) {
+        Timber.d("Alarms enabled toggled: $enabled")
+        alarmSettingsRepository.setAreAlarmsEnabled(enabled)
+        updateAlarmsEnabledState(enabled)
+    }
+
     fun onAlarmTimePicked(alarmTime: String) {
         Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
         alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
         //TODO: Revisit and reconsider this next call
         alarmsRepository.schedulePastDueAlarm(true)
         updateAlarmTimeState(alarmTime)
+    }
+
+    fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {
+        Timber.d("Alarms frequency selected: ${frequency.value}")
+        alarmSettingsRepository.setAlarmFrequency(frequency)
+        updateAlarmFrequencyState(frequency)
     }
 
     fun onDueDateFormatPicked(option: String) {
@@ -98,9 +112,7 @@ class SettingsViewModel @Inject constructor(
 
     }
 
-    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
-
-    fun getTimeString(hour: Int): String = "$hour:00 ${
+    private fun getTimeString(hour: Int): String = "$hour:00 ${
         when (hour) {
             in 1..12 -> "AM"
             in 13..24 -> "PM"
@@ -130,7 +142,7 @@ class SettingsViewModel @Inject constructor(
                     carRepository.saveCarData(car)
                     return true
                 }
-                Timber.w("Unable to import car data",)
+                Timber.w("Unable to import car data")
                 return false
             } ?: Timber.w("Unable to parse data from file with uri: $uri")
         }
@@ -141,15 +153,21 @@ class SettingsViewModel @Inject constructor(
     private fun updateCarState(car: Car?) =
         setState(state, savedState, STATE) { copy(car = car) }
 
+    private fun updateAlarmsEnabledState(enabled: Boolean) {
+        setState(state, savedState, STATE) { copy(alarmsOn = enabled) }
+    }
+
     private fun updateAlarmTimeState(alarmTime: String) {
         setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
+    }
+
+    private fun updateAlarmFrequencyState(frequency: AlarmFrequency) {
+        setState(state, savedState, STATE) { copy(alarmFrequency = frequency) }
     }
 
     private fun updateDueDateFormatState(format: DueDateFormat) {
         setState(state, savedState, STATE) { copy(dueDateFormat = format) }
     }
-
-    fun getAlarmTime() = alarmSettingsRepository.getAlarmTime()
 
     companion object {
         private const val STATE: String = "SettingsViewModel.STATE"

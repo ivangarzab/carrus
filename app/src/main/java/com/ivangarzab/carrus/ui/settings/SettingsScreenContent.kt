@@ -48,7 +48,9 @@ fun SettingsScreenContent(
     modifier: Modifier = Modifier,
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onDarkModeToggle: (Boolean) -> Unit = { },
+    onAlarmsToggle: (Boolean) -> Unit = { },
     onAlarmTimeClicked: () -> Unit = { },
+    onAlarmFrequencyClicked: () -> Unit = { },
     onDueDateFormatClicked: () -> Unit = { },
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
@@ -63,10 +65,16 @@ fun SettingsScreenContent(
                 mutableStateOf(value = false)
             }
             isThereCarData = state.car != null
+
             var isThereCarServiceData: Boolean by rememberSaveable {
                 mutableStateOf(value = false)
             }
             isThereCarServiceData = state.car?.services?.isNotEmpty() ?: false
+
+            var areAlarmsEnabled: Boolean by rememberSaveable {
+                mutableStateOf(value = false)
+            }
+            areAlarmsEnabled = state.alarmsOn
 
             SettingsScreenContentItemSwitch(
                 title = stringResource(id = R.string.setting_dark_mode_title),
@@ -78,21 +86,45 @@ fun SettingsScreenContent(
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
             SettingsScreenContentItemText(
-                title = stringResource(id = R.string.setting_alarm_time_title),
-                subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
-                content = if (state.alarmTime.isNullOrBlank()) {
-                    DEFAULT_ALARM_TIME.toString()
-                } else {
-                    state.alarmTime
-                },
-                onClick = { onAlarmTimeClicked() }
-            )
-            SettingsScreenContentItemText(
                 title = stringResource(id = R.string.settings_due_date_format_title),
                 subtitle = stringResource(id = R.string.settings_due_date_format_subtitle),
                 content = state.dueDateFormat.value,
                 onClick = { onDueDateFormatClicked() }
             )
+
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+
+            SettingsScreenContentItemSwitch(
+                title = stringResource(id = R.string.settings_alarm_on_title),
+                subTitle = stringResource(id = R.string.settings_alarm_on_subtitle),
+                isChecked = areAlarmsEnabled,
+                onToggle = { onAlarmsToggle(it) }
+            )
+
+            AnimatedVisibility(
+                visible = areAlarmsEnabled,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                Column {
+                    SettingsScreenContentItemText(
+                        title = stringResource(id = R.string.setting_alarm_time_title),
+                        subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
+                        content = if (state.alarmTime.isNullOrBlank()) {
+                            DEFAULT_ALARM_TIME.toString()
+                        } else {
+                            state.alarmTime
+                        },
+                        onClick = { onAlarmTimeClicked() }
+                    )
+                    SettingsScreenContentItemText(
+                        title = stringResource(id = R.string.setting_alarm_frequency_title),
+                        subtitle = stringResource(id = R.string.setting_alarm_frequency_subtitle),
+                        content = state.alarmFrequency.value,
+                        onClick = { onAlarmFrequencyClicked() }
+                    )
+                }
+            }
 
             if (isThereCarData) {
                 Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
