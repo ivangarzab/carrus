@@ -6,8 +6,8 @@ package com.ivangarzab.carrus.data
 enum class TimeFormat(
     val value: String
 ) {
-    HR12("12 hours"),
-    HR24("24 hours")
+    HR12("12-hour"),
+    HR24("24-hour")
     ;
 
     companion object {

@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.ui.settings.data
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import kotlinx.parcelize.Parcelize
 
@@ -14,6 +15,8 @@ data class SettingsState(
     val car: Car? = null,
     val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     val dateFormatOptions: List<String> = pickerOptionsDueDateFormat,
+    val clockTimeFormat: TimeFormat = TimeFormat.HR24,
+    val timeFormatOptions: List<String> = pickerOptionsTimeFormat,
     val alarmsOn: Boolean = false,
     val alarmTime: String? = null,
     val alarmTimeOptions: List<String> = pickerOptionsAlarmTime,
@@ -24,7 +27,13 @@ data class SettingsState(
 private val pickerOptionsAlarmTime = listOf(
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
     "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+)//TODO: Get from clockTimeFormat
+
+private val pickerOptionsTimeFormat = listOf(
+    TimeFormat.HR12.value,
+    TimeFormat.HR24.value,
 )
+
 private val pickerOptionsDueDateFormat = listOf(
     DueDateFormat.DAYS.value,
     DueDateFormat.WEEKS.value,

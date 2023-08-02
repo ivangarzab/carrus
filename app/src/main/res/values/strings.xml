@@ -70,6 +70,8 @@
     <string name="setting_alarm_time_subtitle">Value should be between 1 – 24</string>
     <string name="settings_due_date_format_title">Due date format</string>
     <string name="settings_due_date_format_subtitle">How would you like to see a Service\'s time left?</string>
+    <string name="settings_time_format_title">Clock time format</string>
+    <string name="settings_time_format_subtitle">Select between a 12-hour or 24-hour clock format</string>
     <string name="settings_alarm_on_title">Alarm ON</string>
     <string name="settings_alarm_on_subtitle">Toggle the alarm ON and OFF</string>
 

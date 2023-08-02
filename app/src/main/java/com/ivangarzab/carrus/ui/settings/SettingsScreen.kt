@@ -58,6 +58,7 @@ fun SettingsScreenStateful(
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
             onAlarmFrequencyClicked = { viewModel.onAlarmFrequencyPicked(it) },
             onDueDateFormatSelected = { viewModel.onDueDateFormatPicked(it) },
+            onClockTimeFormatClicked = { viewModel.onClockTimeFormatPicked(it) },
             onDeleteCarServicesClicked = { viewModel.onDeleteServicesClicked() },
             onDeleteCarDataClicked = { viewModel.onDeleteCarDataClicked() },
             onImportClicked = { onImportClicked() },
@@ -77,6 +78,7 @@ fun SettingsScreen(
     onAlarmTimeSelected: (String) -> Unit = { },
     onAlarmFrequencyClicked: (AlarmFrequency) -> Unit = { },
     onDueDateFormatSelected: (String) -> Unit = { },
+    onClockTimeFormatClicked: (String) -> Unit = { },
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
@@ -88,13 +90,15 @@ fun SettingsScreen(
     var showDueDateFormatPickerDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
+    var showClockTimeFormatPickerDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
     var showDeleteCarDataDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
     var showDeleteCarServicesDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
-
     var showAlarmFrequencyDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
@@ -117,6 +121,7 @@ fun SettingsScreen(
                     onAlarmTimeClicked = { showAlarmTimePickerDialog = true },
                     onAlarmFrequencyClicked = { showAlarmFrequencyDialog = true },
                     onDueDateFormatClicked = { showDueDateFormatPickerDialog = true },
+                    onClockTimeFormatClicked = { showClockTimeFormatPickerDialog = true },
                     onDeleteCarDataClicked = { showDeleteCarDataDialog = true },
                     onDeleteCarServicesClicked = { showDeleteCarServicesDialog = true },
                     onImportClicked = { onImportClicked() },
@@ -172,7 +177,6 @@ fun SettingsScreen(
                     text = stringResource(id = R.string.dialog_delete_car_title)
                 )
             }
-
             showAlarmFrequencyDialog -> PickerDialog(
                 items = state.alarmFrequencyOptions,
                 onOptionSelected = {
@@ -181,6 +185,16 @@ fun SettingsScreen(
                 },
                 onDismissed = {
                     showAlarmFrequencyDialog = false
+                }
+            )
+            showClockTimeFormatPickerDialog -> PickerDialog(
+                items = state.timeFormatOptions,
+                onOptionSelected = {
+                    onClockTimeFormatClicked(it)
+                    showClockTimeFormatPickerDialog = false
+                },
+                onDismissed = {
+                    showClockTimeFormatPickerDialog = false
                 }
             )
         }

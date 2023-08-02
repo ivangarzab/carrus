@@ -52,6 +52,7 @@ fun SettingsScreenContent(
     onAlarmTimeClicked: () -> Unit = { },
     onAlarmFrequencyClicked: () -> Unit = { },
     onDueDateFormatClicked: () -> Unit = { },
+    onClockTimeFormatClicked: () -> Unit = { },
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
@@ -90,6 +91,13 @@ fun SettingsScreenContent(
                 subtitle = stringResource(id = R.string.settings_due_date_format_subtitle),
                 content = state.dueDateFormat.value,
                 onClick = { onDueDateFormatClicked() }
+            )
+
+            SettingsScreenContentItemText(
+                title = stringResource(id = R.string.settings_time_format_title),
+                subtitle = stringResource(id = R.string.settings_time_format_subtitle),
+                content = state.clockTimeFormat.value,
+                onClick = { onClockTimeFormatClicked() }
             )
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)

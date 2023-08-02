@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
@@ -44,7 +45,9 @@ class SettingsViewModel @Inject constructor(
     )
 
     init {
+        //TODO: This is a mess!
         updateDueDateFormatState(appSettingsRepository.fetchDueDateFormatSetting())
+        updateTimeFormatState(appSettingsRepository.fetchTimeFormatSetting())
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -97,7 +100,7 @@ class SettingsViewModel @Inject constructor(
         updateAlarmTimeState(alarmTime)
     }
 
-    fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {
+    fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
         Timber.d("Alarms frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
         updateAlarmFrequencyState(frequency)
@@ -110,6 +113,14 @@ class SettingsViewModel @Inject constructor(
             updateDueDateFormatState(dueDateFormat)
         }
 
+    }
+
+    fun onClockTimeFormatPicked(option: String) {
+        TimeFormat.get(option).let { timeFormat ->
+            Timber.d("Clock Time format changed to: '$timeFormat'")
+            appSettingsRepository.setTimeFormatSetting(timeFormat)
+            updateTimeFormatState(timeFormat)
+        }
     }
 
     private fun getTimeString(hour: Int): String = "$hour:00 ${
@@ -167,6 +178,10 @@ class SettingsViewModel @Inject constructor(
 
     private fun updateDueDateFormatState(format: DueDateFormat) {
         setState(state, savedState, STATE) { copy(dueDateFormat = format) }
+    }
+
+    private fun updateTimeFormatState(format: TimeFormat) {
+        setState(state, savedState, STATE) { copy(clockTimeFormat = format) }
     }
 
     companion object {
