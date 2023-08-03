@@ -88,6 +88,7 @@ class SettingsViewModel @Inject constructor(
 
     fun onAlarmsEnabledToggleClicked(enabled: Boolean) {
         Timber.d("Alarms enabled toggled: $enabled")
+        //TODO: Check alarm permission first!
         alarmSettingsRepository.setAreAlarmsEnabled(enabled)
         updateAlarmsEnabledState(enabled)
     }
@@ -181,7 +182,12 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun updateTimeFormatState(format: TimeFormat) {
-        setState(state, savedState, STATE) { copy(clockTimeFormat = format) }
+        setState(state, savedState, STATE) {
+            copy(
+                clockTimeFormat = format,
+                alarmTimeOptions = format.range.map { it.toString() }
+            )
+        }
     }
 
     companion object {

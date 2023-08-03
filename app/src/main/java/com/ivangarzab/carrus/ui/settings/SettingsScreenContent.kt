@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -60,8 +63,12 @@ fun SettingsScreenContent(
 ) {
     AppTheme {
         Column(
-            modifier.background(color = MaterialTheme.colorScheme.background)
-        ) {
+            modifier
+                .background(color = MaterialTheme.colorScheme.background)
+                .verticalScroll(
+                    state = rememberScrollState(),
+                    enabled = true
+                )) {
             var isThereCarData: Boolean by rememberSaveable {
                 mutableStateOf(value = false)
             }
@@ -167,6 +174,11 @@ fun SettingsScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 onImportClicked = onImportClicked,
                 onExportClicked = onExportClicked
+            )
+
+            SettingsScreenBottomBar(
+                modifier = Modifier,
+                versionName = BuildConfig.VERSION_NAME //TODO: Best to get from VM
             )
         }
     }

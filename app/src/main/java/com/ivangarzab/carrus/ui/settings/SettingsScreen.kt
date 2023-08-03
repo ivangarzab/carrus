@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
@@ -127,15 +125,9 @@ fun SettingsScreen(
                     onImportClicked = { onImportClicked() },
                     onExportClicked = { onExportClicked() }
                 )
-            },
-            bottomBar = {
-                SettingsScreenBottomBar(
-                    modifier = Modifier
-                        .navigationBarsPadding(),
-                    versionName = BuildConfig.VERSION_NAME
-                )
             }
         )
+
         // Dialogs
         when {
             showAlarmTimePickerDialog -> PickerDialog(
