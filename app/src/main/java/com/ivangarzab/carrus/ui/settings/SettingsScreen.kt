@@ -2,7 +2,8 @@ package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,8 @@ fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
     onImportClicked: () -> Unit,
-    onExportClicked: () -> Unit
+    onExportClicked: () -> Unit,
+    onPrivacyPolicyClicked: () -> Unit
 ) {
     val state: SettingsState by viewModel
         .state
@@ -58,7 +60,8 @@ fun SettingsScreenStateful(
             onDeleteCarServicesClicked = { viewModel.onDeleteServicesClicked() },
             onDeleteCarDataClicked = { viewModel.onDeleteCarDataClicked() },
             onImportClicked = { onImportClicked() },
-            onExportClicked = { onExportClicked() }
+            onExportClicked = { onExportClicked() },
+            onPrivacyPolicyClicked = onPrivacyPolicyClicked
         )
     }
 }
@@ -75,7 +78,8 @@ fun SettingsScreen(
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
-    onExportClicked: () -> Unit = { }
+    onExportClicked: () -> Unit = { },
+    onPrivacyPolicyClicked: () -> Unit = { }
 ) {
     var showAlarmTimePickerDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -116,7 +120,8 @@ fun SettingsScreen(
                 SettingsScreenBottomBar(
                     modifier = Modifier
                         .navigationBarsPadding(),
-                    versionName = BuildConfig.VERSION_NAME
+                    versionName = BuildConfig.VERSION_NAME,
+                    onPrivacyPolicyClicked = onPrivacyPolicyClicked
                 )
             }
         )
@@ -133,6 +138,7 @@ fun SettingsScreen(
                     showAlarmTimePickerDialog = false
                 }
             )
+
             showDueDateFormatPickerDialog -> PickerDialog(
                 items = state.dateFormatOptions,
                 onOptionSelected = {
@@ -143,6 +149,7 @@ fun SettingsScreen(
                     showDueDateFormatPickerDialog = false
                 }
             )
+
             showDeleteCarDataDialog -> {
                 ConfirmationDialog(
                     onConfirmationResult = {
@@ -152,6 +159,7 @@ fun SettingsScreen(
                     text = stringResource(id = R.string.dialog_delete_services_title)
                 )
             }
+
             showDeleteCarServicesDialog -> {
                 ConfirmationDialog(
                     onConfirmationResult = {
@@ -170,14 +178,26 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenBottomBar(
     modifier: Modifier = Modifier,
-    versionName: String = "0.0.0-test"
+    versionName: String = "0.0.0-test",
+    onPrivacyPolicyClicked: () -> Unit = { }
 ) {
     AppTheme {
-        Box(
+        Column(
             modifier = modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        onPrivacyPolicyClicked()
+                    },
+                text = "Privacy Policy",
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
             Text(
                 modifier = Modifier
