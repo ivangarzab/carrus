@@ -18,7 +18,7 @@
             type="android.view.View.OnClickListener" />
         <variable
             name="data"
-            type="com.ivangarzab.carrus.ui.overview.ModalServiceState" />
+            type="com.ivangarzab.carrus.ui.overview.data.ModalServiceState" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout

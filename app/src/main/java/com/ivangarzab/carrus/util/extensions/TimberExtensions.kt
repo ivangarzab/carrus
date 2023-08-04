@@ -11,7 +11,7 @@ fun Timber.Forest.t(
     msg: String,
     vararg args: Any?
 ) {
-    d("π: $msg", args)
+    tag("π").d(msg, args)
 }
 
 /**
@@ -23,7 +23,7 @@ fun Timber.Forest.t(
     msg: String,
     vararg args: Any?
 ) {
-    d("π-$source: $msg", args)
+    tag("$source-π").d(msg, args)
 }
 
 /**
@@ -33,6 +33,6 @@ fun Timber.Forest.a(
     eventName: String,
     vararg params: Any?
 ) {
-    i("analytics=$eventName", params)
+    tag("ANALYTICS").i(eventName, params)
     // TODO: Log analytical event to the cloud
 }

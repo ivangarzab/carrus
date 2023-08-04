@@ -13,8 +13,15 @@ on:
         required: true
         default: 10
       delete_workflow_pattern:
-        description: 'Target workflow name (if empty, all workflows will be targetted):'
-        required: false
+        description: 'Target workflow:'
+        required: true
+        default: "All"
+        type: choice
+        options:
+          - "All"
+          - "Build & Test"
+          - "Build & Release"
+          - "Prune Workflow History"
       delete_workflow_by_state_pattern:
         description: 'Remove workflow based on state: active, deleted, disabled_fork, disabled_inactivity, disabled_manually'
         required: true
@@ -41,12 +48,15 @@ on:
       dry_run:
         description: 'Dry Run: Only log actions, do not perform any delete operations.'
         required: false
+        default: "false"
+        type: choice
         options:
           - "true"
           - "false"
 
 jobs:
   prune:
+    name: Prune Workflow(s)
     runs-on: ubuntu-latest
     permissions:
       actions: write

@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.util.managers
 
 import android.os.Parcelable
+import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.MessageData
 import kotlinx.parcelize.Parcelize
 
@@ -49,6 +50,12 @@ open class MessageQueue : Parcelable {
 
     @Throws(NoSuchElementException::class)
     fun pop(): MessageData = queue.removeFirst()
+
+    companion object {
+        val test = MessageQueue().apply {
+            add(Message.TEST.data)
+        }
+    }
 }
 
 fun MessageQueue.asUniqueMessageQueue() = UniqueMessageQueue()

@@ -47,12 +47,17 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packaging {
         resources.excludes.add("META-INF/*")
     }
 }
 
+val activityVersion = "1.7.2"
 val gsonVersion = "2.9.1"
 val leakCanaryVersion = "2.12"
 val truthVersion = "1.1.5"
@@ -65,6 +70,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.code.gson:gson:$gsonVersion")
 
@@ -72,13 +78,31 @@ dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:$activityVersion")
+    implementation("androidx.activity:activity-compose:$activityVersion")
     implementation("androidx.fragment:fragment-ktx:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.cardview:cardview:1.0.0")
     val navVersion: String by rootProject.extra
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
+    // https://developer.android.com/jetpack/compose/bom
+    val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+    // Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // https://firebase.google.com/support/release-notes/android
     implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
@@ -90,6 +114,11 @@ dependencies {
 
     // https://github.com/JakeWharton/timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // https://github.com/coil-kt/coil
+    val coilVersion = "2.4.0"
+    implementation("io.coil-kt:coil:$coilVersion")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 
     // https://github.com/hadilq/LiveEvent
     implementation("com.github.hadilq:live-event:1.3.0")

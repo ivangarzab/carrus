@@ -1,11 +1,9 @@
 package com.ivangarzab.carrus
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.*
 import com.ivangarzab.carrus.databinding.ActivityMainBinding
-import com.ivangarzab.carrus.util.extensions.updateMargins
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,28 +14,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        //TODO: Migrate the next 3 lines into Compose
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupWindow()
     }
-
-    private fun setupWindow() {
-        WindowCompat.setDecorFitsSystemWindows(window, FULL_SCREEN)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
-            windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).let { insets ->
-                view.updateMargins(
-                    bottom = insets.bottom
-                )
-            }
-            // Return the insets in order for this to keep being passed down to descendant views
-            windowInsets
-        }
-    }
-
-    fun getBindingRoot() = binding.root
 
     companion object {
         const val REQUEST_CODE: Int = 1
-        private const val FULL_SCREEN: Boolean = false
     }
 }
