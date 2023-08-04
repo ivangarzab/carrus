@@ -18,8 +18,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 33
-        versionCode = 5
-        versionName = "1.0.0-alpha05"
+        versionCode = 6
+        versionName = "1.0.0-alpha06"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
