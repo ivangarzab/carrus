@@ -7,23 +7,21 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.RequiresApi
-import com.ivangarzab.carrus.R
+import androidx.lifecycle.ViewModelProvider
+import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialEnum
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @RequiresApi(Build.VERSION_CODES.S)
-class PermissionAlarmInterstitial : PermissionInterstitial() {
+class PermissionAlarmInterstitial :
+    PermissionInterstitial<PermissionInterstitialViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        feedData(
-            PermissionInterstitialData(
-                title = R.string.missing_permission_interstitial_alarm_title,
-                subtitle = R.string.missing_permission_interstitial_alarm_subtitle,
-                body = R.string.missing_permission_interstitial_alarm_content
-            )
-        )
+        viewModel = ViewModelProvider(this)[PermissionInterstitialViewModel::class.java].apply {
+            init(PermissionInterstitialEnum.ALARMS)
+        }
     }
 
     override fun onSettingsClicked() {

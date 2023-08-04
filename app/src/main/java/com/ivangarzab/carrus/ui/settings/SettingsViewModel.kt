@@ -1,21 +1,27 @@
 package com.ivangarzab.carrus.ui.settings
 
-import android.os.Parcelable
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.ui.settings.data.SettingsState
+import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.extensions.writeInFile
+import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,13 +36,6 @@ class SettingsViewModel @Inject constructor(
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
-
-    @Parcelize
-    data class SettingsState(
-        val car: Car? = null,
-        val alarmTime: String? = null,
-        val dueDateFormat: DueDateFormat = DueDateFormat.DAYS
-    ) : Parcelable
 
     val state: LiveData<SettingsState> = savedState.getLiveData(
         STATE,
@@ -109,21 +108,34 @@ class SettingsViewModel @Inject constructor(
         }
     }"
 
-    fun getExportData(): String? = carRepository.fetchCarData()?.let { data ->
-        Gson().toJson(data)
-    }
-
-    fun onImportData(data: String): Boolean {
-        return try {
-            Gson().fromJson(data, Car::class.java).let { car ->
-                Timber.d("Got car data to import: $car")
-                carRepository.saveCarData(car)
+    fun onExportData(
+        contentResolver: ContentResolver,
+        uri: Uri
+    ): Boolean = carRepository.fetchCarData()?.let { data ->
+        Gson().toJson(data)?.let { json ->
+            appScope.launch(Dispatchers.IO) {
+                uri.writeInFile(contentResolver, json)
             }
             true
-        } catch (e: Exception) {
-            Timber.w("Unable to import data", e)
-            false
+        } ?: false
+    } ?: false
+
+    fun onImportData(
+        contentResolver: ContentResolver,
+        uri: Uri
+    ): Boolean {
+        uri.readFromFile(contentResolver).let { data ->
+            data?.let {
+                CarImporter.importFromJson(data)?.let { car ->
+                    carRepository.saveCarData(car)
+                    return true
+                }
+                Timber.w("Unable to import car data",)
+                return false
+            } ?: Timber.w("Unable to parse data from file with uri: $uri")
         }
+        Timber.w("Unable to import data from uri path")
+        return false
     }
 
     private fun updateCarState(car: Car?) =
@@ -138,14 +150,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun getAlarmTime() = alarmSettingsRepository.getAlarmTime()
-
-    val pickerOptionsAlarmTime = arrayOf(
-        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-        "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
-    )
-    val pickerOptionsDueDateFormat = arrayOf(
-        "days", "weeks", "months", "due date"
-    )
 
     companion object {
         private const val STATE: String = "SettingsViewModel.STATE"

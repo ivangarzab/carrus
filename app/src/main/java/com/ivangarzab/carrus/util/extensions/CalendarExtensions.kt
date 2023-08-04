@@ -1,7 +1,8 @@
 package com.ivangarzab.carrus.util.extensions
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * Created by Ivan Garza Bermea.
@@ -19,3 +20,5 @@ fun Calendar.getShortenedDate(): String = SimpleDateFormat(
 ).let { format ->
     format.format(this.time)
 }
+
+fun Calendar.empty(): Calendar = this.apply { timeInMillis = 0L }

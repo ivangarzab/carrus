@@ -13,6 +13,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.databinding.ItemServiceBinding
+import com.ivangarzab.carrus.ui.overview.data.ItemServiceState
 import com.ivangarzab.carrus.util.extensions.getDetails
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue

@@ -8,8 +8,8 @@
     <string name="year">Year</string>
     <string name="license_no">License No.</string>
     <string name="total_miles">Total Miles</string>
-    <string name="miles_per_gallon">miles/gallon</string>
-    <string name="tire_pressure">Tire Pressure</string>
+    <string name="miles_per_gallon">Miles per gallon</string>
+    <string name="tire_pressure">Pressure</string>
     <string name="vin_no">VIN No.</string>
     <string name="color">Color</string>
     <string name="services">Services</string>
@@ -52,6 +52,7 @@
     <string name="create_title">Add a new Car</string>
     <string name="add_a_photo">Add a Photo</string>
     <string name="more_details">More Details</string>
+    <string name="less_details">Less Details</string>
     <string name="create_upload_docs">Upload Documents\n(e.g. Manual, Insurance)</string>
 
     <!-- Settings -->
@@ -107,4 +108,7 @@
     <string name="missing_permission_interstitial_alarm_title">We cannot set alarms!</string>
     <string name="missing_permission_interstitial_alarm_subtitle">Please enable the alarms permission directly from your settings to continue</string>
     <string name="missing_permission_interstitial_alarm_content">1. Click the Settings button below\n2. Scroll all the way down\n3. Click on \'Alarms &amp; reminders\'\n4. Enable alarms using the toggle</string>
+
+    <string name="settings_export_data">EXPORT DATA</string>
+    <string name="settings_import_data">IMPORT DATA</string>
 </resources>

@@ -61,7 +61,7 @@ class CarRepository @Inject constructor() {
     } ?: Timber.w("There's no car data to update")
 
     fun updateCarService(service: Service) = fetchCarData()?.let { car ->
-        Timber.d("Removing car service ${service.name} to: $service")
+        Timber.d("Updating car service ${service.name} to: \n$service")
         saveCarData(
             car.copy(
                 services = car.services.map {

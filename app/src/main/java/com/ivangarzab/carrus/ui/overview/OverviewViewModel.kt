@@ -1,28 +1,26 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.os.Build
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
-import com.ivangarzab.carrus.data.serviceList
+import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
+import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import com.ivangarzab.carrus.util.managers.asUniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,33 +34,17 @@ class OverviewViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val messageQueueRepository: MessageQueueRepository
-    ) : ViewModel(), SortingCallback {
-
-    @Parcelize
-    data class OverviewState(
-        val car: Car? = null,
-        val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
-        val hasPromptedForPermissionNotification: Boolean = false,
-        val hasPromptedForPermissionAlarm: Boolean = false
-    ) : Parcelable
+    ) : ViewModel() {
 
     val state: LiveData<OverviewState> = savedState.getLiveData(
         STATE,
         OverviewState()
     )
 
-    @Parcelize
-    data class QueueState(
-        val messageQueue: UniqueMessageQueue = UniqueMessageQueue()
-    ) : Parcelable
-
-    val queueState: LiveData<QueueState> = savedState.getLiveData(
+    val queueState: LiveData<MessageQueueState> = savedState.getLiveData(
         QUEUE_STATE,
-        QueueState()
+        MessageQueueState()
     )
-
-    private val _nightThemeState: MutableLiveData<Boolean> = MutableLiveData(false)
-    val nightThemeState: LiveData<Boolean> = _nightThemeState
 
     init {
         viewModelScope.launch {
@@ -74,8 +56,8 @@ class OverviewViewModel @Inject constructor(
                 }
         }
         viewModelScope.launch {
-            appSettingsRepository.observeNightThemeData().collect {
-                _nightThemeState.value = it
+            appSettingsRepository.observeDueDateFormatData().collect {
+                setState(state, savedState, STATE) { copy(dueDateFormat = it) }
             }
         }
         viewModelScope.launch {
@@ -84,8 +66,6 @@ class OverviewViewModel @Inject constructor(
             }
         }
     }
-
-    fun getDueDateFormat(): DueDateFormat = appSettingsRepository.fetchDueDateFormatSetting()
 
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
@@ -201,9 +181,7 @@ class OverviewViewModel @Inject constructor(
         setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
     }
 
-    fun isNight(): Boolean = appSettingsRepository.fetchNightThemeSetting() ?: false
-
-    override fun onSort(type: SortingCallback.SortingType) {
+    fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
         onSortingByType(type)
     }
@@ -211,7 +189,7 @@ class OverviewViewModel @Inject constructor(
     fun setupEasterEggForTesting() {
         state.value?.car?.let {
             carRepository.saveCarData(it.copy(
-                services = serviceList
+                services = Service.serviceList
             ))
         }
     }

@@ -2,9 +2,7 @@ package com.ivangarzab.carrus.data
 
 import android.os.Parcelable
 import com.google.gson.Gson
-import com.ivangarzab.carrus.util.extensions.getFormattedDate
 import kotlinx.parcelize.Parcelize
-import java.util.*
 
 /**
  * Created by Ivan Garza Bermea.
@@ -81,7 +79,7 @@ data class Car(
             tirePressure = "35",
             totalMiles = "99,999",
             milesPerGallon = "26",
-            services = serviceList
+            services = Service.serviceList
         )
     }
 }
