@@ -28,8 +28,8 @@ android {
 
     signingConfigs {
         // These can be find inside local.properties
-        val password: String = gradleLocalProperties(rootDir).getProperty("KEYSTORE_PASSWORD")
-        val alias: String = gradleLocalProperties(rootDir).getProperty("KEY_ALIAS")
+        val password: String = gradleLocalProperties(rootDir).getProperty("KEYSTORE_PASSWORD") ?: ""
+        val alias: String = gradleLocalProperties(rootDir).getProperty("KEY_ALIAS") ?: ""
         create("release") {
             storeFile = file("../keystores/upload-keystore.jks")
             storePassword = password
