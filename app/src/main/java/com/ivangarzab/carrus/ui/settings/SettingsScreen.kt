@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -215,17 +214,6 @@ fun SettingsScreenBottomBar(
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
-            Text(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .clickable {
-                        onPrivacyPolicyClicked()
-                    },
-                text = "Privacy Policy",
-                color = MaterialTheme.colorScheme.onSurface
-            )
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
             Text(
                 modifier = Modifier

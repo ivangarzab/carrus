@@ -171,6 +171,15 @@ fun SettingsScreenContent(
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
+            SettingsScreenContentItemText(
+                title = "Privacy Policy",
+                subtitle = "Click here to see the Privacy Policy",
+                content = "",
+                onClick = onPrivacyPolicyClicked
+            )
+
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+
             SettingsScreenContentBottom(
                 modifier = Modifier.fillMaxWidth(),
                 onImportClicked = onImportClicked,
@@ -268,12 +277,14 @@ private fun SettingsScreenContentItemBase(
                         color = MaterialTheme.colorScheme.onBackground,
 //                    fontWeight = FontWeight.SemiBold
                     )
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Light
-                    )
+                    if (subtitle.isNotBlank()) {
+                        Text(
+                            text = subtitle,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Light
+                        )
+                    }
                 }
                 option?.let {
                     Box(
