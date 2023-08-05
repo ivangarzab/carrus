@@ -31,7 +31,7 @@ import javax.inject.Inject
  * Created by Ivan Garza Bermea.
  */
 @HiltViewModel
-class SettingsViewModel @Inject constructor( //TODO: Create test class!
+class SettingsViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
@@ -177,7 +177,7 @@ class SettingsViewModel @Inject constructor( //TODO: Create test class!
 
     private fun updateAlarmsEnabledState(enabled: Boolean) {
         Timber.v("Updating alarms toggle enabled state to $enabled")
-        _state.postValue(state.value?.copy(alarmsOn = enabled))
+        _state.value = state.value?.copy(alarmsOn = enabled)
     }
 
     private fun updateAlarmTimeState(alarmTime: String) {
