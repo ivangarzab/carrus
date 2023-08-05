@@ -1,0 +1,42 @@
+package com.ivangarzab.carrus.ui.privacypolicy
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.google.accompanist.web.WebView
+import com.google.accompanist.web.rememberWebViewState
+import com.ivangarzab.carrus.ui.compose.TopBar
+
+/**
+ * Created by Ivan Garza Bermea.
+ */
+
+@Composable
+fun PrivacyPolicyScreen(
+    url: String,
+    onBackButtonClicked: () -> Unit = { }
+) {
+    val state = rememberWebViewState(url)
+
+    Scaffold(
+        modifier = Modifier,
+        topBar = {
+            TopBar(
+                modifier = Modifier,
+                title = "Privacy Policy",
+                isNavigationIconEnabled = true,
+                onNavigationIconClicked = onBackButtonClicked
+            )
+        }
+    ) {
+        Box(modifier = Modifier.padding(paddingValues = it)) {
+            WebView(
+                modifier = Modifier,
+                state = state,
+                captureBackPresses = false
+            )
+        }
+    }
+}

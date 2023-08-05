@@ -18,8 +18,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 33
-        versionCode = 5
-        versionName = "1.0.0-alpha05"
+        versionCode = 7
+        versionName = "1.0.0-alpha07"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,19 +60,7 @@ android {
 val activityVersion = "1.7.2"
 val gsonVersion = "2.9.1"
 val leakCanaryVersion = "2.12"
-val truthVersion = "1.1.5"
 dependencies {
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.code.gson:gson:$gsonVersion")
-    testImplementation("com.google.truth:truth:$truthVersion")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("com.google.truth:truth:$truthVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("com.google.code.gson:gson:$gsonVersion")
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.core:core-ktx:1.10.1")
@@ -80,7 +68,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.activity:activity-ktx:$activityVersion")
     implementation("androidx.activity:activity-compose:$activityVersion")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -104,6 +92,22 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("com.google.android.material:material:1.9.0") //TODO: Prob don't need anymore
+    implementation("com.google.code.gson:gson:$gsonVersion")
+
+    val accompanistVersion = "0.30.1"
+    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
+
+    // https://github.com/google/dagger/tree/master/java/dagger/hilt
+    val hiltVersion = "2.44"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    kaptTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
     // https://firebase.google.com/support/release-notes/android
     implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
@@ -123,14 +127,16 @@ dependencies {
     // https://github.com/hadilq/LiveEvent
     implementation("com.github.hadilq:live-event:1.3.0")
 
-    // https://github.com/google/dagger/tree/master/java/dagger/hilt
-    val hiltVersion = "2.44"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
-    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("com.google.code.gson:gson:$gsonVersion")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // https://github.com/google/truth
+    val truthVersion = "1.1.5"
+    testImplementation("com.google.truth:truth:$truthVersion")
+    androidTestImplementation("com.google.truth:truth:$truthVersion")
 
     // https://github.com/mockk/mockk
     val mockkVersion = "1.13.5"

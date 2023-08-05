@@ -59,7 +59,8 @@ fun SettingsScreenContent(
     onDeleteCarServicesClicked: () -> Unit = { },
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
-    onExportClicked: () -> Unit = { }
+    onExportClicked: () -> Unit = { },
+    onPrivacyPolicyClicked: () -> Unit = { }
 ) {
     AppTheme {
         Column(
@@ -178,7 +179,8 @@ fun SettingsScreenContent(
 
             SettingsScreenBottomBar(
                 modifier = Modifier,
-                versionName = BuildConfig.VERSION_NAME //TODO: Best to get from VM
+                versionName = BuildConfig.VERSION_NAME,
+                onPrivacyPolicyClicked = onPrivacyPolicyClicked
             )
         }
     }
