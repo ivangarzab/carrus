@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
@@ -24,6 +26,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // These can be find inside local.properties
+        val password: String = gradleLocalProperties(rootDir).getProperty("KEYSTORE_PASSWORD")
+        val alias: String = gradleLocalProperties(rootDir).getProperty("KEY_ALIAS")
+        create("release") {
+            storeFile = file("../keystores/upload-keystore.jks")
+            storePassword = password
+            keyAlias = alias
+            keyPassword = password
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -31,6 +45,7 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
