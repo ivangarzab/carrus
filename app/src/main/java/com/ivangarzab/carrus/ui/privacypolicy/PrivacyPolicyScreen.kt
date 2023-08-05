@@ -8,9 +8,11 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.TopBar
 
 /**
@@ -29,7 +31,7 @@ fun PrivacyPolicyScreen(
         topBar = {
             TopBar(
                 modifier = Modifier,
-                title = "Privacy Policy",
+                title = stringResource(id = R.string.privacy_policy),
                 isNavigationIconEnabled = true,
                 onNavigationIconClicked = onBackButtonClicked
             )

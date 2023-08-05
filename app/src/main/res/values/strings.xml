@@ -112,4 +112,6 @@
 
     <string name="settings_export_data">EXPORT DATA</string>
     <string name="settings_import_data">IMPORT DATA</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_subtitle"></string>
 </resources>

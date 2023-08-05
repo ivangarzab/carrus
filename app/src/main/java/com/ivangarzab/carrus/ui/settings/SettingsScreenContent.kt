@@ -172,8 +172,8 @@ fun SettingsScreenContent(
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
             SettingsScreenContentItemText(
-                title = "Privacy Policy",
-                subtitle = "Click here to see the Privacy Policy",
+                title = stringResource(id = R.string.privacy_policy),
+                subtitle = stringResource(id = R.string.settings_privacy_policy_subtitle),
                 content = "",
                 onClick = onPrivacyPolicyClicked
             )
