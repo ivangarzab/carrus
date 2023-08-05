@@ -63,7 +63,12 @@ class SettingsFragment : Fragment() {
                 SettingsScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
                     onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
-                    onExportClicked = { createDocumentsContract.launch(generateExportFileName()) }
+                    onExportClicked = { createDocumentsContract.launch(generateExportFileName()) },
+                    onPrivacyPolicyClicked = {
+                        findNavController().navigate(
+                            SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicyFragment()
+                        )
+                    }
                 )
             }
         }
