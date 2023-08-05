@@ -72,9 +72,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-# keystore credentials
-keystores/
-
 # Rule exclusion
 !.idea/codeStyles
 !.idea/dictionaries/carrus_dictionary.xml
