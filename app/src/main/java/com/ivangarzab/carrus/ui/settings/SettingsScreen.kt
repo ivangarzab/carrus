@@ -205,8 +205,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenBottomBar(
     modifier: Modifier = Modifier,
-    versionName: String = "0.0.0-test",
-    onPrivacyPolicyClicked: () -> Unit = { }
+    versionName: String = "0.0.0-test"
 ) {
     AppTheme {
         Column(

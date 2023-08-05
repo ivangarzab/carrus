@@ -16,7 +16,6 @@ import java.lang.Float.min
  */
 fun ItemMessageBinding.bind(
     message: MessageData,
-    resources: Resources,
     onClickListener: ((id: String) -> Unit)? = null,
     onCloseClickListener: ((id: String) -> Unit)? = null
 ) {

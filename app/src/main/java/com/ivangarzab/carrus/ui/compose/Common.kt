@@ -74,7 +74,10 @@ fun ConfirmationDialog(
     onConfirmationResult: (Boolean) -> Unit = { },
     text: String = "Delete car data?"
 ) {
-    BaseDialog(onDismissed = { onConfirmationResult(false) }) {
+    BaseDialog(
+        modifier = modifier,
+        onDismissed = { onConfirmationResult(false) }
+    ) {
         Text(
             modifier = Modifier,
             text = text,

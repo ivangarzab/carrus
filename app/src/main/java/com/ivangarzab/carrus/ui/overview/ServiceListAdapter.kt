@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Ivan Garza Bermea.
  */
+@Deprecated("Use Compose instead")
 class ServiceListAdapter(
     private val resources: Resources,
     private val theme: Resources.Theme,

@@ -75,6 +75,7 @@ fun ServiceModalScreen(
 
     AppTheme {
         ServiceBottomSheetContent(
+            modifier = modifier,
             state = state,
             onActionButtonClicked = onActionButtonClicked,
             onUpdateState = onUpdateState,

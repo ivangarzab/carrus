@@ -27,6 +27,7 @@ fun PickerDialog(
     val currentItemState = rememberPickerState()
 
     BaseDialog(
+        modifier = modifier,
         onDismissed = onDismissed
     ) {
         Picker(

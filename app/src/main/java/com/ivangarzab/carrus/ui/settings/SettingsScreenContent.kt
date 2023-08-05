@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
@@ -125,7 +126,10 @@ fun SettingsScreenContent(
                 Column {
                     SettingsScreenContentItemText(
                         title = stringResource(id = R.string.setting_alarm_time_title),
-                        subtitle = stringResource(id = R.string.setting_alarm_time_subtitle),
+                        subtitle = when (state.clockTimeFormat) {
+                            TimeFormat.HR24 -> stringResource(id = R.string.setting_alarm_time_subtitle_24)
+                            TimeFormat.HR12 -> stringResource(id = R.string.setting_alarm_time_subtitle_12)
+                        },
                         content = if (state.alarmTime.isNullOrBlank()) {
                             DEFAULT_ALARM_TIME.toString()
                         } else {

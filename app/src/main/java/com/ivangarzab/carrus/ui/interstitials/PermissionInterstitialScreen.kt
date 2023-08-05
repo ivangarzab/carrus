@@ -86,7 +86,7 @@ fun PermissionInterstitialScreen(
         PermissionInterstitialData(0, 0, 0)
     )
 
-    if (state != null && state.title != 0 && state.subtitle != 0 && state.body != 0) {
+    if (state.title != 0 && state.subtitle != 0 && state.body != 0) {
         PermissionInterstitialScreenContent(
             data = state,
             positiveButtonClick = positiveButtonClick,
