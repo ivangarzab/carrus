@@ -1,10 +1,12 @@
 package com.ivangarzab.carrus.ui.settings.data
 
 import android.os.Parcelable
-import com.ivangarzab.carrus.data.Car
+import androidx.annotation.StringRes
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -12,13 +14,15 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class SettingsState(
-    val car: Car? = null,
+    val isThereCarData: Boolean = false,
+    val isThereCarServicesData: Boolean = false,
     val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     val dateFormatOptions: List<String> = pickerOptionsDueDateFormat,
     val clockTimeFormat: TimeFormat = TimeFormat.HR24,
     val timeFormatOptions: List<String> = pickerOptionsTimeFormat,
     val alarmsOn: Boolean = false,
-    val alarmTime: String? = null,
+    val alarmTime: String = DEFAULT_ALARM_TIME.toString(),
+    @StringRes val alarmTimeSubtitle: Int = R.string.setting_alarm_time_subtitle_24,
     val alarmTimeOptions: List<String> = clockTimeFormat.range.map { it.toString() },
     val alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY,
     val alarmFrequencyOptions: List<String> = pickerOptionsAlarmFrequency,

@@ -35,8 +35,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.TimeFormat
-import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
@@ -71,15 +69,6 @@ fun SettingsScreenContent(
                     state = rememberScrollState(),
                     enabled = true
                 )) {
-            var isThereCarData: Boolean by rememberSaveable {
-                mutableStateOf(value = false)
-            }
-            isThereCarData = state.car != null
-
-            var isThereCarServiceData: Boolean by rememberSaveable {
-                mutableStateOf(value = false)
-            }
-            isThereCarServiceData = state.car?.services?.isNotEmpty() ?: false
 
             var areAlarmsEnabled: Boolean by rememberSaveable {
                 mutableStateOf(value = false)
@@ -126,59 +115,51 @@ fun SettingsScreenContent(
                 Column {
                     SettingsScreenContentItemText(
                         title = stringResource(id = R.string.setting_alarm_time_title),
-                        subtitle = when (state.clockTimeFormat) {
-                            TimeFormat.HR24 -> stringResource(id = R.string.setting_alarm_time_subtitle_24)
-                            TimeFormat.HR12 -> stringResource(id = R.string.setting_alarm_time_subtitle_12)
-                        },
-                        content = if (state.alarmTime.isNullOrBlank()) {
-                            DEFAULT_ALARM_TIME.toString()
-                        } else {
-                            state.alarmTime
-                        },
-                        onClick = { onAlarmTimeClicked() }
+                        subtitle = stringResource(id = state.alarmTimeSubtitle),
+                        content = state.alarmTime,
+                        onClick = onAlarmTimeClicked
                     )
                     SettingsScreenContentItemText(
                         title = stringResource(id = R.string.setting_alarm_frequency_title),
                         subtitle = stringResource(id = R.string.setting_alarm_frequency_subtitle),
                         content = state.alarmFrequency.value,
-                        onClick = { onAlarmFrequencyClicked() }
+                        onClick = onAlarmFrequencyClicked
                     )
                 }
             }
 
-            if (isThereCarData) {
+            if (state.isThereCarData) {
                 Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
             }
             AnimatedVisibility(
-                visible = isThereCarServiceData,
+                visible = state.isThereCarServicesData,
                 enter = expandVertically(),
                 exit = shrinkVertically()
             ) {
                 SettingsScreenContentItemBase(
                     title = stringResource(id = R.string.setting_delete_all_services_title),
                     subtitle = stringResource(id = R.string.setting_delete_all_services_subtitle),
-                    onClick = { onDeleteCarServicesClicked() }
+                    onClick = onDeleteCarServicesClicked
                 )
             }
 
             AnimatedVisibility(
-                visible = isThereCarData,
+                visible = state.isThereCarData,
                 enter = expandVertically(),
                 exit = shrinkVertically()
             ) {
                 SettingsScreenContentItemBase(
                     title = stringResource(id = R.string.setting_delete_car_data_title),
                     subtitle = stringResource(id = R.string.setting_delete_car_data_subtitle),
-                    onClick = { onDeleteCarDataClicked() }
+                    onClick = onDeleteCarDataClicked
                 )
             }
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
-            SettingsScreenContentItemText(
+            SettingsScreenContentItemBase(
                 title = stringResource(id = R.string.privacy_policy),
                 subtitle = stringResource(id = R.string.settings_privacy_policy_subtitle),
-                content = "",
                 onClick = onPrivacyPolicyClicked
             )
 

@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.os.Build
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -56,8 +55,8 @@ class OverviewViewModel @Inject constructor(
                 }
         }
         viewModelScope.launch {
-            appSettingsRepository.observeDueDateFormatData().collect {
-                setState(state, savedState, STATE) { copy(dueDateFormat = it) }
+            appSettingsRepository.observeAppSettingsStateData().collect {
+                setState(state, savedState, STATE) { copy(dueDateFormat = it.dueDateFormat) }
             }
         }
         viewModelScope.launch {

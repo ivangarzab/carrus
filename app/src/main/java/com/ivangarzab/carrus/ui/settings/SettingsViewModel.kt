@@ -3,10 +3,11 @@ package com.ivangarzab.carrus.ui.settings
 import android.content.ContentResolver
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
@@ -18,7 +19,6 @@ import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.extensions.readFromFile
-import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.extensions.writeInFile
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,27 +31,30 @@ import javax.inject.Inject
  * Created by Ivan Garza Bermea.
  */
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    private val savedState: SavedStateHandle,
+class SettingsViewModel @Inject constructor( //TODO: Create test class!
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository
     ) : ViewModel() {
 
-    val state: LiveData<SettingsState> = savedState.getLiveData(
-        STATE,
-        SettingsState()
-    )
+    private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
+    val state: LiveData<SettingsState> = _state
+
+    private var carData: Car? = null
 
     init {
-        //TODO: This is a mess!
-        updateDueDateFormatState(appSettingsRepository.fetchDueDateFormatSetting())
-        updateTimeFormatState(appSettingsRepository.fetchTimeFormatSetting())
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
             }
+        }
+        viewModelScope.launch {
+            appSettingsRepository.observeAppSettingsStateData().collect {
+                updateDueDateFormatState(it.dueDateFormat)
+                updateTimeFormatState(it.timeFormat)
+            }
+
         }
         viewModelScope.launch {
             alarmSettingsRepository.observeAlarmSettingsData().collect {
@@ -74,7 +77,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onDeleteServicesClicked() {
-        state.value?.car?.let {
+        carData?.let {
             if (it.services.isNotEmpty()) {
                 Timber.d("Deleting all services from car data")
                 val newCar = it.copy(
@@ -83,7 +86,7 @@ class SettingsViewModel @Inject constructor(
                 carRepository.saveCarData(newCar)
                 alarmsRepository.cancelAllAlarms()
             }
-        } ?: Timber.v("There are no services to delete from car data")
+        } ?: Timber.wtf("There are no services to delete from car data")
     }
 
     fun onAlarmsEnabledToggleClicked(enabled: Boolean) {
@@ -94,24 +97,21 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onAlarmTimePicked(alarmTime: String) {
-        Timber.d("'Past Due' alarm time reset to: ${getTimeString(alarmTime.toInt())}")
+        Timber.d("Alarm time selected: ${getTimeString(alarmTime.toInt())}")
         alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
-        //TODO: Revisit and reconsider this next call
-        alarmsRepository.schedulePastDueAlarm(true)
-        updateAlarmTimeState(alarmTime)
+        rescheduleAlarms()
     }
 
     fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
-        Timber.d("Alarms frequency selected: ${frequency.value}")
+        Timber.d("Alarm frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
-        updateAlarmFrequencyState(frequency)
+        rescheduleAlarms()
     }
 
     fun onDueDateFormatPicked(option: String) {
         DueDateFormat.get(option).let { dueDateFormat ->
             Timber.d("Due Date format changed to: '$dueDateFormat'")
             appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
-            updateDueDateFormatState(dueDateFormat)
         }
 
     }
@@ -120,8 +120,12 @@ class SettingsViewModel @Inject constructor(
         TimeFormat.get(option).let { timeFormat ->
             Timber.d("Clock Time format changed to: '$timeFormat'")
             appSettingsRepository.setTimeFormatSetting(timeFormat)
-            updateTimeFormatState(timeFormat)
         }
+    }
+
+    private fun rescheduleAlarms() {
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
     }
 
     private fun getTimeString(hour: Int): String = "$hour:00 ${
@@ -139,7 +143,7 @@ class SettingsViewModel @Inject constructor(
         Gson().toJson(data)?.let { json ->
             appScope.launch(Dispatchers.IO) {
                 uri.writeInFile(contentResolver, json)
-            }
+            } // TODO: Create CarExporter object
             true
         } ?: false
     } ?: false
@@ -162,35 +166,62 @@ class SettingsViewModel @Inject constructor(
         return false
     }
 
-    private fun updateCarState(car: Car?) =
-        setState(state, savedState, STATE) { copy(car = car) }
+    private fun updateCarState(car: Car?) {
+        Timber.v("Updating car state: $car")
+        this.carData = car
+        _state.value = state.value?.copy(
+            isThereCarData = car != null,
+            isThereCarServicesData = car?.services?.isNotEmpty() ?: false
+        )
+    }
 
     private fun updateAlarmsEnabledState(enabled: Boolean) {
-        setState(state, savedState, STATE) { copy(alarmsOn = enabled) }
+        Timber.v("Updating alarms toggle enabled state to $enabled")
+        _state.postValue(state.value?.copy(alarmsOn = enabled))
     }
 
     private fun updateAlarmTimeState(alarmTime: String) {
-        setState(state, savedState, STATE) { copy(alarmTime = alarmTime) }
+        Timber.v("Updating alarm time state to $alarmTime")
+        _state.value = state.value?.copy(alarmTime = alarmTime)
     }
 
     private fun updateAlarmFrequencyState(frequency: AlarmFrequency) {
-        setState(state, savedState, STATE) { copy(alarmFrequency = frequency) }
+        Timber.v("Updating alarm frequency state to $frequency")
+        _state.value = state.value?.copy(alarmFrequency = frequency)
     }
 
     private fun updateDueDateFormatState(format: DueDateFormat) {
-        setState(state, savedState, STATE) { copy(dueDateFormat = format) }
+        Timber.v("Updating due date format state to $format")
+        _state.value = state.value?.copy(dueDateFormat = format)
     }
 
     private fun updateTimeFormatState(format: TimeFormat) {
-        setState(state, savedState, STATE) {
-            copy(
+        Timber.v("Updating clock time format state to $format")
+        state.value?.let { currentState ->
+            if (currentState.clockTimeFormat != format) {
+                // format changed
+                when (format) {
+                    TimeFormat.HR12 -> convertFrom24HrFormatTo12Hr(currentState.alarmTime)
+                    TimeFormat.HR24 -> convertFrom12HrFormatTo24Hr(currentState.alarmTime)
+                }
+            }
+            _state.value = currentState.copy(
                 clockTimeFormat = format,
+                alarmTimeSubtitle = when (format) {
+                    TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
+                    TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
+                },
                 alarmTimeOptions = format.range.map { it.toString() }
             )
         }
     }
 
-    companion object {
-        private const val STATE: String = "SettingsViewModel.STATE"
-    }
+    private fun convertFrom12HrFormatTo24Hr(value: String): String =
+        (value.toInt() + 12).toString()
+
+    private fun convertFrom24HrFormatTo12Hr(value: String): String = value
+        .toInt()
+        .takeIf { it > 12 }
+        ?.let { (it - 12).toString() }
+        ?: value
 }
