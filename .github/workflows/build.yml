@@ -35,13 +35,13 @@ jobs:
     - name: Unit Test
       run: ./gradlew testDebugUnitTest
 
-    - run: echo "Uploading Unit Tests Results."
-    - name: Upload Test Results
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v1
-      with:
-        name: debug-test-results
-        path: app/build/reports/tests/testDebugUnitTest
+#    - run: echo "Uploading Unit Tests Results."
+#    - name: Upload Test Results
+#      if: ${{ always() }}
+#      uses: actions/upload-artifact@v1
+#     with:
+#        name: debug-test-results
+#        path: app/build/reports/tests/testDebugUnitTest
 
     - name: Android Test Report
       uses: asadmansr/android-test-report-action@v1.2.0
