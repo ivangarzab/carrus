@@ -192,8 +192,7 @@ fun SettingsScreenContent(
 
             SettingsScreenBottomBar(
                 modifier = Modifier,
-                versionName = BuildConfig.VERSION_NAME,
-                onPrivacyPolicyClicked = onPrivacyPolicyClicked
+                versionName = BuildConfig.VERSION_NAME
             )
         }
     }
