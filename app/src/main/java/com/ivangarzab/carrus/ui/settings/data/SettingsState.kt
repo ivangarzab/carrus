@@ -20,7 +20,7 @@ data class SettingsState(
     val dateFormatOptions: List<String> = pickerOptionsDueDateFormat,
     val clockTimeFormat: TimeFormat = TimeFormat.HR24,
     val timeFormatOptions: List<String> = pickerOptionsTimeFormat,
-    val alarmsOn: Boolean = false,
+    val alarmsOn: Boolean = false, // User enabled + granted permission
     val alarmTime: String = DEFAULT_ALARM_TIME.toString(),
     @StringRes val alarmTimeSubtitle: Int = R.string.setting_alarm_time_subtitle_24,
     val alarmTimeOptions: List<String> = clockTimeFormat.range.map { it.toString() },

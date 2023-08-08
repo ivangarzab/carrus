@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
@@ -41,6 +42,9 @@ class SettingsViewModel @Inject constructor(
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
     val state: LiveData<SettingsState> = _state
 
+    private var isAlarmPermissionGranted = false
+    val onRequestAlarmPermission: LiveEvent<Any> = LiveEvent()
+
     private var carData: Car? = null
 
     init {
@@ -58,10 +62,7 @@ class SettingsViewModel @Inject constructor(
         }
         viewModelScope.launch {
             alarmSettingsRepository.observeAlarmSettingsData().collect {
-                // TODO: Get rid of this redundancy
-                updateAlarmsEnabledState(it.areAlarmsEnabled)
-                updateAlarmTimeState(it.alarmTime)
-                updateAlarmFrequencyState(it.frequency)
+                processAlarmSettingsStateUpdate(it)
             }
         }
     }
@@ -89,11 +90,13 @@ class SettingsViewModel @Inject constructor(
         } ?: Timber.wtf("There are no services to delete from car data")
     }
 
-    fun onAlarmsEnabledToggleClicked(enabled: Boolean) {
+    fun onAlarmsToggled(enabled: Boolean) {
         Timber.d("Alarms enabled toggled: $enabled")
-        //TODO: Check alarm permission first!
-        alarmSettingsRepository.setAreAlarmsEnabled(enabled)
-        updateAlarmsEnabledState(enabled)
+        alarmSettingsRepository.toggleAlarmFeature(enabled)
+        if (enabled && isAlarmPermissionGranted.not()) {
+            Timber.v("Attempting to request alarms permission")
+            onRequestAlarmPermission.value = Any()
+        }
     }
 
     fun onAlarmTimePicked(alarmTime: String) {
@@ -167,12 +170,19 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun updateCarState(car: Car?) {
-        Timber.v("Updating car state: $car")
+        Timber.v("Updating car state")
         this.carData = car
         _state.value = state.value?.copy(
             isThereCarData = car != null,
             isThereCarServicesData = car?.services?.isNotEmpty() ?: false
         )
+    }
+
+    private fun processAlarmSettingsStateUpdate(data: AlarmSettingsRepository.AlarmSettingsState) {
+        isAlarmPermissionGranted = data.isAlarmPermissionGranted
+        updateAlarmsEnabledState(data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled)
+        updateAlarmTimeState(data.alarmTime)
+        updateAlarmFrequencyState(data.frequency)
     }
 
     private fun updateAlarmsEnabledState(enabled: Boolean) {
@@ -182,7 +192,14 @@ class SettingsViewModel @Inject constructor(
 
     private fun updateAlarmTimeState(alarmTime: String) {
         Timber.v("Updating alarm time state to $alarmTime")
-        _state.value = state.value?.copy(alarmTime = alarmTime)
+        state.value?.let { state ->
+            _state.value = state.copy(
+                alarmTime = when (state.clockTimeFormat) {
+                    TimeFormat.HR12 -> getTimeString(alarmTime.toInt())
+                    TimeFormat.HR24 -> alarmTime + "00"
+                }
+            )
+        }
     }
 
     private fun updateAlarmFrequencyState(frequency: AlarmFrequency) {

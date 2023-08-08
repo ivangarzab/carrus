@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
@@ -71,6 +72,15 @@ class SettingsFragment : Fragment() {
                     }
                 )
             }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.onRequestAlarmPermission.observe(viewLifecycleOwner) {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionSettingsFragmentToAlarmPermissionModal()
+            )
         }
     }
 

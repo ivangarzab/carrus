@@ -53,7 +53,7 @@ fun SettingsScreenStateful(
             state = state,
             onBackPressed = { onBackPressed() },
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
-            onAlarmsToggle = { viewModel.onAlarmsEnabledToggleClicked(it) },
+            onAlarmsToggle = { viewModel.onAlarmsToggled(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
             onAlarmFrequencyClicked = { viewModel.onAlarmFrequencyPicked(it) },
             onDueDateFormatSelected = { viewModel.onDueDateFormatPicked(it) },

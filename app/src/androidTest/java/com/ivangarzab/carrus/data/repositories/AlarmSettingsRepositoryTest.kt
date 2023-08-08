@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.data.repositories
 
+import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
@@ -14,15 +15,21 @@ import org.junit.Test
  */
 class AlarmSettingsRepositoryTest {
 
-    private val repository = AlarmSettingsRepository(
-        InstrumentationRegistry.getInstrumentation().context
-    )
+    private val context: Context = InstrumentationRegistry.getInstrumentation().context
+
+    private val repository = AlarmSettingsRepository(context)
 
     @Before
     fun setup() {
         prefs.isAlarmFeatureOn = true
         prefs.alarmPastDueTime = null
         prefs.alarmFrequency = AlarmFrequency.DAILY
+    }
+
+    @Test
+    fun test_isAlarmPermissionGranted_base() = with(repository) {
+        assertThat(isAlarmPermissionGranted())
+            .isTrue()
     }
 
     @Test

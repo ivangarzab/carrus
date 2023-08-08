@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 /**
  * Should only be accessed by Repository, or other data handling classes.
@@ -51,10 +51,6 @@ class Preferences(context: Context) {
             }
         }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_DUE_TIME, value)
-
-    var areAlarmsEnabled: Boolean
-        get() = sharedPreferences.get(KEY_ALARM_ENABLED, false)
-        set(value) = sharedPreferences.set(KEY_ALARM_ENABLED, value)
 
     var alarmFrequency: AlarmFrequency
         get() = sharedPreferences.get(KEY_ALARM_PAST_FREQUENCY, AlarmFrequency.DAILY.name).let {
@@ -111,7 +107,6 @@ class Preferences(context: Context) {
         private const val KEY_ALARM_PAST_DUE_INTENT = "alarm-past-due-intent"
         private const val KEY_ALARM_PAST_DUE_TIME = "alarm-past-due-time-hour"
         private const val KEY_ALARM_PAST_FREQUENCY = "alarm-past-due-frequency"
-        private const val KEY_ALARM_ENABLED = "alarm-enabled-global"
     }
 }
 

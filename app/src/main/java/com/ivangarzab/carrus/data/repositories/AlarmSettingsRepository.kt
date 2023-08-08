@@ -1,7 +1,12 @@
 package com.ivangarzab.carrus.data.repositories
 
 import android.app.AlarmManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
+import androidx.core.content.ContextCompat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
@@ -22,8 +27,8 @@ class AlarmSettingsRepository @Inject constructor(
 ) {
 
     data class AlarmSettingsState(
+        val isAlarmPermissionGranted: Boolean = false,
         val isAlarmFeatureEnabled: Boolean = false,
-        val areAlarmsEnabled: Boolean = false,
         val alarmTime: String = "",
         val frequency: AlarmFrequency = AlarmFrequency.DAILY
     )
@@ -32,12 +37,24 @@ class AlarmSettingsRepository @Inject constructor(
 
     init {
         // Make sure the alarm permissions are granted for devices running Android 11 =<
-        toggleAlarmFeature(
+        setIsAlarmPermissionGranted(
             (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
                 .isAbleToScheduleExactAlarms()
-        ) //TODO: Can we listen for these changes?
+        )
+        // Listen for alarm permission changes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ContextCompat.registerReceiver(
+                context,
+                AlarmPermissionStateChangedReceiver(),
+                IntentFilter(
+                    AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+                ),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+        }
+
         // Extract initial data
-        setAreAlarmsEnabled(areAlarmsEnabled())
+        toggleAlarmFeature(isAlarmFeatureOn())
         setAlarmTime(getAlarmTime())
         setAlarmFrequency(getAlarmFrequency())
     }
@@ -48,9 +65,18 @@ class AlarmSettingsRepository @Inject constructor(
 
     fun observeAlarmSettingsData(): Flow<AlarmSettingsState> = alarmSettingsFlow.asStateFlow()
 
+    fun isAlarmPermissionGranted(): Boolean = alarmSettingsFlow.value.isAlarmPermissionGranted
+
+    fun setIsAlarmPermissionGranted(granted: Boolean) {
+        Timber.v("Setting alarm permission ${if (granted) "granted" else "not granted"}")
+        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
+            isAlarmPermissionGranted = granted
+        ))
+    }
+
     fun isAlarmFeatureOn(): Boolean = prefs.isAlarmFeatureOn
 
-    private fun toggleAlarmFeature(isEnabled: Boolean) {
+    fun toggleAlarmFeature(isEnabled: Boolean) {
         Timber.v("Toggling alarm feature ${if (isEnabled) "ON" else "OFF"}")
         prefs.isAlarmFeatureOn = isEnabled
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
@@ -78,14 +104,17 @@ class AlarmSettingsRepository @Inject constructor(
         ))
     }
 
-    fun areAlarmsEnabled(): Boolean = prefs.areAlarmsEnabled
-
-    fun setAreAlarmsEnabled(enabled: Boolean) {
-        Timber.v("Turning ${if (enabled) "ON" else "OFF"} alarms globally")
-        prefs.areAlarmsEnabled = enabled
-        updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
-            areAlarmsEnabled = enabled
-        ))
+    inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
+                    Timber.d("Received alarm permission state changed broadcast")
+                    setIsAlarmPermissionGranted(true)
+                    //TODO: Continue listening until we're ready to exit the app
+                    context?.unregisterReceiver(this)
+                }
+            }
+        }
     }
 }
 
