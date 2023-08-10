@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
+import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.TimeFormat
@@ -178,7 +179,7 @@ class SettingsViewModel @Inject constructor(
         )
     }
 
-    private fun processAlarmSettingsStateUpdate(data: AlarmSettingsRepository.AlarmSettingsState) {
+    private fun processAlarmSettingsStateUpdate(data: AlarmSettingsState) {
         isAlarmPermissionGranted = data.isAlarmPermissionGranted
         updateAlarmsEnabledState(data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled)
         updateAlarmTimeState(data.alarmTime)

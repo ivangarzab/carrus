@@ -79,17 +79,17 @@ class AlarmSettingsRepositoryTest {
     }
 
     @Test
-    fun test_getAlarmFrequency_sunday() = with(repository) {
-        prefs.alarmFrequency = AlarmFrequency.SUNDAY
+    fun test_getAlarmFrequency_weekly() = with(repository) {
+        prefs.alarmFrequency = AlarmFrequency.WEEKLY
         assertThat(getAlarmFrequency())
-            .isSameInstanceAs(AlarmFrequency.SUNDAY)
+            .isSameInstanceAs(AlarmFrequency.WEEKLY)
     }
 
     @Test
-    fun test_setAlarmFrequency_sunday() = with(repository) {
-        setAlarmFrequency(AlarmFrequency.SUNDAY)
+    fun test_setAlarmFrequency_weekly() = with(repository) {
+        setAlarmFrequency(AlarmFrequency.WEEKLY)
         assertThat(getAlarmFrequency())
-            .isSameInstanceAs(AlarmFrequency.SUNDAY)
+            .isSameInstanceAs(AlarmFrequency.WEEKLY)
     }
 
     @Test

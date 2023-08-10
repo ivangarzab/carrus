@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
@@ -25,13 +26,6 @@ import javax.inject.Singleton
 class AlarmSettingsRepository @Inject constructor(
     @ApplicationContext context: Context
 ) {
-
-    data class AlarmSettingsState(
-        val isAlarmPermissionGranted: Boolean = false,
-        val isAlarmFeatureEnabled: Boolean = false,
-        val alarmTime: String = "",
-        val frequency: AlarmFrequency = AlarmFrequency.DAILY
-    )
 
     private val alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
 

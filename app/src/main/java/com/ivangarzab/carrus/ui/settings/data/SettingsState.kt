@@ -40,10 +40,4 @@ private val pickerOptionsDueDateFormat = listOf(
     DueDateFormat.DATE.value
 )
 
-private val pickerOptionsAlarmFrequency = listOf(
-    AlarmFrequency.DAILY.value,
-    AlarmFrequency.OTHER_DAY.value,
-    AlarmFrequency.MONDAYS.value,
-    AlarmFrequency.FRIDAYS.value,
-    AlarmFrequency.SUNDAY.value
-)
+private val pickerOptionsAlarmFrequency = AlarmFrequency.asStringList()
