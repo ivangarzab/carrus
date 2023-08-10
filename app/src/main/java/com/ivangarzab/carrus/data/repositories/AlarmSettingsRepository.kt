@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
@@ -35,18 +36,6 @@ class AlarmSettingsRepository @Inject constructor(
             (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
                 .isAbleToScheduleExactAlarms()
         )
-        // Listen for alarm permission changes
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ContextCompat.registerReceiver(
-                context,
-                AlarmPermissionStateChangedReceiver(),
-                IntentFilter(
-                    AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
-                ),
-                ContextCompat.RECEIVER_NOT_EXPORTED
-            )
-        }
-
         // Extract initial data
         toggleAlarmFeature(isAlarmFeatureOn())
         setAlarmTime(getAlarmTime())
@@ -55,6 +44,18 @@ class AlarmSettingsRepository @Inject constructor(
 
     private fun updateAlarmSettingsFlow(data: AlarmSettingsState) {
         alarmSettingsFlow.value = data
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun listenForAlarmPermissionChanges(context: Context) {
+        ContextCompat.registerReceiver(
+            context,
+            AlarmPermissionStateChangedReceiver(),
+            IntentFilter(
+                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+            ),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     fun observeAlarmSettingsData(): Flow<AlarmSettingsState> = alarmSettingsFlow.asStateFlow()
@@ -98,7 +99,7 @@ class AlarmSettingsRepository @Inject constructor(
         ))
     }
 
-    inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
+    inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
@@ -112,4 +113,4 @@ class AlarmSettingsRepository @Inject constructor(
     }
 }
 
-const val DEFAULT_ALARM_TIME:Int = 7
+const val DEFAULT_ALARM_TIME: Int = 7
