@@ -7,12 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.UUID
@@ -27,6 +27,7 @@ class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository
     ) : ViewModel() {
 
+    //private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
     val state: LiveData<CarModalState> = savedState.getLiveData(
         STATE,
         CarModalState()
@@ -147,39 +148,17 @@ class CreateViewModel @Inject constructor(
 
     fun onImportData(data: String): Boolean {
         return try {
-            Gson().fromJson(data, Car::class.java).let { car ->
+            CarImporter.importFromJson(data)?.let { car ->
                 Timber.d("Got car data to import: $car")
-                carRepository.saveCarData(adaptCarData(
-                    car.copy(imageUri = null) // get rid of the image URL to avoid exception
-                ))
-            }
-            onSubmit.postValue(true)
-            true
+                carRepository.saveCarData(car)
+                onSubmit.postValue(true)
+                true
+            } ?: false
         } catch (e: Exception) {
             Timber.w("Unable to import data", e)
             false
         }
     }
-
-    /**
-     * TODO: There's got to be a better way of doing this!
-     *  Or at least arrive at at state where we don't need this anymore --
-     *  Should we start versioning our Car data too?
-     */
-    private fun adaptCarData(data: Car): Car = Car (
-        uid = UUID.randomUUID().toString(),
-        nickname = data.nickname ?: "",
-        make = data.make ?: "",
-        model = data.model ?: "",
-        year = data.year ?: "",
-        licenseNo = data.licenseNo ?: "",
-        vinNo = data.vinNo ?: "",
-        tirePressure = data.tirePressure ?: "",
-        totalMiles = data.totalMiles ?: "",
-        milesPerGallon = data.milesPerGallon ?: "",
-        services = data.services,
-        imageUri = null
-    )
 
     companion object {
         private const val STATE: String = "CreateViewModel.STATE"
