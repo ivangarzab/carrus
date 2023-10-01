@@ -1,13 +1,15 @@
 #!/bin/bash
+# The purpose of this script is to automatically update the app's build.gradle.kts versionName,
+# given the parameter provided, as well as incrementing the versionCode up by 1 for a release.
 
 VERSION_NAME="$1"
-
 SED_OPTION=
 if [[ "$OSTYPE" == "darwin"* ]]; then
   SED_OPTION="-i ''"
 else
   SED_OPTION="-i"
 fi
+
 
 # Update versionName
 VERSION_NAME_PATTERN="versionName"
