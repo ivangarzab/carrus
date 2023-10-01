@@ -30,7 +30,7 @@ class CarTest {
     }
 
     @Test
-    fun testToString() {
+    fun testToStringVerbose() {
         val expectedToString = "Car(" +
                 "\nnickname='Shaq'" +
                 "\nmake='Chevrolet'" +
@@ -44,6 +44,14 @@ class CarTest {
                 "\nservices='${Service.serviceList}'" +
                 "\nimageUri=null" +
                 "\n)"
+        val carToString = defaultCar.toStringVerbose()
+
+        assertEquals(expectedToString, carToString)
+    }
+
+    @Test
+    fun testToString() = with(defaultCar) {
+        val expectedToString = "Car ${nickname.ifBlank { "$make $model" }} with ${services.size} services"
         val carToString = defaultCar.toString()
 
         assertEquals(expectedToString, carToString)
