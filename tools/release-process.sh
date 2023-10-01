@@ -22,4 +22,4 @@ echo "Updating both 'develop' & 'master' branches with release branch"
 ./tools/release/release-step3.sh "$VERSION_NAME"
 # Step 4
 echo "Pushing all changes up to the 'origin'"
-./tools/release/release-step4.sh "$VERSION_NAME"
+#./tools/release/release-step4.sh "$VERSION_NAME"
