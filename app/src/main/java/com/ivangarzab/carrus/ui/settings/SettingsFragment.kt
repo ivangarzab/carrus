@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
             when(viewModel.onExportData(
                 requireContext().contentResolver, it
             )) {
-                true -> { /* No-op */ }
+                true -> { toast("Data export success") }
                 false -> toast("Unable to export data")
             }
         } ?: Timber.w("Error fetching uri")

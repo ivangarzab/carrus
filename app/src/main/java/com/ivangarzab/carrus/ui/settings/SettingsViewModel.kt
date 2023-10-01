@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
@@ -23,6 +22,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.writeInFile
+import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -145,15 +145,14 @@ class SettingsViewModel @Inject constructor(
         alarmsRepository.schedulePastDueAlarm(true)
     }
 
-
     fun onExportData(
         contentResolver: ContentResolver,
         uri: Uri
     ): Boolean = carRepository.fetchCarData()?.let { data ->
-        Gson().toJson(data)?.let { json ->
+        CarExporter.exportToJson(data)?.let { json ->
             appScope.launch(Dispatchers.IO) {
                 uri.writeInFile(contentResolver, json)
-            } // TODO: Create CarExporter object
+            }
             true
         } ?: false
     } ?: false
