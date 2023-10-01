@@ -1,11 +1,6 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.Manifest
-import android.app.AlarmManager
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,15 +9,14 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.content.ContextCompat
-import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
-import com.ivangarzab.carrus.util.extensions.*
+import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
+import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -92,14 +86,6 @@ class OverviewFragment : Fragment() {
         ) {
             viewModel.addAlarmPermissionMessage()
             Timber.d("Registering alarm permission state changed broadcast receiver")
-            ContextCompat.registerReceiver(
-                requireContext(),
-                AlarmPermissionStateChangedReceiver(),
-                IntentFilter(
-                    AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
-                ),
-                ContextCompat.RECEIVER_NOT_EXPORTED
-            )
         }
 
         state.car?.let {
@@ -157,17 +143,4 @@ class OverviewFragment : Fragment() {
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
     )
-
-    //TODO: Move into the AlarmSettingsRepository, or add it into its own Repository
-    inner class AlarmPermissionStateChangedReceiver: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                    Timber.d("Received alarm permission state changed broadcast")
-                    viewModel.removeAlarmPermissionMessage()
-                    requireContext().unregisterReceiver(this)
-                }
-            }
-        }
-    }
 }

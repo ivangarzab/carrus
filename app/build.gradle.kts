@@ -88,6 +88,7 @@ dependencies {
     // Android Studio Preview support
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation("androidx.compose.ui:ui-util")
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -127,11 +128,14 @@ dependencies {
     // https://github.com/hadilq/LiveEvent
     implementation("com.github.hadilq:live-event:1.3.0")
 
+    // Unit & instrumented testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.code.gson:gson:$gsonVersion")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
     // https://github.com/google/truth
     val truthVersion = "1.1.5"

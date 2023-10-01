@@ -86,7 +86,6 @@ fun Picker(
     }
 
     Box(modifier = modifier) {
-
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
@@ -109,19 +108,15 @@ fun Picker(
                 )
             }
         }
-
         Divider(
             color = dividerColor,
             modifier = Modifier.offset(y = itemHeightDp * visibleItemsMiddle)
         )
-
         Divider(
             color = dividerColor,
             modifier = Modifier.offset(y = itemHeightDp * (visibleItemsMiddle + 1))
         )
-
     }
-
 }
 
 private fun Modifier.fadingEdge(brush: Brush) = this

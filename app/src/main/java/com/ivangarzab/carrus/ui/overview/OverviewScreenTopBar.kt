@@ -129,7 +129,7 @@ fun OverviewScreenTopBar(
                         } ?: MaterialTheme.colorScheme.primary
                     }
                 ),
-                actions = { /* Empty composable */ },
+                actions = actions,
                 scrollBehavior = scrollBehavior
             )
         }

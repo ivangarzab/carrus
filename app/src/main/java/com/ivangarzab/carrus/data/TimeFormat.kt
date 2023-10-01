@@ -4,10 +4,11 @@ package com.ivangarzab.carrus.data
  * Created by Ivan Garza Bermea.
  */
 enum class TimeFormat(
-    val value: String
+    val value: String,
+    val range: IntRange
 ) {
-    HR12("12 hours"),
-    HR24("24 hours")
+    HR12("12-hour", 1..12),
+    HR24("24-hour", 0..23)
     ;
 
     companion object {

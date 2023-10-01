@@ -97,7 +97,6 @@ class StackingMessagesView @JvmOverloads constructor(
     ).apply {
         bind(
             message = message,
-            resources = resources,
             onClickListener = onClickListener,
             onCloseClickListener = { onMessageDismissed(it) }
         )

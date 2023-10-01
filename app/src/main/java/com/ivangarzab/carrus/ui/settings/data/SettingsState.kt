@@ -1,8 +1,12 @@
 package com.ivangarzab.carrus.ui.settings.data
 
 import android.os.Parcelable
-import com.ivangarzab.carrus.data.Car
+import androidx.annotation.StringRes
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -10,17 +14,30 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class SettingsState(
-    val car: Car? = null,
-    val alarmTime: String? = null,
+    val isThereCarData: Boolean = false,
+    val isThereCarServicesData: Boolean = false,
     val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
-    val alarmTimeOptions: List<String> = pickerOptionsAlarmTime,
-    val dateFormatOptions: List<String> = pickerOptionsDueDateFormat
+    val dateFormatOptions: List<String> = pickerOptionsDueDateFormat,
+    val clockTimeFormat: TimeFormat = TimeFormat.HR24,
+    val timeFormatOptions: List<String> = pickerOptionsTimeFormat,
+    val alarmsOn: Boolean = false, // User enabled + granted permission
+    val alarmTime: AlarmTime = AlarmTime.default,
+    @StringRes val alarmTimeSubtitle: Int = R.string.setting_alarm_time_subtitle_24,
+    val alarmTimeOptions: List<String> = clockTimeFormat.range.map { it.toString() },
+    val alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY,
+    val alarmFrequencyOptions: List<String> = pickerOptionsAlarmFrequency,
 ) : Parcelable
 
-private val pickerOptionsAlarmTime = listOf(
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
-    "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"
+private val pickerOptionsTimeFormat = listOf(
+    TimeFormat.HR12.value,
+    TimeFormat.HR24.value,
 )
+
 private val pickerOptionsDueDateFormat = listOf(
-    "days", "weeks", "months", "due date"
+    DueDateFormat.DAYS.value,
+    DueDateFormat.WEEKS.value,
+    DueDateFormat.MONTHS.value,
+    DueDateFormat.DATE.value
 )
+
+private val pickerOptionsAlarmFrequency = AlarmFrequency.asStringList()

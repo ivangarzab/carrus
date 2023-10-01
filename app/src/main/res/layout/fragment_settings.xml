@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:showToggle="@{false}"
-                app:subtitle="@{@string/setting_alarm_time_subtitle}"
+                app:subtitle="@{@string/setting_alarm_time_subtitle_24}"
                 app:title="@{@string/setting_alarm_time_title}"
                 app:value="@{alarmTime}" />
 
