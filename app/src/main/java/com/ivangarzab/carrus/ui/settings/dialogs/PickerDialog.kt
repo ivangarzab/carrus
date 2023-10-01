@@ -20,6 +20,7 @@ import com.ivangarzab.carrus.ui.compose.rememberPickerState
 fun PickerDialog(
     modifier: Modifier = Modifier,
     items: List<String> = (1..6).map { it.toString() },
+    startIndex: Int = 0,
     visibleItemCount: Int = 3,
     onOptionSelected: (String) -> Unit = { },
     onDismissed: () -> Unit = { }
@@ -33,6 +34,7 @@ fun PickerDialog(
         Picker(
             state = currentItemState,
             items = items,
+            startIndex = startIndex,
             visibleItemsCount = visibleItemCount
         )
         PositiveAndNegativeButtons(

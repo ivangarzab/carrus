@@ -163,6 +163,7 @@ fun SettingsScreen(
 
             showDueDateFormatPickerDialog -> PickerDialog(
                 items = state.dateFormatOptions,
+                startIndex = state.dateFormatOptions.indexOf(state.dueDateFormat.value),
                 onOptionSelected = {
                     showDueDateFormatPickerDialog = false
                     onDueDateFormatSelected(it)
@@ -197,12 +198,14 @@ fun SettingsScreen(
                     showAlarmFrequencyDialog = false
                     onAlarmFrequencyClicked(AlarmFrequency.get(it))
                 },
+                startIndex = state.alarmFrequencyOptions.indexOf(state.alarmFrequency.value),
                 onDismissed = {
                     showAlarmFrequencyDialog = false
                 }
             )
             showClockTimeFormatPickerDialog -> PickerDialog(
                 items = state.timeFormatOptions,
+                startIndex = state.timeFormatOptions.indexOf(state.clockTimeFormat.value),
                 onOptionSelected = {
                     onClockTimeFormatClicked(it)
                     showClockTimeFormatPickerDialog = false
