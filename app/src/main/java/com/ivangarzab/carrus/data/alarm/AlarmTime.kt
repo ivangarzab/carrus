@@ -45,6 +45,10 @@ data class AlarmTime(
      */
     fun equals(other: AlarmTime): Boolean = this.raw24HourValue == other.raw24HourValue
 
+    override fun toString(): String {
+        return "$raw24HourValue:00"
+    }
+
     companion object {
         val default = AlarmTime(raw24HourValue = DEFAULT_ALARM_TIME)
     }

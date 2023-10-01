@@ -37,6 +37,7 @@ import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
+import com.ivangarzab.carrus.ui.compose.drawVerticalScrollbar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
@@ -64,13 +65,16 @@ fun SettingsScreenContent(
     onPrivacyPolicyClicked: () -> Unit = { }
 ) {
     AppTheme {
+        val scrollState = rememberScrollState()
         Column(
             modifier
                 .background(color = MaterialTheme.colorScheme.background)
+                .drawVerticalScrollbar(scrollState)
                 .verticalScroll(
-                    state = rememberScrollState(),
+                    state = scrollState,
                     enabled = true
-                )) {
+                )
+        ) {
 
             var areAlarmsEnabled: Boolean by rememberSaveable {
                 mutableStateOf(value = false)
@@ -160,7 +164,7 @@ fun SettingsScreenContent(
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
 
             SettingsScreenContentItemBase(
-                title = stringResource(id = R.string.privacy_policy),
+                title = stringResource(id = R.string.settings_privacy_policy_title),
                 subtitle = stringResource(id = R.string.settings_privacy_policy_subtitle),
                 onClick = onPrivacyPolicyClicked
             )

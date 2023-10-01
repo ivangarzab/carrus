@@ -145,13 +145,6 @@ class SettingsViewModel @Inject constructor(
         alarmsRepository.schedulePastDueAlarm(true)
     }
 
-    private fun getTimeString(hour: Int): String = "$hour:00 ${
-        when (hour) {
-            in 1..12 -> "AM"
-            in 13..24 -> "PM"
-            else -> ""
-        }
-    }"
 
     fun onExportData(
         contentResolver: ContentResolver,
@@ -224,13 +217,6 @@ class SettingsViewModel @Inject constructor(
     private fun updateTimeFormatState(format: TimeFormat) {
         Timber.v("Updating clock time format state to $format")
         state.value?.let { currentState ->
-            if (currentState.clockTimeFormat != format) {
-                // format changed
-                /*when (format) {
-                    TimeFormat.HR12 -> convertFrom24HrFormatTo12Hr(currentState.alarmTime)
-                    TimeFormat.HR24 -> convertFrom12HrFormatTo24Hr(currentState.alarmTime)
-                }*/
-            }
             _state.value = currentState.copy(
                 clockTimeFormat = format,
                 alarmTimeSubtitle = when (format) {
@@ -241,13 +227,4 @@ class SettingsViewModel @Inject constructor(
             )
         }
     }
-
-    private fun convertFrom12HrFormatTo24Hr(value: String): String =
-        (value.toInt() + 12).toString()
-
-    private fun convertFrom24HrFormatTo12Hr(value: String): String = value
-        .toInt()
-        .takeIf { it > 12 }
-        ?.let { (it - 12).toString() }
-        ?: value
 }
