@@ -10,6 +10,16 @@ import java.util.UUID
  */
 object CarImporter {
 
+    /**
+     * Using the JSON received as a parameter, utilize [Gson] in order to import the data.
+     * This function may fail for a few different reasons, and it may produce a end-result which
+     * contains null values for fields that are not nullable.
+     *
+     * @param json the JSON string to use for importation
+     *
+     * TODO: Consider bringing in Moshi for this and use instead of Gson
+     *      *  Should we start versioning our Car data too?
+     */
     fun importFromJson(json: String): Car? {
         return try {
             Gson().fromJson(json, Car::class.java).let { car ->
@@ -23,11 +33,9 @@ object CarImporter {
     }
 
     /**
-     * TODO: There's got to be a better way of doing this!
-     *  Or at least arrive at at state where we don't need this anymore --
-     *  Should we start versioning our Car data too?
-     *
-     * TODO: Consider bringing in Moshi for this and use instead of Gson
+     * Clean up the freshly imported [Car] data as to make sure that there are no null values
+     * for fields that are not expecting null values.  Additionally, we're nullifying the
+     * 'imageUri' field as to avoid any trouble with the storage rules.
      */
     private fun cleanImportedData(data: Car): Car = Car(
         uid = UUID.randomUUID().toString(),
