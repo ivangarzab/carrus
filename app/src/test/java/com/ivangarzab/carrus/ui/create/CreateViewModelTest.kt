@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import androidx.lifecycle.SavedStateHandle
 import com.ivangarzab.carrus.TEST_CAR
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import io.mockk.every
@@ -32,7 +31,6 @@ class CreateViewModelTest {
     fun setup() {
         val carRepository: CarRepository = mockk(relaxUnitFun = true)
         viewModel = CreateViewModel(
-            SavedStateHandle(),
             carRepository = carRepository
         ).apply {
             init(null)

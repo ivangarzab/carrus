@@ -25,6 +25,9 @@ data class Car(
 
     fun toJson(): String = Gson().toJson(this)
 
+    //TODO: Propagate into the OverviewScreen
+    fun getCarName(): String = nickname.ifBlank { "$make $model" }
+
     override fun compareTo(other: Car): Int = compareValuesBy(this, other,
         { it.uid },
         { it.nickname },
@@ -39,6 +42,10 @@ data class Car(
     )
 
     override fun toString(): String {
+        return "Car ${getCarName()} with ${services.size} services"
+    }
+
+    fun toStringVerbose(): String {
         return "Car(" +
                 "\nnickname='$nickname'" +
                 "\nmake='$make'" +

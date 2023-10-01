@@ -86,6 +86,7 @@ fun PermissionInterstitialScreen(
         PermissionInterstitialData(0, 0, 0)
     )
 
+    // the state != null is needed here for a strange bug
     if (state != null && state.title != 0 && state.subtitle != 0 && state.body != 0) {
         PermissionInterstitialScreenContent(
             data = state,

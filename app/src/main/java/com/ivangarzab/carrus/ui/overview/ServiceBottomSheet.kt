@@ -69,7 +69,7 @@ fun ServiceBottomSheetContent(
 ) {
     AppTheme {
         Surface(
-            modifier = Modifier,
+            modifier = modifier,
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(

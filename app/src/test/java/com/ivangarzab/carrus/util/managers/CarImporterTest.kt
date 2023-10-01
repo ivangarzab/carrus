@@ -11,13 +11,13 @@ import org.junit.Test
 class CarImporterTest {
 
     @Test
-    fun test_importFromJson_empty_string_return_null() {
+    fun test_importFromJson_empty_string_null() {
         assertThat(CarImporter.importFromJson(TEST_EMPTY_CAR_DATA))
             .isNull()
     }
 
     @Test
-    fun test_importFromJson_bad_string_return_null() {
+    fun test_importFromJson_bad_string_null() {
         assertThat(CarImporter.importFromJson(TEST_BAD_CAR_DATA))
             .isNull()
     }
@@ -28,9 +28,16 @@ class CarImporterTest {
             .isInstanceOf(Car::class.java)
     }
 
+    @Test
+    fun test_importFromJson_success_no_imageUri() = with(
+        CarImporter.importFromJson(TEST_CAR_JSON)
+    ) {
+        assertThat(this?.imageUri)
+            .isNull()
+    }
+
     companion object {
         private const val TEST_EMPTY_CAR_DATA = ""
         private const val TEST_BAD_CAR_DATA = "this is bad car data"
-
     }
 }

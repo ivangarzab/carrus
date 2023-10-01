@@ -91,12 +91,12 @@ fun PositiveAndNegativeButtons(
     Column(modifier = modifier) {
         PositiveButton(
             modifier = Modifier,
-            text = stringResource(id = R.string.submit),
+            text = positiveButtonText,
             onClick = onPositiveButtonClicked
         )
         NegativeButton(
             modifier = Modifier.padding(top = 4.dp),
-            text = stringResource(id = R.string.cancel),
+            text = negativeButtonText,
             onClick = onNegativeButtonClicked
         )
     }

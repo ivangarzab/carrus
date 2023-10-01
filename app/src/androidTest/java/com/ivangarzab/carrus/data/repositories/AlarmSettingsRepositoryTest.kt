@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.data.repositories
 
+import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
@@ -14,15 +15,21 @@ import org.junit.Test
  */
 class AlarmSettingsRepositoryTest {
 
-    private val repository = AlarmSettingsRepository(
-        InstrumentationRegistry.getInstrumentation().context
-    )
+    private val context: Context = InstrumentationRegistry.getInstrumentation().context
+
+    private val repository = AlarmSettingsRepository(context)
 
     @Before
     fun setup() {
         prefs.isAlarmFeatureOn = true
         prefs.alarmPastDueTime = null
         prefs.alarmFrequency = AlarmFrequency.DAILY
+    }
+
+    @Test
+    fun test_isAlarmPermissionGranted_base() = with(repository) {
+        assertThat(isAlarmPermissionGranted())
+            .isTrue()
     }
 
     @Test
@@ -72,17 +79,17 @@ class AlarmSettingsRepositoryTest {
     }
 
     @Test
-    fun test_getAlarmFrequency_sunday() = with(repository) {
-        prefs.alarmFrequency = AlarmFrequency.SUNDAY
+    fun test_getAlarmFrequency_weekly() = with(repository) {
+        prefs.alarmFrequency = AlarmFrequency.WEEKLY
         assertThat(getAlarmFrequency())
-            .isSameInstanceAs(AlarmFrequency.SUNDAY)
+            .isSameInstanceAs(AlarmFrequency.WEEKLY)
     }
 
     @Test
-    fun test_setAlarmFrequency_sunday() = with(repository) {
-        setAlarmFrequency(AlarmFrequency.SUNDAY)
+    fun test_setAlarmFrequency_weekly() = with(repository) {
+        setAlarmFrequency(AlarmFrequency.WEEKLY)
         assertThat(getAlarmFrequency())
-            .isSameInstanceAs(AlarmFrequency.SUNDAY)
+            .isSameInstanceAs(AlarmFrequency.WEEKLY)
     }
 
     @Test

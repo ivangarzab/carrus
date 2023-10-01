@@ -22,25 +22,29 @@ import javax.inject.Singleton
 class AppSettingsRepository @Inject constructor(
     @ApplicationContext context: Context
 ) {
+    data class AppSettingsState(
+        val timeFormat: TimeFormat = TimeFormat.HR12,
+        val dueDateFormat: DueDateFormat = DueDateFormat.DATE
+    )
+    private val appSettingsStateFlow = MutableStateFlow(AppSettingsState())
 
     private val nightThemeFlow = MutableStateFlow(false)
-
-    private val dueDateFormatFlow = MutableStateFlow(DueDateFormat.DAYS)
-
-    private val timeFormatFlow = MutableStateFlow(TimeFormat.HR12)
 
     private val leftHandedModeFlow = MutableStateFlow(false)
 
     init {
-        setNightThemeSetting(
-            fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context)
-        )
+        setNightThemeSetting(fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context))
+        setDueDateFormatSetting(fetchDueDateFormatSetting())
+        setTimeFormatSetting(fetchTimeFormatSetting())
+        setLeftHandedSetting(fetchLeftHandedSetting())
     }
 
     fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
 
-    /** Night Theme/Dark Mode **/
+    fun observeAppSettingsStateData(): Flow<AppSettingsState> = appSettingsStateFlow.asStateFlow()
 
+    /** Night Theme/Dark Mode **/
+//TODO: I may not need this info after the Compose migration after all
     fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
     fun setNightThemeSetting(isNight: Boolean) {
@@ -75,10 +79,12 @@ class AppSettingsRepository @Inject constructor(
         updateDueDateFormatFlow(format)
     }
 
-    fun observeDueDateFormatData(): Flow<DueDateFormat> = dueDateFormatFlow.asStateFlow()
-
     private fun updateDueDateFormatFlow(format: DueDateFormat) {
-        dueDateFormatFlow.value = format
+        appSettingsStateFlow.value.let {
+            appSettingsStateFlow.value = it.copy(
+                dueDateFormat = format
+            )
+        }
     }
 
     /** Time Format functions **/
@@ -93,10 +99,12 @@ class AppSettingsRepository @Inject constructor(
         updateTimeFormatFlow(format)
     }
 
-    fun observeTimeFormatData(): Flow<TimeFormat> = timeFormatFlow.asStateFlow()
-
     private fun updateTimeFormatFlow(format: TimeFormat) {
-        timeFormatFlow.value = format
+        appSettingsStateFlow.value.let {
+            appSettingsStateFlow.value = it.copy(
+                timeFormat = format
+            )
+        }
     }
 
     /** Left-handed Mode functions **/

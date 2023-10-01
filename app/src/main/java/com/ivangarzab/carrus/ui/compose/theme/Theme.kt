@@ -83,7 +83,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true, // Android 12+
+    //dynamicColor: Boolean = true, // Android 12+
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current

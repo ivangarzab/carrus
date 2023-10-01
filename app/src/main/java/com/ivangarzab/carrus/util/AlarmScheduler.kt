@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.SystemClock
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.prefs
@@ -33,7 +34,7 @@ class AlarmScheduler(
     ) = getAlarmPendingIntent(alarmData)?.let {
         Timber.d("Scheduling ${alarmData.type.name} alarm")
         setAlarmBroadcastReceiverEnableState(true)
-        scheduleDefaultDailyAlarm(it)
+        scheduleDefaultDailyAlarm(it, alarmData.frequency)
         onDone(true)
     } ?: onDone(false)
 
@@ -64,7 +65,10 @@ class AlarmScheduler(
         }
     }
 
-    private fun scheduleDefaultDailyAlarm(alarmIntent: PendingIntent) {
+    private fun scheduleDefaultDailyAlarm(
+            alarmIntent: PendingIntent,
+            alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY
+    ) {
         val alarmTime: Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME // 7am is the default
         alarmManager.setRepeating(
             AlarmManager.RTC,
@@ -76,7 +80,7 @@ class AlarmScheduler(
                     alarmTime
                 )
             }.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
+            alarmFrequency.interval,
             alarmIntent
         )
         Timber.d("Scheduled daily alarm at $alarmTime")
