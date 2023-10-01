@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -81,11 +82,15 @@ class AlarmSettingsRepository @Inject constructor(
 
     fun getAlarmTime(): Int = prefs.alarmPastDueTime ?: DEFAULT_ALARM_TIME
 
+    /**
+     * Set a new alarm time, based on a 24-hour clock reference.  I.e., parameter [alarmTime]
+     * should be a number between [0 - 23].
+     */
     fun setAlarmTime(alarmTime: Int) {
         Timber.v("Setting alarm time to $alarmTime")
         prefs.alarmPastDueTime = alarmTime
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
-            alarmTime = alarmTime.toString()
+            alarmTime = AlarmTime(alarmTime)
         ))
     }
 

@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -24,8 +27,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
+import com.ivangarzab.carrus.ui.compose.NegativeButton
+import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
@@ -75,7 +82,7 @@ fun SettingsScreen(
     onBackPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmsToggle: (Boolean) -> Unit = { },
-    onAlarmTimeSelected: (String) -> Unit = { },
+    onAlarmTimeSelected: (Int) -> Unit = { },
     onAlarmFrequencyClicked: (AlarmFrequency) -> Unit = { },
     onDueDateFormatSelected: (String) -> Unit = { },
     onClockTimeFormatClicked: (String) -> Unit = { },
@@ -134,11 +141,19 @@ fun SettingsScreen(
 
         // Dialogs
         when {
-            showAlarmTimePickerDialog -> PickerDialog(
-                items = state.alarmTimeOptions,
-//                visibleItemCount = 6, TODO: Figure out how to dynamically calculate Picker size
-                onOptionSelected = {
-                    showAlarmTimePickerDialog = false
+            showAlarmTimePickerDialog -> TimePickerDialog(
+                modifier = Modifier,
+                currentTime = state.alarmTime.getTime(state.clockTimeFormat).toLong(),
+                /*when (state.clockTimeFormat) {
+                    TimeFormat.HR24 -> state.alarmTime.toLong()
+                    TimeFormat.HR12 -> if (state.isPM) {
+                        state.alarmTime.toLong() + 12
+                    } else {
+                        state.alarmTime.toLong()
+                    }
+                },*/
+                is24HrFormat = state.clockTimeFormat == TimeFormat.HR24,
+                onValueSelected = {
                     onAlarmTimeSelected(it)
                 },
                 onDismissed = {
@@ -221,6 +236,45 @@ fun SettingsScreenBottomBar(
                 text = versionName,
                 style = TextStyle(fontStyle = FontStyle.Italic),
                 color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun TimePickerDialog(
+    modifier: Modifier = Modifier,
+    currentTime: Long = 0,
+    is24HrFormat: Boolean = false,
+    onValueSelected: (Int) -> Unit = { },
+    onDismissed: () -> Unit = { }
+) {
+    val timePickerState = rememberTimePickerState(
+        is24Hour = is24HrFormat
+    )
+
+    AppTheme {
+        BaseDialog(
+            modifier = modifier,
+            isLarge = true,
+            onDismissed = onDismissed
+        ) {
+            TimePicker(
+                state = timePickerState,
+            )
+            PositiveButton(
+                text = stringResource(id = R.string.submit),
+                onClick = {
+                    onValueSelected(timePickerState.hour)
+                    onDismissed()
+                }
+            )
+            NegativeButton(
+                text = stringResource(id = R.string.cancel),
+                onClick = onDismissed
             )
         }
     }

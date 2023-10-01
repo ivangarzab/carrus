@@ -35,6 +35,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
@@ -116,7 +118,7 @@ fun SettingsScreenContent(
                     SettingsScreenContentItemText(
                         title = stringResource(id = R.string.setting_alarm_time_title),
                         subtitle = stringResource(id = state.alarmTimeSubtitle),
-                        content = state.alarmTime,
+                        content = state.alarmTime.getTimeAsString(state.clockTimeFormat),
                         onClick = onAlarmTimeClicked
                     )
                     SettingsScreenContentItemText(
@@ -202,6 +204,32 @@ private fun SettingsScreenContentItemText(
             textAlign = TextAlign.Center,
         )
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SettingsScreenContentItemTime(
+    title: String = "Title",
+    subtitle: String = "This is a very long subtitle for explanation.",
+    time: String = DEFAULT_ALARM_TIME.toString(),
+    timeFormat: TimeFormat = TimeFormat.HR24,
+    isPM: Boolean = false,
+    onClick: () -> Unit = { }
+) {
+    SettingsScreenContentItemText(
+        title = title,
+        subtitle = subtitle,
+        content = when (timeFormat) {
+            TimeFormat.HR24 -> "${time}:00"
+            TimeFormat.HR12 -> if (isPM) {
+                "${time + 12} PM"
+            } else {
+                "$time AM"
+            } //TODO: We should create a 'Time' data class that abstracts all this logic
+        },
+        onClick = onClick
+    )
 }
 
 @Preview

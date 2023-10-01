@@ -15,6 +15,7 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
@@ -100,15 +101,27 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onAlarmTimePicked(alarmTime: String) {
-        Timber.d("Alarm time selected: ${getTimeString(alarmTime.toInt())}")
-        alarmSettingsRepository.setAlarmTime(alarmTime.toInt())
-        rescheduleAlarms()
+    /**
+     * Process the alarm time picker Dialog selection.
+     *
+     * @param alarmTime alarm time in 24-hour clock format
+     */
+    fun onAlarmTimePicked(alarmTime: Int) {
+        state.value?.let { state ->
+            val newAlarmTime = AlarmTime(alarmTime)
+            Timber.d("Alarm time selected: ${newAlarmTime.getTimeAsString(state.clockTimeFormat)}")
+            alarmSettingsRepository.setAlarmTime(alarmTime)
+            if (state.alarmTime.equals(newAlarmTime).not()) {
+                Timber.d("Rescheduling alarm after the time was changed")
+                rescheduleAlarms()
+            }
+        }
     }
 
     fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
         Timber.d("Alarm frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
+        Timber.d("Rescheduling alarm after the frequency was changed")
         rescheduleAlarms()
     }
 
@@ -191,15 +204,10 @@ class SettingsViewModel @Inject constructor(
         _state.value = state.value?.copy(alarmsOn = enabled)
     }
 
-    private fun updateAlarmTimeState(alarmTime: String) {
+    private fun updateAlarmTimeState(alarmTime: AlarmTime) {
         Timber.v("Updating alarm time state to $alarmTime")
         state.value?.let { state ->
-            _state.value = state.copy(
-                alarmTime = when (state.clockTimeFormat) {
-                    TimeFormat.HR12 -> getTimeString(alarmTime.toInt())
-                    TimeFormat.HR24 -> alarmTime + "00"
-                }
-            )
+            _state.value = state.copy(alarmTime = alarmTime)
         }
     }
 
@@ -218,10 +226,10 @@ class SettingsViewModel @Inject constructor(
         state.value?.let { currentState ->
             if (currentState.clockTimeFormat != format) {
                 // format changed
-                when (format) {
+                /*when (format) {
                     TimeFormat.HR12 -> convertFrom24HrFormatTo12Hr(currentState.alarmTime)
                     TimeFormat.HR24 -> convertFrom12HrFormatTo24Hr(currentState.alarmTime)
-                }
+                }*/
             }
             _state.value = currentState.copy(
                 clockTimeFormat = format,

@@ -6,7 +6,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
-import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -21,7 +21,7 @@ data class SettingsState(
     val clockTimeFormat: TimeFormat = TimeFormat.HR24,
     val timeFormatOptions: List<String> = pickerOptionsTimeFormat,
     val alarmsOn: Boolean = false, // User enabled + granted permission
-    val alarmTime: String = DEFAULT_ALARM_TIME.toString(),
+    val alarmTime: AlarmTime = AlarmTime.default,
     @StringRes val alarmTimeSubtitle: Int = R.string.setting_alarm_time_subtitle_24,
     val alarmTimeOptions: List<String> = clockTimeFormat.range.map { it.toString() },
     val alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY,

@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.data
 
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 
 /**
  * Created by Ivan Garza Bermea.
@@ -8,6 +9,6 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 data class AlarmSettingsState(
     val isAlarmPermissionGranted: Boolean = false,
     val isAlarmFeatureEnabled: Boolean = false,
-    val alarmTime: String = "",
+    val alarmTime: AlarmTime = AlarmTime.default,
     val frequency: AlarmFrequency = AlarmFrequency.DAILY
 )
