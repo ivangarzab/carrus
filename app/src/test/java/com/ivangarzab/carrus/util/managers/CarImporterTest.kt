@@ -31,6 +31,5 @@ class CarImporterTest {
     companion object {
         private const val TEST_EMPTY_CAR_DATA = ""
         private const val TEST_BAD_CAR_DATA = "this is bad car data"
-
     }
 }
