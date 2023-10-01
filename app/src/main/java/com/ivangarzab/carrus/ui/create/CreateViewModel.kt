@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.Car
@@ -23,15 +22,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CreateViewModel @Inject constructor(
-    private val savedState: SavedStateHandle,
     private val carRepository: CarRepository
     ) : ViewModel() {
 
-    //private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
-    val state: LiveData<CarModalState> = savedState.getLiveData(
-        STATE,
-        CarModalState()
-    )
+    private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
+    val state: LiveData<CarModalState> = _state
     enum class Type { CREATE, EDIT }
     lateinit var type: Type
 
@@ -90,13 +85,14 @@ class CreateViewModel @Inject constructor(
             Uri.parse(uri),
             Intent.FLAG_GRANT_READ_URI_PERMISSION
         )
-        setState(state, savedState, STATE) {
+        setState(state, _state) {
             copy(imageUri = uri)
         }
     }
 
     fun onImageDeleted() {
-        setState(state, savedState, STATE) {
+        Timber.v("Deleting image")
+        setState(state, _state) {
             copy(imageUri = null)
         }
     }
@@ -112,7 +108,7 @@ class CreateViewModel @Inject constructor(
         totalMiles: String,
         milesPerGallon: String
     ) {
-        setState(state, savedState, STATE) {
+        setState(state, _state) {
             copy(
                 nickname = nickname,
                 make = make,
@@ -128,7 +124,7 @@ class CreateViewModel @Inject constructor(
     }
 
     private fun onSetupContent(car: Car) {
-        setState(state, savedState, STATE) {
+        setState(state, _state) {
             copy(
                 title = "Edit Car",
                 actionButton = "Update",
@@ -158,9 +154,5 @@ class CreateViewModel @Inject constructor(
             Timber.w("Unable to import data", e)
             false
         }
-    }
-
-    companion object {
-        private const val STATE: String = "CreateViewModel.STATE"
     }
 }
