@@ -111,6 +111,7 @@ private fun OverviewScreen(
                             title = it.nickname.ifBlank {
                                 "${it.make} ${it.model}"
                             },
+                            plates = it.licenseNo,
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
