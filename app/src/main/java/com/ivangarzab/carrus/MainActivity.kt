@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Only here to support the [MapFragment] -- remove once we find a diff solution.
+     */
+    fun getBindingRoot() = binding.root
+
     companion object {
         const val REQUEST_CODE: Int = 1
     }
