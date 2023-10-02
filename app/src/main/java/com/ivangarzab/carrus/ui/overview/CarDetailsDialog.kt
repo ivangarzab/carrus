@@ -29,7 +29,10 @@ fun CarDetailsDialog(
     milesPerGallon: String = "26",
     onClick: () -> Unit = { }
 ) {
-    BaseDialog(onDismissed = onClick) {
+    BaseDialog(
+        onDismissed = onClick,
+        isLarge = true
+    ) {
         Text(
             text = "Details",
             style = MaterialTheme.typography.titleLarge,
