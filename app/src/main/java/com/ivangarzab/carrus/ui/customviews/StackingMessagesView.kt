@@ -12,10 +12,8 @@ import androidx.lifecycle.LiveData
 import com.ivangarzab.carrus.data.MessageData
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
-import com.ivangarzab.carrus.ui.overview.OverviewViewModel
+import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.util.extensions.bind
-import com.ivangarzab.carrus.util.extensions.fadeIn
-import com.ivangarzab.carrus.util.extensions.fadeOut
 import com.ivangarzab.carrus.util.managers.MessageQueue
 import timber.log.Timber
 
@@ -43,7 +41,7 @@ class StackingMessagesView @JvmOverloads constructor(
 
     fun feedData(
         owner: LifecycleOwner,
-        dataObservable: LiveData<OverviewViewModel.QueueState>
+        dataObservable: LiveData<MessageQueueState>
     ) {
         dataObservable.observe(owner) {
             Timber.d("Got a message queue update!")
@@ -99,7 +97,6 @@ class StackingMessagesView @JvmOverloads constructor(
     ).apply {
         bind(
             message = message,
-            resources = resources,
             onClickListener = onClickListener,
             onCloseClickListener = { onMessageDismissed(it) }
         )

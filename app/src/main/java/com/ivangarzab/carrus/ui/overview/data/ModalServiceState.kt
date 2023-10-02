@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.overview
+package com.ivangarzab.carrus.ui.overview.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -17,4 +17,15 @@ data class ModalServiceState(
 ) : Parcelable {
 
     fun isEmpty(): Boolean = name.isEmpty() && repairDate.isEmpty() && dueDate.isEmpty()
+
+    companion object {
+        val empty = ModalServiceState(
+            name = "",
+            repairDate = "",
+            dueDate = "",
+            brand = "",
+            type = "",
+            price = "",
+        )
+    }
 }

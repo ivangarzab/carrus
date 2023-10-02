@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 /**
  * Should only be accessed by Repository, or other data handling classes.

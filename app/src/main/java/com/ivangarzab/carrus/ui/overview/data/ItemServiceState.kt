@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.overview
+package com.ivangarzab.carrus.ui.overview.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

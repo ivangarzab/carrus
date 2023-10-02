@@ -25,14 +25,9 @@ class ServiceModalViewModelTest {
 
     private lateinit var viewModel: ServiceModalViewModel
 
-    private var state: ServiceModalViewModel.ServiceModalState? = null
-    private val stateObserver = Observer<ServiceModalViewModel.ServiceModalState?> {
+    private var state: ServiceModalState? = null
+    private val stateObserver = Observer<ServiceModalState?> {
         state = it
-    }
-
-    private var onDataRequest: Pair<Boolean, ServiceModalViewModel.DataRequest>? = null
-    private val onDataRequestObserver = Observer<Pair<Boolean, ServiceModalViewModel.DataRequest>> {
-        onDataRequest = it
     }
 
     private var onSubmission: Boolean? = null
@@ -50,159 +45,93 @@ class ServiceModalViewModelTest {
         every { carRepository.updateCarService(TEST_SERVICE) }
 
         viewModel.state.observeForever(stateObserver)
-        viewModel.onDataRequest.observeForever(onDataRequestObserver)
         viewModel.onSubmission.observeForever(onSubmissionObserver)
     }
 
     @After
     fun teardown() {
         viewModel.state.removeObserver(stateObserver)
-        viewModel.onDataRequest.removeObserver(onDataRequestObserver)
         viewModel.onSubmission.removeObserver(onSubmissionObserver)
     }
 
     @Test
-    fun test_setArgsData_type_with_null() {
+    fun test_setArgsData_base() {
         viewModel.setArgsData(null)
-        assertThat(state?.type)
+        assertThat(viewModel.modalType)
             .isSameInstanceAs(ServiceModalViewModel.Type.CREATE)
     }
 
     @Test
-    fun test_setArgsData_data_with_null() {
-        viewModel.setArgsData(null)
-        assertThat(state?.data)
-            .isNull()
-    }
-
-    @Test
-    fun test_setArgsData_type_with_data() {
+    fun test_setArgsData_with_data() {
         setArgsData()
-        assertThat(state?.type)
+        assertThat(viewModel.modalType)
             .isSameInstanceAs(ServiceModalViewModel.Type.EDIT)
     }
 
     @Test
-    fun test_setArgsData_data_with_data() {
-        setArgsData()
-        assertThat(state?.data)
-            .isEqualTo(TEST_SERVICE_EMPTY)
+    fun test_onUpdateServiceModalState_empty_data() {
+        with(SERVICE_MODAL_STATE_INVALID) {
+            setEmptyArgsData()
+            viewModel.onUpdateServiceModalState(this)
+            state?.let {
+                assertThat(it.name).matches(name)
+                assertThat(it.repairDate).matches(repairDate)
+                assertThat(it.dueDate).matches(dueDate)
+            }
+        }
     }
 
     @Test
-    fun test_onActionButtonClicked_without_state_data_first() {
+    fun test_onUpdateServiceModalState_valid_data() {
+        with(SERVICE_MODAL_STATE_VALID) {
+            setEmptyArgsData()
+            viewModel.onUpdateServiceModalState(this)
+            state?.let {
+                assertThat(it.name).matches(name)
+                assertThat(it.repairDate).matches(repairDate)
+                assertThat(it.dueDate).matches(dueDate)
+            }
+        }
+    }
+
+    @Test
+    fun test_onActionButtonClicked_without_state_data_onSubmission_return_false() {
         viewModel.onActionButtonClicked()
-        assertThat(onDataRequest?.first)
-            .isFalse()
-    }
-
-    @Test
-    fun test_onActionButtonClicked_without_state_data_second() {
-        viewModel.onActionButtonClicked()
-        assertThat(onDataRequest?.second)
-            .isEqualTo(ServiceModalViewModel.DataRequest())
-    }
-
-    @Test
-    fun test_onActionButtonClicked_with_state_data_first() {
-        setArgsData()
-        viewModel.onActionButtonClicked()
-        assertThat(onDataRequest?.first)
-            .isTrue()
-    }
-
-    @Test
-    fun test_onActionButtonClicked_with_state_data_second() {
-        setArgsData()
-        viewModel.onActionButtonClicked()
-        assertThat(onDataRequest?.second)
-            .isEqualTo(ServiceModalViewModel.DataRequest(
-                type = state?.type ?: ServiceModalViewModel.Type.EDIT,
-                id = TEST_SERVICE_EMPTY.id
-            ))
-    }
-
-    @Test
-    fun test_onSubmitData_with_bogus_data_fail() {
-        viewModel.onSubmitData(TEST_SERVICE_EMPTY)
         assertThat(onSubmission)
             .isFalse()
     }
 
     @Test
-    fun test_onSubmitData_with_data_without_state_data() {
-        viewModel.onSubmitData(TEST_SERVICE)
+    fun test_onActionButtonClicked_with_empty_data_onSubmission_return_false() {
+        setEmptyArgsData()
+        viewModel.onActionButtonClicked()
+        assertThat(onSubmission)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onActionButtonClicked_with_state_data_onSubmission_return_true() {
+        setArgsData()
+        viewModel.onActionButtonClicked()
         assertThat(onSubmission)
             .isTrue()
     }
 
-    @Test
-    fun test_onSubmitData_with_data_with_state_data() {
-        viewModel.setArgsData(TEST_SERVICE)
-        viewModel.onSubmitData(TEST_SERVICE.copy(
-            cost = 99.99f
-        ))
-        assertThat(onSubmission)
-            .isTrue()
-    }
+    private fun setEmptyArgsData() = viewModel.setArgsData(TEST_SERVICE_EMPTY)
+    private fun setArgsData() = viewModel.setArgsData(TEST_SERVICE)
 
-    @Test
-    fun test_getRepairDateInMillis_without_data() {
-        assertThat(viewModel.getRepairDateInMillis())
-            .isEqualTo(0L)
-    }
+    companion object {
+        private val SERVICE_MODAL_STATE_INVALID = ServiceModalState(
+            name = "",
+            repairDate = "",
+            dueDate = "",
+        )
 
-    @Test
-    fun test_getRepairDateInMillis_with_data() = with(viewModel) {
-        setArgsData(TEST_SERVICE)
-        assertThat(getRepairDateInMillis())
-            .isEqualTo(TEST_SERVICE.repairDate.timeInMillis)
-    }
-
-    @Test
-    fun test_getDueDateInMillis_without_data() {
-        assertThat(viewModel.getDueDateInMillis())
-            .isEqualTo(0L)
-    }
-
-    @Test
-    fun test_getDueDateInMillis_with_data() = with(viewModel) {
-        setArgsData(TEST_SERVICE)
-        assertThat(getDueDateInMillis())
-            .isEqualTo(TEST_SERVICE.dueDate.timeInMillis)
-    }
-
-    @Test
-    fun test_setNewRepairDateInMillis_without_state_data() = with(viewModel) {
-        setNewRepairDateInMillis(1639120980000)
-        assertThat(getRepairDateInMillis())
-            .isEqualTo(0L)
-    }
-
-    @Test
-    fun test_setNewRepairDateInMillis_with_state_data() = with(viewModel) {
-        setArgsData(TEST_SERVICE)
-        setNewRepairDateInMillis(1639120980000)
-        assertThat(getRepairDateInMillis())
-            .isEqualTo(1639120980000)
-    }
-
-    @Test
-    fun test_setDueDateInMillis_without_state_data() = with(viewModel) {
-        setNewDueDateInMillis(1639120980000)
-        assertThat(getDueDateInMillis())
-            .isEqualTo(0L)
-    }
-
-    @Test
-    fun test_setNewDueDateInMillis_with_state_data() = with(viewModel) {
-        setArgsData(TEST_SERVICE)
-        setNewDueDateInMillis(1639120980000)
-        assertThat(getDueDateInMillis())
-            .isEqualTo(1639120980000)
-    }
-
-    private fun setArgsData() {
-        viewModel.setArgsData(TEST_SERVICE_EMPTY)
+        private val SERVICE_MODAL_STATE_VALID = ServiceModalState(
+            name = "Valid Service",
+            repairDate = "7/31/23",
+            dueDate = "7/31/23",
+            price = "9.99"
+        )
     }
 }

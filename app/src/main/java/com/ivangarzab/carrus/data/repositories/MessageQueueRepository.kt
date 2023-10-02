@@ -44,6 +44,8 @@ class MessageQueueRepository @Inject constructor() {
     }
 
     private fun updateMessageQueue(messageQueue: MessageQueue) {
-        messageQueueFlow.value = messageQueue
+        messageQueueFlow.value = MessageQueue().apply {
+            queue = messageQueue.queue
+        }
     }
 }
