@@ -52,6 +52,7 @@ class OverviewFragment : Fragment() {
                     onCarEditButtonClicked = { navigateToEditFragment() },
                     onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
                     onSettingsButtonClicked = { navigateToSettingsFragment() },
+                    onMapButtonClicked = { navigateToMapFragment() },
                     onAddCarClicked = { navigateToCreateFragment() },
                     onMessageClicked = { onMessageClicked(it) }
                 )
@@ -142,5 +143,9 @@ class OverviewFragment : Fragment() {
 
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
+    )
+
+    private fun navigateToMapFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToMapFragment()
     )
 }

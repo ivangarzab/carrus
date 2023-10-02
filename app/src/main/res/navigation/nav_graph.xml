@@ -113,6 +113,6 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.ivangarzab.carrus.ui.map.MapFragment"
-        android:label="fragment_mao"
+        android:label="fragment_map"
         tools:layout="@layout/fragment_map"/>
 </navigation>

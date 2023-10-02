@@ -5,7 +5,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -34,6 +33,7 @@ fun OverviewScreenBottomBar(
     settingsButtonClicked: () -> Unit = { },
     carEditButtonClicked: () -> Unit = { },
     carDetailsButtonClicked: () -> Unit = { },
+    mapButtonClicked: () -> Unit = { }
 ) {
     AppTheme {
         BottomAppBar(
@@ -93,6 +93,17 @@ fun OverviewScreenBottomBar(
                         imageVector = Icons.Filled.Settings,
                         tint = iconTint,
                         contentDescription = "Edit Car icon button"
+                    )
+                }
+                IconButton(
+                    modifier = iconModifier,
+                    onClick = mapButtonClicked
+                ) {
+                    Icon(
+                        modifier = Modifier.size(iconSize),
+                        painter = painterResource(id = R.drawable.ic_map),
+                        tint = iconTint,
+                        contentDescription = "Map icon button"
                     )
                 }
             }

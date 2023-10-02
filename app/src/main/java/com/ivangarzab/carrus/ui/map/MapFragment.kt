@@ -11,8 +11,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
@@ -24,7 +22,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding: FragmentMapBinding by viewBinding()
 
-    private val placesClient: PlacesClient = Places.createClient(requireActivity())
+//    private val placesClient: PlacesClient = Places.createClient(requireActivity())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
