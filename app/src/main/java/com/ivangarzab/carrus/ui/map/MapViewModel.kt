@@ -20,6 +20,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.maps.android.SphericalUtil
+import com.ivangarzab.carrus.data.PlaceData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -43,6 +44,8 @@ class MapViewModel @Inject constructor(
     private val locationManager = GeoLocationManager(context)
 
     private var predictionsRequested = true
+
+    private val markedPlaces: MutableList<String> = mutableListOf()
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -83,11 +86,29 @@ class MapViewModel @Inject constructor(
             _state.value = (state.value?.copy(
                 currentLocation = LatLng(latitude, longitude)
             ))
-            if (predictionsRequested) {
+            /*if (predictionsRequested) {
                 fetchPlacesPredictions("gas station")
                 predictionsRequested = false
-            }
+            }*/
         }
+    }
+
+    fun onSearchForGasStation() {
+        //TODO: Makes ure permissions have been granted
+        Timber.d("Searching for Gas Stations around the area")
+        fetchPlacesPredictions(PHRASE_GAS_STATION)
+    }
+
+    fun onSearchForCarWash() {
+        //TODO: Makes ure permissions have been granted
+        Timber.d("Searching for Car Washes around the area")
+        fetchPlacesPredictions(PHRASE_CAR_WASH)
+    }
+
+    fun onSearchForRepairShop() {
+        //TODO: Makes ure permissions have been granted
+        Timber.d("Searching for Repair Shops around the area")
+        fetchPlacesPredictions(PHRASE_REPAIR_SHOP)
     }
 
     private fun fetchPlacesPredictions(searchString: String) {
@@ -168,5 +189,23 @@ class MapViewModel @Inject constructor(
                 Timber.e("Place not found, statusCode: $statusCode")
             }
         }
+    }
+
+    fun isPlaceMarked(place: PlaceData): Boolean {
+        markedPlaces.forEach {
+            if (place.id == it) return true
+        }
+        return false
+    }
+
+    fun onPlaceMarked(place: PlaceData) {
+        if (isPlaceMarked(place).not())
+            markedPlaces.add(place.id)
+    }
+
+    companion object {
+        private const val PHRASE_GAS_STATION: String = "gas station"
+        private const val PHRASE_CAR_WASH: String = "car wash"
+        private const val PHRASE_REPAIR_SHOP: String = "repair shop"
     }
 }

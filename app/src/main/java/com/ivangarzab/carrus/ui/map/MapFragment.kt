@@ -45,6 +45,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
+        setupViews()
         setupMap()
         requestLocationPermission()
 
@@ -60,9 +61,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 }
                 // Mark all search results
                 if (state.searchList.isNotEmpty()) {
-                    state.searchList.forEachIndexed { index, item ->
-
-//                        placeMarker(item.latLng, item.name)
+                    state.searchList.forEach { item ->
+                        with(viewModel) {
+                            if (isPlaceMarked(item).not()) {
+                                placeMarker(item.latLng, item.name)
+                                onPlaceMarked(item)
+                            }
+                        }
                     }
                 }
             }
@@ -78,6 +83,20 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                     updatePadding(bottom = insets.bottom)
                 }
                 WindowInsetsCompat.CONSUMED
+            }
+        }
+    }
+
+    private fun setupViews() {
+        with(binding) {
+            mapGasStationButton.setOnClickListener {
+                viewModel.onSearchForGasStation()
+            }
+            mapCarWashButton.setOnClickListener {
+                viewModel.onSearchForCarWash()
+            }
+            mapRepairShopButton.setOnClickListener {
+                viewModel.onSearchForRepairShop()
             }
         }
     }
