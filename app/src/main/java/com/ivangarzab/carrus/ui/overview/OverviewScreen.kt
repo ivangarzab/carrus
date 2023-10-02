@@ -149,7 +149,7 @@ private fun OverviewScreen(
                     showCarDetailsDialog -> CarDetailsDialog(
                         vinNo = it.vinNo,
                         tirePressure = it.tirePressure,
-                        milesTotal = it.milesPerGallon,
+                        milesTotal = it.totalMiles,
                         milesPerGallon = it.milesPerGallon,
                         onClick = {
                             showCarDetailsDialog = false
