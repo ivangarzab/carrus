@@ -103,6 +103,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.maps.android:places-ktx:2.0.0")
+    implementation("com.google.maps.android:android-maps-utils:0.5")
     implementation("com.android.volley:volley:1.2.1")
 
     // https://github.com/google/dagger/tree/master/java/dagger/hilt
