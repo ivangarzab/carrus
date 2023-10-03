@@ -112,6 +112,7 @@ dependencies {
     // https://firebase.google.com/support/release-notes/android
     implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // https://github.com/square/leakcanary
     implementation("com.squareup.leakcanary:plumber-android:$leakCanaryVersion")
