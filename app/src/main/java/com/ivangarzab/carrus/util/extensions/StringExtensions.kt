@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.util.extensions
 
+import androidx.core.text.isDigitsOnly
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -19,4 +20,7 @@ fun String.getCalendarFromShortenedDate(): Calendar = this.takeIf {
     }
 } ?: Calendar.getInstance().empty()
 
-fun String.parseIntoMoney(): Float = this.takeIf { it.isNotBlank() }?.toFloat() ?: 0.00f
+fun String.parseIntoMoney(): Float =
+    takeIf { it.isNotBlank() }
+    ?.takeIf { it.isDigitsOnly() }
+    ?.toFloat() ?: 0.00f
