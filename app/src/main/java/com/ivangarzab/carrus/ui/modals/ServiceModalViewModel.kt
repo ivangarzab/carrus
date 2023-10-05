@@ -102,7 +102,7 @@ class ServiceModalViewModel @Inject constructor(
     private fun onServiceCreated(service: Service) {
         carRepository.addCarService(service)
         Timber.d("New service created: ${service.name}")
-        Analytics.logServiceCreate(service.id, service.name)
+        Analytics.logServiceCreated(service.id, service.name)
     }
 
     private fun onServiceUpdate(service: Service) {

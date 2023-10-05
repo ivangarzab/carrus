@@ -29,107 +29,125 @@ object Analytics {
         }
     }
 
+    fun logPermissionGranted(permission: String) {
+        logEvent("permission_granted",
+            Pair("permission_type", permission)
+        )
+    }
+
+    fun logPermissionDenied(permission: String) {
+        logEvent("permission_denied",
+            Pair("permission_type", permission)
+        )
+    }
+
     // Instrumentation events
-    fun logCarCreate(id: String, name: String) {
-        logEvent("car_create",
-            Pair("id", id),
+    fun logCarCreated(id: String, name: String) {
+        logEvent("car_created",
+            Pair("car_id", id),
             Pair("name", name)
         )
     }
 
-    fun logCarDelete(id: String, name: String) {
-        logEvent("car_delete",
-            Pair("id", id),
+    fun logCarDeleted(id: String, name: String) {
+        logEvent("car_deleted",
+            Pair("car_id", id),
             Pair("name", name)
         )
     }
 
     fun logCarExported(id: String, name: String) {
         logEvent("car_exported",
-            Pair("id", id),
-            Pair("name", name)
+            Pair("car_id", id),
+            Pair("car_name", name)
         )
     }
 
     fun logCarImported(id: String, name: String) {
-        logEvent("car_Imported",
-            Pair("id", id),
-            Pair("name", name)
+        logEvent("car_imported",
+            Pair("car_id", id),
+            Pair("car_name", name)
         )
     }
 
-    fun logServiceCreate(id: String, name: String) {
-        logEvent("service_create",
-            Pair("id", id),
-            Pair("name", name)
+    fun logServiceCreated(id: String, name: String) {
+        logEvent("service_created",
+            Pair("service_id", id),
+            Pair("service_name", name)
         )
     }
 
-    fun logServiceDelete(id: String, name: String) {
-        logEvent("service_delete",
-            Pair("id", id),
-            Pair("name", name)
+    fun logServiceDeleted(id: String, name: String) {
+        logEvent("service_deleted",
+            Pair("service_id", id),
+            Pair("service_name", name)
         )
     }
 
-    fun logServiceListSort(type: String) {
-        logEvent("service_list_sort",
-            Pair("type", type)
+    fun logServiceListSorted(type: String) {
+        logEvent("service_list_sorted",
+            Pair("sort_type", type)
         )
     }
 
-    fun logAlarmSchedule(name: String, force: Boolean) {
-        logEvent("alarm_schedule",
-            Pair("type", name),
+    fun logServiceListDeleted(carId: String) {
+        logEvent("service_list_deleted",
+            Pair("car_id", carId)
+        )
+    }
+
+    fun logAlarmScheduled(name: String, force: Boolean) {
+        logEvent("alarm_scheduled",
+            Pair("alarm_type", name),
             Pair("force", force)
         )
     }
 
-    fun logAlarmCancel(name: String) {
-        logEvent("alarm_cancel",
-            Pair("type", name)
+    fun logAlarmCancelled(name: String) {
+        logEvent("alarm_cancelled",
+            Pair("alarm_type", name)
         )
     }
 
-    fun logAlarmFeatureToggle(enabled: Boolean) {
-        logEvent("alarm_feature_toggle",
+    fun logAlarmFeatureToggled(enabled: Boolean) {
+        logEvent("alarm_feature_toggled",
             Pair("enabled", enabled)
         )
     }
 
-    fun logAlarmTimeChange(alarmTime: Int) {
-        logEvent("alarm_time_change",
-            Pair("alarmTime", alarmTime)
+    fun logAlarmTimeChanged(alarmTime: Int) {
+        logEvent("alarm_time_changed",
+            Pair("alarm_time", alarmTime)
         )
     }
 
-    fun logAlarmFrequencySet(frequency: String) {
-        logEvent("alarm_frequency_change",
-            Pair("alarmFrequency", frequency)
+    fun logAlarmFrequencyChanged(frequency: String) {
+        logEvent("alarm_frequency_changed",
+            Pair("alarm_frequency", frequency)
         )
     }
 
-    fun logNightThemeChange(isNight: Boolean) {
-        logEvent("night_theme_change",
-            Pair("isNight", isNight)
+    fun logNightThemeChanged(isNight: Boolean) {
+        logEvent("night_theme_changed",
+            Pair("night", isNight)
         )
     }
 
-    fun logDueDateFormatChange(format: String) {
-        logEvent("due_date_format_change",
+    fun logDueDateFormatChanged(format: String) {
+        logEvent("due_date_format_changed",
             Pair("format", format)
         )
     }
 
-    fun logTimeFormatChange(format: String) {
-        logEvent("time_format_change",
+    fun logTimeFormatChanged(format: String) {
+        logEvent("time_format_changed",
             Pair("format", format)
         )
     }
 
-    fun logLeftHandedChange(lefty: Boolean) {
-        logEvent("left_handed_change",
-            Pair("isLefty", lefty)
+    fun logLeftHandedChanged(lefty: Boolean) {
+        logEvent("left_handed_changed",
+            Pair("lefty", lefty)
         )
     }
 }

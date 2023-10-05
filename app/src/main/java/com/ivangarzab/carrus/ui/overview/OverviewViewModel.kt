@@ -70,7 +70,7 @@ class OverviewViewModel @Inject constructor(
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
-        Analytics.logServiceDelete(service.id, service.name)
+        Analytics.logServiceDeleted(service.id, service.name)
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -184,7 +184,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
-        Analytics.logServiceListSort(type.name.lowercase())
+        Analytics.logServiceListSorted(type.name.lowercase())
         onSortingByType(type)
     }
 

@@ -73,13 +73,13 @@ class SettingsViewModel @Inject constructor(
     fun onDarkModeToggleClicked(checked: Boolean) {
         Timber.v("Dark mode toggle was checked to: $checked")
         appSettingsRepository.setNightThemeSetting(checked)
-        Analytics.logNightThemeChange(checked)
+        Analytics.logNightThemeChanged(checked)
     }
 
     fun onDeleteCarDataClicked() {
         Timber.d("Deleting car data")
         carData?.let {
-            Analytics.logCarDelete(it.uid, it.getCarName())
+            Analytics.logCarDeleted(it.uid, it.getCarName())
         }
         carRepository.deleteCarData()
     }
@@ -101,7 +101,7 @@ class SettingsViewModel @Inject constructor(
     fun onAlarmsToggled(enabled: Boolean) {
         Timber.d("Alarms enabled toggled: $enabled")
         alarmSettingsRepository.toggleAlarmFeature(enabled)
-        Analytics.logAlarmFeatureToggle(enabled)
+        Analytics.logAlarmFeatureToggled(enabled)
         if (enabled && isAlarmPermissionGranted.not()) {
             Timber.v("Attempting to request alarms permission")
             onRequestAlarmPermission.value = Any()
@@ -118,7 +118,7 @@ class SettingsViewModel @Inject constructor(
             val newAlarmTime = AlarmTime(alarmTime)
             Timber.d("Alarm time selected: ${newAlarmTime.getTimeAsString(state.clockTimeFormat)}")
             alarmSettingsRepository.setAlarmTime(alarmTime)
-            Analytics.logAlarmTimeChange(alarmTime)
+            Analytics.logAlarmTimeChanged(alarmTime)
             if (state.alarmTime.equals(newAlarmTime).not()) {
                 Timber.d("Rescheduling alarm after the time was changed")
                 rescheduleAlarms()
@@ -129,7 +129,7 @@ class SettingsViewModel @Inject constructor(
     fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
         Timber.d("Alarm frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
-        Analytics.logAlarmFrequencySet(frequency.value)
+        Analytics.logAlarmFrequencyChanged(frequency.value)
         Timber.d("Rescheduling alarm after the frequency was changed")
         rescheduleAlarms()
     }
@@ -138,7 +138,7 @@ class SettingsViewModel @Inject constructor(
         DueDateFormat.get(option).let { dueDateFormat ->
             Timber.d("Due Date format changed to: '$dueDateFormat'")
             appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
-            Analytics.logDueDateFormatChange(option)
+            Analytics.logDueDateFormatChanged(option)
         }
 
     }
@@ -147,7 +147,7 @@ class SettingsViewModel @Inject constructor(
         TimeFormat.get(option).let { timeFormat ->
             Timber.d("Clock Time format changed to: '$timeFormat'")
             appSettingsRepository.setTimeFormatSetting(timeFormat)
-            Analytics.logTimeFormatChange(option)
+            Analytics.logTimeFormatChanged(option)
         }
     }
 
