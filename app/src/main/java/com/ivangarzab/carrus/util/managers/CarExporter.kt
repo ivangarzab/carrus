@@ -16,6 +16,7 @@ object CarExporter {
     fun exportToJson(data: Car): String? {
         return try {
             cleanData(data).let { cleanData ->
+                Timber.d("Got car data to export: $cleanData")
                 Gson().toJson(cleanData)
             }
         } catch (e: Exception) {

@@ -15,6 +15,7 @@ import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
 import com.ivangarzab.carrus.util.managers.asUniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -182,6 +183,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
+        Analytics.logServiceListSort(type.name.lowercase())
         onSortingByType(type)
     }
 

@@ -5,6 +5,7 @@ import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.AlarmScheduler
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.util.Calendar
@@ -37,6 +38,7 @@ class AlarmsRepository @Inject constructor(
                 Timber.w("${type.name} alarm is already scheduled")
                 //return // skip dupes..?
                 cancelAlarm(type)
+                Analytics.logAlarmCancel(type.name)
             }
             scheduler.scheduleAlarm(getAlarmSchedulingData(type)) {
                 toggleAlarmActiveFlag(type, it)

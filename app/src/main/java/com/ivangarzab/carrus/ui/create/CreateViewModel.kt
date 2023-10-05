@@ -11,6 +11,7 @@ import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -147,6 +148,7 @@ class CreateViewModel @Inject constructor(
             CarImporter.importFromJson(data)?.let { car ->
                 Timber.d("Got car data to import: $car")
                 carRepository.saveCarData(car)
+                Analytics.logCarImported(car.uid, car.getCarName())
                 onSubmit.postValue(true)
                 true
             } ?: false

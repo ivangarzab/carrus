@@ -4,6 +4,7 @@ import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.managers.Analytics
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,17 +38,20 @@ class CarRepository @Inject constructor() {
     fun saveCarData(car: Car) {
         prefs.defaultCar = car
         Timber.d("Car data was saved")
+        Analytics.logCarCreate(car.uid, car.getCarName())
         updateCarDataChannel(car)
     }
 
     fun deleteCarData() {
         prefs.defaultCar = null
         Timber.d("Car data was removed")
+        fetchCarData()?.let { Analytics.logCarDelete(it.uid, it.getCarName()) }
         updateCarDataChannel(null)
     }
 
     fun addCarService(service: Service) = fetchCarData()?.let {
         Timber.d("Adding car service: $service")
+        Analytics.logServiceCreate(service.id, service.name)
         saveCarData(it.apply {
             services = services.toMutableList().apply { add(service) }
         })
@@ -55,6 +59,7 @@ class CarRepository @Inject constructor() {
 
     fun removeCarService(service: Service) = fetchCarData()?.let {
         Timber.d("Removing car service: $service")
+        Analytics.logServiceDelete(service.id, service.name)
         saveCarData(it.apply {
             services = services.toMutableList().apply { remove(service) }
         })
