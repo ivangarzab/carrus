@@ -59,6 +59,13 @@ object Analytics {
         )
     }
 
+    fun logCarUpdated(id: String, name: String) {
+        logEvent("car_updated",
+            Pair("car_id", id),
+            Pair("name", name)
+        )
+    }
+
     fun logCarDeleted(id: String, name: String) {
         logEvent("car_deleted",
             Pair("car_id", id),
@@ -82,6 +89,13 @@ object Analytics {
 
     fun logServiceCreated(id: String, name: String) {
         logEvent("service_created",
+            Pair("service_id", id),
+            Pair("service_name", name)
+        )
+    }
+
+    fun logServiceUpdated(id: String, name: String) {
+        logEvent("service_updated",
             Pair("service_id", id),
             Pair("service_name", name)
         )

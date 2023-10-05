@@ -71,12 +71,17 @@ class CreateViewModel @Inject constructor(
                 imageUri = state.imageUri
             ).let { data ->
                 when (type) {
-                    Type.CREATE -> carRepository.saveCarData(data)
-                    Type.EDIT -> carRepository.saveCarData(data.copy(
-                        services = carRepository.fetchCarData()?.services ?: emptyList()
-                    ))
+                    Type.CREATE -> {
+                        carRepository.saveCarData(data)
+                        Analytics.logCarCreated(data.uid, data.getCarName())
+                    }
+                    Type.EDIT -> {
+                        carRepository.saveCarData(data.copy(
+                            services = carRepository.fetchCarData()?.services ?: emptyList()
+                        ))
+                        Analytics.logCarUpdated(data.uid, data.getCarName())
+                    }
                 }
-                Analytics.logCarCreated(data.uid, data.getCarName())
             }
         }
         onSubmit.postValue(true)

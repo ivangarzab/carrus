@@ -108,6 +108,7 @@ class ServiceModalViewModel @Inject constructor(
     private fun onServiceUpdate(service: Service) {
         carRepository.updateCarService(service)
         Timber.d("Service updated: ${service.name}")
+        Analytics.logServiceUpdated(service.id, service.name)
     }
 
     private fun setState(update: ServiceModalState) {
