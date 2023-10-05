@@ -77,6 +77,7 @@ class OverviewViewModel @Inject constructor(
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
         Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
         if (isGranted) { removeNotificationPermissionMessage() }
+        Analytics.logNotificationPermissionResult(isGranted)
     }
 
     fun onMessageDismissed() {

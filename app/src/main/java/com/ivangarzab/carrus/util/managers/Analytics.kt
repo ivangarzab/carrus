@@ -29,16 +29,26 @@ object Analytics {
         }
     }
 
-    fun logPermissionGranted(permission: String) {
+    private fun logPermissionGranted(permission: String) {
         logEvent("permission_granted",
             Pair("permission_type", permission)
         )
     }
 
-    fun logPermissionDenied(permission: String) {
+    private fun logPermissionDenied(permission: String) {
         logEvent("permission_denied",
             Pair("permission_type", permission)
         )
+    }
+
+    fun logNotificationPermissionResult(granted: Boolean) = when (granted) {
+        true -> logPermissionGranted("notifications")
+        false -> logPermissionDenied("notifications")
+    }
+
+    fun logAlarmsPermissionResult(granted: Boolean) = when (granted) {
+        true -> logPermissionGranted("alarms")
+        false -> logPermissionDenied("alarms")
     }
 
     // Instrumentation events

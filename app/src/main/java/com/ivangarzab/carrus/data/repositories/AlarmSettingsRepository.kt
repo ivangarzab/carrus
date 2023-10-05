@@ -1,9 +1,7 @@
 package com.ivangarzab.carrus.data.repositories
 
 import android.app.AlarmManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +10,7 @@ import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.receivers.AlarmPermissionStateChangedReceiver
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +50,7 @@ class AlarmSettingsRepository @Inject constructor(
     fun listenForAlarmPermissionChanges(context: Context) {
         ContextCompat.registerReceiver(
             context,
-            AlarmPermissionStateChangedReceiver(),
+            AlarmPermissionStateChangedReceiver { setIsAlarmPermissionGranted(true) },
             IntentFilter(
                 AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
             ),
@@ -102,19 +101,6 @@ class AlarmSettingsRepository @Inject constructor(
         updateAlarmSettingsFlow(alarmSettingsFlow.value.copy(
             frequency = frequency
         ))
-    }
-
-    inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                    Timber.d("Received alarm permission state changed broadcast")
-                    setIsAlarmPermissionGranted(true)
-                    //TODO: Continue listening until we're ready to exit the app
-                    context?.unregisterReceiver(this)
-                }
-            }
-        }
     }
 }
 
