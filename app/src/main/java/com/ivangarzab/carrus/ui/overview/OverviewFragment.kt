@@ -17,6 +17,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -48,12 +49,30 @@ class OverviewFragment : Fragment() {
         setContent {
             AppTheme {
                 OverviewScreenStateful(
-                    onFloatingActionButtonClicked = { navigateToNewServiceBottomSheet() },
-                    onCarEditButtonClicked = { navigateToEditFragment() },
-                    onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
-                    onSettingsButtonClicked = { navigateToSettingsFragment() },
-                    onAddCarClicked = { navigateToCreateFragment() },
-                    onMessageClicked = { onMessageClicked(it) }
+                    onFloatingActionButtonClicked = {
+                        navigateToNewServiceBottomSheet()
+                        Analytics.logAddNewServiceClicked()
+                    },
+                    onCarEditButtonClicked = {
+                        navigateToEditFragment()
+                        Analytics.logEditCarClicked()
+                    },
+                    onServiceEditButtonClicked = {
+                        navigateToEditServiceBottomSheet(it)
+                        Analytics.logEditServiceClicked()
+                    },
+                    onSettingsButtonClicked = {
+                        navigateToSettingsFragment()
+                        Analytics.logSettingsClicked()
+                    },
+                    onAddCarClicked = {
+                        navigateToCreateFragment()
+                        Analytics.logAddNewCarClicked()
+                    },
+                    onMessageClicked = {
+                        onMessageClicked(it)
+                        Analytics.logAppMessageClicked()
+                    }
                 )
             }
         }
@@ -72,6 +91,7 @@ class OverviewFragment : Fragment() {
             "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 attemptToRequestNotificationPermission()
             }
+
             "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 attemptToRequestAlarmsPermission()
             }

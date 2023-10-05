@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
@@ -63,9 +64,16 @@ class SettingsFragment : Fragment() {
             AppTheme {
                 SettingsScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
-                    onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
-                    onExportClicked = { createDocumentsContract.launch(generateExportFileName()) },
+                    onImportClicked = {
+                        Analytics.logImportButtonClicked()
+                        openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE))
+                                      },
+                    onExportClicked = {
+                        Analytics.logExportButtonClicked()
+                        createDocumentsContract.launch(generateExportFileName())
+                                      },
                     onPrivacyPolicyClicked = {
+                        Analytics.logPrivacyPolicyClicked()
                         findNavController().navigate(
                             SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicyFragment()
                         )

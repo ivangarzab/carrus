@@ -174,4 +174,110 @@ object Analytics {
             Pair("lefty", lefty)
         )
     }
+
+    fun logAddNewCarClicked() {
+        logEvent("add_new_car_clicked")
+    }
+
+    fun logEditCarClicked() {
+        logEvent("edit_car_clicked")
+    }
+
+    fun logEditServiceClicked() {
+        logEvent("edit_service_clicked")
+    }
+
+    fun logAddNewServiceClicked() {
+        logEvent("add_service_clicked")
+    }
+
+    fun logSettingsClicked() {
+        logEvent("settings_clicked")
+    }
+
+    fun logAppMessageClicked() {
+        logEvent("message_clicked")
+    }
+
+    fun logAddImageClicked() {
+        logEvent("image_add_clicked")
+    }
+
+    fun logImportButtonClicked() {
+        logEvent("import_clicked")
+    }
+
+    fun logExportButtonClicked() {
+        logEvent("export_clicked")
+    }
+
+    fun logPrivacyPolicyClicked() {
+        logEvent("privacy_policy_clicked")
+    }
+
+    fun logImageAdded() {
+        logEvent("image_added")
+    }
+
+    fun logImageDeleted() {
+        logEvent("image_deleted")
+    }
+
+    fun logAppMessageAdded(type: String) {
+        logEvent("message_added",
+            Pair("message_type", type)
+        )
+    }
+
+    fun logAppMessageRemoved(type: String) {
+        logEvent("message_removed",
+            Pair("message_type", type)
+        )
+    }
+
+    fun logSortClicked(type: String) {
+        logEvent("sorting_by_type_clicked",
+            Pair("sort_type", type)
+        )
+    }
+
+    fun logDarkModeToggleClicked() {
+        logEvent("dark_mode_clicked")
+    }
+
+    fun logDeleteCarDataClicked() {
+        logEvent("car_delete_clicked")
+    }
+
+    fun logDeleteServiceListClicked() {
+        logEvent("service_list_delete_clicked")
+    }
+
+    fun logAlarmsToggleClicked() {
+        logEvent("alarms_toggle_clicked")
+    }
+
+    fun logAlarmTimeClicked() {
+        logEvent("alarm_time_clicked")
+    }
+
+    fun logAlarmFrequencyClicked() {
+        logEvent("alarm_frequency_clicked")
+    }
+
+    fun logDueDateFormatClicked() {
+        logEvent("due_date_format_clicked")
+    }
+
+    fun logTimeFormatClicked() {
+        logEvent("time_format_clicked")
+    }
+
+    fun logServiceSubmitClicked() {
+        logEvent("service_submit_clicked")
+    }
+
+    fun logCarDetailsClicked() {
+        logEvent("car_details_clicked")
+    }
 }

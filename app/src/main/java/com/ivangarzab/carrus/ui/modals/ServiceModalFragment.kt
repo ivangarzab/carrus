@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -28,6 +29,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
             ServiceModalScreenStateful(
                 args = args,
                 onSubmissionSuccess = { submitSuccess ->
+                    Analytics.logServiceSubmitClicked()
                     when (submitSuccess) {
                         true -> findNavController().popBackStack()
                         false -> toast("Missing required data")

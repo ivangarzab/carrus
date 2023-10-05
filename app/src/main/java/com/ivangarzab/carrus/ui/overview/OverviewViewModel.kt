@@ -80,38 +80,47 @@ class OverviewViewModel @Inject constructor(
         Analytics.logNotificationPermissionResult(isGranted)
     }
 
-    fun onMessageDismissed() {
-        Timber.v("Removing message at the top of the queue")
-        messageQueueRepository.dismissMessage()
-    }
-
     fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
-        Timber.v("Adding ${this.name} message to the queue")
-        messageQueueRepository.addMessage(this)
+        addMessage(this)
         setState(state, savedState, STATE) {
             copy(hasPromptedForPermissionNotification = true)
         }
     }
 
     private fun removeNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
-        Timber.v("Removing ${this.name} message from queue")
-        messageQueueRepository.removeMessage(this)
+        removeMessage(this)
     }
 
     fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
-        Timber.v("Adding ${this.name} message to the queue")
-        messageQueueRepository.addMessage(this)
+        addMessage(this)
         setState(state, savedState, STATE) {
             copy(hasPromptedForPermissionAlarm = true)
         }
     }
 
     fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+        removeMessage(this)
+    }
+
+    fun addTestMessage() = addMessage(Message.TEST)
+
+    private fun addMessage(type: Message) = with(type) {
+        Timber.v("Adding ${this.name} message to the queue")
+        Analytics.logAppMessageAdded(this.name)
+        messageQueueRepository.addMessage(this)
+    }
+
+    private fun removeMessage(type: Message) = with(type) {
         Timber.v("Removing ${this.name} message from queue")
+        Analytics.logAppMessageRemoved(this.name)
         messageQueueRepository.removeMessage(this)
     }
 
-    fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
+    fun onMessageDismissed() {
+        Timber.v("Removing message at the top of the queue")
+        //TODO: How do we instrument this, or should we simply use removeMessage instead?
+        messageQueueRepository.dismissMessage()
+    }
 
     private fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
@@ -119,6 +128,7 @@ class OverviewViewModel @Inject constructor(
             SortingCallback.SortingType.NAME -> sortServicesByName()
             SortingCallback.SortingType.DATE -> sortServicesByDate()
         }
+        Analytics.logServiceListSorted(type.name)
         setState(state, savedState, STATE) {
             copy(serviceSortingType = type)
         }
@@ -187,7 +197,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
-        Analytics.logServiceListSorted(type.name.lowercase())
+        Analytics.logSortClicked(type.name)
         onSortingByType(type)
     }
 

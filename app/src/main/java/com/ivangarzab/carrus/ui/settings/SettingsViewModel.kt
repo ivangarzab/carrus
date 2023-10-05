@@ -72,12 +72,14 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
+        Analytics.logDarkModeToggleClicked()
         Timber.v("Dark mode toggle was checked to: $checked")
         appSettingsRepository.setNightThemeSetting(checked)
         Analytics.logNightThemeChanged(checked)
     }
 
     fun onDeleteCarDataClicked() {
+        Analytics.logDeleteCarDataClicked()
         Timber.d("Deleting car data")
         carData?.let {
             Analytics.logCarDeleted(it.uid, it.getCarName())
@@ -86,6 +88,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onDeleteServicesClicked() {
+        Analytics.logDeleteServiceListClicked()
         carData?.let {
             if (it.services.isNotEmpty()) {
                 Timber.d("Deleting all services from car data")
@@ -101,6 +104,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onAlarmsToggled(enabled: Boolean) {
+        Analytics.logAlarmsToggleClicked()
         Timber.d("Alarms enabled toggled: $enabled")
         alarmSettingsRepository.toggleAlarmFeature(enabled)
         Analytics.logAlarmFeatureToggled(enabled)
@@ -116,6 +120,7 @@ class SettingsViewModel @Inject constructor(
      * @param alarmTime alarm time in 24-hour clock format
      */
     fun onAlarmTimePicked(alarmTime: Int) {
+        Analytics.logAlarmTimeClicked()
         state.value?.let { state ->
             val newAlarmTime = AlarmTime(alarmTime)
             Timber.d("Alarm time selected: ${newAlarmTime.getTimeAsString(state.clockTimeFormat)}")
@@ -129,6 +134,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
+        Analytics.logAlarmFrequencyClicked()
         Timber.d("Alarm frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
         Analytics.logAlarmFrequencyChanged(frequency.value)
@@ -137,6 +143,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onDueDateFormatPicked(option: String) {
+        Analytics.logDueDateFormatClicked()
         DueDateFormat.get(option).let { dueDateFormat ->
             Timber.d("Due Date format changed to: '$dueDateFormat'")
             appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
@@ -146,6 +153,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onClockTimeFormatPicked(option: String) {
+        Analytics.logTimeFormatClicked()
         TimeFormat.get(option).let { timeFormat ->
             Timber.d("Clock Time format changed to: '$timeFormat'")
             appSettingsRepository.setTimeFormatSetting(timeFormat)

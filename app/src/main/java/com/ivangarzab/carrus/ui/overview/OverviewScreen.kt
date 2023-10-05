@@ -24,6 +24,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
@@ -139,6 +140,7 @@ private fun OverviewScreen(
                             settingsButtonClicked = onSettingsButtonClicked,
                             carEditButtonClicked = onEditButtonClicked,
                             carDetailsButtonClicked = {
+                                Analytics.logCarDetailsClicked()
                                 showCarDetailsDialog = true
                             }
                         )

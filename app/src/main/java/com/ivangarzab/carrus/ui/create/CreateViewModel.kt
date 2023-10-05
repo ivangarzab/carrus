@@ -92,6 +92,7 @@ class CreateViewModel @Inject constructor(
             Uri.parse(uri),
             Intent.FLAG_GRANT_READ_URI_PERMISSION
         )
+        Analytics.logImageAdded()
         setState(state, _state) {
             copy(imageUri = uri)
         }
@@ -99,6 +100,7 @@ class CreateViewModel @Inject constructor(
 
     fun onImageDeleted() {
         Timber.v("Deleting image")
+        Analytics.logImageDeleted()
         setState(state, _state) {
             copy(imageUri = null)
         }

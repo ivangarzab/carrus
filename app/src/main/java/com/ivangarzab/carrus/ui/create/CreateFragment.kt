@@ -15,6 +15,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -68,11 +69,13 @@ class CreateFragment : Fragment() {
                 CreateScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
                     onImportClicked = {
+                        Analytics.logImportButtonClicked()
                         openDocumentContract.launch(
                             arrayOf(DEFAULT_FILE_MIME_TYPE)
                         )
                     },
                     onAddImageClicked = {
+                        Analytics.logAddImageClicked()
                         pickMedia.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
