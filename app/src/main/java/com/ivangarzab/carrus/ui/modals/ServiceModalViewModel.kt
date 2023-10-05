@@ -10,6 +10,7 @@ import com.ivangarzab.carrus.util.extensions.empty
 import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.parseIntoMoney
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.Calendar
@@ -101,6 +102,7 @@ class ServiceModalViewModel @Inject constructor(
     private fun onServiceCreated(service: Service) {
         carRepository.addCarService(service)
         Timber.d("New service created: ${service.name}")
+        Analytics.logServiceCreate(service.id, service.name)
     }
 
     private fun onServiceUpdate(service: Service) {

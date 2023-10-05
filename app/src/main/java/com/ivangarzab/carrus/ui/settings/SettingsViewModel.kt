@@ -78,6 +78,9 @@ class SettingsViewModel @Inject constructor(
 
     fun onDeleteCarDataClicked() {
         Timber.d("Deleting car data")
+        carData?.let {
+            Analytics.logCarDelete(it.uid, it.getCarName())
+        }
         carRepository.deleteCarData()
     }
 
@@ -90,6 +93,7 @@ class SettingsViewModel @Inject constructor(
                 )
                 carRepository.saveCarData(newCar)
                 alarmsRepository.cancelAllAlarms()
+                Analytics.logServiceListDeleted(it.uid)
             }
         } ?: Timber.wtf("There are no services to delete from car data")
     }

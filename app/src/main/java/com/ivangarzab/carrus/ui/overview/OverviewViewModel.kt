@@ -70,6 +70,7 @@ class OverviewViewModel @Inject constructor(
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
+        Analytics.logServiceDelete(service.id, service.name)
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {

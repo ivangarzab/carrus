@@ -76,6 +76,7 @@ class CreateViewModel @Inject constructor(
                         services = carRepository.fetchCarData()?.services ?: emptyList()
                     ))
                 }
+                Analytics.logCarCreate(data.uid, data.getCarName())
             }
         }
         onSubmit.postValue(true)
