@@ -96,10 +96,10 @@ object Analytics {
         )
     }
 
-    fun logAlarmScheduled(name: String, force: Boolean) {
+    fun logAlarmScheduled(name: String, forced: Boolean) {
         logEvent("alarm_scheduled",
             Pair("alarm_type", name),
-            Pair("force", force)
+            Pair("forced", forced)
         )
     }
 

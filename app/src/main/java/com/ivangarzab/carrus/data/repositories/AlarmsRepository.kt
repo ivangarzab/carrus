@@ -59,6 +59,7 @@ class AlarmsRepository @Inject constructor(
                 false -> Timber.w("Unable to cancel ${type.name} alarm")
             }
         }
+
     }
 
     private fun getAlarmSchedulingData(type: Alarm): AlarmSchedulingData =
@@ -91,6 +92,8 @@ class AlarmsRepository @Inject constructor(
     }
 
     fun cancelAllAlarms() {
+        //TODO: This doesn't seem correct.. we may want to iterate over all Alarms and
+        // call cancelAlarm(..) on them individually.
         prefs.isAlarmPastDueActive = false
     }
 

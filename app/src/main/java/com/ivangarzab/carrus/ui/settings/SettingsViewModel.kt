@@ -13,6 +13,7 @@ import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.DueDateFormat
 import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
@@ -92,8 +93,9 @@ class SettingsViewModel @Inject constructor(
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
-                alarmsRepository.cancelAllAlarms()
                 Analytics.logServiceListDeleted(it.uid)
+                alarmsRepository.cancelAllAlarms()
+                Analytics.logAlarmCancelled(Alarm.PAST_DUE.name)
             }
         } ?: Timber.wtf("There are no services to delete from car data")
     }
@@ -154,6 +156,7 @@ class SettingsViewModel @Inject constructor(
     private fun rescheduleAlarms() {
         //TODO: Revisit and reconsider this next call
         alarmsRepository.schedulePastDueAlarm(true)
+        Analytics.logAlarmScheduled(Alarm.PAST_DUE.name, true)
     }
 
     fun onExportData(

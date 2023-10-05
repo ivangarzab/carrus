@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ivangarzab.carrus.data.Car
 import com.ivangarzab.carrus.data.Message
 import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
@@ -158,6 +159,7 @@ class OverviewViewModel @Inject constructor(
                 true -> {
                     if (alarmsRepository.isPastDueAlarmActive().not()) {
                         alarmsRepository.schedulePastDueAlarm()
+                        Analytics.logAlarmScheduled(Alarm.PAST_DUE.name, false)
                     } else {
                         Timber.v("'Past Due' alarm is already scheduled")
                     }

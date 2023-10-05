@@ -9,11 +9,11 @@ import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.carrus.util.AlarmScheduler
 import com.ivangarzab.carrus.util.NotificationController
 import com.ivangarzab.carrus.util.NotificationData
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -50,6 +50,7 @@ class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
         if (alarmSettingsRepository.isAlarmFeatureOn() && isPastDueAlarmActive()) {
             Timber.d("Rescheduling PAST_DUE alarm")
             alarmsRepository.schedulePastDueAlarm()
+            Analytics.logAlarmScheduled(Alarm.PAST_DUE.name, false)
         } else {
             Timber.w("Unable to find PAST_DUE alarm Intent")
         }
