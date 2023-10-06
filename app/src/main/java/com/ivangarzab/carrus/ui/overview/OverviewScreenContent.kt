@@ -128,15 +128,18 @@ fun OverviewScreenEmpty(
                 modifier = Modifier
                     .align(Alignment.Center)
             ) {
+                val contentColor = MaterialTheme.colorScheme.onSurface
                 Icon(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     painter = painterResource(id = R.drawable.ic_add),
+                    tint = contentColor,
                     contentDescription = "Add new car button"
                 )
                 Text(
                     text = stringResource(id = R.string.add_new_car_capitalized),
                     style = MaterialTheme.typography.titleLarge,
-                    fontStyle = FontStyle.Italic
+                    fontStyle = FontStyle.Italic,
+                    color = contentColor
                 )
             }
         }

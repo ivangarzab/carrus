@@ -85,11 +85,11 @@ class SettingsFragment : Fragment() {
     }
 
     private fun generateExportFileName(): String =
-        EXPORT_FILE_NAME_PREFIX + Calendar.getInstance().getShortenedDate() + EXPORT_FILE_NAME_SUFFIX
+        Calendar.getInstance().getShortenedDate() + EXPORT_FILE_NAME_SUFFIX + EXPORT_FILE_NAME_EXTENSION
 
     companion object {
-        private const val EXPORT_FILE_NAME_PREFIX = "carrus-backup-"
-        private const val EXPORT_FILE_NAME_SUFFIX = ".txt"
+        private const val EXPORT_FILE_NAME_SUFFIX = "-carrus-backup"
+        private const val EXPORT_FILE_NAME_EXTENSION = ".txt"
     }
 }
 

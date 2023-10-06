@@ -111,6 +111,7 @@ private fun OverviewScreen(
                             title = it.nickname.ifBlank {
                                 "${it.make} ${it.model}"
                             },
+                            plates = it.licenseNo,
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
@@ -149,7 +150,7 @@ private fun OverviewScreen(
                     showCarDetailsDialog -> CarDetailsDialog(
                         vinNo = it.vinNo,
                         tirePressure = it.tirePressure,
-                        milesTotal = it.milesPerGallon,
+                        milesTotal = it.totalMiles,
                         milesPerGallon = it.milesPerGallon,
                         onClick = {
                             showCarDetailsDialog = false
