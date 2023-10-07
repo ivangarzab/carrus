@@ -85,8 +85,8 @@ fun OverviewServiceItemStateful(
 private fun OverviewServiceItem(
     modifier: Modifier = Modifier,
     index: Int = -1,
-    data: Service = Service.empty,
-    dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
+    data: Service = Service.serviceList[1],
+    dueDateFormat: DueDateFormat = DueDateFormat.WEEKS,
     isExpanded: Boolean = true,
     onEditClicked: (Service) -> Unit = { },
     onDeleteClicked: (Service) -> Unit = { },
@@ -148,7 +148,7 @@ private fun OverviewServiceItem(
                                     } //TODO: Set up logic in VM
                                 }
                             },
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleSmall,
                             fontStyle = when (data.isPastDue()) {
                                 true -> FontStyle.Italic
                                 false -> null

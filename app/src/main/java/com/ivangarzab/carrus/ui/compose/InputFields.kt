@@ -61,7 +61,15 @@ private fun BaseInputField(
             },
             textStyle = textStyle ?: LocalTextStyle.current,
             onValueChange = {
-                updateListener(it.trim())
+                updateListener(
+                    it.length.let { len ->
+                        if (it.takeLast(2) == "  ") {
+                            it.trim().plus(" ")
+                        } else {
+                            it.trimStart()
+                        }
+                    }
+                )
             },
             singleLine = true,
             readOnly = isReadOnly,
