@@ -1,8 +1,8 @@
 package com.ivangarzab.carrus.ui.overview.data
 
 import android.os.Parcelable
-import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.DueDateFormat
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.ui.overview.SortingCallback
 import kotlinx.parcelize.Parcelize
 

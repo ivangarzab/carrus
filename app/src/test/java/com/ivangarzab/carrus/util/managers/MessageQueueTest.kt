@@ -1,6 +1,12 @@
 package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.*
+import com.ivangarzab.carrus.ANSWER_0
+import com.ivangarzab.carrus.ANSWER_1
+import com.ivangarzab.carrus.ANSWER_2
+import com.ivangarzab.carrus.TEST_MESSAGE_DATA_1
+import com.ivangarzab.carrus.TEST_MESSAGE_DATA_2
+import com.ivangarzab.carrus.TEST_MESSAGE_DATA_3
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test

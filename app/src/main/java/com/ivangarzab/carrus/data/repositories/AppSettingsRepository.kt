@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.ivangarzab.carrus.BuildConfig
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.prefs
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow

@@ -1,8 +1,8 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.ivangarzab.carrus.appScope
-import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.prefs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

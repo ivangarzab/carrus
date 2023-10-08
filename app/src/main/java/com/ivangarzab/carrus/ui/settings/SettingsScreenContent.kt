@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.ui.compose.drawVerticalScrollbar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme

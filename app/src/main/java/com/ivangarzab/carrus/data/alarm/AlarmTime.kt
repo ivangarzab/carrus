@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.data.alarm
 
 import android.os.Parcelable
-import com.ivangarzab.carrus.data.TimeFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import kotlinx.parcelize.Parcelize
 

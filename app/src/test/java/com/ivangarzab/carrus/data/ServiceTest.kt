@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.data
 
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
 import junit.framework.TestCase.assertEquals
 import org.junit.Test

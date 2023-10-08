@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.util
+package com.ivangarzab.carrus.util.managers
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -11,7 +11,7 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.prefs
-import com.ivangarzab.carrus.receivers.AlarmBroadcastReceiver
+import com.ivangarzab.carrus.util.receivers.AlarmBroadcastReceiver
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.Calendar

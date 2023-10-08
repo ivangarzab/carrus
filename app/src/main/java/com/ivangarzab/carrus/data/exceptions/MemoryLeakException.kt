@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.exceptions
+package com.ivangarzab.carrus.data.exceptions
 
 /**
  * Created by Ivan Garza Bermea.
