@@ -16,6 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,6 +54,10 @@ fun OverviewScreenContent(
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { }
 ) {
+    var expandedItemIndex: Int by rememberSaveable {
+        mutableStateOf(NO_ITEM_EXPANDED)
+    }
+
     AppTheme {
         LazyColumn(modifier = modifier) {
             item {
@@ -92,14 +100,22 @@ fun OverviewScreenContent(
             }
             if (serviceList.isNotEmpty()) {
                 itemsIndexed(serviceList) { index, _ ->
-                    OverviewServiceItemStateful(
+                    OverviewServiceItem(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp),
                         index = index,
                         data = serviceList[index],
                         dueDateFormat = dueDateFormat,
+                        isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
-                        onDeleteClicked = onServiceDeleteButtonClicked
+                        onDeleteClicked = onServiceDeleteButtonClicked,
+                        onExpandOrShrinkRequest = { index, expand ->
+                            expandedItemIndex = if (expand) {
+                                index
+                            } else {
+                                NO_ITEM_EXPANDED
+                            }
+                        }
                     )
                 }
             } else {
@@ -110,6 +126,7 @@ fun OverviewScreenContent(
         }
     }
 }
+private const val NO_ITEM_EXPANDED = -1
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
