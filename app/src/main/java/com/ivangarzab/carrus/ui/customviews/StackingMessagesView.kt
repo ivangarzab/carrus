@@ -9,12 +9,12 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import com.ivangarzab.carrus.data.MessageData
+import com.ivangarzab.carrus.data.models.MessageData
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
 import com.ivangarzab.carrus.databinding.ViewStackingMessagesBinding
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.util.extensions.bind
-import com.ivangarzab.carrus.util.managers.MessageQueue
 import timber.log.Timber
 
 /**

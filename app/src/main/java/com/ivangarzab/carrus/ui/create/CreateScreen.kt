@@ -51,7 +51,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.NumberInputField

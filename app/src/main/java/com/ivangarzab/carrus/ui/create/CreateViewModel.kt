@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState

@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receivers.AlarmBroadcastReceiver"
+        <receiver android:name=".util.receivers.AlarmBroadcastReceiver"
             android:enabled="false"
             android:exported="false">
             <intent-filter>

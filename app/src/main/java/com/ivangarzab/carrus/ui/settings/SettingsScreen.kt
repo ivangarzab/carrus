@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
 import com.ivangarzab.carrus.ui.compose.NegativeButton

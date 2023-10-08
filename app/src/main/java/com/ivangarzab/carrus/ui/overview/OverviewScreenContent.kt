@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
  * Created by Ivan Garza Bermea.

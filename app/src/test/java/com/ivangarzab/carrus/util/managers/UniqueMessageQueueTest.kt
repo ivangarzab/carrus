@@ -4,6 +4,7 @@ import com.ivangarzab.carrus.ANSWER_1
 import com.ivangarzab.carrus.ANSWER_2
 import com.ivangarzab.carrus.TEST_MESSAGE_DATA_1
 import com.ivangarzab.carrus.TEST_MESSAGE_DATA_2
+import com.ivangarzab.carrus.data.structures.UniqueMessageQueue
 import junit.framework.TestCase
 import org.junit.Test
 

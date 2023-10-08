@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data
+package com.ivangarzab.carrus.data.models
 
 import android.os.Parcelable
 import com.ivangarzab.carrus.util.extensions.getFormattedDate

@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.util.extensions
 
-import com.ivangarzab.carrus.data.Service
-import java.util.*
+import com.ivangarzab.carrus.data.models.Service
+import java.util.Calendar
 
 /**
  * Boolean return indicating whether a [Service] is past due.

@@ -10,7 +10,7 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carrus.data.Car" />
+            type="com.ivangarzab.carrus.data.models.Car" />
         <import
             alias="SortingType"
             type="com.ivangarzab.carrus.ui.overview.SortingCallback.SortingType"/>

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.databinding.ItemServiceBinding
 import com.ivangarzab.carrus.ui.overview.data.ItemServiceState
 import com.ivangarzab.carrus.util.extensions.getDetails

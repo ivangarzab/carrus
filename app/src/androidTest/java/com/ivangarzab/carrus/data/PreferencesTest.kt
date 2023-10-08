@@ -4,6 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ivangarzab.carrus.data.*
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.util.managers.get
+import com.ivangarzab.carrus.util.managers.set
 import org.junit.Assert
 import org.junit.Test
 import java.util.*

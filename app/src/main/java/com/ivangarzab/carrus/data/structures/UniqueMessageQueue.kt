@@ -1,6 +1,6 @@
-package com.ivangarzab.carrus.util.managers
+package com.ivangarzab.carrus.data.structures
 
-import com.ivangarzab.carrus.data.MessageData
+import com.ivangarzab.carrus.data.models.MessageData
 import kotlinx.parcelize.Parcelize
 
 /**
