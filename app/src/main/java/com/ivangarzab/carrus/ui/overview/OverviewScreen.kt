@@ -57,7 +57,7 @@ fun OverviewScreenStateful(
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
-            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)},
+            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
             onMessageContentClicked = { onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
@@ -90,6 +90,14 @@ private fun OverviewScreen(
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val systemUiController = rememberSystemUiController()
+
+    var showCarDetailsButton: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    } //TODO: Move this logic to the VM
+    showCarDetailsButton = state.car?.let {
+        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
+                it.tirePressure.isNotBlank() || it.vinNo.isNotBlank()
+    } ?: false
 
     var showCarDetailsDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -139,9 +147,8 @@ private fun OverviewScreen(
                             actionButtonClicked = onFloatingActionButtonClicked,
                             settingsButtonClicked = onSettingsButtonClicked,
                             carEditButtonClicked = onEditButtonClicked,
-                            carDetailsButtonClicked = {
-                                showCarDetailsDialog = true
-                            }
+                            showCarDetailsButton = showCarDetailsButton,
+                            carDetailsButtonClicked = { showCarDetailsDialog = true }
                         )
                     }
                 )
@@ -156,6 +163,7 @@ private fun OverviewScreen(
                             showCarDetailsDialog = false
                         }
                     )
+
                     showServiceModal -> ServiceBottomSheet(
                         modifier = Modifier,
                         onDismissed = { showServiceModal = false }
