@@ -5,7 +5,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -26,14 +25,13 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 /**
  * Created by Ivan Garza Bermea.
  */
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun OverviewScreenBottomBar(
-    actionButtonClicked: () -> Unit = { },
-    settingsButtonClicked: () -> Unit = { },
-    carEditButtonClicked: () -> Unit = { },
-    carDetailsButtonClicked: () -> Unit = { },
+    actionButtonClicked: () -> Unit,
+    settingsButtonClicked: () -> Unit,
+    carEditButtonClicked: () -> Unit,
+    showCarDetailsButton: Boolean,
+    carDetailsButtonClicked: () -> Unit,
 ) {
     AppTheme {
         BottomAppBar(
@@ -73,16 +71,18 @@ fun OverviewScreenBottomBar(
                         contentDescription = "Edit icon button"
                     )
                 }
-                IconButton(
-                    modifier = iconModifier,
-                    onClick = carDetailsButtonClicked
-                ) {
-                    Icon(
-                        modifier = Modifier.size(iconSize),
-                        imageVector = Icons.Filled.Info,
-                        tint = iconTint,
-                        contentDescription = "Car details icon button"
-                    )
+                if (showCarDetailsButton) {
+                    IconButton(
+                        modifier = iconModifier,
+                        onClick = carDetailsButtonClicked
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            imageVector = Icons.Filled.Info,
+                            tint = iconTint,
+                            contentDescription = "Car details icon button"
+                        )
+                    }
                 }
                 IconButton(
                     modifier = iconModifier,
@@ -96,6 +96,21 @@ fun OverviewScreenBottomBar(
                     )
                 }
             }
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun OverviewScreenBottomBarPreview() {
+    AppTheme {
+        OverviewScreenBottomBar(
+            actionButtonClicked = { },
+            settingsButtonClicked = { },
+            carEditButtonClicked = { },
+            showCarDetailsButton = true,
+            carDetailsButtonClicked = { },
         )
     }
 }
