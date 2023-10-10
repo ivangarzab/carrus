@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
@@ -45,6 +46,9 @@ class OverviewViewModel @Inject constructor(
         MessageQueueState()
     )
 
+    val triggerNotificationPermissionRequest: LiveEvent<Boolean> = LiveEvent()
+    val triggerAlarmsPermissionRequest: LiveEvent<Boolean> = LiveEvent()
+
     init {
         viewModelScope.launch {
             carRepository.observeCarData()
@@ -76,12 +80,31 @@ class OverviewViewModel @Inject constructor(
         if (isGranted) { removeNotificationPermissionMessage() }
     }
 
+    fun onMessageClicked(id: String) {
+        Timber.d("Got a message click with id=$id")
+        when (id) {
+            Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    triggerNotificationPermissionRequest.postValue(true)
+                }
+                removeNotificationPermissionMessage()
+            }
+            Message.MISSING_PERMISSION_ALARM.data.id -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    triggerAlarmsPermissionRequest.postValue(true)
+                }
+                removeAlarmPermissionMessage()
+            }
+            Message.TEST.data.id -> removeTestMessage()
+        }
+    }
+
     fun onMessageDismissed() {
         Timber.v("Removing message at the top of the queue")
         messageQueueRepository.dismissMessage()
     }
 
-    fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
+    private fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         setState(state, savedState, STATE) {
@@ -102,12 +125,13 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    private fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Removing ${this.name} message from queue")
         messageQueueRepository.removeMessage(this)
     }
 
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
+    private fun removeTestMessage() = messageQueueRepository.removeMessage(Message.TEST)
 
     private fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {

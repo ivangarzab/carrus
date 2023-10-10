@@ -52,8 +52,7 @@ class OverviewFragment : Fragment() {
                     onCarEditButtonClicked = { navigateToEditFragment() },
                     onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
                     onSettingsButtonClicked = { navigateToSettingsFragment() },
-                    onAddCarClicked = { navigateToCreateFragment() },
-                    onMessageClicked = { onMessageClicked(it) }
+                    onAddCarClicked = { navigateToCreateFragment() }
                 )
             }
         }
@@ -61,19 +60,19 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.state.observe(viewLifecycleOwner) {
-            processStateChange(it)
-        }
-    }
-
-    private fun onMessageClicked(id: String) { //TODO: Move into VM
-        Timber.d("Got a message click with id=$id")
-        when (id) {
-            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                attemptToRequestNotificationPermission()
+        with(viewModel) {
+            state.observe(viewLifecycleOwner) {
+                processStateChange(it)
             }
-            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                attemptToRequestAlarmsPermission()
+            triggerNotificationPermissionRequest.observe(viewLifecycleOwner) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    attemptToRequestNotificationPermission()
+                }
+            }
+            triggerAlarmsPermissionRequest.observe(viewLifecycleOwner) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    attemptToRequestAlarmsPermission()
+                }
             }
         }
     }
