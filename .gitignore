@@ -34,6 +34,9 @@ proguard/
 # Android Studio captures folder
 captures/
 
+# Android Studio generated HTML Test Coverage reports
+/htmlReport/
+
 # IntelliJ
 *.iml
 .idea/*
