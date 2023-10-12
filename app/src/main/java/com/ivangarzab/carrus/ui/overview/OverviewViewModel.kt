@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
@@ -12,7 +13,6 @@ import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.structures.LiveState
-import com.ivangarzab.carrus.data.structures.UniqueMessageQueue
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
@@ -56,8 +56,24 @@ class OverviewViewModel @Inject constructor(
         }
         viewModelScope.launch {
             messageQueueRepository.observeMessageQueueFlow().collect {
-                updateQueueState(it.asUniqueMessageQueue())
+                queueState.setState {
+                    //TODO: Fix the cast
+                    copy(messageQueue = it.asUniqueMessageQueue())
+                }
             }
+        }
+    }
+
+    fun processStateChange(
+        state: OverviewState,
+        areNotificationsEnabled: Boolean
+    ) {
+        Timber.v("Processing overview state change")
+        state.car?.let {
+            processCarServicesListForNotification(
+                services = it.services,
+                areNotificationsEnabled = areNotificationsEnabled
+            )
         }
     }
 
@@ -113,7 +129,18 @@ class OverviewViewModel @Inject constructor(
             messageQueueRepository.removeMessage(this)
         }
 
-    fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
+        val hasPromptedForPermissionAlarm = state.value?.hasPromptedForPermissionAlarm ?: false
+        if (canScheduleExactAlarms.not() &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            hasPromptedForPermissionAlarm.not()
+        ) {
+            addAlarmPermissionMessage()
+            Timber.d("Registering alarm permission state changed broadcast receiver")
+        }
+    }
+
+    private fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         state.setState {
@@ -167,7 +194,7 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    fun processCarServicesListForNotification(
+    private fun processCarServicesListForNotification(
         services: List<Service>,
         areNotificationsEnabled: Boolean
     ) {
@@ -196,24 +223,20 @@ class OverviewViewModel @Inject constructor(
 
     private fun updateCarState(car: Car?) = state.setState { copy(car = car) }
 
-    private fun updateQueueState(queue: UniqueMessageQueue) {
-        queueState.setState {
-            copy(messageQueue = queue)
-        }
-    }
-
     fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
         onSortingByType(type)
     }
 
     fun setupEasterEggForTesting() {
-        state.value?.car?.let {
-            carRepository.saveCarData(
-                it.copy(
-                    services = Service.serviceList
+        if (App.isRelease().not()) {
+            state.value?.car?.let {
+                carRepository.saveCarData(
+                    it.copy(
+                        services = Service.serviceList
+                    )
                 )
-            )
+            }
         }
     }
 }
