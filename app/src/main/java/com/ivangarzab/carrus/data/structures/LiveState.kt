@@ -59,6 +59,9 @@ open class LiveState<T>(
         }
     }
 
+    /**
+     * Sets a new value of type [T] immediately, and notify all observers.
+     */
     @MainThread
     fun setState(block: T.() -> T) {
         getMutableState().let { currentState ->
@@ -67,6 +70,9 @@ open class LiveState<T>(
         }
     }
 
+    /**
+     * Queue setting a new value of type [T] for the posterity, and notify all observers.
+     */
     @MainThread
     fun postState(block: T.() -> T) {
         getMutableState().let { currentState ->
