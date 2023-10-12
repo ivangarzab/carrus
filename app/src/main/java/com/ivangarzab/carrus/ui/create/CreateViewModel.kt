@@ -80,6 +80,7 @@ class CreateViewModel @Inject constructor(
         onSubmit.postValue(true)
     }
 
+    //TODO: Create image resolver tool
     fun onImageUriReceived(contentResolver: ContentResolver, uri: String) {
         contentResolver.takePersistableUriPermission(
             Uri.parse(uri),
