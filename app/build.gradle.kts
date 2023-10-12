@@ -58,7 +58,7 @@ android {
 }
 
 val activityVersion = "1.7.2"
-val gsonVersion = "2.9.1"
+val gsonVersion = "2.10.1"
 val leakCanaryVersion = "2.12"
 dependencies {
 
@@ -144,7 +144,7 @@ dependencies {
     androidTestImplementation("com.google.truth:truth:$truthVersion")
 
     // https://github.com/mockk/mockk
-    val mockkVersion = "1.13.5"
+    val mockkVersion = "1.13.8"
     testImplementation("io.mockk:mockk-android:$mockkVersion")
     testImplementation("io.mockk:mockk-agent:$mockkVersion")
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
