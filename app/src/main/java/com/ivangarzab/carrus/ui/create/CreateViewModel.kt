@@ -1,8 +1,5 @@
 package com.ivangarzab.carrus.ui.create
 
-import android.content.ContentResolver
-import android.content.Intent
-import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +9,7 @@ import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -23,7 +21,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CreateViewModel @Inject constructor(
-    private val carRepository: CarRepository
+    private val carRepository: CarRepository,
+    private val contentResolverHelper: ContentResolverHelper
 ) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
@@ -84,12 +83,13 @@ class CreateViewModel @Inject constructor(
         onSubmit.postValue(true)
     }
 
-    //TODO: Create image resolver tool
-    fun onImageUriReceived(contentResolver: ContentResolver, uri: String) {
-        contentResolver.takePersistableUriPermission(
-            Uri.parse(uri),
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-        )
+    fun onImageUriReceived(uri: String) {
+        Timber.v("Image uri '$uri' permission ${
+            when (contentResolverHelper.persistUriPermission(uri)) {
+                true -> "granted"
+                false -> "denied"
+            }
+        }")
         setState(state, _state) {
             copy(imageUri = uri)
         }

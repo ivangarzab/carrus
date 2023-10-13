@@ -32,10 +32,7 @@ class CreateFragment : Fragment() {
         it?.let { uri ->
             Timber.d("Got image uri: $uri")
             uri.toString().apply {
-                viewModel.onImageUriReceived(
-                    contentResolver = requireContext().contentResolver,
-                    uri = this
-                )
+                viewModel.onImageUriReceived(uri = this)
             }
         } ?: Timber.d("No media selected")
     }
