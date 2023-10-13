@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.ui.create
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,11 +24,14 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
     val state: LiveData<CarModalState> = _state
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     enum class Type { CREATE, EDIT }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     lateinit var type: Type
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -99,7 +103,7 @@ class CreateViewModel @Inject constructor(
     }
 
     fun onUpdateStateData(
-        nickname: String = "",
+        nickname: String,
         make: String,
         model: String,
         year: String,

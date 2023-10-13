@@ -140,11 +140,6 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun rescheduleAlarms() {
-        //TODO: Revisit and reconsider this next call
-        alarmsRepository.schedulePastDueAlarm(true)
-    }
-
     fun onExportData(
         contentResolver: ContentResolver,
         uri: Uri
@@ -173,6 +168,11 @@ class SettingsViewModel @Inject constructor(
         }
         Timber.w("Unable to import data from uri path")
         return false
+    }
+
+    private fun rescheduleAlarms() {
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
     }
 
     private fun updateCarState(car: Car?) {
