@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,8 +51,7 @@ class OverviewFragment : Fragment() {
                     onCarEditButtonClicked = { navigateToEditFragment() },
                     onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
                     onSettingsButtonClicked = { navigateToSettingsFragment() },
-                    onAddCarClicked = { navigateToCreateFragment() },
-                    onMessageClicked = { onMessageClicked(it) }
+                    onAddCarClicked = { navigateToCreateFragment() }
                 )
             }
         }
@@ -61,39 +59,23 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.state.observe(viewLifecycleOwner) {
-            processStateChange(it)
-        }
-    }
-
-    private fun onMessageClicked(id: String) { //TODO: Move into VM
-        Timber.d("Got a message click with id=$id")
-        when (id) {
-            "100" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                attemptToRequestNotificationPermission()
+        with(viewModel) {
+            //TODO: Move into Compose
+            state.observe(viewLifecycleOwner) {
+                processStateChange(it, requireContext().areNotificationsEnabled())
+                //TODO: Consider moving this call
+                checkForAlarmPermission(requireContext().canScheduleExactAlarms())
             }
-            "101" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                attemptToRequestAlarmsPermission()
+            triggerNotificationPermissionRequest.observe(viewLifecycleOwner) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    attemptToRequestNotificationPermission()
+                }
             }
-        }
-    }
-
-    private fun processStateChange(state: OverviewState) { //TODO: Move into VM
-        Timber.v("Processing overview state change")
-        if (requireContext().canScheduleExactAlarms().not() &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            state.hasPromptedForPermissionAlarm.not()
-        ) {
-            viewModel.addAlarmPermissionMessage()
-            Timber.d("Registering alarm permission state changed broadcast receiver")
-        }
-
-        state.car?.let {
-            Timber.d("Got new Car state: ${state.car}")
-            viewModel.processCarServicesListForNotification(
-                services = it.services,
-                areNotificationsEnabled = requireContext().areNotificationsEnabled()
-            )
+            triggerAlarmsPermissionRequest.observe(viewLifecycleOwner) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    attemptToRequestAlarmsPermission()
+                }
+            }
         }
     }
 
