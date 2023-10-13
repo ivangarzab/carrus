@@ -36,8 +36,7 @@ fun OverviewScreenStateful(
     onCarEditButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
-    onAddCarClicked: () -> Unit,
-    onMessageClicked: (String) -> Unit
+    onAddCarClicked: () -> Unit
 ) {
     val state: OverviewState by viewModel
         .state
@@ -58,7 +57,7 @@ fun OverviewScreenStateful(
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
-            onMessageContentClicked = { onMessageClicked(it) },
+            onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
             addServiceList = { viewModel.setupEasterEggForTesting() },
