@@ -6,11 +6,13 @@ import com.ivangarzab.carrus.BLANK_STRING
 import com.ivangarzab.carrus.EMPTY_CAR
 import com.ivangarzab.carrus.EMPTY_STRING
 import com.ivangarzab.carrus.TEST_CAR
+import com.ivangarzab.carrus.TEST_CAR_JSON
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import junit.framework.TestCase
 import org.junit.Before
@@ -27,10 +29,11 @@ class CreateViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: CreateViewModel
+    private lateinit var carRepository: CarRepository
 
     @Before
     fun setup() {
-        val carRepository: CarRepository = mockk(relaxUnitFun = true)
+        carRepository = mockk(relaxUnitFun = true)
         viewModel = CreateViewModel(
             carRepository = carRepository,
             contentResolverHelper = TestContentResolverHelper()
@@ -175,6 +178,31 @@ class CreateViewModelTest {
         assertThat(result.totalMiles).isEqualTo(TEST_CAR_MODAL_STATE.totalMiles)
         assertThat(result.milesPerGallon).isEqualTo(TEST_CAR_MODAL_STATE.milesPerGallon)
         assertThat(result.imageUri).isEqualTo(TEST_CAR_MODAL_STATE.imageUri)
+    }
+
+    @Test
+    fun test_onImportData_empty_string_failure() {
+        assertThat(viewModel.onImportData(EMPTY_STRING))
+            .isFalse()
+    }
+
+    @Test
+    fun test_onImportData_blank_string_failure() {
+        assertThat(viewModel.onImportData(BLANK_STRING))
+            .isFalse()
+    }
+
+    @Test
+    fun test_onImportData_invalid_json_failure() {
+        assertThat(viewModel.onImportData(TEST_URI))
+            .isFalse()
+    }
+
+    @Test
+    fun test_onImportData_valid_json_success() = with(viewModel) {
+        justRun { carRepository.saveCarData(any()) }
+        assertThat(onImportData(TEST_CAR_JSON))
+            .isTrue()
     }
 
     companion object {
