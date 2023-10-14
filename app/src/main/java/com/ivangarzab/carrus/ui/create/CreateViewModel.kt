@@ -84,6 +84,8 @@ class CreateViewModel @Inject constructor(
     }
 
     fun onImageUriReceived(uri: String) {
+        if (uri.isBlank()) return
+
         Timber.v("Image uri '$uri' permission ${
             when (contentResolverHelper.persistUriPermission(uri)) {
                 true -> "granted"

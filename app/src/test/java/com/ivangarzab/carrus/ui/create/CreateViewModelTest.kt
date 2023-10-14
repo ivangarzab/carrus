@@ -2,11 +2,14 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.BLANK_STRING
 import com.ivangarzab.carrus.EMPTY_CAR
+import com.ivangarzab.carrus.EMPTY_STRING
 import com.ivangarzab.carrus.TEST_CAR
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
+import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase
@@ -29,7 +32,8 @@ class CreateViewModelTest {
     fun setup() {
         val carRepository: CarRepository = mockk(relaxUnitFun = true)
         viewModel = CreateViewModel(
-            carRepository = carRepository
+            carRepository = carRepository,
+            contentResolverHelper = TestContentResolverHelper()
         ).apply { init(null) }
 
         every { carRepository.fetchCarData() } returns TEST_CAR
@@ -59,7 +63,7 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_make_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(EMPTY, MODEL, YEAR)
+            verifyData(EMPTY_STRING, MODEL, YEAR)
         }
         TestCase.assertEquals(false, result)
     }
@@ -67,7 +71,7 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_model_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(MAKE, EMPTY, YEAR)
+            verifyData(MAKE, EMPTY_STRING, YEAR)
         }
         TestCase.assertEquals(false, result)
     }
@@ -75,9 +79,34 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_year_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(MAKE, MODEL, EMPTY)
+            verifyData(MAKE, MODEL, EMPTY_STRING)
         }
         TestCase.assertEquals(false, result)
+    }
+
+    @Test
+    fun test_onImageUriReceived_success() = with(viewModel) {
+        val result = state.getOrAwaitValue {
+            onImageUriReceived("uri")
+        }
+        assertThat(result.imageUri)
+            .isNotNull()
+    }
+
+    @Test
+    fun test_onImageUriReceived_empty_string_failure() = with(viewModel) {
+        onImageUriReceived(EMPTY_STRING)
+        val result = state.getOrAwaitValue()
+        assertThat(result.imageUri)
+            .isNull()
+    }
+
+    @Test
+    fun test_onImageUriReceived_blank_string_failure() = with(viewModel) {
+        onImageUriReceived(BLANK_STRING)
+        val result = state.getOrAwaitValue()
+        assertThat(result.imageUri)
+            .isNull()
     }
 
     @Test
@@ -87,7 +116,17 @@ class CreateViewModelTest {
         }
         assertThat(result.imageUri)
             .isNull()
-    } //TODO: Test with an updated imageUri once we get there
+    }
+
+    @Test
+    fun test_onImageDeleted_with_data() = with(viewModel) {
+        onImageUriReceived(TEST_URI)
+        val result = state.getOrAwaitValue {
+            onImageDeleted()
+        }
+        assertThat(result.imageUri)
+            .isNull()
+    }
 
     @Test
     fun test_onUpdateStateData_base() = with(viewModel) {
@@ -139,7 +178,7 @@ class CreateViewModelTest {
     }
 
     companion object {
-        private const val EMPTY = ""
+        private const val TEST_URI = "uri"
         private const val NICKNAME = "Shaq"
         private const val MODEL = "Malibu"
         private const val MAKE = "Chevrolet"
