@@ -2,9 +2,9 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.BLANK_STRING
 import com.ivangarzab.carrus.EMPTY_CAR
-import com.ivangarzab.carrus.EMPTY_STRING
+import com.ivangarzab.carrus.STRING_BLANK
+import com.ivangarzab.carrus.STRING_EMPTY
 import com.ivangarzab.carrus.TEST_CAR
 import com.ivangarzab.carrus.TEST_CAR_JSON
 import com.ivangarzab.carrus.data.repositories.CarRepository
@@ -66,7 +66,7 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_make_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(EMPTY_STRING, MODEL, YEAR)
+            verifyData(STRING_EMPTY, MODEL, YEAR)
         }
         TestCase.assertEquals(false, result)
     }
@@ -74,7 +74,7 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_model_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(MAKE, EMPTY_STRING, YEAR)
+            verifyData(MAKE, STRING_EMPTY, YEAR)
         }
         TestCase.assertEquals(false, result)
     }
@@ -82,7 +82,7 @@ class CreateViewModelTest {
     @Test
     fun test_verifyData_bogus_year_false() = with(viewModel) {
         val result = onVerify.getOrAwaitValue {
-            verifyData(MAKE, MODEL, EMPTY_STRING)
+            verifyData(MAKE, MODEL, STRING_EMPTY)
         }
         TestCase.assertEquals(false, result)
     }
@@ -98,7 +98,7 @@ class CreateViewModelTest {
 
     @Test
     fun test_onImageUriReceived_empty_string_failure() = with(viewModel) {
-        onImageUriReceived(EMPTY_STRING)
+        onImageUriReceived(STRING_EMPTY)
         val result = state.getOrAwaitValue()
         assertThat(result.imageUri)
             .isNull()
@@ -106,7 +106,7 @@ class CreateViewModelTest {
 
     @Test
     fun test_onImageUriReceived_blank_string_failure() = with(viewModel) {
-        onImageUriReceived(BLANK_STRING)
+        onImageUriReceived(STRING_BLANK)
         val result = state.getOrAwaitValue()
         assertThat(result.imageUri)
             .isNull()
@@ -182,13 +182,13 @@ class CreateViewModelTest {
 
     @Test
     fun test_onImportData_empty_string_failure() {
-        assertThat(viewModel.onImportData(EMPTY_STRING))
+        assertThat(viewModel.onImportData(STRING_EMPTY))
             .isFalse()
     }
 
     @Test
     fun test_onImportData_blank_string_failure() {
-        assertThat(viewModel.onImportData(BLANK_STRING))
+        assertThat(viewModel.onImportData(STRING_BLANK))
             .isFalse()
     }
 

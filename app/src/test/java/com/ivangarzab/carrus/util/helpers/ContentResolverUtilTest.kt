@@ -3,7 +3,7 @@ package com.ivangarzab.carrus.util.helpers
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.EMPTY_STRING
+import com.ivangarzab.carrus.STRING_EMPTY
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,7 +36,7 @@ class ContentResolverUtilTest {
 
     @Test
     fun test_persistUriPermission_empty_string_failure() {
-        val result = helper.persistUriPermission(EMPTY_STRING)
+        val result = helper.persistUriPermission(STRING_EMPTY)
         assertThat(result)
             .isFalse()
     }
