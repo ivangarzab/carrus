@@ -77,7 +77,8 @@ private fun SortingButton(
         targetValue = when (isSelected) {
             true -> MaterialTheme.colorScheme.primary
             false -> Color.Transparent
-        }
+        },
+        label = ""
     )
     AppTheme {
         OutlinedButton(

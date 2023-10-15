@@ -2,11 +2,14 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
@@ -17,6 +20,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -35,13 +39,11 @@ import java.lang.Float.min
  * Created by Ivan Garza Bermea.
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun OverviewScreenTopBar(
-    title: String = "Test Top App Bar Title",
-    plates: String = "DH9 L474",
-    imageUri: String? = null,
+    title: String,
+    plates: String,
+    imageUri: String?,
     actions: @Composable RowScope.() -> Unit = { },
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     addTestMessage: () -> Unit = { }
@@ -81,10 +83,15 @@ fun OverviewScreenTopBar(
             LargeTopAppBar(
                 modifier = Modifier
                     .constrainAs(topbar) { /* No-op */ }
-                    .clip(clipSpecs)
+//                    .clip(clipSpecs)
                     .combinedClickable(
                         onClick = { },
-                        onLongClick = { if (App.isRelease().not()) addTestMessage() }
+                        onLongClick = {
+                            if (App
+                                    .isRelease()
+                                    .not()
+                            ) addTestMessage()
+                        }
                     ),
                 title = {
                     Column {
@@ -132,6 +139,33 @@ fun OverviewScreenTopBar(
                 actions = actions,
                 scrollBehavior = scrollBehavior
             )
+            Box(modifier =  Modifier //TODO: We might want to add this at the bottom of the appbar
+                .height(32.dp)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.background
+                        )
+                    )
+                )
+            )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun OverviewScreenTopBarPreview() {
+    AppTheme {
+        OverviewScreenTopBar(
+            title = "Test Top App Bar Title",
+            plates = "DH9 L474",
+            imageUri = null,
+            actions = { },
+            addTestMessage = { }
+        )
     }
 }
