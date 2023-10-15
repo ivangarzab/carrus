@@ -22,6 +22,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
@@ -131,6 +132,7 @@ private fun OverviewScreen(
                                 .padding(paddingValues),
                             messageQueue = messageQueue,
                             serviceList = it.services,
+                            detailsState = DetailsPanelState.fromCar(state.car),
                             dueDateFormat = state.dueDateFormat,
                             sortingType = state.serviceSortingType,
                             onSortRequest = onSortRequest,

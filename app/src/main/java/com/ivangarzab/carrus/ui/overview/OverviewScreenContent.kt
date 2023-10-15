@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -33,6 +34,7 @@ import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 
 /**
  * Created by Ivan Garza Bermea.
@@ -45,6 +47,7 @@ fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     messageQueue: MessageQueue = MessageQueue.test,
     serviceList: List<Service> = Service.serviceList,
+    detailsState: DetailsPanelState = DetailsPanelState(),
     dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
@@ -67,6 +70,30 @@ fun OverviewScreenContent(
                     messageQueue = messageQueue,
                     onDismissClicked = onMessageDismissClicked,
                     onMessageClicked = { onMessageContentClicked(it) }
+                )
+            }
+            item {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier.combinedClickable(
+                            onClick = { },
+                            onLongClick = { if (App.isRelease().not()) addServiceList() }
+                        ),
+                        text = stringResource(id = R.string.details),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
+            }
+            item {
+                OverviewScreenDetailsPanel(
+                    modifier = Modifier.height(200.dp),
+                    state = detailsState
                 )
             }
             item {
