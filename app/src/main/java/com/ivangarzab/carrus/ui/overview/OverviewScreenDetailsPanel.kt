@@ -2,39 +2,96 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OverviewScreenDetailsPanel(
+    modifier: Modifier = Modifier,
+    gridSize: Dp = 200.dp,
+    state: DetailsPanelState = DetailsPanelState()
+) {
+    AppTheme {
+        Column(
+            modifier = modifier
+        ) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 12.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    text = stringResource(id = R.string.car_details),
+                    style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp),
+                    fontStyle = FontStyle.Italic
+                )
+                IconButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = { /*TODO: wire up! */ }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Filled.Edit,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = "Edit icon button"
+                    )
+                }
+            }
+            OverviewScreenDetailsPanelGrid(
+                modifier = Modifier
+                    .height(gridSize),
+                state = state
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun OverviewScreenDetailsPanelGrid(
     modifier: Modifier = Modifier,
     state: DetailsPanelState = DetailsPanelState()
 ) {
     AppTheme {
         LazyHorizontalStaggeredGrid(
-            modifier = modifier,
+            modifier = modifier
+                .padding(start = 16.dp, end = 16.dp),
             rows = StaggeredGridCells.Fixed(count = 2),
             contentPadding = PaddingValues(8.dp)
         ) {
@@ -43,9 +100,6 @@ fun OverviewScreenDetailsPanel(
             }
             item {
                 OverviewScreenDetailsItem(title = "License Plate", content = state.licenseNo)
-            }
-            item {
-                OverviewScreenDetailsItem(title = "Vin Number", content = state.vinNo)
             }
             item {
                 OverviewScreenDetailsItem(title = "Tire Pressure", content = state.tirePressure)
@@ -57,7 +111,13 @@ fun OverviewScreenDetailsPanel(
                 OverviewScreenDetailsItem(title = "City mi/gal", content = state.milesPerGalCity)
             }
             item {
-                OverviewScreenDetailsItem(title = "Highway mi/gal", content = state.milesPerGalHighway)
+                OverviewScreenDetailsItem(
+                    title = "Highway mi/gal",
+                    content = state.milesPerGalHighway
+                )
+            }
+            item {
+                OverviewScreenDetailsItem(title = "Vin Number", content = state.vinNo)
             }
         }
     }
@@ -69,11 +129,9 @@ fun OverviewScreenDetailsItem(
     content: String
 ) {
     AppTheme {
-        ElevatedCard(
+        Card(
             modifier = Modifier
                 .padding(8.dp)
-                .clipToBounds()
-                .clickable { /* TODO: Call the VM, if needed */ }
         ) {
             Column(
                 modifier = Modifier
@@ -82,7 +140,7 @@ fun OverviewScreenDetailsItem(
                 Text(
                     text = title,
                     textAlign = TextAlign.Start,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold //TODO: Make a diff color instead
                 )
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(
@@ -101,8 +159,8 @@ fun OverviewScreenDetailsItem(
 fun OverviewScreenDetailsPanelPreview() {
     AppTheme {
         OverviewScreenDetailsPanel(
-            modifier = Modifier.height(200.dp),
-            DetailsPanelState(
+            modifier = Modifier.height(250.dp),
+            state = DetailsPanelState(
                 licenseState = "TX",
                 licenseNo = "DH9 L474",
                 vinNo = "ABCDEFGHIJKLMNOPQ",

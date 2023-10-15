@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -73,26 +72,9 @@ fun OverviewScreenContent(
                 )
             }
             item {
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        modifier = Modifier.combinedClickable(
-                            onClick = { },
-                            onLongClick = { if (App.isRelease().not()) addServiceList() }
-                        ),
-                        text = stringResource(id = R.string.details),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontStyle = FontStyle.Italic
-                    )
-                }
-            }
-            item {
                 OverviewScreenDetailsPanel(
-                    modifier = Modifier.height(200.dp),
+                    modifier = Modifier,
+                    gridSize = 200.dp,
                     state = detailsState
                 )
             }

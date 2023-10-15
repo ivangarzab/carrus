@@ -2,14 +2,11 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
@@ -19,7 +16,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -32,6 +28,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ivangarzab.carrus.App
+import com.ivangarzab.carrus.ui.compose.fadingEdge
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import java.lang.Float.min
 
@@ -49,14 +46,16 @@ fun OverviewScreenTopBar(
     addTestMessage: () -> Unit = { }
 ) {
     val clipSpecs = RoundedCornerShape(
-        bottomStart = 32.dp,
-        bottomEnd = 32.dp
+        bottomStart = 16.dp,
+        bottomEnd = 16.dp
     )
+    val topbarColor = MaterialTheme.colorScheme.primary
 
     AppTheme {
         ConstraintLayout {
             val image: ConstrainedLayoutReference = createRef()
             val topbar: ConstrainedLayoutReference = createRef()
+            val gradient: ConstrainedLayoutReference = createRef()
 
             imageUri?.let {
                 AsyncImage(
@@ -65,7 +64,7 @@ fun OverviewScreenTopBar(
                             bottom.linkTo(topbar.bottom)
                         }
                         .fillMaxWidth()
-                        .clip(clipSpecs)
+//                        .clip(clipSpecs)
                         .graphicsLayer {
                             val scrollState = scrollBehavior.state
                             alpha = 1f - ((scrollState.heightOffset /
@@ -83,27 +82,30 @@ fun OverviewScreenTopBar(
             LargeTopAppBar(
                 modifier = Modifier
                     .constrainAs(topbar) { /* No-op */ }
+                    .fadingEdge(
+                        Brush.verticalGradient(
+                            0.9f to topbarColor,
+                            1f to Color.Transparent
+                        )
+                    )
 //                    .clip(clipSpecs)
                     .combinedClickable(
                         onClick = { },
                         onLongClick = {
-                            if (App
-                                    .isRelease()
-                                    .not()
-                            ) addTestMessage()
+                            if (App.isRelease().not()) addTestMessage()
                         }
                     ),
                 title = {
                     Column {
                         val scrollState = scrollBehavior.state
-                        if (scrollState.heightOffset == 0.0f) {
+                        /*if (scrollState.heightOffset == 0.0f) {
                             Text(
                                 modifier = Modifier,
                                 text = plates,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = Color.White
                             )
-                        }
+                        }*/
                         Text(
                             modifier = Modifier,
                             text = title,
@@ -126,30 +128,32 @@ fun OverviewScreenTopBar(
                     } else {
                         imageUri?.let {
                             val scrollState = scrollBehavior.state
-                            MaterialTheme.colorScheme.primary.copy(
+                            topbarColor.copy(
                                 alpha = min(
                                     1f,
                                     (scrollState.heightOffset / scrollState.heightOffsetLimit)
                                             + 0.4f
                                 )
                             )
-                        } ?: MaterialTheme.colorScheme.primary
+                        } ?: topbarColor
                     }
                 ),
                 actions = actions,
                 scrollBehavior = scrollBehavior
             )
-            Box(modifier =  Modifier //TODO: We might want to add this at the bottom of the appbar
-                .height(32.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            MaterialTheme.colorScheme.background
-                        )
+            /*Box(modifier = Modifier //TODO: We might want to add this at the bottom of the appbar
+                .constrainAs(gradient) {
+                    top.linkTo(topbar.bottom)
+                }
+                .height(18.dp)
+                .background(color = topbarColor)
+                .fadingEdge(
+                    Brush.verticalGradient(
+                        0.9f to topbarColor,
+                        1f to Color.Transparent
                     )
                 )
-            )
+            )*/
         }
     }
 }
