@@ -14,21 +14,9 @@ data class DetailsPanelState(
     val milesPerGalCity: String = "",
     val milesPerGalHighway: String = ""
 ) {
-    fun asList(): List<String> {
-        val result: MutableList<String> = mutableListOf()
-        if (licenseState.isNotBlank()) result.add(licenseState)
-        if (licenseNo.isNotBlank()) result.add(licenseNo)
-        if (vinNo.isNotBlank()) result.add(vinNo)
-        if (tirePressure.isNotBlank()) result.add(tirePressure)
-        if (totalMiles.isNotBlank()) result.add(totalMiles)
-        if (milesPerGalCity.isNotBlank()) result.add(milesPerGalCity)
-        if (milesPerGalHighway.isNotBlank()) result.add(milesPerGalHighway)
-        return result
-    }
-
     companion object {
         fun fromCar(car: Car): DetailsPanelState = DetailsPanelState(
-            licenseState = "",
+            licenseState = "", //TODO: Impl
             licenseNo = car.licenseNo,
             vinNo = car.vinNo,
             tirePressure = car.tirePressure,

@@ -26,7 +26,7 @@ fun OverviewScreenBottomBar(
         NavigationBar {
             NavigationBarItem(
                 selected = false,
-                onClick = homeButtonClicked,
+                onClick = { },
                 label = {
                     Text(stringResource(id = R.string.home))
                 },

@@ -43,13 +43,14 @@ fun OverviewScreenDetailsPanel(
         Column(
             modifier = modifier
         ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 8.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 8.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
             ) {
                 PanelTitleText(
                     modifier = Modifier.align(Alignment.CenterStart),
@@ -84,29 +85,46 @@ fun OverviewScreenDetailsPanelGrid(
             rows = StaggeredGridCells.Fixed(count = 2),
             contentPadding = PaddingValues(4.dp)
         ) {
-            item {
-                OverviewScreenDetailsItem(title = "License State", content = state.licenseState)
+            state.licenseState.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(title = "License State", content = state.licenseState)
+                }
             }
-            item {
-                OverviewScreenDetailsItem(title = "License Plate", content = state.licenseNo)
+            state.licenseNo.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(title = "License Plate", content = state.licenseNo)
+                }
             }
-            item {
-                OverviewScreenDetailsItem(title = "Tire Pressure", content = state.tirePressure)
+            state.tirePressure.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(title = "Tire Pressure", content = state.tirePressure)
+                }
             }
-            item {
-                OverviewScreenDetailsItem(title = "Total Miles", content = state.totalMiles)
+            state.totalMiles.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(title = "Total Miles", content = state.totalMiles)
+                }
             }
-            item {
-                OverviewScreenDetailsItem(title = "City mi/gal", content = state.milesPerGalCity)
+            state.milesPerGalCity.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(
+                        title = "City mi/gal",
+                        content = state.milesPerGalCity
+                    )
+                }
             }
-            item {
-                OverviewScreenDetailsItem(
-                    title = "Highway mi/gal",
-                    content = state.milesPerGalHighway
-                )
+            state.milesPerGalHighway.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(
+                        title = "Highway mi/gal",
+                        content = state.milesPerGalHighway
+                    )
+                }
             }
-            item {
-                OverviewScreenDetailsItem(title = "Vin Number", content = state.vinNo)
+            state.vinNo.takeIf { it.isNotEmpty() }.let {
+                item {
+                    OverviewScreenDetailsItem(title = "Vin Number", content = state.vinNo)
+                }
             }
         }
     }

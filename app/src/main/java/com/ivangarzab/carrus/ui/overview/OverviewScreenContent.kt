@@ -223,7 +223,7 @@ fun RotationalQuotePanel() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
+            .padding(top = 32.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
         fun getRandomQuote(): String = quoteList[Random().nextInt(quoteList.size)]
         Text(
