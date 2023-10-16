@@ -32,6 +32,8 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
+import com.ivangarzab.carrus.ui.compose.PanelIcon
+import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 
@@ -81,18 +83,31 @@ fun OverviewScreenContent(
             item {
                 Box(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 4.dp, end = 16.dp)
                 ) {
-                    Text(
-                        modifier = Modifier.combinedClickable(
-                            onClick = { },
-                            onLongClick = { if (App.isRelease().not()) addServiceList() }
-                        ),
-                        text = stringResource(id = R.string.services),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontStyle = FontStyle.Italic
+                    PanelTitleText(
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .combinedClickable(
+                                onClick = { },
+                                onLongClick = {
+                                    if (App
+                                            .isRelease()
+                                            .not()
+                                    ) {
+                                        // Easter egg for testing!
+                                        addServiceList()
+                                    }
+                                }
+                            ),
+                        text = stringResource(id = R.string.services)
+                    )
+                    PanelIcon(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onClick = { /*TODO: show/hide sorting panel */ },
+                        painter = painterResource(id = R.drawable.ic_sort),
+                        contentDescription = "Service sort icon button"
                     )
                 }
             }
@@ -135,6 +150,7 @@ fun OverviewScreenContent(
         }
     }
 }
+
 private const val NO_ITEM_EXPANDED = -1
 
 @Preview
@@ -177,8 +193,9 @@ fun EmptyListView(
     modifier: Modifier = Modifier
 ) {
     AppTheme {
-        Box(modifier = modifier
-            .fillMaxWidth()
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),

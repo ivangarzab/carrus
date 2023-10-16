@@ -8,29 +8,24 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.PanelIcon
+import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 
@@ -50,28 +45,21 @@ fun OverviewScreenDetailsPanel(
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = 12.dp,
+                    top = 8.dp,
                     start = 16.dp,
                     end = 16.dp
                 )
             ) {
-                Text(
+                PanelTitleText(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    text = stringResource(id = R.string.car_details),
-                    style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp),
-                    fontStyle = FontStyle.Italic
+                    text = stringResource(id = R.string.car_details)
                 )
-                IconButton(
+                PanelIcon(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = { /*TODO: wire up! */ }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = Icons.Filled.Edit,
-                        tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = "Edit icon button"
-                    )
-                }
+                    onClick = { /*TODO: Wire up edit button! */ },
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Car edit icon button"
+                )
             }
             OverviewScreenDetailsPanelGrid(
                 modifier = Modifier
@@ -91,9 +79,9 @@ fun OverviewScreenDetailsPanelGrid(
     AppTheme {
         LazyHorizontalStaggeredGrid(
             modifier = modifier
-                .padding(start = 16.dp, end = 16.dp),
+                .padding(end = 16.dp),
             rows = StaggeredGridCells.Fixed(count = 2),
-            contentPadding = PaddingValues(8.dp)
+            contentPadding = PaddingValues(4.dp)
         ) {
             item {
                 OverviewScreenDetailsItem(title = "License State", content = state.licenseState)

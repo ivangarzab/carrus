@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -20,10 +21,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.ivangarzab.carrus.R
@@ -158,6 +165,54 @@ fun TopBar(
                     )
                 }
             }
+        )
+    }
+}
+
+@Composable
+fun PanelTitleText(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    Text(
+        modifier = modifier,
+        text = text,
+        style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp),
+        fontStyle = FontStyle.Italic
+    )
+}
+
+@Composable
+fun PanelIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    imageVector: ImageVector,
+    contentDescription: String = "Panel icon button"
+) {
+    PanelIcon(
+        modifier = modifier,
+        onClick = onClick,
+        painter = rememberVectorPainter(imageVector),
+        contentDescription = contentDescription
+    )
+}
+
+@Composable
+fun PanelIcon(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    painter: Painter,
+    contentDescription: String = "Panel icon button"
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Icon(
+            modifier = Modifier.size(28.dp),
+            painter = painter,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = contentDescription
         )
     }
 }
