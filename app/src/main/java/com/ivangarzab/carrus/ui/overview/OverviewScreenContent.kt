@@ -99,10 +99,7 @@ fun OverviewScreenContent(
                             .combinedClickable(
                                 onClick = { },
                                 onLongClick = {
-                                    if (App
-                                            .isRelease()
-                                            .not()
-                                    ) {
+                                    if (App.isRelease().not()) {
                                         // Easter egg for testing!
                                         addServiceList()
                                     }

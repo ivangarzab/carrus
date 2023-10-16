@@ -1,11 +1,12 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.TimeFormat
@@ -38,11 +40,12 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
+import leakcanary.LeakCanary
+import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
-
 @Composable
 fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
@@ -210,6 +213,7 @@ fun SettingsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -223,11 +227,24 @@ fun SettingsScreenBottomBar(
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.surface)
         ) {
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            SettingsScreenDivider()
             Text(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { },
+                        onLongClick = {
+                            if (App
+                                    .isRelease()
+                                    .not()
+                            ) {
+                                // Easter egg: Turn off LeakCanary🔥
+                                LeakCanary.config = LeakCanary.config.copy(dumpHeap = false)
+                                Timber.d("LeakCanary has been put back in the cage")
+                            }
+                        }
+                    ),
                 text = versionName,
                 style = TextStyle(fontStyle = FontStyle.Italic),
                 color = MaterialTheme.colorScheme.onSurface

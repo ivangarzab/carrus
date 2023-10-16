@@ -88,7 +88,7 @@ fun SettingsScreenContent(
                 onToggle = { onDarkModeToggle(it) }
             )
 
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            SettingsScreenDivider()
 
             SettingsScreenContentItemText(
                 title = stringResource(id = R.string.settings_due_date_format_title),
@@ -104,7 +104,7 @@ fun SettingsScreenContent(
                 onClick = { onClockTimeFormatClicked() }
             )
 
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            SettingsScreenDivider()
 
             SettingsScreenContentItemSwitch(
                 title = stringResource(id = R.string.settings_alarm_on_title),
@@ -135,7 +135,7 @@ fun SettingsScreenContent(
             }
 
             if (state.isThereCarData) {
-                Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+                SettingsScreenDivider()
             }
             AnimatedVisibility(
                 visible = state.isThereCarServicesData,
@@ -161,7 +161,7 @@ fun SettingsScreenContent(
                 )
             }
 
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            SettingsScreenDivider()
 
             SettingsScreenContentItemBase(
                 title = stringResource(id = R.string.settings_privacy_policy_title),
@@ -169,7 +169,7 @@ fun SettingsScreenContent(
                 onClick = onPrivacyPolicyClicked
             )
 
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            SettingsScreenDivider()
 
             SettingsScreenContentBottom(
                 modifier = Modifier.fillMaxWidth(),
@@ -349,4 +349,17 @@ fun SettingsScreenContentBottom(
             }
         }
     }
+}
+
+@Composable
+fun SettingsScreenDivider() {
+    val horizontalMargin = 12.dp
+    Divider(
+        modifier = Modifier.padding(
+            start = horizontalMargin,
+            end = horizontalMargin
+        ),
+        thickness = 1.dp,
+        color = MaterialTheme.colorScheme.outline
+    )
 }
