@@ -61,6 +61,9 @@ fun OverviewScreenContent(
     var expandedItemIndex: Int by rememberSaveable {
         mutableStateOf(NO_ITEM_EXPANDED)
     }
+    var isSortingPanelVisible: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     AppTheme {
         LazyColumn(modifier = modifier) {
@@ -105,7 +108,7 @@ fun OverviewScreenContent(
                     )
                     PanelIcon(
                         modifier = Modifier.align(Alignment.CenterEnd),
-                        onClick = { /*TODO: show/hide sorting panel */ },
+                        onClick = { isSortingPanelVisible = isSortingPanelVisible.not() },
                         painter = painterResource(id = R.drawable.ic_sort),
                         contentDescription = "Service sort icon button"
                     )
@@ -113,7 +116,8 @@ fun OverviewScreenContent(
             }
             item {
                 OverviewScreenSortingPanel(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    isVisible = isSortingPanelVisible,
                     onSortRequest = onSortRequest,
                     selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
                         SortingCallback.SortingType.NONE -> 0
