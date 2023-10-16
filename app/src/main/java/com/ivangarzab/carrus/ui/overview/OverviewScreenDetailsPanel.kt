@@ -85,27 +85,27 @@ fun OverviewScreenDetailsPanelGrid(
             rows = StaggeredGridCells.Fixed(count = 2),
             contentPadding = PaddingValues(4.dp)
         ) {
-            state.licenseState.takeIf { it.isNotEmpty() }.let {
+            state.licenseState.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "License State", content = state.licenseState)
                 }
             }
-            state.licenseNo.takeIf { it.isNotEmpty() }.let {
+            state.licenseNo.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "License Plate", content = state.licenseNo)
                 }
             }
-            state.tirePressure.takeIf { it.isNotEmpty() }.let {
+            state.tirePressure.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "Tire Pressure", content = state.tirePressure)
                 }
             }
-            state.totalMiles.takeIf { it.isNotEmpty() }.let {
+            state.totalMiles.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "Total Miles", content = state.totalMiles)
                 }
             }
-            state.milesPerGalCity.takeIf { it.isNotEmpty() }.let {
+            state.milesPerGalCity.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(
                         title = "City mi/gal",
@@ -113,7 +113,7 @@ fun OverviewScreenDetailsPanelGrid(
                     )
                 }
             }
-            state.milesPerGalHighway.takeIf { it.isNotEmpty() }.let {
+            state.milesPerGalHighway.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(
                         title = "Highway mi/gal",
@@ -121,7 +121,7 @@ fun OverviewScreenDetailsPanelGrid(
                     )
                 }
             }
-            state.vinNo.takeIf { it.isNotEmpty() }.let {
+            state.vinNo.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "Vin Number", content = state.vinNo)
                 }
@@ -168,7 +168,7 @@ fun OverviewScreenDetailsPanelPreview() {
         OverviewScreenDetailsPanel(
             modifier = Modifier.height(250.dp),
             state = DetailsPanelState(
-                licenseState = "TX",
+                licenseState = "",
                 licenseNo = "DH9 L474",
                 vinNo = "ABCDEFGHIJKLMNOPQ",
                 tirePressure = "32",
