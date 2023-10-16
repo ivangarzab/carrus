@@ -36,7 +36,8 @@ import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 fun OverviewScreenDetailsPanel(
     modifier: Modifier = Modifier,
     gridSize: Dp = 200.dp,
-    state: DetailsPanelState = DetailsPanelState()
+    state: DetailsPanelState = DetailsPanelState(),
+    onEditCarClicked: () -> Unit,
 ) {
     AppTheme {
         Column(
@@ -56,7 +57,7 @@ fun OverviewScreenDetailsPanel(
                 )
                 PanelIcon(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    onClick = { /*TODO: Wire up edit button! */ },
+                    onClick = onEditCarClicked,
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Car edit icon button"
                 )
@@ -156,7 +157,8 @@ fun OverviewScreenDetailsPanelPreview() {
                 totalMiles = "100,000",
                 milesPerGalCity = "23",
                 milesPerGalHighway = "30"
-            )
+            ),
+            onEditCarClicked = { }
         )
     }
 }

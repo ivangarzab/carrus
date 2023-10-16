@@ -1,9 +1,13 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -15,10 +19,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -52,7 +58,7 @@ fun OverviewScreenStateful(
             state = state,
             messageQueue = queueState.messageQueue,
             onFloatingActionButtonClicked = onFloatingActionButtonClicked,
-            onEditButtonClicked = onCarEditButtonClicked,
+            onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
@@ -75,7 +81,7 @@ private fun OverviewScreen(
     @PreviewParameter(OverviewStatePreviewProvider::class) state: OverviewState,
     messageQueue: MessageQueue = MessageQueue.test,
     onFloatingActionButtonClicked: () -> Unit = { },
-    onEditButtonClicked: () -> Unit = { },
+    onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
@@ -90,18 +96,6 @@ private fun OverviewScreen(
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val systemUiController = rememberSystemUiController()
-
-    var showCarDetailsButton: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    } //TODO: Move this logic to the VM
-    showCarDetailsButton = state.car?.let {
-        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
-                it.tirePressure.isNotBlank() || it.vinNo.isNotBlank()
-    } ?: false
-
-    var showCarDetailsDialog: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
 
     var showServiceModal: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -136,6 +130,7 @@ private fun OverviewScreen(
                             dueDateFormat = state.dueDateFormat,
                             sortingType = state.serviceSortingType,
                             onSortRequest = onSortRequest,
+                            onEditCarClicked = onEditCarButtonClicked,
                             onServiceEditButtonClicked = onServiceEditButtonClicked,
                             onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
                             addServiceList = addServiceList,
@@ -145,26 +140,33 @@ private fun OverviewScreen(
                     },
                     bottomBar = {
                         OverviewScreenBottomBar(
-                            actionButtonClicked = onFloatingActionButtonClicked,
-                            settingsButtonClicked = onSettingsButtonClicked,
-                            carEditButtonClicked = onEditButtonClicked,
-                            showCarDetailsButton = showCarDetailsButton,
-                            carDetailsButtonClicked = { showCarDetailsDialog = true }
+                            homeButtonClicked = onEditCarButtonClicked,
+                            settingsButtonClicked = onSettingsButtonClicked
                         )
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            containerColor = if (isSystemInDarkTheme()) {
+                                MaterialTheme.colorScheme.surface
+                            } else {
+                                MaterialTheme.colorScheme.primary
+                            },
+                            contentColor = if (isSystemInDarkTheme()) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.onPrimary
+                            },
+                            onClick = onFloatingActionButtonClicked
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_add),
+                                contentDescription = "Add Service floating action button"
+                            )
+                        }
                     }
                 )
                 // Dialog
                 when {
-                    showCarDetailsDialog -> CarDetailsDialog(
-                        vinNo = it.vinNo,
-                        tirePressure = it.tirePressure,
-                        milesTotal = it.totalMiles,
-                        milesPerGallon = it.milesPerGallon,
-                        onClick = {
-                            showCarDetailsDialog = false
-                        }
-                    )
-
                     showServiceModal -> ServiceBottomSheet(
                         modifier = Modifier,
                         onDismissed = { showServiceModal = false }

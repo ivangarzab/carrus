@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.App
@@ -36,6 +37,7 @@ import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
+import java.util.Random
 
 /**
  * Created by Ivan Garza Bermea.
@@ -52,6 +54,7 @@ fun OverviewScreenContent(
     dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
     onSortRequest: (SortingCallback.SortingType) -> Unit = { },
+    onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     addServiceList: () -> Unit = { },
@@ -80,7 +83,8 @@ fun OverviewScreenContent(
                 OverviewScreenDetailsPanel(
                     modifier = Modifier,
                     gridSize = 200.dp,
-                    state = detailsState
+                    state = detailsState,
+                    onEditCarClicked = onEditCarClicked
                 )
             }
             item {
@@ -151,6 +155,9 @@ fun OverviewScreenContent(
                     EmptyListView()
                 }
             }
+            item {
+                RotationalQuotePanel()
+            }
         }
     }
 }
@@ -210,3 +217,38 @@ fun EmptyListView(
         }
     }
 }
+
+@Composable
+fun RotationalQuotePanel() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        fun getRandomQuote(): String = quoteList[Random().nextInt(quoteList.size)]
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = getRandomQuote(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
+            fontStyle = FontStyle.Italic
+        )
+    }
+}
+private val quoteList: List<String> = listOf(
+    "Winning isn't everything, but wanting to win is.",
+    "Second place is just the first loser.",
+    "If you ain't first, you're last.",
+    "I am a precision instrument of speed and aerodynamics.",
+    "I hate rusty cars.",
+    "Float like a Cadillac, sting like a Beemer.",
+    "What’s behind you doesn’t matter.",
+    "To finish first, you must first finish.",
+    "Auto racing began five minutes after the second car was built.",
+    "You win some, you lose some, you wreck some.",
+    "I live my life a quarter mile at a time.",
+    "The winner ain’t the one with the fastest car, it’s the one who refuses to lose.",
+    "The crashes people remember, but drivers remember the near misses.",
+    "You don’t expect to be at the top of the mountain the day you start climbing.",
+    "If you're in control, you're not going fast enough."
+)
