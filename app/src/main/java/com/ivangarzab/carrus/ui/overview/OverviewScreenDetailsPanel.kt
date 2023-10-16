@@ -28,6 +28,7 @@ import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
+import com.ivangarzab.carrus.util.extensions.parseIntoNumberWithCommas
 
 /**
  * Created by Ivan Garza Bermea.
@@ -54,7 +55,7 @@ fun OverviewScreenDetailsPanel(
             ) {
                 PanelTitleText(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    text = stringResource(id = R.string.car_details)
+                    text = stringResource(id = R.string.details)
                 )
                 PanelIcon(
                     modifier = Modifier.align(Alignment.CenterEnd),
@@ -102,7 +103,10 @@ fun OverviewScreenDetailsPanelGrid(
             }
             state.totalMiles.takeIf { it.isNotEmpty() }?.let {
                 item {
-                    OverviewScreenDetailsItem(title = "Total Miles", content = state.totalMiles)
+                    OverviewScreenDetailsItem(
+                        title = "Total Miles",
+                        content = state.totalMiles.parseIntoNumberWithCommas()
+                    )
                 }
             }
             state.milesPerGalCity.takeIf { it.isNotEmpty() }?.let {
@@ -145,8 +149,9 @@ fun OverviewScreenDetailsItem(
                     .padding(16.dp)
             ) {
                 Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = title,
-                    textAlign = TextAlign.Start,
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold //TODO: Make a diff color instead
                 )
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -172,7 +177,7 @@ fun OverviewScreenDetailsPanelPreview() {
                 licenseNo = "DH9 L474",
                 vinNo = "ABCDEFGHIJKLMNOPQ",
                 tirePressure = "32",
-                totalMiles = "100,000",
+                totalMiles = "1000000",
                 milesPerGalCity = "23",
                 milesPerGalHighway = "30"
             ),

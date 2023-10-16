@@ -121,7 +121,10 @@ fun OverviewServiceItem(
                                     } //TODO: Set up logic in VM
                                 }
                             },
-                            style = MaterialTheme.typography.titleSmall,
+                            style = when (data.isPastDue()) {
+                                true -> MaterialTheme.typography.titleMedium
+                                false -> MaterialTheme.typography.titleSmall
+                            },
                             fontStyle = when (data.isPastDue()) {
                                 true -> FontStyle.Italic
                                 false -> null

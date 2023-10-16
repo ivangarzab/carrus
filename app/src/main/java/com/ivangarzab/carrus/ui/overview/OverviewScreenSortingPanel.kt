@@ -83,7 +83,7 @@ private fun SortingChipButton(
             colors = FilterChipDefaults.filterChipColors(
                 labelColor = MaterialTheme.colorScheme.primary,
                 selectedContainerColor = MaterialTheme.colorScheme.primary,
-                selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                selectedLabelColor = MaterialTheme.colorScheme.background
             ),
             label = {
                 Text(

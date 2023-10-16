@@ -7,7 +7,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
@@ -39,23 +37,17 @@ import java.lang.Float.min
 @Composable
 fun OverviewScreenTopBar(
     title: String,
-    plates: String,
     imageUri: String?,
     actions: @Composable RowScope.() -> Unit = { },
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     addTestMessage: () -> Unit = { }
 ) {
-    val clipSpecs = RoundedCornerShape(
-        bottomStart = 16.dp,
-        bottomEnd = 16.dp
-    )
     val topbarColor = MaterialTheme.colorScheme.primary
 
     AppTheme {
         ConstraintLayout {
             val image: ConstrainedLayoutReference = createRef()
             val topbar: ConstrainedLayoutReference = createRef()
-            val gradient: ConstrainedLayoutReference = createRef()
 
             imageUri?.let {
                 AsyncImage(
@@ -64,7 +56,6 @@ fun OverviewScreenTopBar(
                             bottom.linkTo(topbar.bottom)
                         }
                         .fillMaxWidth()
-//                        .clip(clipSpecs)
                         .graphicsLayer {
                             val scrollState = scrollBehavior.state
                             alpha = 1f - ((scrollState.heightOffset /
@@ -84,11 +75,15 @@ fun OverviewScreenTopBar(
                     .constrainAs(topbar) { /* No-op */ }
                     .fadingEdge(
                         Brush.verticalGradient(
-                            0.9f to topbarColor,
-                            1f to Color.Transparent
+                            0.90f to topbarColor,
+                            0.95f to topbarColor.copy(
+                                alpha = 0.75f
+                            ),
+                            1.0f to topbarColor.copy(
+                                alpha = 0.50f
+                            )
                         )
                     )
-//                    .clip(clipSpecs)
                     .combinedClickable(
                         onClick = { },
                         onLongClick = {
@@ -97,15 +92,6 @@ fun OverviewScreenTopBar(
                     ),
                 title = {
                     Column {
-                        val scrollState = scrollBehavior.state
-                        /*if (scrollState.heightOffset == 0.0f) {
-                            Text(
-                                modifier = Modifier,
-                                text = plates,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = Color.White
-                            )
-                        }*/
                         Text(
                             modifier = Modifier,
                             text = title,
@@ -141,19 +127,6 @@ fun OverviewScreenTopBar(
                 actions = actions,
                 scrollBehavior = scrollBehavior
             )
-            /*Box(modifier = Modifier //TODO: We might want to add this at the bottom of the appbar
-                .constrainAs(gradient) {
-                    top.linkTo(topbar.bottom)
-                }
-                .height(18.dp)
-                .background(color = topbarColor)
-                .fadingEdge(
-                    Brush.verticalGradient(
-                        0.9f to topbarColor,
-                        1f to Color.Transparent
-                    )
-                )
-            )*/
         }
     }
 }
@@ -166,7 +139,6 @@ fun OverviewScreenTopBarPreview() {
     AppTheme {
         OverviewScreenTopBar(
             title = "Test Top App Bar Title",
-            plates = "DH9 L474",
             imageUri = null,
             actions = { },
             addTestMessage = { }

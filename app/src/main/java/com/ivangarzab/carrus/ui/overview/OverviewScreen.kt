@@ -113,7 +113,6 @@ private fun OverviewScreen(
                             title = it.nickname.ifBlank {
                                 "${it.make} ${it.model}"
                             },
-                            plates = it.licenseNo,
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
@@ -141,6 +140,7 @@ private fun OverviewScreen(
                     bottomBar = {
                         OverviewScreenBottomBar(
                             homeButtonClicked = onEditCarButtonClicked,
+                            mapButtonClicked = { /*TODO: Insert map code */ },
                             settingsButtonClicked = onSettingsButtonClicked
                         )
                     },

@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.ui.overview
 import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 
@@ -20,7 +22,8 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 @Composable
 fun OverviewScreenBottomBar(
     settingsButtonClicked: () -> Unit,
-    homeButtonClicked: () -> Unit
+    homeButtonClicked: () -> Unit,
+    mapButtonClicked: () -> Unit
 ) {
     AppTheme {
         NavigationBar {
@@ -37,6 +40,21 @@ fun OverviewScreenBottomBar(
                     )
                 }
             )
+            if (App.isRelease().not()) {
+                NavigationBarItem(
+                    selected = false,
+                    onClick = mapButtonClicked,
+                    label = {
+                        Text(text = "Map")
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = "Home navigation button"
+                        )
+                    }
+                )
+            }
             NavigationBarItem(
                 selected = false,
                 onClick = settingsButtonClicked,
@@ -60,8 +78,9 @@ fun OverviewScreenBottomBar(
 private fun OverviewScreenBottomBarPreview() {
     AppTheme {
         OverviewScreenBottomBar(
-            settingsButtonClicked = { },
-            homeButtonClicked = { }
+            homeButtonClicked = { },
+            mapButtonClicked = { },
+            settingsButtonClicked = { }
         )
     }
 }

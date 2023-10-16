@@ -225,16 +225,19 @@ fun RotationalQuotePanel() {
             .fillMaxWidth()
             .padding(top = 32.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
-        fun getRandomQuote(): String = quoteList[Random().nextInt(quoteList.size)]
+        val randomQuote: String by rememberSaveable {
+            mutableStateOf(quoteList[Random().nextInt(quoteList.size)])
+        }
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = getRandomQuote(),
+            text = randomQuote,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
             fontStyle = FontStyle.Italic
         )
     }
 }
+
 private val quoteList: List<String> = listOf(
     "Winning isn't everything, but wanting to win is.",
     "Second place is just the first loser.",
