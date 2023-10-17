@@ -353,7 +353,7 @@ fun SettingsScreenContentBottom(
 
 @Composable
 fun SettingsScreenDivider() {
-    val horizontalMargin = 12.dp
+    val horizontalMargin = 8.dp
     Divider(
         modifier = Modifier.padding(
             start = horizontalMargin,

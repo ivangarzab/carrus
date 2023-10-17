@@ -7,6 +7,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -225,9 +226,12 @@ fun SettingsScreenBottomBar(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.surface)
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
-            SettingsScreenDivider()
+            Divider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline
+            )
             Text(
                 modifier = Modifier
                     .padding(16.dp)

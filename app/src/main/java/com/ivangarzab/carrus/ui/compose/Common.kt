@@ -25,16 +25,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.compose.theme.Typography
 
 /**
  * This file contains the most common and basic Composables for use across the application.
@@ -177,7 +176,7 @@ fun PanelTitleText(
     Text(
         modifier = modifier,
         text = text,
-        style = TextStyle(fontSize = 20.sp, lineHeight = 28.sp),
+        style = Typography.titleMediumLarge,
         fontStyle = FontStyle.Italic
     )
 }
