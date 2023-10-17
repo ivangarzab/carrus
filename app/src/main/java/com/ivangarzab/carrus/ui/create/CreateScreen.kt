@@ -54,13 +54,13 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
+import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.NumberInputField
 import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
-import com.ivangarzab.carrus.ui.overview.NavigationBottomBar
 
 /**
  * Created by Ivan Garza Bermea.

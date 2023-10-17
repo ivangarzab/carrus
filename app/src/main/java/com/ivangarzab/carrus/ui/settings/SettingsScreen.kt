@@ -34,11 +34,11 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
+import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.NegativeButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.ui.overview.NavigationBottomBar
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
@@ -253,10 +253,7 @@ fun SettingsScreenBottomBar(
                     .combinedClickable(
                         onClick = { },
                         onLongClick = {
-                            if (App
-                                    .isRelease()
-                                    .not()
-                            ) {
+                            if (App.isRelease().not()) {
                                 // Easter egg: Turn off LeakCanary🔥
                                 LeakCanary.config = LeakCanary.config.copy(dumpHeap = false)
                                 Timber.d("LeakCanary has been put back in the cage")
