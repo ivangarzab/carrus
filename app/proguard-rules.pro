@@ -30,5 +30,5 @@
     public static *** bind(android.view.View);
 }
 # Custom exceptions start here:
--keep class com.ivangarzab.carrus.data.Car { *; }
--keep class com.ivangarzab.carrus.data.Service { *; }
+-keep class com.ivangarzab.carrus.data.models.Car { *; }
+-keep class com.ivangarzab.carrus.data.models.Service { *; }

@@ -1,5 +1,7 @@
 package com.ivangarzab.carrus.data
 
+import com.ivangarzab.carrus.data.models.Car
+
 /**
  * Created by Ivan Garza Bermea.
  */

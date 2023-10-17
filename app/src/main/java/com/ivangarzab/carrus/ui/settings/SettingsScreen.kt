@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
 import com.ivangarzab.carrus.ui.compose.NegativeButton
@@ -143,15 +143,7 @@ fun SettingsScreen(
         when {
             showAlarmTimePickerDialog -> TimePickerDialog(
                 modifier = Modifier,
-                currentTime = state.alarmTime.getTime(state.clockTimeFormat).toLong(),
-                /*when (state.clockTimeFormat) {
-                    TimeFormat.HR24 -> state.alarmTime.toLong()
-                    TimeFormat.HR12 -> if (state.isPM) {
-                        state.alarmTime.toLong() + 12
-                    } else {
-                        state.alarmTime.toLong()
-                    }
-                },*/
+                currentTime = state.alarmTime.getTime(TimeFormat.HR24),
                 is24HrFormat = state.clockTimeFormat == TimeFormat.HR24,
                 onValueSelected = {
                     onAlarmTimeSelected(it)
@@ -250,12 +242,13 @@ fun SettingsScreenBottomBar(
 @Composable
 fun TimePickerDialog(
     modifier: Modifier = Modifier,
-    currentTime: Long = 0,
+    currentTime: Int = 0,
     is24HrFormat: Boolean = false,
     onValueSelected: (Int) -> Unit = { },
     onDismissed: () -> Unit = { }
 ) {
     val timePickerState = rememberTimePickerState(
+        initialHour = currentTime,
         is24Hour = is24HrFormat
     )
 

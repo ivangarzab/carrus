@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.ivangarzab.carrus.data.AlarmSettingsState
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.prefs

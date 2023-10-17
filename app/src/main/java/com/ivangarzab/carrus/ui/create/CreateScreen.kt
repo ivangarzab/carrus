@@ -51,7 +51,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.NumberInputField
@@ -177,10 +177,14 @@ private fun CreateScreenContent(
     onDeleteImageClicked: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
 ) {
+    fun shouldBeExpanded(state: CarModalState): Boolean = state.let {
+        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
+                it.vinNo.isNotBlank() || it.tirePressure.isNotBlank()
+    }
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(value = false)
+        mutableStateOf(shouldBeExpanded(state))
     }
     var isImagePresent: Boolean by rememberSaveable {
         mutableStateOf(false)

@@ -2,8 +2,8 @@ package com.ivangarzab.carrus
 
 import android.app.Application
 import com.google.android.libraries.places.api.Places
-import com.ivangarzab.carrus.data.Preferences
 import com.ivangarzab.carrus.util.managers.LeakUploader
+import com.ivangarzab.carrus.util.managers.Preferences
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

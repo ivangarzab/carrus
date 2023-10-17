@@ -19,8 +19,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 33
-        versionCode = 8
-        versionName = "1.0.0-alpha08"
+        versionCode = 9
+        versionName = "1.0.0-alpha09"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,7 +59,7 @@ android {
 }
 
 val activityVersion = "1.7.2"
-val gsonVersion = "2.9.1"
+val gsonVersion = "2.10.1"
 val leakCanaryVersion = "2.12"
 dependencies {
 
@@ -77,6 +77,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // https://developer.android.com/jetpack/compose/bom
     val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
@@ -149,7 +150,7 @@ dependencies {
     androidTestImplementation("com.google.truth:truth:$truthVersion")
 
     // https://github.com/mockk/mockk
-    val mockkVersion = "1.13.5"
+    val mockkVersion = "1.13.8"
     testImplementation("io.mockk:mockk-android:$mockkVersion")
     testImplementation("io.mockk:mockk-agent:$mockkVersion")
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion")

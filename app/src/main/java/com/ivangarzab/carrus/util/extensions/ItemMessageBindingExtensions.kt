@@ -2,14 +2,8 @@ package com.ivangarzab.carrus.util.extensions
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.res.Resources
-import android.view.MotionEvent
-import android.view.View
-import com.ivangarzab.carrus.data.MessageData
+import com.ivangarzab.carrus.data.models.MessageData
 import com.ivangarzab.carrus.databinding.ItemMessageBinding
-import timber.log.Timber
-import java.lang.Float.max
-import java.lang.Float.min
 
 /**
  * Created by Ivan Garza Bermea.

@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus
 
-import com.ivangarzab.carrus.data.MessageData
-import com.ivangarzab.carrus.data.MessageType
+import com.ivangarzab.carrus.data.models.MessageData
+import com.ivangarzab.carrus.data.models.MessageType
 
 /**
  * Created by Ivan Garza Bermea.

@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.data.repositories
 
-import com.ivangarzab.carrus.data.Message
-import com.ivangarzab.carrus.util.managers.MessageQueue
+import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber

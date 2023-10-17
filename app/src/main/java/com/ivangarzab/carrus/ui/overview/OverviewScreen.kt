@@ -19,12 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
-import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
  * Created by Ivan Garza Bermea.
@@ -37,8 +37,7 @@ fun OverviewScreenStateful(
     onSettingsButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
-    onAddCarClicked: () -> Unit,
-    onMessageClicked: (String) -> Unit
+    onAddCarClicked: () -> Unit
 ) {
     val state: OverviewState by viewModel
         .state
@@ -59,8 +58,8 @@ fun OverviewScreenStateful(
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
-            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it)},
-            onMessageContentClicked = { onMessageClicked(it) },
+            onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
+            onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
             addServiceList = { viewModel.setupEasterEggForTesting() },
@@ -94,6 +93,14 @@ private fun OverviewScreen(
 
     val systemUiController = rememberSystemUiController()
 
+    var showCarDetailsButton: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    } //TODO: Move this logic to the VM
+    showCarDetailsButton = state.car?.let {
+        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
+                it.tirePressure.isNotBlank() || it.vinNo.isNotBlank()
+    } ?: false
+
     var showCarDetailsDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
@@ -114,6 +121,7 @@ private fun OverviewScreen(
                             title = it.nickname.ifBlank {
                                 "${it.make} ${it.model}"
                             },
+                            plates = it.licenseNo,
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
@@ -141,9 +149,8 @@ private fun OverviewScreen(
                             actionButtonClicked = onFloatingActionButtonClicked,
                             settingsButtonClicked = onSettingsButtonClicked,
                             carEditButtonClicked = onEditButtonClicked,
-                            carDetailsButtonClicked = {
-                                showCarDetailsDialog = true
-                            },
+                            showCarDetailsButton = showCarDetailsButton,
+                            carDetailsButtonClicked = { showCarDetailsDialog = true },
                             mapButtonClicked = onMapButtonClicked
                         )
                     }
@@ -153,12 +160,13 @@ private fun OverviewScreen(
                     showCarDetailsDialog -> CarDetailsDialog(
                         vinNo = it.vinNo,
                         tirePressure = it.tirePressure,
-                        milesTotal = it.milesPerGallon,
+                        milesTotal = it.totalMiles,
                         milesPerGallon = it.milesPerGallon,
                         onClick = {
                             showCarDetailsDialog = false
                         }
                     )
+
                     showServiceModal -> ServiceBottomSheet(
                         modifier = Modifier,
                         onDismissed = { showServiceModal = false }

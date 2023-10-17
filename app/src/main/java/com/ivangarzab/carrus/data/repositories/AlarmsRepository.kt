@@ -4,7 +4,7 @@ import android.content.Context
 import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.prefs
-import com.ivangarzab.carrus.util.AlarmScheduler
+import com.ivangarzab.carrus.util.managers.AlarmScheduler
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.util.Calendar
