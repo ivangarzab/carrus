@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -99,7 +101,10 @@ fun OverviewScreenContent(
                             .combinedClickable(
                                 onClick = { },
                                 onLongClick = {
-                                    if (App.isRelease().not()) {
+                                    if (App
+                                            .isRelease()
+                                            .not()
+                                    ) {
                                         // Easter egg for testing!
                                         addServiceList()
                                     }
@@ -107,8 +112,15 @@ fun OverviewScreenContent(
                             ),
                         text = stringResource(id = R.string.services)
                     )
+
+                    val sortingIconRotationDegree: Float by animateFloatAsState(
+                        targetValue = if (isSortingPanelVisible) 180f else 0f,
+                        label = ""
+                    )
                     PanelIcon(
-                        modifier = Modifier.align(Alignment.CenterEnd),
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .rotate(sortingIconRotationDegree),
                         onClick = { isSortingPanelVisible = isSortingPanelVisible.not() },
                         painter = painterResource(id = R.drawable.ic_sort),
                         contentDescription = "Service sort icon button"

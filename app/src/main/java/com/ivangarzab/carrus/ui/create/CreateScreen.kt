@@ -212,7 +212,7 @@ private fun CreateScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 16.dp, start = 16.dp, end = 32.dp)
                     .verticalScroll(
                         state = rememberScrollState(),
                         enabled = true

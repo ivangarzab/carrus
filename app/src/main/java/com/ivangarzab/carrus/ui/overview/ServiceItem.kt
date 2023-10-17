@@ -141,7 +141,8 @@ fun OverviewServiceItem(
                     }
 
                     val arrowRotationDegree: Float by animateFloatAsState(
-                        targetValue = if (isExpanded) 180f else 0f
+                        targetValue = if (isExpanded) 180f else 0f,
+                        label = ""
                     )
                     IconButton(
                         modifier = Modifier

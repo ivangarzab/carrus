@@ -47,11 +47,7 @@ fun OverviewScreenDetailsPanel(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
+                    .padding(top = 8.dp, start = 16.dp)
             ) {
                 PanelTitleText(
                     modifier = Modifier.align(Alignment.CenterStart),
@@ -81,8 +77,7 @@ fun OverviewScreenDetailsPanelGrid(
 ) {
     AppTheme {
         LazyHorizontalStaggeredGrid(
-            modifier = modifier
-                .padding(end = 16.dp),
+            modifier = modifier,
             rows = StaggeredGridCells.Fixed(count = 2),
             contentPadding = PaddingValues(4.dp)
         ) {
