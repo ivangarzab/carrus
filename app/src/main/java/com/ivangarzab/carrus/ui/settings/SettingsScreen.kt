@@ -38,6 +38,7 @@ import com.ivangarzab.carrus.ui.compose.NegativeButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.overview.NavigationBottomBar
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
@@ -51,6 +52,8 @@ import timber.log.Timber
 fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
+    onNavSettingsPressed: () -> Unit,
+    onNavHomePressed: () -> Unit,
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit,
     onPrivacyPolicyClicked: () -> Unit
@@ -63,6 +66,8 @@ fun SettingsScreenStateful(
         SettingsScreen(
             state = state,
             onBackPressed = { onBackPressed() },
+            onNavigateHomePressed = onNavHomePressed,
+            onNavigateSettingsPressed = onNavSettingsPressed,
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
             onAlarmsToggle = { viewModel.onAlarmsToggled(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
@@ -84,6 +89,8 @@ fun SettingsScreenStateful(
 fun SettingsScreen(
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onBackPressed: () -> Unit = { },
+    onNavigateHomePressed: () -> Unit = { },
+    onNavigateSettingsPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmsToggle: (Boolean) -> Unit = { },
     onAlarmTimeSelected: (Int) -> Unit = { },
@@ -139,6 +146,13 @@ fun SettingsScreen(
                     onImportClicked = { onImportClicked() },
                     onExportClicked = { onExportClicked() },
                     onPrivacyPolicyClicked = onPrivacyPolicyClicked
+                )
+            },
+            bottomBar = {
+                NavigationBottomBar(
+                    settingsButtonClicked = { },
+                    homeButtonClicked = onNavigateHomePressed,
+                    mapButtonClicked = { }
                 )
             }
         )

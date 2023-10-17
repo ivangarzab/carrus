@@ -60,6 +60,7 @@ import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
+import com.ivangarzab.carrus.ui.overview.NavigationBottomBar
 
 /**
  * Created by Ivan Garza Bermea.
@@ -68,6 +69,8 @@ import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
 fun CreateScreenStateful(
     viewModel: CreateViewModel = viewModel(),
     onBackPressed: () -> Unit,
+    onNavSettingsPressed: () -> Unit,
+    onNavHomePressed: () -> Unit,
     onImportClicked: () -> Unit,
     onAddImageClicked: () -> Unit
 ) {
@@ -92,6 +95,8 @@ fun CreateScreenStateful(
                 )
             },
             onBackPressed = { onBackPressed() },
+            onNavigateHomePressed = onNavHomePressed,
+            onNavigateSettingsPressed = onNavSettingsPressed,
             onImportClicked = { onImportClicked() },
             onAddImageClicked = { onAddImageClicked() },
             onDeleteImageClicked = { viewModel.onImageDeleted() },
@@ -129,6 +134,8 @@ private fun CreateScreen(
     @PreviewParameter(CarModalStatePreview::class) state: CarModalState,
     onUpdateState: (CarModalState) -> Unit = { },
     onBackPressed: () -> Unit = { },
+    onNavigateHomePressed: () -> Unit = { },
+    onNavigateSettingsPressed: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
@@ -149,6 +156,13 @@ private fun CreateScreen(
                     onNavigationIconClicked = onBackPressed,
                     isActionIconEnabled = true,
                     onActionIconClicked = onImportClicked
+                )
+            },
+            bottomBar = {
+                NavigationBottomBar(
+                    settingsButtonClicked = onNavigateSettingsPressed,
+                    homeButtonClicked = onNavigateHomePressed,
+                    mapButtonClicked = { }
                 )
             }
         ) { paddingValues ->

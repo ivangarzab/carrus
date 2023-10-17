@@ -20,7 +20,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
  * Created by Ivan Garza Bermea.
  */
 @Composable
-fun OverviewScreenBottomBar(
+fun NavigationBottomBar(
     settingsButtonClicked: () -> Unit,
     homeButtonClicked: () -> Unit,
     mapButtonClicked: () -> Unit
@@ -29,7 +29,7 @@ fun OverviewScreenBottomBar(
         NavigationBar {
             NavigationBarItem(
                 selected = false,
-                onClick = { },
+                onClick = homeButtonClicked,
                 label = {
                     Text(stringResource(id = R.string.home))
                 },
@@ -75,12 +75,10 @@ fun OverviewScreenBottomBar(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun OverviewScreenBottomBarPreview() {
-    AppTheme {
-        OverviewScreenBottomBar(
-            homeButtonClicked = { },
-            mapButtonClicked = { },
-            settingsButtonClicked = { }
-        )
-    }
+private fun NavigationBottomBarPreview() {
+    NavigationBottomBar(
+        homeButtonClicked = { },
+        mapButtonClicked = { },
+        settingsButtonClicked = { }
+    )
 }

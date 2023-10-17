@@ -138,8 +138,8 @@ private fun OverviewScreen(
                         )
                     },
                     bottomBar = {
-                        OverviewScreenBottomBar(
-                            homeButtonClicked = onEditCarButtonClicked,
+                        NavigationBottomBar(
+                            homeButtonClicked = { },
                             mapButtonClicked = { /*TODO: Insert map code */ },
                             settingsButtonClicked = onSettingsButtonClicked
                         )
