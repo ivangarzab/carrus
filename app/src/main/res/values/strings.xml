@@ -2,6 +2,7 @@
     <string name="app_name">Carrus</string>
 
     <!-- General -->
+    <string name="home">Home</string>
     <string name="make">Make</string>
     <string name="model">Model</string>
     <string name="nickname">Nickname</string>
@@ -14,6 +15,7 @@
     <string name="color">Color</string>
     <string name="services">Services</string>
     <string name="details">Details</string>
+    <string name="car_details">Car Details</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
