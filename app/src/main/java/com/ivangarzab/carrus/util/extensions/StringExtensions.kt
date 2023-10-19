@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.util.extensions
 
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -44,3 +45,15 @@ fun String.parseIntoMoney(): Float {
     return result
 }
 const val EMPTY_MONEY_VALUE = 0.00f
+
+/**
+ * Parses a [String] into a number with commas format of type: 100,000.
+ * TODO: Make tests!
+ * More examples include: 1,000; 999,999; 1,000,000; etc.
+ */
+fun String.parseIntoNumberWithCommas(): String = try {
+    String.format("%,d", this.toLong())
+} catch (e: NumberFormatException) {
+    Timber.w("Caught a NumberFormatException trying to parse $this into a number with commas", e)
+    this
+}

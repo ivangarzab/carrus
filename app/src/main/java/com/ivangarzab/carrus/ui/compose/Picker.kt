@@ -119,7 +119,7 @@ fun Picker(
     }
 }
 
-private fun Modifier.fadingEdge(brush: Brush) = this
+fun Modifier.fadingEdge(brush: Brush) = this
     .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
     .drawWithContent {
         drawContent()

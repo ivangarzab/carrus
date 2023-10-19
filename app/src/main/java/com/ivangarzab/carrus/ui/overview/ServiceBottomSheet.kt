@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.compose.theme.Typography
 import com.ivangarzab.carrus.ui.modals.ServiceModalState
 import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
 
@@ -84,7 +84,7 @@ fun ServiceBottomSheetContent(
                 Text(
                     modifier = Modifier.padding(bottom = 8.dp),
                     text = state.title ?: stringResource(id = R.string.services),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = Typography.titleMediumLarge,
                     fontStyle = FontStyle.Italic,
                 )
                 TextInputField(
