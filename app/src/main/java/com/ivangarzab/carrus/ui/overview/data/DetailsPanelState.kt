@@ -14,6 +14,18 @@ data class DetailsPanelState(
     val milesPerGalCity: String = "",
     val milesPerGalHighway: String = ""
 ) {
+    fun getTotalValidFields(): Int {
+        var result: Int = 0
+        if (licenseState.isNotEmpty()) result+=1
+        if (licenseNo.isNotEmpty()) result+=1
+        if (vinNo.isNotEmpty()) result+=1
+        if (tirePressure.isNotEmpty()) result+=1
+        if (totalMiles.isNotEmpty()) result+=1
+        if (milesPerGalCity.isNotEmpty()) result+=1
+        if (milesPerGalHighway.isNotEmpty()) result+=1
+        return result
+    }
+
     companion object {
         fun fromCar(car: Car): DetailsPanelState = DetailsPanelState(
             licenseState = "", //TODO: Impl
