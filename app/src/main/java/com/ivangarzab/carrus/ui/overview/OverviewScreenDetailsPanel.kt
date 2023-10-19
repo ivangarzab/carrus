@@ -61,7 +61,9 @@ fun OverviewScreenDetailsPanel(
                     text = stringResource(id = R.string.details)
                 )
                 PanelIcon(
-                    modifier = Modifier.align(Alignment.CenterEnd),
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end =16.dp),
                     onClick = onEditCarClicked,
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Car edit icon button"

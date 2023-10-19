@@ -100,10 +100,7 @@ fun OverviewScreenContent(
                             .combinedClickable(
                                 onClick = { },
                                 onLongClick = {
-                                    if (App
-                                            .isRelease()
-                                            .not()
-                                    ) {
+                                    if (App.isRelease().not()) {
                                         // Easter egg for testing!
                                         addServiceList()
                                     }
@@ -214,6 +211,7 @@ fun EmptyListView(
     AppTheme {
         Box(
             modifier = modifier
+                .padding(top = 24.dp, bottom = 16.dp)
                 .fillMaxWidth()
         ) {
             Text(
