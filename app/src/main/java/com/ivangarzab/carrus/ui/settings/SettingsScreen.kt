@@ -28,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.TimeFormat
@@ -42,8 +41,6 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
-import leakcanary.LeakCanary
-import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
@@ -253,11 +250,11 @@ fun SettingsScreenBottomBar(
                     .combinedClickable(
                         onClick = { },
                         onLongClick = {
-                            if (App.isRelease().not()) {
+                            /*if (App.isRelease().not()) {
                                 // Easter egg: Turn off LeakCanary🔥
                                 LeakCanary.config = LeakCanary.config.copy(dumpHeap = false)
                                 Timber.d("LeakCanary has been put back in the cage")
-                            }
+                            }*/
                         }
                     ),
                 text = versionName,
