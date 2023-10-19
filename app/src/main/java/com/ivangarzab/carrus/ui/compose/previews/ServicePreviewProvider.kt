@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.ui.compose.previews
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.Service
 
 /**
  * Created by Ivan Garza Bermea.

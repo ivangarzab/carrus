@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.ui.overview.data
 
 import android.os.Parcelable
-import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
+import com.ivangarzab.carrus.data.structures.UniqueMessageQueue
 import kotlinx.parcelize.Parcelize
 
 /**

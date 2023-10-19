@@ -2,6 +2,8 @@ package com.ivangarzab.carrus.data
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.Service
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

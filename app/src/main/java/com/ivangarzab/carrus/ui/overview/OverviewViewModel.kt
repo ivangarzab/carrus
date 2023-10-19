@@ -1,22 +1,21 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.os.Build
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.Message
-import com.ivangarzab.carrus.data.Service
+import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.App
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
+import com.ivangarzab.carrus.data.structures.LiveState
+import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
-import com.ivangarzab.carrus.util.extensions.setState
-import com.ivangarzab.carrus.util.managers.UniqueMessageQueue
-import com.ivangarzab.carrus.util.managers.asUniqueMessageQueue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -28,22 +27,18 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
-    private val savedState: SavedStateHandle,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val messageQueueRepository: MessageQueueRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
-    val state: LiveData<OverviewState> = savedState.getLiveData(
-        STATE,
-        OverviewState()
-    )
+    val state: LiveState<OverviewState> = LiveState(OverviewState())
 
-    val queueState: LiveData<MessageQueueState> = savedState.getLiveData(
-        QUEUE_STATE,
-        MessageQueueState()
-    )
+    val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
+
+    val triggerNotificationPermissionRequest: LiveEvent<Boolean> = LiveEvent()
+    val triggerAlarmsPermissionRequest: LiveEvent<Boolean> = LiveEvent()
 
     init {
         viewModelScope.launch {
@@ -56,13 +51,29 @@ class OverviewViewModel @Inject constructor(
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                setState(state, savedState, STATE) { copy(dueDateFormat = it.dueDateFormat) }
+                state.setState { copy(dueDateFormat = it.dueDateFormat) }
             }
         }
         viewModelScope.launch {
             messageQueueRepository.observeMessageQueueFlow().collect {
-                updateQueueState(it.asUniqueMessageQueue())
+                queueState.setState {
+                    //TODO: Fix the cast
+                    copy(messageQueue = it.asUniqueMessageQueue())
+                }
             }
+        }
+    }
+
+    fun processStateChange(
+        state: OverviewState,
+        areNotificationsEnabled: Boolean
+    ) {
+        Timber.v("Processing overview state change")
+        state.car?.let {
+            processCarServicesListForNotification(
+                services = it.services,
+                areNotificationsEnabled = areNotificationsEnabled
+            )
         }
     }
 
@@ -73,7 +84,30 @@ class OverviewViewModel @Inject constructor(
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
         Timber.d("Notification permissions ${if (isGranted) "granted" else "denied"}")
-        if (isGranted) { removeNotificationPermissionMessage() }
+        if (isGranted) {
+            removeNotificationPermissionMessage()
+        }
+    }
+
+    fun onMessageClicked(id: String) {
+        Timber.d("Got a message click with id=$id")
+        when (id) {
+            Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    triggerNotificationPermissionRequest.postValue(true)
+                }
+                removeNotificationPermissionMessage()
+            }
+
+            Message.MISSING_PERMISSION_ALARM.data.id -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    triggerAlarmsPermissionRequest.postValue(true)
+                }
+                removeAlarmPermissionMessage()
+            }
+
+            Message.TEST.data.id -> removeTestMessage()
+        }
     }
 
     fun onMessageDismissed() {
@@ -81,33 +115,46 @@ class OverviewViewModel @Inject constructor(
         messageQueueRepository.dismissMessage()
     }
 
-    fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
+    private fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
-        setState(state, savedState, STATE) {
+        state.setState {
             copy(hasPromptedForPermissionNotification = true)
         }
     }
 
-    private fun removeNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
-        Timber.v("Removing ${this.name} message from queue")
-        messageQueueRepository.removeMessage(this)
+    private fun removeNotificationPermissionMessage() =
+        with(Message.MISSING_PERMISSION_NOTIFICATION) {
+            Timber.v("Removing ${this.name} message from queue")
+            messageQueueRepository.removeMessage(this)
+        }
+
+    fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
+        val hasPromptedForPermissionAlarm = state.value?.hasPromptedForPermissionAlarm ?: false
+        if (canScheduleExactAlarms.not() &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            hasPromptedForPermissionAlarm.not()
+        ) {
+            addAlarmPermissionMessage()
+            Timber.d("Registering alarm permission state changed broadcast receiver")
+        }
     }
 
-    fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    private fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
-        setState(state, savedState, STATE) {
+        state.setState {
             copy(hasPromptedForPermissionAlarm = true)
         }
     }
 
-    fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    private fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Removing ${this.name} message from queue")
         messageQueueRepository.removeMessage(this)
     }
 
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
+    private fun removeTestMessage() = messageQueueRepository.removeMessage(Message.TEST)
 
     private fun onSortingByType(type: SortingCallback.SortingType) {
         when (type) {
@@ -115,7 +162,7 @@ class OverviewViewModel @Inject constructor(
             SortingCallback.SortingType.NAME -> sortServicesByName()
             SortingCallback.SortingType.DATE -> sortServicesByDate()
         }
-        setState(state, savedState, STATE) {
+        state.setState {
             copy(serviceSortingType = type)
         }
     }
@@ -127,7 +174,7 @@ class OverviewViewModel @Inject constructor(
 
     private fun sortServicesByName() {
         Timber.v("Sorting services by name")
-        state.value?.car?.let {car ->
+        state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.name }
@@ -138,7 +185,7 @@ class OverviewViewModel @Inject constructor(
 
     private fun sortServicesByDate() {
         Timber.v("Sorting services by due date")
-        state.value?.car?.let {car ->
+        state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.dueDate }
@@ -147,7 +194,7 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    fun processCarServicesListForNotification(
+    private fun processCarServicesListForNotification(
         services: List<Service>,
         areNotificationsEnabled: Boolean
     ) {
@@ -160,6 +207,7 @@ class OverviewViewModel @Inject constructor(
                         Timber.v("'Past Due' alarm is already scheduled")
                     }
                 }
+
                 false -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                         state.value?.hasPromptedForPermissionNotification?.not() == true
@@ -173,12 +221,7 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    private fun updateCarState(car: Car?) =
-        setState(state, savedState, STATE) { copy(car = car) }
-
-    private fun updateQueueState(queue: UniqueMessageQueue) {
-        setState(queueState, savedState, QUEUE_STATE) { copy(messageQueue = queue)}
-    }
+    private fun updateCarState(car: Car?) = state.setState { copy(car = car) }
 
     fun onSort(type: SortingCallback.SortingType) {
         Timber.v("Got a sorting request with type=$type")
@@ -186,15 +229,14 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun setupEasterEggForTesting() {
-        state.value?.car?.let {
-            carRepository.saveCarData(it.copy(
-                services = Service.serviceList
-            ))
+        if (App.isRelease().not()) {
+            state.value?.car?.let {
+                carRepository.saveCarData(
+                    it.copy(
+                        services = Service.serviceList
+                    )
+                )
+            }
         }
-    }
-
-    companion object {
-        private const val STATE: String = "OverviewViewModel.STATE"
-        private const val QUEUE_STATE: String = "OverviewViewModel.QUEUE_STATE"
     }
 }

@@ -1,19 +1,18 @@
-package com.ivangarzab.carrus.receivers
+package com.ivangarzab.carrus.util.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.Service
 import com.ivangarzab.carrus.data.alarm.Alarm
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.carrus.util.AlarmScheduler
-import com.ivangarzab.carrus.util.NotificationController
-import com.ivangarzab.carrus.util.NotificationData
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
+import com.ivangarzab.carrus.util.managers.NotificationController
+import com.ivangarzab.carrus.util.managers.NotificationData
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject

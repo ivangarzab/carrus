@@ -9,13 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
-import com.ivangarzab.carrus.data.AlarmSettingsState
-import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AlarmSettingsState
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository

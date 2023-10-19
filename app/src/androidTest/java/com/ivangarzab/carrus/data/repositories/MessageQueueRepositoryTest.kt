@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.ONE
 import com.ivangarzab.carrus.TWO
 import com.ivangarzab.carrus.ZERO
-import com.ivangarzab.carrus.data.Message
+import com.ivangarzab.carrus.data.models.Message
 import org.junit.Test
 
 /**
