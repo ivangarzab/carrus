@@ -53,6 +53,7 @@ fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
+    onNavMapPressed: () -> Unit,
     onNavHomePressed: () -> Unit,
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit,
@@ -68,6 +69,7 @@ fun SettingsScreenStateful(
             onBackPressed = { onBackPressed() },
             onNavigateHomePressed = onNavHomePressed,
             onNavigateSettingsPressed = onNavSettingsPressed,
+            onNavigateMapPressed = onNavMapPressed,
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
             onAlarmsToggle = { viewModel.onAlarmsToggled(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
@@ -91,6 +93,7 @@ fun SettingsScreen(
     onBackPressed: () -> Unit = { },
     onNavigateHomePressed: () -> Unit = { },
     onNavigateSettingsPressed: () -> Unit = { },
+    onNavigateMapPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmsToggle: (Boolean) -> Unit = { },
     onAlarmTimeSelected: (Int) -> Unit = { },
@@ -152,7 +155,7 @@ fun SettingsScreen(
                 NavigationBottomBar(
                     settingsButtonClicked = { },
                     homeButtonClicked = onNavigateHomePressed,
-                    mapButtonClicked = { }
+                    mapButtonClicked = onNavigateMapPressed
                 )
             }
         )

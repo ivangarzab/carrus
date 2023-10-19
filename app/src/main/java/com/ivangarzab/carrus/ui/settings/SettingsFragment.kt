@@ -70,6 +70,9 @@ class SettingsFragment : Fragment() {
                     onNavSettingsPressed = { findNavController().navigate(
                         CreateFragmentDirections.actionGlobalSettingsFragment()
                     ) },
+                    onNavMapPressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionGlobalMapFragment()
+                    ) },
                     onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
                     onExportClicked = { createDocumentsContract.launch(generateExportFileName()) },
                     onPrivacyPolicyClicked = {

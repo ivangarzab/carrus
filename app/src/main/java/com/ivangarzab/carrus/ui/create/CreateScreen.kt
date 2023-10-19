@@ -71,6 +71,7 @@ fun CreateScreenStateful(
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
     onNavHomePressed: () -> Unit,
+    onNavMapPressed: () -> Unit,
     onImportClicked: () -> Unit,
     onAddImageClicked: () -> Unit
 ) {
@@ -97,6 +98,7 @@ fun CreateScreenStateful(
             onBackPressed = { onBackPressed() },
             onNavigateHomePressed = onNavHomePressed,
             onNavigateSettingsPressed = onNavSettingsPressed,
+            onNavigateMapPressed = onNavMapPressed,
             onImportClicked = { onImportClicked() },
             onAddImageClicked = { onAddImageClicked() },
             onDeleteImageClicked = { viewModel.onImageDeleted() },
@@ -136,6 +138,7 @@ private fun CreateScreen(
     onBackPressed: () -> Unit = { },
     onNavigateHomePressed: () -> Unit = { },
     onNavigateSettingsPressed: () -> Unit = { },
+    onNavigateMapPressed: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
@@ -162,7 +165,7 @@ private fun CreateScreen(
                 NavigationBottomBar(
                     settingsButtonClicked = onNavigateSettingsPressed,
                     homeButtonClicked = onNavigateHomePressed,
-                    mapButtonClicked = { }
+                    mapButtonClicked = onNavigateMapPressed
                 )
             }
         ) { paddingValues ->
