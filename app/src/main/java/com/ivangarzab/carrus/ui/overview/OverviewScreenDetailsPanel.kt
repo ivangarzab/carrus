@@ -36,10 +36,17 @@ import com.ivangarzab.carrus.util.extensions.parseIntoNumberWithCommas
 @Composable
 fun OverviewScreenDetailsPanel(
     modifier: Modifier = Modifier,
-    gridSize: Dp = 200.dp,
     state: DetailsPanelState = DetailsPanelState(),
     onEditCarClicked: () -> Unit,
 ) {
+    val totalValidFields = state.getTotalValidFields()
+    val gridSize: Dp = if (totalValidFields > 3) {
+        200.dp
+    } else if (totalValidFields in 1..2) {
+        100.dp
+    } else {
+        0.dp
+    }
     AppTheme {
         Column(
             modifier = modifier
@@ -63,6 +70,7 @@ fun OverviewScreenDetailsPanel(
             OverviewScreenDetailsPanelGrid(
                 modifier = Modifier
                     .height(gridSize),
+                rows = if (state.getTotalValidFields() > 3) 2 else 1,
                 state = state
             )
         }
@@ -73,12 +81,13 @@ fun OverviewScreenDetailsPanel(
 @Composable
 fun OverviewScreenDetailsPanelGrid(
     modifier: Modifier = Modifier,
+    rows: Int = 1,
     state: DetailsPanelState = DetailsPanelState()
 ) {
     AppTheme {
         LazyHorizontalStaggeredGrid(
             modifier = modifier,
-            rows = StaggeredGridCells.Fixed(count = 2),
+            rows = StaggeredGridCells.Fixed(count = rows),
             contentPadding = PaddingValues(4.dp)
         ) {
             state.licenseState.takeIf { it.isNotEmpty() }?.let {
@@ -166,15 +175,8 @@ fun OverviewScreenDetailsItem(
 fun OverviewScreenDetailsPanelPreview() {
     AppTheme {
         OverviewScreenDetailsPanel(
-            modifier = Modifier.height(250.dp),
+            modifier = Modifier,
             state = DetailsPanelState(
-                licenseState = "",
-                licenseNo = "DH9 L474",
-                vinNo = "ABCDEFGHIJKLMNOPQ",
-                tirePressure = "32",
-                totalMiles = "1000000",
-                milesPerGalCity = "23",
-                milesPerGalHighway = "30"
             ),
             onEditCarClicked = { }
         )

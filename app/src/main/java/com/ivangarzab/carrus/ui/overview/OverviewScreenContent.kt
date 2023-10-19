@@ -84,7 +84,6 @@ fun OverviewScreenContent(
             item {
                 OverviewScreenDetailsPanel(
                     modifier = Modifier,
-                    gridSize = 200.dp,
                     state = detailsState,
                     onEditCarClicked = onEditCarClicked
                 )
