@@ -77,7 +77,9 @@ open class LiveState<T>(
     fun setState(block: T.() -> T) {
         if (observers.isEmpty()) hasValueWithoutFirstObserver = true
         getMutableState().let { currentState ->
-            observers.forEach { it.newValue() }
+            if (observers.isNotEmpty() && observers.iterator() != null) {
+                observers.forEach { it.newValue() }
+            }
             super.setValue(block(currentState))
         }
     }
@@ -87,8 +89,11 @@ open class LiveState<T>(
      */
     @MainThread
     fun postState(block: T.() -> T) {
+        if (observers.isEmpty()) hasValueWithoutFirstObserver = true
         getMutableState().let { currentState ->
-            observers.forEach { it.newValue() }
+            if (observers.isNotEmpty() && observers.iterator() != null) {
+                observers.forEach { it.newValue() }
+            }
             super.postValue(block(currentState))
         }
     }
