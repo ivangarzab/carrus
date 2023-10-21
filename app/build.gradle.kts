@@ -52,6 +52,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.4"
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    } // Needed for LiveState's ArraySet class to function in unit testing
     packaging {
         resources.excludes.add("META-INF/*")
     }
@@ -77,6 +80,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    testImplementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
 
     // https://developer.android.com/jetpack/compose/bom
     val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
