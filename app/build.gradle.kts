@@ -52,9 +52,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.4"
     }
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-    } // Needed for LiveState's ArraySet class to function in unit testing
     packaging {
         resources.excludes.add("META-INF/*")
     }

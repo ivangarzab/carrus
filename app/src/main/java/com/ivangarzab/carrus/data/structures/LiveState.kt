@@ -20,7 +20,7 @@ open class LiveState<T>(
     initialValue: T
 ) : LiveData<T>(initialValue) {
 
-    private val observers = ArraySet<ObserverWrapper<in T>>()
+    private val observers = ArrayList<ObserverWrapper<in T>>()
     private var hasValueWithoutFirstObserver: Boolean = true
 
     @MainThread
@@ -32,6 +32,7 @@ open class LiveState<T>(
                 it.newValue()
             }
             observers.add(it)
+
             super.observe(owner, it)
         }
     }
