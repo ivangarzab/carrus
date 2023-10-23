@@ -38,11 +38,13 @@ class CarTest {
                 "\nmake='Chevrolet'" +
                 "\nmodel='Malibu'" +
                 "\nyear='2006'" +
+                "\nlicenseState='Texas'" +
                 "\nlicenseNo='IGB066'" +
                 "\nvinNo='4Y1SL65848Z411439'" +
                 "\ntirePressure='35'" +
                 "\ntotalMiles='99,999'" +
-                "\nmi/gal='26'" +
+                "\nmi/gal-City='26'" +
+                "\nmi/gal-Highway='31'" +
                 "\nservices='${Service.serviceList}'" +
                 "\nimageUri=null" +
                 "\n)"

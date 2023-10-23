@@ -31,7 +31,7 @@ data class DetailsPanelState(
     companion object {
         fun fromCar(car: Car): DetailsPanelState = DetailsPanelState(
             year = car.year,
-            licenseState = "", //TODO: Impl
+            licenseState = car.licenseState,
             licenseNo = car.licenseNo,
             vinNo = car.vinNo,
             tirePressure = car.tirePressure,
