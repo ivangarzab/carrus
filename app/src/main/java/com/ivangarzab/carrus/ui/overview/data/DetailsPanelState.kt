@@ -37,7 +37,7 @@ data class DetailsPanelState(
             tirePressure = car.tirePressure,
             totalMiles = car.totalMiles,
             milesPerGalCity = car.milesPerGalCity,
-            milesPerGalHighway = car.milesPerGalCity
+            milesPerGalHighway = car.milesPerGalHighway
         )
     }
 }
