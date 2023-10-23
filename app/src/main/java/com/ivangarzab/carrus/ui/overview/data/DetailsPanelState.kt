@@ -6,6 +6,7 @@ import com.ivangarzab.carrus.data.models.Car
  * Created by Ivan Garza Bermea.
  */
 data class DetailsPanelState(
+    val year: String = "",
     val licenseState: String = "",
     val licenseNo: String = "",
     val vinNo: String = "",
@@ -16,6 +17,7 @@ data class DetailsPanelState(
 ) {
     fun getTotalValidFields(): Int {
         var result: Int = 0
+        if (year.isNotEmpty()) result+=1
         if (licenseState.isNotEmpty()) result+=1
         if (licenseNo.isNotEmpty()) result+=1
         if (vinNo.isNotEmpty()) result+=1
@@ -28,6 +30,7 @@ data class DetailsPanelState(
 
     companion object {
         fun fromCar(car: Car): DetailsPanelState = DetailsPanelState(
+            year = car.year,
             licenseState = "", //TODO: Impl
             licenseNo = car.licenseNo,
             vinNo = car.vinNo,
