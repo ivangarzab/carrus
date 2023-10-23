@@ -54,6 +54,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
+import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.NumberInputField
 import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.TopBar
@@ -68,6 +69,8 @@ import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
 fun CreateScreenStateful(
     viewModel: CreateViewModel = viewModel(),
     onBackPressed: () -> Unit,
+    onNavSettingsPressed: () -> Unit,
+    onNavHomePressed: () -> Unit,
     onImportClicked: () -> Unit,
     onAddImageClicked: () -> Unit
 ) {
@@ -92,6 +95,8 @@ fun CreateScreenStateful(
                 )
             },
             onBackPressed = { onBackPressed() },
+            onNavigateHomePressed = onNavHomePressed,
+            onNavigateSettingsPressed = onNavSettingsPressed,
             onImportClicked = { onImportClicked() },
             onAddImageClicked = { onAddImageClicked() },
             onDeleteImageClicked = { viewModel.onImageDeleted() },
@@ -129,6 +134,8 @@ private fun CreateScreen(
     @PreviewParameter(CarModalStatePreview::class) state: CarModalState,
     onUpdateState: (CarModalState) -> Unit = { },
     onBackPressed: () -> Unit = { },
+    onNavigateHomePressed: () -> Unit = { },
+    onNavigateSettingsPressed: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
@@ -149,6 +156,13 @@ private fun CreateScreen(
                     onNavigationIconClicked = onBackPressed,
                     isActionIconEnabled = true,
                     onActionIconClicked = onImportClicked
+                )
+            },
+            bottomBar = {
+                NavigationBottomBar(
+                    settingsButtonClicked = onNavigateSettingsPressed,
+                    homeButtonClicked = onNavigateHomePressed,
+                    mapButtonClicked = { }
                 )
             }
         ) { paddingValues ->
@@ -198,7 +212,7 @@ private fun CreateScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(top = 16.dp, start = 16.dp, end = 32.dp)
                     .verticalScroll(
                         state = rememberScrollState(),
                         enabled = true

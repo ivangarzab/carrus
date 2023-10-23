@@ -22,6 +22,7 @@ import com.ivangarzab.carrus.ui.compose.BigNegativeButton
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+@Deprecated("This is no longer in use")
 fun CarDetailsDialog(
     vinNo: String = "I123456789ABCDEFG",
     tirePressure: String = "32",

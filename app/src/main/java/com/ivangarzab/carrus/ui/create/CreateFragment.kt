@@ -64,6 +64,12 @@ class CreateFragment : Fragment() {
             AppTheme {
                 CreateScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
+                    onNavHomePressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionNavGraphSelf()
+                    ) },
+                    onNavSettingsPressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionGlobalSettingsFragment()
+                    ) },
                     onImportClicked = {
                         openDocumentContract.launch(
                             arrayOf(DEFAULT_FILE_MIME_TYPE)

@@ -18,8 +18,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 33
-        versionCode = 9
-        versionName = "1.0.0-alpha09"
+        versionCode = 10
+        versionName = "1.0.0-alpha10"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -79,7 +79,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     testImplementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
 
-    // https://developer.android.com/jetpack/compose/bom
+    // https://developer.android.com/jetpack/compose/bom/bom-mapping
     val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)

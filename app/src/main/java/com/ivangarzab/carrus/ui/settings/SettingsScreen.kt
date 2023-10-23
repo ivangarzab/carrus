@@ -1,7 +1,9 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +33,7 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.ConfirmationDialog
+import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.NegativeButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TopBar
@@ -42,11 +45,12 @@ import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
 /**
  * Created by Ivan Garza Bermea.
  */
-
 @Composable
 fun SettingsScreenStateful(
     viewModel: SettingsViewModel = viewModel(),
     onBackPressed: () -> Unit,
+    onNavSettingsPressed: () -> Unit,
+    onNavHomePressed: () -> Unit,
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit,
     onPrivacyPolicyClicked: () -> Unit
@@ -59,6 +63,8 @@ fun SettingsScreenStateful(
         SettingsScreen(
             state = state,
             onBackPressed = { onBackPressed() },
+            onNavigateHomePressed = onNavHomePressed,
+            onNavigateSettingsPressed = onNavSettingsPressed,
             onDarkModeToggle = { viewModel.onDarkModeToggleClicked(it) },
             onAlarmsToggle = { viewModel.onAlarmsToggled(it) },
             onAlarmTimeSelected = { viewModel.onAlarmTimePicked(it) },
@@ -80,6 +86,8 @@ fun SettingsScreenStateful(
 fun SettingsScreen(
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
     onBackPressed: () -> Unit = { },
+    onNavigateHomePressed: () -> Unit = { },
+    onNavigateSettingsPressed: () -> Unit = { },
     onDarkModeToggle: (Boolean) -> Unit = { },
     onAlarmsToggle: (Boolean) -> Unit = { },
     onAlarmTimeSelected: (Int) -> Unit = { },
@@ -135,6 +143,13 @@ fun SettingsScreen(
                     onImportClicked = { onImportClicked() },
                     onExportClicked = { onExportClicked() },
                     onPrivacyPolicyClicked = onPrivacyPolicyClicked
+                )
+            },
+            bottomBar = {
+                NavigationBottomBar(
+                    settingsButtonClicked = { },
+                    homeButtonClicked = onNavigateHomePressed,
+                    mapButtonClicked = { }
                 )
             }
         )
@@ -210,6 +225,7 @@ fun SettingsScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -221,13 +237,26 @@ fun SettingsScreenBottomBar(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.surface)
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSurface)
+            Divider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline
+            )
             Text(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { },
+                        onLongClick = {
+                            /*if (App.isRelease().not()) {
+                                // Easter egg: Turn off LeakCanary🔥
+                                LeakCanary.config = LeakCanary.config.copy(dumpHeap = false)
+                                Timber.d("LeakCanary has been put back in the cage")
+                            }*/
+                        }
+                    ),
                 text = versionName,
                 style = TextStyle(fontStyle = FontStyle.Italic),
                 color = MaterialTheme.colorScheme.onSurface
