@@ -116,7 +116,8 @@ fun CreateScreenStateful(
                                 vinNo = vinNo,
                                 tirePressure = tirePressure,
                                 totalMiles = totalMiles,
-                                milesPerGallon = milesPerGallon
+                                milesPerGallon = milesPerGalCity
+//                                milesPerGallon = milesPerGalCity
                             )
                         }
                     }

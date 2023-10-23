@@ -67,11 +67,13 @@ class CarTest {
             make = "Chevrolet",
             model = "Impala",
             year = "2010",
+            licenseState = "Texas",
             licenseNo = "XYZ123",
             vinNo = "5Y1SL67890Z123456",
             tirePressure = "32",
             totalMiles = "80,000",
-            milesPerGallon = "22",
+            milesPerGalCity = "22",
+            milesPerGalHighway = "27",
             services = Service.serviceList
         )
 
@@ -87,11 +89,13 @@ class CarTest {
             make = "Chevrolet",
             model = "Malibu",
             year = "2006",
+            licenseState = "Texas",
             licenseNo = "IGB066",
             vinNo = "4Y1SL65848Z411439",
             tirePressure = "35",
             totalMiles = "99,999",
-            milesPerGallon = "26",
+            milesPerGalCity = "26",
+            milesPerGalHighway = "31",
             services = Service.serviceList
         )
 

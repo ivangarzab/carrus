@@ -61,11 +61,13 @@ class CreateViewModel @Inject constructor(
                 make = state.make,
                 model = state.model,
                 year = state.year,
+                licenseState = state.licenseNo,
                 licenseNo = state.licenseNo,
                 vinNo = state.vinNo,
                 tirePressure = state.tirePressure,
                 totalMiles = state.totalMiles,
-                milesPerGallon = state.milesPerGallon,
+                milesPerGalCity = state.milesPerGallon,
+                milesPerGalHighway = state.milesPerGallon,
                 services = emptyList(),
                 imageUri = state.imageUri
             ).let { data ->
@@ -136,7 +138,7 @@ class CreateViewModel @Inject constructor(
                 vinNo = car.vinNo,
                 tirePressure = car.tirePressure,
                 totalMiles = car.totalMiles,
-                milesPerGallon = car.milesPerGallon,
+                milesPerGallon = car.milesPerGalCity,
                 imageUri = car.imageUri
             )
         }

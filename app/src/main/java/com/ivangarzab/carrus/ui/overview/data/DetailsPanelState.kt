@@ -36,8 +36,8 @@ data class DetailsPanelState(
             vinNo = car.vinNo,
             tirePressure = car.tirePressure,
             totalMiles = car.totalMiles,
-            milesPerGalCity = car.milesPerGallon,
-            milesPerGalHighway = car.milesPerGallon
+            milesPerGalCity = car.milesPerGalCity,
+            milesPerGalHighway = car.milesPerGalCity
         )
     }
 }
