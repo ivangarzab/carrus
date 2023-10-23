@@ -66,8 +66,8 @@ class CreateViewModel @Inject constructor(
                 vinNo = state.vinNo,
                 tirePressure = state.tirePressure,
                 totalMiles = state.totalMiles,
-                milesPerGalCity = state.milesPerGallon,
-                milesPerGalHighway = state.milesPerGallon,
+                milesPerGalCity = state.milesPerGalCity,
+                milesPerGalHighway = state.milesPerGalCity,
                 services = emptyList(),
                 imageUri = state.imageUri
             ).let { data ->
@@ -104,11 +104,13 @@ class CreateViewModel @Inject constructor(
         make: String,
         model: String,
         year: String,
+        licenseState: String,
         licenseNo: String,
         vinNo: String,
         tirePressure: String,
         totalMiles: String,
-        milesPerGallon: String
+        milesPerGalCity: String,
+        milesPerGalHighway: String
     ) {
         setState(state, _state) {
             copy(
@@ -120,7 +122,7 @@ class CreateViewModel @Inject constructor(
                 vinNo = vinNo,
                 tirePressure = tirePressure,
                 totalMiles = totalMiles,
-                milesPerGallon = milesPerGallon
+                milesPerGalCity = milesPerGalCity
             )
         }
     }
@@ -138,7 +140,7 @@ class CreateViewModel @Inject constructor(
                 vinNo = car.vinNo,
                 tirePressure = car.tirePressure,
                 totalMiles = car.totalMiles,
-                milesPerGallon = car.milesPerGalCity,
+                milesPerGalCity = car.milesPerGalCity,
                 imageUri = car.imageUri
             )
         }

@@ -344,7 +344,7 @@
                                 android:layout_height="wrap_content"
                                 android:autofillHints="false"
                                 android:hint="@string/miles_per_gallon"
-                                android:text="@{state.milesPerGallon}"
+                                android:text="@{state.milesPerGalCity}"
                                 android:inputType="number"
                                 android:imeOptions="actionNext" />
                         </com.google.android.material.textfield.TextInputLayout>

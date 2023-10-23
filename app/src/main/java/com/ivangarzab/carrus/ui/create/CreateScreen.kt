@@ -87,11 +87,13 @@ fun CreateScreenStateful(
                     make = it.make,
                     model = it.model,
                     year = it.year,
+                    licenseState = it.licenseState,
                     licenseNo = it.licenseNo,
                     vinNo = it.vinNo,
                     tirePressure = it.tirePressure,
                     totalMiles = it.totalMiles,
-                    milesPerGallon = it.milesPerGallon
+                    milesPerGalCity = it.milesPerGalCity,
+                    milesPerGalHighway = it.milesPerGalHighway
                 )
             },
             onBackPressed = { onBackPressed() },
@@ -112,12 +114,13 @@ fun CreateScreenStateful(
                                 make = make,
                                 model = model,
                                 year = year,
+                                licenseState = licenseState,
                                 licenseNo = licenseNo,
                                 vinNo = vinNo,
                                 tirePressure = tirePressure,
                                 totalMiles = totalMiles,
-                                milesPerGallon = milesPerGalCity
-//                                milesPerGallon = milesPerGalCity
+                                milesPerGalCity = milesPerGalCity,
+                                milesPerGalHighway = milesPerGalHighway
                             )
                         }
                     }
@@ -193,7 +196,7 @@ private fun CreateScreenContent(
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
 ) {
     fun shouldBeExpanded(state: CarModalState): Boolean = state.let {
-        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
+        it.totalMiles.isNotBlank() || it.milesPerGalCity.isNotBlank() ||
                 it.vinNo.isNotBlank() || it.tirePressure.isNotBlank()
     }
     val verticalSeparation: Dp = 12.dp
@@ -396,11 +399,11 @@ private fun CreateScreenContent(
                                     .padding(start = spaceInBetween)
                                     .weight(2f),
                                 label = stringResource(id = R.string.miles_per_gal),
-                                content = state.milesPerGallon,
+                                content = state.milesPerGalCity,
                                 updateListener = {
                                     onUpdateState(
                                         state.copy(
-                                            milesPerGallon = it
+                                            milesPerGalCity = it
                                         )
                                     )
                                 }
