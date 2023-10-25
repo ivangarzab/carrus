@@ -20,4 +20,5 @@ interface AppSettingsRepository {
     fun setDueDateFormatSetting(format: DueDateFormat)
     fun setTimeFormatSetting(format: TimeFormat)
     fun observeLeftHandedData(): Flow<Boolean>
+    fun setLeftHandedSetting(isLeftHanded: Boolean)
 }

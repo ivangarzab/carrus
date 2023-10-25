@@ -88,7 +88,6 @@ class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     /** Time Format functions **/
-
     @VisibleForTesting
     fun fetchTimeFormatSetting(): TimeFormat = prefs.timeFormat.also {
         Timber.v("Got time format: ${it.name}")
@@ -109,14 +108,13 @@ class AppSettingsRepositoryImpl @Inject constructor(
     }
 
     /** Left-handed Mode functions **/
-
+    @VisibleForTesting
     fun fetchLeftHandedSetting(): Boolean = prefs.leftHandedMode
 
-    fun setLeftHandedSetting(isLeftHanded: Boolean) {
+    override fun setLeftHandedSetting(isLeftHanded: Boolean) {
         Timber.v("Setting left-handed mode: $isLeftHanded")
         prefs.leftHandedMode = isLeftHanded
     }
 
     override fun observeLeftHandedData(): Flow<Boolean> = leftHandedModeFlow
-
 }

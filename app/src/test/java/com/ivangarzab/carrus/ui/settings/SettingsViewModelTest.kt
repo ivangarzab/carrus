@@ -5,11 +5,10 @@ import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.MainDispatcherRule
 import com.ivangarzab.carrus.TEST_CAR
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
-import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -31,7 +30,7 @@ class SettingsViewModelTest {
     private lateinit var viewModel: SettingsViewModel
 
     private val carRepository: CarRepository = TestCarRepository()
-    private val appSettingsRepository: AppSettingsRepository = mockk(relaxed = true)
+    private val appSettingsRepository: TestAppSettingsRepository = TestAppSettingsRepository()
     private val alarmSettingsRepository: AlarmSettingsRepository = mockk(relaxed = true)
 
     @Before
@@ -46,17 +45,15 @@ class SettingsViewModelTest {
 
     @Test
     fun test_onDarkModeToggleClicked_true() {
-        every { appSettingsRepository.fetchNightThemeSetting() } returns true
         viewModel.onDarkModeToggleClicked(true)
-        assertThat(appSettingsRepository.fetchNightThemeSetting())
+        assertThat(appSettingsRepository.isNight)
             .isTrue()
     }
 
     @Test
     fun test_onDarkModeToggleClicked_false() {
-        every { appSettingsRepository.fetchNightThemeSetting() } returns false
         viewModel.onDarkModeToggleClicked(false)
-        assertThat(appSettingsRepository.fetchNightThemeSetting())
+        assertThat(appSettingsRepository.isNight)
             .isFalse()
     }
 
