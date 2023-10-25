@@ -29,7 +29,9 @@ class AlarmSettingsRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context
 ) : AlarmSettingsRepository {
 
-    private val alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
+    private val _alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
+    override val alarmSettingsFlow: MutableStateFlow<AlarmSettingsState>
+        get() = _alarmSettingsFlow
 
     init {
         // Make sure the alarm permissions are granted for devices running Android 11 =<
@@ -44,7 +46,7 @@ class AlarmSettingsRepositoryImpl @Inject constructor(
     }
 
     private fun updateAlarmSettingsFlow(data: AlarmSettingsState) {
-        alarmSettingsFlow.value = data
+        _alarmSettingsFlow.value = data
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -104,7 +106,9 @@ class AlarmSettingsRepositoryImpl @Inject constructor(
         ))
     }
 
+    //TODO: Move out of this class
     inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
+        //TODO: How do we test a broadcast receiver?
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
