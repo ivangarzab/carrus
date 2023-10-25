@@ -6,7 +6,7 @@ import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.prefs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,18 +18,20 @@ import javax.inject.Singleton
 @Singleton
 class CarRepositoryImpl @Inject constructor() : CarRepository {
 
-    private val carDataChannel = MutableStateFlow<Car?>(null)
+    private val _carDataChannel: MutableStateFlow<Car?> = MutableStateFlow(null)
+    override val carDataChannel: StateFlow<Car?>
+        get() = _carDataChannel
 
     init {
         updateCarDataChannel(fetchCarData())
     }
 
     private fun updateCarDataChannel(car: Car?) = appScope.launch {
-        carDataChannel.value = car
+        _carDataChannel.value = car
     }
 
     override fun observeCarData(): Flow<Car?> {
-        return carDataChannel.asStateFlow()
+        return carDataChannel
     }
 
     override fun fetchCarData(): Car? = prefs.defaultCar

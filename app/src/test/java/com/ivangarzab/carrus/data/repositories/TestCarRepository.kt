@@ -1,11 +1,12 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.google.android.gms.common.util.VisibleForTesting
-import com.ivangarzab.carrus.EMPTY_CAR
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Service
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.runBlocking
 
 /**
  * Created by Ivan Garza Bermea.
@@ -13,26 +14,32 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class TestCarRepository : CarRepository {
 
     @VisibleForTesting
-    var carData: Car? = EMPTY_CAR
+    val _carDataChannel: MutableStateFlow<Car?> = MutableStateFlow(null)
+    override val carDataChannel: StateFlow<Car?>
+        get() = _carDataChannel
+
+    private fun updateCarDataChannel(car: Car?) = runBlocking {
+        _carDataChannel.value = car
+    }
 
     override fun observeCarData(): Flow<Car?> {
-        return MutableStateFlow(carData)
+        return carDataChannel
     }
 
     override fun fetchCarData(): Car? {
-        return carData
+        return carDataChannel.value
     }
 
     override fun saveCarData(car: Car) {
-        carData = car
+        updateCarDataChannel(car)
     }
 
     override fun deleteCarData() {
-        carData = null
+        updateCarDataChannel(null)
     }
 
     override fun addCarService(service: Service) {
-        carData?.let {
+        carDataChannel.value?.let {
             saveCarData(it.apply {
                 services = services.toMutableList().apply { add(service) }
             })
@@ -40,7 +47,7 @@ class TestCarRepository : CarRepository {
     }
 
     override fun removeCarService(service: Service) {
-        carData?.let {
+        carDataChannel.value?.let {
             saveCarData(it.apply {
                 services = services.toMutableList().apply { remove(service) }
             })
@@ -48,7 +55,7 @@ class TestCarRepository : CarRepository {
     }
 
     override fun updateCarService(service: Service) {
-        carData?.let {car ->
+        carDataChannel.value?.let { car ->
             saveCarData(
                 car.copy(
                     services = car.services.map {
