@@ -14,7 +14,7 @@ import org.junit.Test
  */
 class AppSettingsRepositoryTest {
 
-    private val repository = AppSettingsRepository(
+    private val repository = AppSettingsRepositoryImpl(
         InstrumentationRegistry.getInstrumentation().context
     )
 
