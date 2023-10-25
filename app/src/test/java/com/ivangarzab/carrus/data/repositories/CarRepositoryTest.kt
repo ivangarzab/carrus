@@ -57,7 +57,7 @@ class CarRepositoryTest {
         with(repository) {
             populateData()
             val carFlow = observeCarData()
-            val expected = carDataChannel.value
+            val expected = carDataFlow.value
             assertThat(carFlow).isInstanceOf(Flow::class.java)
             assertThat(carFlow.first()).isEqualTo(expected)
         }
@@ -66,7 +66,7 @@ class CarRepositoryTest {
     @Test
     fun test_fetchCarData_base() = runTest {
         with(repository) {
-            val expected = carDataChannel.value
+            val expected = carDataFlow.value
             assertThat(fetchCarData())
                 .isEqualTo(expected)
         }
@@ -76,7 +76,7 @@ class CarRepositoryTest {
     fun test_saveCarData_base() = runTest {
         with(repository) {
             saveCarData(TEST_CAR)
-            val result = carDataChannel.first()
+            val result = carDataFlow.first()
             assertThat(result)
                 .isEqualTo(TEST_CAR)
         }
@@ -86,7 +86,7 @@ class CarRepositoryTest {
     fun test_deleteCarData_base() = runTest {
         with(repository) {
             deleteCarData()
-            val result = carDataChannel.value
+            val result = carDataFlow.value
             assertThat(result)
                 .isNull()
         }
@@ -97,7 +97,7 @@ class CarRepositoryTest {
         with(repository) {
             populateData()
             addCarService(TEST_SERVICE)
-            val result = repository.carDataChannel.value
+            val result = repository.carDataFlow.value
             assertThat(result?.services?.contains(TEST_SERVICE))
                 .isTrue()
         }
@@ -109,7 +109,7 @@ class CarRepositoryTest {
             populateData()
             addCarService(TEST_SERVICE)
             removeCarService(TEST_SERVICE)
-            val result = repository.carDataChannel.value
+            val result = repository.carDataFlow.value
             assertThat(result?.services?.contains(TEST_SERVICE))
                 .isFalse()
         }
@@ -118,9 +118,9 @@ class CarRepositoryTest {
     @Test
     fun test_removeCarService_service_dne() = runTest {
         with(repository) {
-            val originalCarData = repository.carDataChannel.value
+            val originalCarData = repository.carDataFlow.value
             removeCarService(TEST_SERVICE)
-            val result = repository.carDataChannel.value
+            val result = repository.carDataFlow.value
             assertThat(result)
                 .isEqualTo(originalCarData)
         }
@@ -131,7 +131,7 @@ class CarRepositoryTest {
         with(repository) {
             populateData()
             updateCarService(TEST_SERVICE)
-            val result = repository.carDataChannel.value
+            val result = repository.carDataFlow.value
             assertThat(result?.services?.contains(TEST_SERVICE))
                 .isFalse()
         }
@@ -145,7 +145,7 @@ class CarRepositoryTest {
             val updatedService = TEST_SERVICE.copy(name = TEST_SERVICE_UPDATED_NAME)
             updateCarService(updatedService)
 
-            val result = repository.carDataChannel.value
+            val result = repository.carDataFlow.value
             assertThat(result?.services?.contains(updatedService))
                 .isTrue()
         }

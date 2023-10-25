@@ -15,7 +15,7 @@ class TestCarRepository : CarRepository {
 
     @VisibleForTesting
     val _carDataChannel: MutableStateFlow<Car?> = MutableStateFlow(null)
-    override val carDataChannel: StateFlow<Car?>
+    override val carDataFlow: StateFlow<Car?>
         get() = _carDataChannel
 
     private fun updateCarDataChannel(car: Car?) = runBlocking {
@@ -23,11 +23,11 @@ class TestCarRepository : CarRepository {
     }
 
     override fun observeCarData(): Flow<Car?> {
-        return carDataChannel
+        return carDataFlow
     }
 
     override fun fetchCarData(): Car? {
-        return carDataChannel.value
+        return carDataFlow.value
     }
 
     override fun saveCarData(car: Car) {
@@ -39,7 +39,7 @@ class TestCarRepository : CarRepository {
     }
 
     override fun addCarService(service: Service) {
-        carDataChannel.value?.let {
+        carDataFlow.value?.let {
             saveCarData(it.apply {
                 services = services.toMutableList().apply { add(service) }
             })
@@ -47,7 +47,7 @@ class TestCarRepository : CarRepository {
     }
 
     override fun removeCarService(service: Service) {
-        carDataChannel.value?.let {
+        carDataFlow.value?.let {
             saveCarData(it.apply {
                 services = services.toMutableList().apply { remove(service) }
             })
@@ -55,7 +55,7 @@ class TestCarRepository : CarRepository {
     }
 
     override fun updateCarService(service: Service) {
-        carDataChannel.value?.let { car ->
+        carDataFlow.value?.let { car ->
             saveCarData(
                 car.copy(
                     services = car.services.map {

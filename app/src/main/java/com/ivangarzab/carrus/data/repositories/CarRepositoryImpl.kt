@@ -19,7 +19,7 @@ import javax.inject.Singleton
 class CarRepositoryImpl @Inject constructor() : CarRepository {
 
     private val _carDataChannel: MutableStateFlow<Car?> = MutableStateFlow(null)
-    override val carDataChannel: StateFlow<Car?>
+    override val carDataFlow: StateFlow<Car?>
         get() = _carDataChannel
 
     init {
@@ -31,7 +31,7 @@ class CarRepositoryImpl @Inject constructor() : CarRepository {
     }
 
     override fun observeCarData(): Flow<Car?> {
-        return carDataChannel
+        return carDataFlow
     }
 
     override fun fetchCarData(): Car? = prefs.defaultCar

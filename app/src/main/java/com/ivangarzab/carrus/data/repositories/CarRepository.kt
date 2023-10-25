@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface CarRepository {
 
-    val carDataChannel: StateFlow<Car?>
+    val carDataFlow: StateFlow<Car?>
 
     fun observeCarData(): Flow<Car?>
     fun fetchCarData(): Car?
