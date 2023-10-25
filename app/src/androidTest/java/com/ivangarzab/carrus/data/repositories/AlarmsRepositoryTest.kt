@@ -17,7 +17,7 @@ class AlarmsRepositoryTest {
 
     private val repository = AlarmsRepositoryImpl(
         context = context,
-        alarmSettingsRepository = AlarmSettingsRepository(context)
+        alarmSettingsRepository = AlarmSettingsRepositoryImpl(context)
     )
 
     @Before
