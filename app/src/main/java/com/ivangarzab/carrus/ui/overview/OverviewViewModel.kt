@@ -17,6 +17,7 @@ import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
+import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -161,11 +162,11 @@ class OverviewViewModel @Inject constructor(
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
     private fun removeTestMessage() = messageQueueRepository.removeMessage(Message.TEST)
 
-    private fun onSortingByType(type: SortingCallback.SortingType) {
+    private fun onSortingByType(type: SortingType) {
         when (type) {
-            SortingCallback.SortingType.NONE -> resetServicesSort()
-            SortingCallback.SortingType.NAME -> sortServicesByName()
-            SortingCallback.SortingType.DATE -> sortServicesByDate()
+            SortingType.NONE -> resetServicesSort()
+            SortingType.NAME -> sortServicesByName()
+            SortingType.DATE -> sortServicesByDate()
         }
         state.setState {
             copy(serviceSortingType = type)
@@ -228,7 +229,7 @@ class OverviewViewModel @Inject constructor(
 
     private fun updateCarState(car: Car?) = state.setState { copy(car = car) }
 
-    fun onSort(type: SortingCallback.SortingType) {
+    fun onSort(type: SortingType) {
         Timber.v("Got a sorting request with type=$type")
         onSortingByType(type)
     }

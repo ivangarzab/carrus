@@ -12,6 +12,7 @@ import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
+import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -227,12 +228,12 @@ class OverviewViewModelTest {
     fun test_onSort_base() = with(viewModel) {
         val result = state.getOrAwaitValue()
         assertThat(result.serviceSortingType)
-            .isSameInstanceAs(SortingCallback.SortingType.NONE)
+            .isSameInstanceAs(SortingType.NONE)
     }
 
     @Test
     fun test_onSort_none_state_update() = with(viewModel) {
-        val test = SortingCallback.SortingType.NONE
+        val test = SortingType.NONE
         val result = state.getOrAwaitValue {
             onSort(test)
         }
@@ -242,7 +243,7 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onSort_name_state_update() = with(viewModel) {
-        val test = SortingCallback.SortingType.NAME
+        val test = SortingType.NAME
         val result = state.getOrAwaitValue {
             onSort(test)
         }
@@ -252,7 +253,7 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onSort_date_state_update() = with(viewModel) {
-        val test = SortingCallback.SortingType.DATE
+        val test = SortingType.DATE
         val result = state.getOrAwaitValue {
             onSort(test)
         }

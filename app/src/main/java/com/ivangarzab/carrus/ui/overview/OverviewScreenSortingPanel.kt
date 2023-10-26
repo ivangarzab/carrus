@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.overview.data.SortingType
 
 /**
  * Created by Ivan Garza Bermea.
@@ -30,7 +31,7 @@ fun OverviewScreenSortingPanel(
     modifier: Modifier = Modifier,
     isVisible: Boolean = true,
     selectedIndex: Int = 0,
-    onSortRequest: (SortingCallback.SortingType) -> Unit = { }
+    onSortRequest: (SortingType) -> Unit = { }
 ) {
     val itemStartPadding: Dp = 4.dp
     AppTheme {
@@ -45,19 +46,19 @@ fun OverviewScreenSortingPanel(
                 SortingChipButton(
                     modifier = Modifier,
                     isSelected = selectedIndex == 0,
-                    onClick = { onSortRequest(SortingCallback.SortingType.NONE) },
+                    onClick = { onSortRequest(SortingType.NONE) },
                     text = stringResource(id = R.string.none)
                 )
                 SortingChipButton(
                     modifier = Modifier.padding(start = itemStartPadding),
                     isSelected = selectedIndex == 1,
-                    onClick = { onSortRequest(SortingCallback.SortingType.NAME) },
+                    onClick = { onSortRequest(SortingType.NAME) },
                     text = stringResource(id = R.string.name)
                 )
                 SortingChipButton(
                     modifier = Modifier.padding(start = itemStartPadding),
                     isSelected = selectedIndex == 2,
-                    onClick = { onSortRequest(SortingCallback.SortingType.DATE) },
+                    onClick = { onSortRequest(SortingType.DATE) },
                     text = stringResource(id = R.string.date)
                 )
             }

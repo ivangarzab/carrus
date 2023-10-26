@@ -3,7 +3,6 @@ package com.ivangarzab.carrus.ui.overview.data
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
-import com.ivangarzab.carrus.ui.overview.SortingCallback
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -13,7 +12,7 @@ import kotlinx.parcelize.Parcelize
 data class OverviewState(
     val car: Car? = null,
     val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
-    val serviceSortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
+    val serviceSortingType: SortingType = SortingType.NONE,
     val hasPromptedForPermissionNotification: Boolean = false,
     val hasPromptedForPermissionAlarm: Boolean = false
 ) : Parcelable
