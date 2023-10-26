@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
 import org.junit.Before
 import org.junit.Test
 
@@ -20,25 +21,29 @@ class AlarmSettingsRepositoryTest {
     @Test
     fun test_isAlarmPermissionGranted_base() = with(repository) {
         assertThat(isAlarmPermissionGranted())
-            .isTrue()
+            .isFalse()
     }
 
     @Test
     fun test_isAlarmFeatureOn_base() = with(repository) {
         assertThat(isAlarmFeatureOn())
-            .isTrue()
+            .isFalse()
     }
 
     @Test
     fun test_isAlarmFeatureOn_true() = with(repository) {
-        _isAlarmFeatureOn = true
+        _alarmSettingsFlow.value = alarmSettingsFlow.value.copy(
+            isAlarmFeatureEnabled = true
+        )
         assertThat(isAlarmFeatureOn())
             .isTrue()
     }
 
     @Test
     fun test_isAlarmFeatureOn_false() = with(repository) {
-        _isAlarmFeatureOn = false
+        _alarmSettingsFlow.value = alarmSettingsFlow.value.copy(
+            isAlarmFeatureEnabled = false
+        )
         assertThat(isAlarmFeatureOn())
             .isFalse()
     }
@@ -51,7 +56,9 @@ class AlarmSettingsRepositoryTest {
 
     @Test
     fun test_getAlarmTime_non_default() = with(repository) {
-        _alarmTime = TEST_ALARM_TIME
+        _alarmSettingsFlow.value = alarmSettingsFlow.value.copy(
+            alarmTime = AlarmTime(TEST_ALARM_TIME)
+        )
         assertThat(getAlarmTime())
             .isEqualTo(TEST_ALARM_TIME)
     }
@@ -71,7 +78,9 @@ class AlarmSettingsRepositoryTest {
 
     @Test
     fun test_getAlarmFrequency_weekly() = with(repository) {
-        _alarmFrequency = AlarmFrequency.WEEKLY
+        _alarmSettingsFlow.value = alarmSettingsFlow.value.copy(
+            frequency = AlarmFrequency.WEEKLY
+        )
         assertThat(getAlarmFrequency())
             .isSameInstanceAs(AlarmFrequency.WEEKLY)
     }
