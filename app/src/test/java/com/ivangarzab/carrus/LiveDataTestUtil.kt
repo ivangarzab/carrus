@@ -53,7 +53,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
         // Don't wait indefinitely if the LiveData is not set
         if (!latch.await(time, timeUnit)) {
             this.value?.let {
-                return it
+                return it // Last attempt at returning a value
             } ?: throw TimeoutException("LiveData value didn't arrive in time.")
         }
     } finally {

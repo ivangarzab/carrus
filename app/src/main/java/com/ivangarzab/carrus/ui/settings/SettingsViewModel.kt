@@ -57,8 +57,7 @@ class SettingsViewModel @Inject constructor(
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                updateDueDateFormatState(it.dueDateFormat)
-                updateTimeFormatState(it.timeFormat)
+                processAppSettingsStateUpdates(it.dueDateFormat, it.timeFormat)
             }
 
         }
@@ -140,18 +139,22 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    //TODO: Needs testing
     fun onExportData(
         contentResolver: ContentResolver,
         uri: Uri
-    ): Boolean = carRepository.fetchCarData()?.let { data ->
-        CarExporter.exportToJson(data)?.let { json ->
-            appScope.launch(Dispatchers.IO) {
-                uri.writeInFile(contentResolver, json)
-            }
-            true
+    ): Boolean {
+        return carRepository.fetchCarData()?.let { data ->
+            CarExporter.exportToJson(data)?.let { json ->
+                appScope.launch(Dispatchers.IO) {
+                    uri.writeInFile(contentResolver, json)
+                }
+                true
+            } ?: false
         } ?: false
-    } ?: false
+    }
 
+    //TODO: Needs testing
     fun onImportData(
         contentResolver: ContentResolver,
         uri: Uri
@@ -186,44 +189,29 @@ class SettingsViewModel @Inject constructor(
 
     private fun processAlarmSettingsStateUpdate(data: AlarmSettingsState) {
         isAlarmPermissionGranted = data.isAlarmPermissionGranted
-        updateAlarmsEnabledState(data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled)
-        updateAlarmTimeState(data.alarmTime)
-        updateAlarmFrequencyState(data.frequency)
-    }
-
-    private fun updateAlarmsEnabledState(enabled: Boolean) {
-        Timber.v("Updating alarms toggle enabled state to $enabled")
-        _state.value = state.value?.copy(alarmsOn = enabled)
-    }
-
-    private fun updateAlarmTimeState(alarmTime: AlarmTime) {
-        Timber.v("Updating alarm time state to $alarmTime")
+        Timber.v("Updating alarm settings state changes")
         state.value?.let { state ->
-            _state.value = state.copy(alarmTime = alarmTime)
-        }
-    }
-
-    private fun updateAlarmFrequencyState(frequency: AlarmFrequency) {
-        Timber.v("Updating alarm frequency state to $frequency")
-        _state.value = state.value?.copy(alarmFrequency = frequency)
-    }
-
-    private fun updateDueDateFormatState(format: DueDateFormat) {
-        Timber.v("Updating due date format state to $format")
-        _state.value = state.value?.copy(dueDateFormat = format)
-    }
-
-    private fun updateTimeFormatState(format: TimeFormat) {
-        Timber.v("Updating clock time format state to $format")
-        state.value?.let { currentState ->
-            _state.value = currentState.copy(
-                clockTimeFormat = format,
-                alarmTimeSubtitle = when (format) {
-                    TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
-                    TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
-                },
-                alarmTimeOptions = format.range.map { it.toString() }
+            _state.value = state.copy(
+                alarmsOn = data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled,
+                alarmTime = data.alarmTime,
+                alarmFrequency = data.frequency
             )
         }
+    }
+
+    private fun processAppSettingsStateUpdates(
+        dueDateFormat: DueDateFormat,
+        clockTimeFormat: TimeFormat
+    ) {
+        Timber.v("Updating app settings state changes")
+        _state.value = state.value?.copy(
+            dueDateFormat = dueDateFormat,
+            clockTimeFormat = clockTimeFormat,
+            alarmTimeSubtitle = when (clockTimeFormat) {
+                TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
+                TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
+            },
+            alarmTimeOptions = clockTimeFormat.range.map { it.toString() }
+        )
     }
 }
