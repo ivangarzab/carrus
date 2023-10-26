@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
@@ -16,6 +17,7 @@ import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
+import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
+    private val buildVersionProvider: BuildVersionProvider,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
@@ -93,14 +96,14 @@ class OverviewViewModel @Inject constructor(
         Timber.d("Got a message click with id=$id")
         when (id) {
             Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU) {
                     triggerNotificationPermissionRequest.postValue(true)
                 }
                 removeNotificationPermissionMessage()
             }
 
             Message.MISSING_PERMISSION_ALARM.data.id -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.S) {
                     triggerAlarmsPermissionRequest.postValue(true)
                 }
                 removeAlarmPermissionMessage()
@@ -115,7 +118,8 @@ class OverviewViewModel @Inject constructor(
         messageQueueRepository.dismissMessage()
     }
 
-    private fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
+    @VisibleForTesting
+    fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         state.setState {
@@ -132,15 +136,16 @@ class OverviewViewModel @Inject constructor(
     fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
         val hasPromptedForPermissionAlarm = state.value?.hasPromptedForPermissionAlarm ?: false
         if (canScheduleExactAlarms.not() &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            hasPromptedForPermissionAlarm.not()
+            hasPromptedForPermissionAlarm.not() &&
+            buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.S
         ) {
             addAlarmPermissionMessage()
             Timber.d("Registering alarm permission state changed broadcast receiver")
         }
     }
 
-    private fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    @VisibleForTesting
+    fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         state.setState {
@@ -209,12 +214,12 @@ class OverviewViewModel @Inject constructor(
                 }
 
                 false -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU &&
                         state.value?.hasPromptedForPermissionNotification?.not() == true
                     ) {
                         addNotificationPermissionMessage()
                     } else {
-                        Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
+                        Timber.v("We don't need Notification permission for sdk=${buildVersionProvider.getSdkVersionInt()} (<33)")
                     }
                 }
             }

@@ -6,6 +6,6 @@ package com.ivangarzab.carrus.ui.overview
 interface SortingCallback {
     enum class SortingType {
         NONE, NAME, DATE
-    }
+    } //TODO: Have this on it's own file
     fun onSort(type: SortingType)
 }
