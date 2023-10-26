@@ -5,15 +5,12 @@ import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.EMPTY_CAR
 import com.ivangarzab.carrus.STRING_BLANK
 import com.ivangarzab.carrus.STRING_EMPTY
-import com.ivangarzab.carrus.TEST_CAR
 import com.ivangarzab.carrus.TEST_CAR_JSON
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
-import io.mockk.every
-import io.mockk.justRun
-import io.mockk.mockk
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
@@ -33,13 +30,11 @@ class CreateViewModelTest {
 
     @Before
     fun setup() {
-        carRepository = mockk(relaxUnitFun = true)
+        carRepository = TestCarRepository()
         viewModel = CreateViewModel(
             carRepository = carRepository,
             contentResolverHelper = TestContentResolverHelper()
         ).apply { init(null) }
-
-        every { carRepository.fetchCarData() } returns TEST_CAR
     }
 
     @Test
@@ -141,11 +136,13 @@ class CreateViewModelTest {
             assertThat(result.make).isEmpty()
             assertThat(result.model).isEmpty()
             assertThat(result.year).isEmpty()
+            assertThat(result.licenseState).isEmpty()
             assertThat(result.licenseNo).isEmpty()
             assertThat(result.vinNo).isEmpty()
             assertThat(result.tirePressure).isEmpty()
             assertThat(result.totalMiles).isEmpty()
-            assertThat(result.milesPerGallon).isEmpty()
+            assertThat(result.milesPerGalCity).isEmpty()
+            assertThat(result.milesPerGalHighway).isEmpty()
             assertThat(result.imageUri).isNull()
         }
     }
@@ -158,11 +155,13 @@ class CreateViewModelTest {
                 make = MAKE,
                 model = MODEL,
                 year = YEAR,
+                licenseState = LICENSE_STATE,
                 licenseNo = LICENSE_NO,
                 vinNo = VIN_NO,
                 tirePressure = TIRE_PRESSURE,
                 totalMiles = TOTAL_MILES,
-                milesPerGallon = MILES_PER_GALLON
+                milesPerGalCity = MILES_PER_GALLON_CITY,
+                milesPerGalHighway = MILES_PER_GALLON_HIGHWAY,
             )
         }
         assertThat(result.isExpanded).isEqualTo(TEST_CAR_MODAL_STATE.isExpanded)
@@ -172,11 +171,13 @@ class CreateViewModelTest {
         assertThat(result.make).isEqualTo(TEST_CAR_MODAL_STATE.make)
         assertThat(result.model).isEqualTo(TEST_CAR_MODAL_STATE.model)
         assertThat(result.year).isEqualTo(TEST_CAR_MODAL_STATE.year)
+        assertThat(result.licenseState).isEqualTo(TEST_CAR_MODAL_STATE.licenseState)
         assertThat(result.licenseNo).isEqualTo(TEST_CAR_MODAL_STATE.licenseNo)
         assertThat(result.vinNo).isEqualTo(TEST_CAR_MODAL_STATE.vinNo)
         assertThat(result.tirePressure).isEqualTo(TEST_CAR_MODAL_STATE.tirePressure)
         assertThat(result.totalMiles).isEqualTo(TEST_CAR_MODAL_STATE.totalMiles)
-        assertThat(result.milesPerGallon).isEqualTo(TEST_CAR_MODAL_STATE.milesPerGallon)
+        assertThat(result.milesPerGalCity).isEqualTo(TEST_CAR_MODAL_STATE.milesPerGalCity)
+        assertThat(result.milesPerGalHighway).isEqualTo(TEST_CAR_MODAL_STATE.milesPerGalHighway)
         assertThat(result.imageUri).isEqualTo(TEST_CAR_MODAL_STATE.imageUri)
     }
 
@@ -200,7 +201,6 @@ class CreateViewModelTest {
 
     @Test
     fun test_onImportData_valid_json_success() = with(viewModel) {
-        justRun { carRepository.saveCarData(any()) }
         assertThat(onImportData(TEST_CAR_JSON))
             .isTrue()
     }
@@ -211,11 +211,13 @@ class CreateViewModelTest {
         private const val MODEL = "Malibu"
         private const val MAKE = "Chevrolet"
         private const val YEAR = "2008"
+        private const val LICENSE_STATE = "Texas"
         private const val LICENSE_NO = "09TX956"
         private const val VIN_NO = "ABCDEFGHIJKLMNOPQ"
         private const val TIRE_PRESSURE = "32"
         private const val TOTAL_MILES = "106000"
-        private const val MILES_PER_GALLON = "23"
+        private const val MILES_PER_GALLON_CITY = "23"
+        private const val MILES_PER_GALLON_HIGHWAY = "28"
         private const val SCREEN_TITLE = "Add a Car"
         private const val ACTION_BUTTON = "Submit"
         private val TEST_CAR_MODAL_STATE = CarModalState(
@@ -226,11 +228,13 @@ class CreateViewModelTest {
             make = MAKE,
             model = MODEL,
             year = YEAR,
+            licenseState = LICENSE_STATE,
             licenseNo = LICENSE_NO,
             vinNo = VIN_NO,
             tirePressure = TIRE_PRESSURE,
             totalMiles = TOTAL_MILES,
-            milesPerGallon = MILES_PER_GALLON,
+            milesPerGalCity = MILES_PER_GALLON_CITY,
+            milesPerGalHighway = MILES_PER_GALLON_HIGHWAY,
             imageUri = null
         )
 
