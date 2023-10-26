@@ -87,11 +87,13 @@ fun CreateScreenStateful(
                     make = it.make,
                     model = it.model,
                     year = it.year,
+                    licenseState = it.licenseState,
                     licenseNo = it.licenseNo,
                     vinNo = it.vinNo,
                     tirePressure = it.tirePressure,
                     totalMiles = it.totalMiles,
-                    milesPerGallon = it.milesPerGallon
+                    milesPerGalCity = it.milesPerGalCity,
+                    milesPerGalHighway = it.milesPerGalHighway
                 )
             },
             onBackPressed = { onBackPressed() },
@@ -112,11 +114,13 @@ fun CreateScreenStateful(
                                 make = make,
                                 model = model,
                                 year = year,
+                                licenseState = licenseState,
                                 licenseNo = licenseNo,
                                 vinNo = vinNo,
                                 tirePressure = tirePressure,
                                 totalMiles = totalMiles,
-                                milesPerGallon = milesPerGallon
+                                milesPerGalCity = milesPerGalCity,
+                                milesPerGalHighway = milesPerGalHighway
                             )
                         }
                     }
@@ -191,14 +195,14 @@ private fun CreateScreenContent(
     onDeleteImageClicked: () -> Unit = { },
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
 ) {
-    fun shouldBeExpanded(state: CarModalState): Boolean = state.let {
-        it.totalMiles.isNotBlank() || it.milesPerGallon.isNotBlank() ||
+    fun shouldBeExpanded(): Boolean = state.let {
+        it.totalMiles.isNotBlank() || it.milesPerGalCity.isNotBlank() ||
                 it.vinNo.isNotBlank() || it.tirePressure.isNotBlank()
     }
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(shouldBeExpanded(state))
+        mutableStateOf(shouldBeExpanded())
     }
     var isImagePresent: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -351,19 +355,39 @@ private fun CreateScreenContent(
                         }
                     )
                 }
-                TextInputField(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = verticalSeparation),
-                    label = stringResource(id = R.string.nickname),
-                    content = state.nickname,
-                    isLastField = isExpanded.not(),
-                    updateListener = {
-                        onUpdateState(state.copy(
-                            nickname = it
-                        ))
-                    }
-                )
+                        .padding(top = verticalSeparation)
+                ) {
+                    TextInputField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(3f)
+                            .padding(end = spaceInBetween),
+                        label = stringResource(id = R.string.nickname),
+                        content = state.nickname,
+                        updateListener = {
+                            onUpdateState(state.copy(
+                                nickname = it
+                            ))
+                        }
+                    )
+                    TextInputField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(2f)
+                            .padding(start = spaceInBetween),
+                        label = "State",
+                        content = state.licenseState,
+                        isLastField = isExpanded.not(),
+                        updateListener = {
+                            onUpdateState(state.copy(
+                                licenseState = it
+                            ))
+                        }
+                    )
+                }
 
                 AnimatedVisibility(
                     visible = isExpanded,
@@ -394,12 +418,12 @@ private fun CreateScreenContent(
                                 modifier = Modifier
                                     .padding(start = spaceInBetween)
                                     .weight(2f),
-                                label = stringResource(id = R.string.miles_per_gal),
-                                content = state.milesPerGallon,
+                                label = stringResource(id = R.string.tire_pressure),
+                                content = state.tirePressure,
                                 updateListener = {
                                     onUpdateState(
                                         state.copy(
-                                            milesPerGallon = it
+                                            tirePressure = it
                                         )
                                     )
                                 }
@@ -414,32 +438,45 @@ private fun CreateScreenContent(
                                 modifier = Modifier
                                     .padding(end = spaceInBetween)
                                     .weight(2f),
-                                label = stringResource(id = R.string.tire_pressure),
-                                content = state.tirePressure,
+                                label = stringResource(id = R.string.mi_per_gal_city),
+                                content = state.milesPerGalCity,
                                 updateListener = {
                                     onUpdateState(
                                         state.copy(
-                                            tirePressure = it
+                                            milesPerGalCity = it
                                         )
                                     )
                                 }
                             )
-                            TextInputField(
+                            NumberInputField(
                                 modifier = Modifier
                                     .padding(start = spaceInBetween)
-                                    .weight(3f),
-                                label = stringResource(id = R.string.vin_no),
-                                content = state.vinNo,
-                                isLastField = true,
+                                    .weight(2f),
+                                label = stringResource(id = R.string.mi_per_gal_highway),
+                                content = state.milesPerGalHighway,
                                 updateListener = {
                                     onUpdateState(
                                         state.copy(
-                                            vinNo = it
+                                            milesPerGalHighway = it
                                         )
                                     )
                                 }
                             )
                         }
+                        TextInputField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            label = stringResource(id = R.string.vin_no),
+                            content = state.vinNo,
+                            isLastField = true,
+                            updateListener = {
+                                onUpdateState(
+                                    state.copy(
+                                        vinNo = it
+                                    )
+                                )
+                            }
+                        )
                     }
                 }
 

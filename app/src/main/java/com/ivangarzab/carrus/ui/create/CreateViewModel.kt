@@ -61,11 +61,13 @@ class CreateViewModel @Inject constructor(
                 make = state.make,
                 model = state.model,
                 year = state.year,
+                licenseState = state.licenseState,
                 licenseNo = state.licenseNo,
                 vinNo = state.vinNo,
                 tirePressure = state.tirePressure,
                 totalMiles = state.totalMiles,
-                milesPerGallon = state.milesPerGallon,
+                milesPerGalCity = state.milesPerGalCity,
+                milesPerGalHighway = state.milesPerGalHighway,
                 services = emptyList(),
                 imageUri = state.imageUri
             ).let { data ->
@@ -102,11 +104,13 @@ class CreateViewModel @Inject constructor(
         make: String,
         model: String,
         year: String,
+        licenseState: String,
         licenseNo: String,
         vinNo: String,
         tirePressure: String,
         totalMiles: String,
-        milesPerGallon: String
+        milesPerGalCity: String,
+        milesPerGalHighway: String
     ) {
         setState(state, _state) {
             copy(
@@ -114,11 +118,13 @@ class CreateViewModel @Inject constructor(
                 make = make,
                 model = model,
                 year = year,
+                licenseState = licenseState,
                 licenseNo = licenseNo,
                 vinNo = vinNo,
                 tirePressure = tirePressure,
                 totalMiles = totalMiles,
-                milesPerGallon = milesPerGallon
+                milesPerGalCity = milesPerGalCity,
+                milesPerGalHighway = milesPerGalHighway
             )
         }
     }
@@ -132,11 +138,13 @@ class CreateViewModel @Inject constructor(
                 make = car.make,
                 model = car.model,
                 year = car.year,
+                licenseState = car.licenseState,
                 licenseNo = car.licenseNo,
                 vinNo = car.vinNo,
                 tirePressure = car.tirePressure,
                 totalMiles = car.totalMiles,
-                milesPerGallon = car.milesPerGallon,
+                milesPerGalCity = car.milesPerGalCity,
+                milesPerGalHighway = car.milesPerGalHighway,
                 imageUri = car.imageUri
             )
         }
