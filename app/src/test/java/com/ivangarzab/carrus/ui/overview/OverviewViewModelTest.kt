@@ -58,11 +58,6 @@ class OverviewViewModelTest {
     }
 
     @Test
-    fun test_processOnStateChange() {
-        //TODO()
-    }
-
-    @Test
     fun test_onServiceDeleted_success() = with(viewModel) {
         carRepository.let {
             it.saveCarData(TEST_CAR)

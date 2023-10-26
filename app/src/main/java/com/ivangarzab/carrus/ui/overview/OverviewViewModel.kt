@@ -68,16 +68,34 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    //TODO: Break this function down into more digestible and manageable pieces
     fun processStateChange(
         state: OverviewState,
         areNotificationsEnabled: Boolean
     ) {
-        Timber.v("Processing overview state change")
         state.car?.let {
-            processCarServicesListForNotification(
-                services = it.services,
-                areNotificationsEnabled = areNotificationsEnabled
-            )
+            Timber.v("Processing overview state change")
+            if (it.services.isNotEmpty()) {
+                when (areNotificationsEnabled) {
+                    true -> {
+                        if (alarmsRepository.isPastDueAlarmActive().not()) {
+                            alarmsRepository.schedulePastDueAlarm()
+                        } else {
+                            Timber.v("'Past Due' alarm is already scheduled")
+                        }
+                    }
+
+                    false -> {
+                        if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU &&
+                            this.state.value?.hasPromptedForPermissionNotification?.not() == true
+                        ) {
+                            addNotificationPermissionMessage()
+                        } else {
+                            Timber.v("We don't need Notification permission for sdk=${buildVersionProvider.getSdkVersionInt()} (<33)")
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -197,33 +215,6 @@ class OverviewViewModel @Inject constructor(
                     services = car.services.sortedBy { it.dueDate }
                 )
             )
-        }
-    }
-
-    private fun processCarServicesListForNotification(
-        services: List<Service>,
-        areNotificationsEnabled: Boolean
-    ) {
-        if (services.isNotEmpty()) {
-            when (areNotificationsEnabled) {
-                true -> {
-                    if (alarmsRepository.isPastDueAlarmActive().not()) {
-                        alarmsRepository.schedulePastDueAlarm()
-                    } else {
-                        Timber.v("'Past Due' alarm is already scheduled")
-                    }
-                }
-
-                false -> {
-                    if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU &&
-                        state.value?.hasPromptedForPermissionNotification?.not() == true
-                    ) {
-                        addNotificationPermissionMessage()
-                    } else {
-                        Timber.v("We don't need Notification permission for sdk=${buildVersionProvider.getSdkVersionInt()} (<33)")
-                    }
-                }
-            }
         }
     }
 
