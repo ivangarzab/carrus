@@ -13,7 +13,7 @@
             type="com.ivangarzab.carrus.data.models.Car" />
         <import
             alias="SortingType"
-            type="com.ivangarzab.carrus.ui.overview.SortingCallback.SortingType"/>
+            type="com.ivangarzab.carrus.ui.overview.data.SortingType"/>
         <variable
             name="sortingCallback"
             type="com.ivangarzab.carrus.ui.overview.SortingCallback" />
@@ -71,8 +71,9 @@
                     android:layout_marginEnd="@dimen/base_6"
                     app:cardCornerRadius="@dimen/base_16"
                     android:focusable="true"
-                    android:clickable="true"
-                    android:onClick="@{() -> sortingCallback.onSort(SortingType.NONE)}">
+                    android:clickable="true">
+                    <!-- android:onClick="@{() -> sortingCallback.onSort(SortingType.NONE)}" -->
+
                     <TextView
                         android:id="@+id/overviewServiceSortNoneLabel"
                         android:layout_width="wrap_content"

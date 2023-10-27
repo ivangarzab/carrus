@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data.repositories
+package com.ivangarzab.carrus.data.states
 
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime

@@ -42,7 +42,7 @@ fun OverviewScreenDetailsPanel(
     val totalValidFields = state.getTotalValidFields()
     val gridSize: Dp = if (totalValidFields > 3) {
         200.dp
-    } else if (totalValidFields in 1..2) {
+    } else if (totalValidFields in 1..3) {
         100.dp
     } else {
         0.dp
@@ -63,7 +63,7 @@ fun OverviewScreenDetailsPanel(
                 PanelIcon(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(end =16.dp),
+                        .padding(end = 16.dp),
                     onClick = onEditCarClicked,
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Car edit icon button"
@@ -92,6 +92,11 @@ fun OverviewScreenDetailsPanelGrid(
             rows = StaggeredGridCells.Fixed(count = rows),
             contentPadding = PaddingValues(4.dp)
         ) {
+            state.year.takeIf { it.isNotEmpty() }?.let {
+                item {
+                    OverviewScreenDetailsItem(title = "Year", content = state.year)
+                }
+            }
             state.licenseState.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "License State", content = state.licenseState)
