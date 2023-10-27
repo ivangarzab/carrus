@@ -196,9 +196,13 @@ private fun CreateScreenContent(
     onActionButtonClicked: (String, String, String) -> Unit = { _, _, _ -> },
 ) {
     fun shouldBeExpanded(): Boolean = state.let {
-        it.totalMiles.isNotBlank() || it.milesPerGalCity.isNotBlank() ||
-                it.vinNo.isNotBlank() || it.tirePressure.isNotBlank()
+        it.totalMiles.isNotBlank() ||
+                it.milesPerGalCity.isNotBlank() ||
+                it.milesPerGalHighway.isNotBlank() ||
+                it.vinNo.isNotBlank() ||
+                it.tirePressure.isNotBlank()
     }
+
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
@@ -378,7 +382,7 @@ private fun CreateScreenContent(
                             .fillMaxWidth()
                             .weight(2f)
                             .padding(start = spaceInBetween),
-                        label = "State",
+                        label = stringResource(id = R.string.state),
                         content = state.licenseState,
                         isLastField = isExpanded.not(),
                         updateListener = {
