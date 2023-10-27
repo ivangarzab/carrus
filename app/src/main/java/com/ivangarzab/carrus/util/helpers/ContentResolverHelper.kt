@@ -1,0 +1,11 @@
+package com.ivangarzab.carrus.util.helpers
+
+import android.net.Uri
+
+/**
+ * Created by Ivan Garza Bermea.
+ */
+interface ContentResolverHelper {
+    fun persistUriPermission(uri: String): Boolean
+    fun persistUriPermission(uri: Uri): Boolean
+}

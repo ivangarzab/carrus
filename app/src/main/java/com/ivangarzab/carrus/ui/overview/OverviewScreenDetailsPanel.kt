@@ -42,7 +42,7 @@ fun OverviewScreenDetailsPanel(
     val totalValidFields = state.getTotalValidFields()
     val gridSize: Dp = if (totalValidFields > 3) {
         200.dp
-    } else if (totalValidFields in 1..2) {
+    } else if (totalValidFields in 1..3) {
         100.dp
     } else {
         0.dp
@@ -92,7 +92,7 @@ fun OverviewScreenDetailsPanelGrid(
             rows = StaggeredGridCells.Fixed(count = rows),
             contentPadding = PaddingValues(4.dp)
         ) {
-            state.licenseState.takeIf { it.isNotEmpty() }?.let {
+            state.year.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "Year", content = state.year)
                 }

@@ -38,6 +38,7 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="days">Days</string>
     <string name="not_now">Not now</string>
+    <string name="state">State</string>
 
     <!-- Sorting -->
     <string name="none">none</string>

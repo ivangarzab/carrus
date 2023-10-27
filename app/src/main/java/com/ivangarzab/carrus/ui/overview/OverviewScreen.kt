@@ -33,6 +33,7 @@ import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
+import com.ivangarzab.carrus.ui.overview.data.SortingType
 
 /**
  * Created by Ivan Garza Bermea.
@@ -85,7 +86,7 @@ private fun OverviewScreen(
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
-    onSortRequest: (SortingCallback.SortingType) -> Unit = { },
+    onSortRequest: (SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
