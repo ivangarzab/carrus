@@ -22,7 +22,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ServiceModalViewModel @Inject constructor(
-    private val carRepository: CarRepository
+    private val carRepository: CarRepository,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     private val _state = MutableLiveData(ServiceModalState())
@@ -102,13 +103,13 @@ class ServiceModalViewModel @Inject constructor(
     private fun onServiceCreated(service: Service) {
         carRepository.addCarService(service)
         Timber.d("New service created: ${service.name}")
-        Analytics.logServiceCreated(service.id, service.name)
+        analytics.logServiceCreated(service.id, service.name)
     }
 
     private fun onServiceUpdate(service: Service) {
         carRepository.updateCarService(service)
         Timber.d("Service updated: ${service.name}")
-        Analytics.logServiceUpdated(service.id, service.name)
+        analytics.logServiceUpdated(service.id, service.name)
     }
 
     private fun setState(update: ServiceModalState) {

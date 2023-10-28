@@ -23,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
-    private val contentResolverHelper: ContentResolverHelper
+    private val contentResolverHelper: ContentResolverHelper,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
@@ -78,13 +79,13 @@ class CreateViewModel @Inject constructor(
                 when (type) {
                     Type.CREATE -> {
                         carRepository.saveCarData(data)
-                        Analytics.logCarCreated(data.uid, data.getCarName())
+                        analytics.logCarCreated(data.uid, data.getCarName())
                     }
                     Type.EDIT -> {
                         carRepository.saveCarData(data.copy(
                             services = carRepository.fetchCarData()?.services ?: emptyList()
                         ))
-                        Analytics.logCarUpdated(data.uid, data.getCarName())
+                        analytics.logCarUpdated(data.uid, data.getCarName())
                     }
                 }
             }
@@ -101,7 +102,7 @@ class CreateViewModel @Inject constructor(
                 false -> "denied"
             }
         }")
-        Analytics.logImageAdded()
+        analytics.logImageAdded()
         setState(state, _state) {
             copy(imageUri = uri)
         }
@@ -109,7 +110,7 @@ class CreateViewModel @Inject constructor(
 
     fun onImageDeleted() {
         Timber.v("Deleting image")
-        Analytics.logImageDeleted()
+        analytics.logImageDeleted()
         setState(state, _state) {
             copy(imageUri = null)
         }
@@ -171,7 +172,7 @@ class CreateViewModel @Inject constructor(
             CarImporter.importFromJson(data)?.let { car ->
                 Timber.d("Got car data to import: $car")
                 carRepository.saveCarData(car)
-                Analytics.logCarImported(car.uid, car.getCarName())
+                analytics.logCarImported(car.uid, car.getCarName())
                 onSubmit.postValue(true)
                 true
             } ?: false

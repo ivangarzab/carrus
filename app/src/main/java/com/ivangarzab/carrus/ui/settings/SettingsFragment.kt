@@ -18,6 +18,7 @@ import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -26,6 +27,9 @@ import java.util.Calendar
 class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val createDocumentsContract = registerForActivityResult(
         ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
@@ -72,15 +76,15 @@ class SettingsFragment : Fragment() {
                         CreateFragmentDirections.actionGlobalSettingsFragment()
                     ) },
                     onImportClicked = {
-                        Analytics.logImportButtonClicked()
+                        analytics.logImportButtonClicked()
                         openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE))
                                       },
                     onExportClicked = {
-                        Analytics.logExportButtonClicked()
+                        analytics.logExportButtonClicked()
                         createDocumentsContract.launch(generateExportFileName())
                                       },
                     onPrivacyPolicyClicked = {
-                        Analytics.logPrivacyPolicyClicked()
+                        analytics.logPrivacyPolicyClicked()
                         findNavController().navigate(
                             SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicyFragment()
                         )

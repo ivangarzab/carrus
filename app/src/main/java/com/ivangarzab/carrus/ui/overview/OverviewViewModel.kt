@@ -35,7 +35,8 @@ class OverviewViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
-    private val messageQueueRepository: MessageQueueRepository
+    private val messageQueueRepository: MessageQueueRepository,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     val state: LiveState<OverviewState> = LiveState(OverviewState())
@@ -103,7 +104,7 @@ class OverviewViewModel @Inject constructor(
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
-        Analytics.logServiceDeleted(service.id, service.name)
+        analytics.logServiceDeleted(service.id, service.name)
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -111,7 +112,7 @@ class OverviewViewModel @Inject constructor(
         if (isGranted) {
             removeNotificationPermissionMessage()
         }
-        Analytics.logNotificationPermissionResult(isGranted)
+        analytics.logNotificationPermissionResult(isGranted)
     }
 
     fun onMessageClicked(id: String) {
@@ -175,13 +176,13 @@ class OverviewViewModel @Inject constructor(
 
     private fun addMessage(type: Message) = with(type) {
         Timber.v("Adding ${this.name} message to the queue")
-        Analytics.logAppMessageAdded(this.name)
+        analytics.logAppMessageAdded(this.name)
         messageQueueRepository.addMessage(this)
     }
 
     private fun removeMessage(type: Message) = with(type) {
         Timber.v("Removing ${this.name} message from queue")
-        Analytics.logAppMessageRemoved(this.name)
+        analytics.logAppMessageRemoved(this.name)
         messageQueueRepository.removeMessage(this)
     }
 
@@ -197,7 +198,7 @@ class OverviewViewModel @Inject constructor(
             SortingType.NAME -> sortServicesByName()
             SortingType.DATE -> sortServicesByDate()
         }
-        Analytics.logServiceListSorted(type.name)
+        analytics.logServiceListSorted(type.name)
         state.setState {
             copy(serviceSortingType = type)
         }
@@ -234,7 +235,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onSort(type: SortingType) {
         Timber.v("Got a sorting request with type=$type")
-        Analytics.logSortClicked(type.name)
+        analytics.logSortClicked(type.name)
         onSortingByType(type)
     }
 

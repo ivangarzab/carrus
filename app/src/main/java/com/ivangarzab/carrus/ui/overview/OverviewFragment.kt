@@ -19,6 +19,7 @@ import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 
 /**
@@ -28,6 +29,9 @@ import timber.log.Timber
 class OverviewFragment : Fragment() {
 
     private val viewModel: OverviewViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -50,23 +54,23 @@ class OverviewFragment : Fragment() {
                 OverviewScreenStateful(
                     onFloatingActionButtonClicked = {
                         navigateToNewServiceBottomSheet()
-                        Analytics.logAddNewServiceClicked()
+                        analytics.logAddNewServiceClicked()
                     },
                     onCarEditButtonClicked = {
                         navigateToEditFragment()
-                        Analytics.logEditCarClicked()
+                        analytics.logEditCarClicked()
                     },
                     onServiceEditButtonClicked = {
                         navigateToEditServiceBottomSheet(it)
-                        Analytics.logEditServiceClicked()
+                        analytics.logEditServiceClicked()
                     },
                     onSettingsButtonClicked = {
                         navigateToSettingsFragment()
-                        Analytics.logSettingsClicked()
+                        analytics.logSettingsClicked()
                     },
                     onAddCarClicked = {
                         navigateToCreateFragment()
-                        Analytics.logAddNewCarClicked()
+                        analytics.logAddNewCarClicked()
                     }
                 )
             }
