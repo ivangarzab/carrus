@@ -1,6 +1,6 @@
 package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.analytics.AnalyticsRepository
+import com.ivangarzab.analytics.AnalyticsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

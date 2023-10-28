@@ -61,6 +61,7 @@ val activityVersion = "1.7.2"
 val gsonVersion = "2.10.1"
 val leakCanaryVersion = "2.12"
 dependencies {
+    implementation(project(":analytics"))
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.core:core-ktx:1.10.1")

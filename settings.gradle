@@ -7,3 +7,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Carrus"
 include ':app'
+include ':analytics'
