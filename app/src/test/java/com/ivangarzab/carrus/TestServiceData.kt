@@ -1,6 +1,6 @@
 package com.ivangarzab.carrus
 
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.Service
 import java.util.Calendar
 
 val TEST_SERVICE: Service = Service(

@@ -52,7 +52,7 @@
         tools:layout="@layout/fragment_create">
         <argument
             android:name="data"
-            app:argType="com.ivangarzab.carrus.data.Car"
+            app:argType="com.ivangarzab.carrus.data.models.Car"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
@@ -63,7 +63,7 @@
         tools:layout="@layout/modal_service">
         <argument
             android:name="service"
-            app:argType="com.ivangarzab.carrus.data.Service"
+            app:argType="com.ivangarzab.carrus.data.models.Service"
             app:nullable="true"
             android:defaultValue="@null" />
     </dialog>
@@ -103,4 +103,18 @@
         android:id="@+id/privacyPolicyFragment"
         android:name="com.ivangarzab.carrus.ui.privacypolicy.PrivacyPolicyFragment"
         android:label="PrivacyPolicyFragment" />
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_nav_graph_self"
+        app:destination="@id/nav_graph"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true"
+        app:launchSingleTop="true" />
 </navigation>

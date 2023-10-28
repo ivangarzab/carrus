@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.google.gson.Gson
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import timber.log.Timber
 import java.util.UUID
 
@@ -43,11 +43,13 @@ object CarImporter {
         make = data.make ?: "",
         model = data.model ?: "",
         year = data.year ?: "",
+        licenseState = data.licenseState ?: "",
         licenseNo = data.licenseNo ?: "",
         vinNo = data.vinNo ?: "",
         tirePressure = data.tirePressure ?: "",
         totalMiles = data.totalMiles ?: "",
-        milesPerGallon = data.milesPerGallon ?: "",
+        milesPerGalCity = data.milesPerGalCity ?: "",
+        milesPerGalHighway = data.milesPerGalHighway ?: "",
         services = data.services,
         imageUri = null
     )

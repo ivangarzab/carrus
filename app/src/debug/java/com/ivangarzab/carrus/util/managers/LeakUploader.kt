@@ -2,7 +2,7 @@ package com.ivangarzab.carrus.util.managers
 
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
-import com.ivangarzab.carrus.exceptions.MemoryLeakException
+import com.ivangarzab.carrus.data.exceptions.MemoryLeakException
 import leakcanary.EventListener
 import leakcanary.LeakCanary
 import shark.Leak

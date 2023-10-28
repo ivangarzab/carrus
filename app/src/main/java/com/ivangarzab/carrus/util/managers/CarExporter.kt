@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.google.gson.Gson
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import timber.log.Timber
 
 /**

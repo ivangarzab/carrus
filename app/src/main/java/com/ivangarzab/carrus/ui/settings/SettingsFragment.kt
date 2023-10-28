@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.create.CreateFragmentDirections
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.managers.Analytics
@@ -64,6 +65,12 @@ class SettingsFragment : Fragment() {
             AppTheme {
                 SettingsScreenStateful(
                     onBackPressed = { findNavController().popBackStack() },
+                    onNavHomePressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionNavGraphSelf()
+                    ) },
+                    onNavSettingsPressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionGlobalSettingsFragment()
+                    ) },
                     onImportClicked = {
                         Analytics.logImportButtonClicked()
                         openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE))
@@ -93,11 +100,11 @@ class SettingsFragment : Fragment() {
     }
 
     private fun generateExportFileName(): String =
-        EXPORT_FILE_NAME_PREFIX + Calendar.getInstance().getShortenedDate() + EXPORT_FILE_NAME_SUFFIX
+        Calendar.getInstance().getShortenedDate() + EXPORT_FILE_NAME_SUFFIX + EXPORT_FILE_NAME_EXTENSION
 
     companion object {
-        private const val EXPORT_FILE_NAME_PREFIX = "carrus-backup-"
-        private const val EXPORT_FILE_NAME_SUFFIX = ".txt"
+        private const val EXPORT_FILE_NAME_SUFFIX = "-carrus-backup"
+        private const val EXPORT_FILE_NAME_EXTENSION = ".txt"
     }
 }
 

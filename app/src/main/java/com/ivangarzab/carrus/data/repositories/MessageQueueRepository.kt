@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.data.repositories
 
-import com.ivangarzab.carrus.data.Message
-import com.ivangarzab.carrus.util.managers.MessageQueue
+import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -38,9 +38,13 @@ class MessageQueueRepository @Inject constructor() {
     }
 
     fun dismissMessage() {
-        updateMessageQueue(messageQueueFlow.value.apply {
-            Timber.d("Popped message with id=${pop().id} from queue")
-        })
+        try {
+            updateMessageQueue(messageQueueFlow.value.apply {
+                Timber.d("Popped message with id=${pop().id} from queue")
+            })
+        } catch (e: NoSuchElementException) {
+            Timber.w("Attempted to dismiss with")
+        }
     }
 
     private fun updateMessageQueue(messageQueue: MessageQueue) {

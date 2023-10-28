@@ -9,17 +9,17 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
-import com.ivangarzab.carrus.data.AlarmSettingsState
-import com.ivangarzab.carrus.data.Car
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.data.states.AlarmSettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.writeInFile
@@ -59,8 +59,7 @@ class SettingsViewModel @Inject constructor(
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                updateDueDateFormatState(it.dueDateFormat)
-                updateTimeFormatState(it.timeFormat)
+                processAppSettingsStateUpdates(it.dueDateFormat, it.timeFormat)
             }
 
         }
@@ -161,25 +160,22 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun rescheduleAlarms() {
-        //TODO: Revisit and reconsider this next call
-        alarmsRepository.schedulePastDueAlarm(true)
-        Analytics.logAlarmScheduled(Alarm.PAST_DUE.name, true)
-    }
-
+    //TODO: Needs testing
     fun onExportData(
         contentResolver: ContentResolver,
         uri: Uri
-    ): Boolean = carRepository.fetchCarData()?.let { data ->
-        Analytics.logCarExported(data.uid, data.getCarName())
-        CarExporter.exportToJson(data)?.let { json ->
-            appScope.launch(Dispatchers.IO) {
-                uri.writeInFile(contentResolver, json)
-            }
-            true
+    ): Boolean {
+        return carRepository.fetchCarData()?.let { data ->
+            CarExporter.exportToJson(data)?.let { json ->
+                appScope.launch(Dispatchers.IO) {
+                    uri.writeInFile(contentResolver, json)
+                }
+                true
+            } ?: false
         } ?: false
-    } ?: false
+    }
 
+    //TODO: Needs testing
     fun onImportData(
         contentResolver: ContentResolver,
         uri: Uri
@@ -199,6 +195,12 @@ class SettingsViewModel @Inject constructor(
         return false
     }
 
+    private fun rescheduleAlarms() {
+        //TODO: Revisit and reconsider this next call
+        alarmsRepository.schedulePastDueAlarm(true)
+        Analytics.logAlarmScheduled(Alarm.PAST_DUE.name, true)
+    }
+
     private fun updateCarState(car: Car?) {
         Timber.v("Updating car state")
         this.carData = car
@@ -210,44 +212,29 @@ class SettingsViewModel @Inject constructor(
 
     private fun processAlarmSettingsStateUpdate(data: AlarmSettingsState) {
         isAlarmPermissionGranted = data.isAlarmPermissionGranted
-        updateAlarmsEnabledState(data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled)
-        updateAlarmTimeState(data.alarmTime)
-        updateAlarmFrequencyState(data.frequency)
-    }
-
-    private fun updateAlarmsEnabledState(enabled: Boolean) {
-        Timber.v("Updating alarms toggle enabled state to $enabled")
-        _state.value = state.value?.copy(alarmsOn = enabled)
-    }
-
-    private fun updateAlarmTimeState(alarmTime: AlarmTime) {
-        Timber.v("Updating alarm time state to $alarmTime")
+        Timber.v("Updating alarm settings state changes")
         state.value?.let { state ->
-            _state.value = state.copy(alarmTime = alarmTime)
-        }
-    }
-
-    private fun updateAlarmFrequencyState(frequency: AlarmFrequency) {
-        Timber.v("Updating alarm frequency state to $frequency")
-        _state.value = state.value?.copy(alarmFrequency = frequency)
-    }
-
-    private fun updateDueDateFormatState(format: DueDateFormat) {
-        Timber.v("Updating due date format state to $format")
-        _state.value = state.value?.copy(dueDateFormat = format)
-    }
-
-    private fun updateTimeFormatState(format: TimeFormat) {
-        Timber.v("Updating clock time format state to $format")
-        state.value?.let { currentState ->
-            _state.value = currentState.copy(
-                clockTimeFormat = format,
-                alarmTimeSubtitle = when (format) {
-                    TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
-                    TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
-                },
-                alarmTimeOptions = format.range.map { it.toString() }
+            _state.value = state.copy(
+                alarmsOn = data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled,
+                alarmTime = data.alarmTime,
+                alarmFrequency = data.frequency
             )
         }
+    }
+
+    private fun processAppSettingsStateUpdates(
+        dueDateFormat: DueDateFormat,
+        clockTimeFormat: TimeFormat
+    ) {
+        Timber.v("Updating app settings state changes")
+        _state.value = state.value?.copy(
+            dueDateFormat = dueDateFormat,
+            clockTimeFormat = clockTimeFormat,
+            alarmTimeSubtitle = when (clockTimeFormat) {
+                TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
+                TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
+            },
+            alarmTimeOptions = clockTimeFormat.range.map { it.toString() }
+        )
     }
 }

@@ -1,14 +1,16 @@
 package com.ivangarzab.carrus.data.repositories
 
-import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.EMPTY_CAR
-import com.ivangarzab.carrus.data.TEST_CAR
 import com.ivangarzab.carrus.data.SERVICE_EMPTY
 import com.ivangarzab.carrus.data.SERVICE_TEST_1
 import com.ivangarzab.carrus.data.SERVICE_TEST_2
+import com.ivangarzab.carrus.data.TEST_CAR
 import com.ivangarzab.carrus.prefs
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Test
 
 
 /**
@@ -16,7 +18,7 @@ import org.junit.Before
  */
 class CarRepositoryTest {
 
-    private val repository = CarRepository()
+    private val repository = CarRepositoryImpl()
 
     @Before
     fun setup() {
@@ -27,6 +29,14 @@ class CarRepositoryTest {
     fun test_base_control() = with(repository) {
         assertThat(fetchCarData())
             .isNull()
+    }
+
+    @Test
+    fun test_observeCarData_base() = runTest {
+        with(repository) {
+            val carFlow = observeCarData()
+            assertThat(carFlow).isInstanceOf(Flow::class.java)
+        }
     }
 
     @Test

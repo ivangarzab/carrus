@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.ivangarzab.carrus.data.Message
+import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.util.managers.MessageQueue
 
 /**
  * Created by Ivan Garza Bermea.

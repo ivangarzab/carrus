@@ -3,10 +3,10 @@ package com.ivangarzab.carrus.ui.settings.data
 import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.TimeFormat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
 import kotlinx.parcelize.Parcelize
 
 /**

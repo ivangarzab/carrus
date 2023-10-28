@@ -2,6 +2,7 @@
     <string name="app_name">Carrus</string>
 
     <!-- General -->
+    <string name="home">Home</string>
     <string name="make">Make</string>
     <string name="model">Model</string>
     <string name="nickname">Nickname</string>
@@ -14,6 +15,7 @@
     <string name="color">Color</string>
     <string name="services">Services</string>
     <string name="details">Details</string>
+    <string name="car_details">Car Details</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -28,11 +30,15 @@
     <string name="dollar_sign">$</string>
     <string name="miles">miles</string>
     <string name="miles_per_gal">miles/gal</string>
+    <string name="mi_per_gal_city">mi/gal CIty</string>
+    <string name="mi_per_gal_highway">mi/gal Highway</string>
     <string name="psi">psi</string>
+    <string name="psi_cap">PSI</string>
     <string name="due">Due</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="days">Days</string>
     <string name="not_now">Not now</string>
+    <string name="state">State</string>
 
     <!-- Sorting -->
     <string name="none">none</string>
@@ -94,7 +100,7 @@
     <string name="service_date_format">%1$d/%2$d/%3$d</string>
     <string name="service_repair_date_format">on %s</string>
     <string name="service_due_date_week_format">%s weeks</string>
-    <string name="service_due_date_months_format">%s months</string>
+    <string name="service_due_date_months_format">%s mo.</string>
 
     <!-- Notifications -->
     <string name="notification_past_due_title">You have past due services!</string>

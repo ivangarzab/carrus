@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,11 +24,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -37,8 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.DueDateFormat
-import com.ivangarzab.carrus.data.Service
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
@@ -52,54 +51,28 @@ import java.util.concurrent.TimeUnit
  */
 
 @Composable
-fun OverviewServiceItemStateful(
+fun OverviewServiceItem(
     modifier: Modifier = Modifier,
-    index: Int = -1,
-    data: Service = Service.empty, //TODO: Create and use ServiceItemState
+    index: Int,
+    data: Service,
     dueDateFormat: DueDateFormat,
-    onEditClicked: (Service) -> Unit = { },
-    onDeleteClicked: (Service) -> Unit = { }
-) {
-    var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(value = false)
-    }
-
-    AppTheme {
-        OverviewServiceItem(
-            modifier = modifier,
-            index = index,
-            data = data,
-            dueDateFormat = dueDateFormat,
-            isExpanded = isExpanded,
-            onEditClicked = { onEditClicked(it) },
-            onDeleteClicked = { onDeleteClicked(it) }
-        ) {
-            isExpanded = isExpanded.not()
-        }
-    }
-}
-
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun OverviewServiceItem(
-    modifier: Modifier = Modifier,
-    index: Int = -1,
-    data: Service = Service.empty,
-    dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
     isExpanded: Boolean = true,
-    onEditClicked: (Service) -> Unit = { },
-    onDeleteClicked: (Service) -> Unit = { },
-    onExpandClicked: () -> Unit = { }
+    onEditClicked: (Service) -> Unit,
+    onDeleteClicked: (Service) -> Unit,
+    onExpandOrShrinkRequest: (index: Int, expand: Boolean) -> Unit
 ) {
+    fun onExpandOrShrinkClicked() = onExpandOrShrinkRequest(index, isExpanded.not())
+
     AppTheme {
         Card(
             modifier = modifier
                 .padding(top = 6.dp, bottom = 6.dp)
-                .clickable { onExpandClicked() },
+                .clip(CardDefaults.shape)
+                .clickable { onExpandOrShrinkClicked() },
         ) {
-            Column(modifier = modifier
-                .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
+            Column(
+                modifier = modifier
+                    .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
             ) {
                 Row {
                     Text(
@@ -148,7 +121,10 @@ private fun OverviewServiceItem(
                                     } //TODO: Set up logic in VM
                                 }
                             },
-                            style = MaterialTheme.typography.titleMedium,
+                            style = when (data.isPastDue()) {
+                                true -> MaterialTheme.typography.titleMedium
+                                false -> MaterialTheme.typography.titleSmall
+                            },
                             fontStyle = when (data.isPastDue()) {
                                 true -> FontStyle.Italic
                                 false -> null
@@ -165,13 +141,14 @@ private fun OverviewServiceItem(
                     }
 
                     val arrowRotationDegree: Float by animateFloatAsState(
-                        targetValue = if (isExpanded) 180f else 0f
+                        targetValue = if (isExpanded) 180f else 0f,
+                        label = ""
                     )
                     IconButton(
                         modifier = Modifier
                             .weight(1f)
                             .rotate(arrowRotationDegree),
-                        onClick = onExpandClicked
+                        onClick = { onExpandOrShrinkClicked() }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
@@ -240,6 +217,24 @@ private fun OverviewServiceItem(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun OverviewServiceItemPreview() {
+    AppTheme {
+        OverviewServiceItem(
+            modifier = Modifier,
+            index = -1,
+            data = Service.serviceList[1],
+            dueDateFormat = DueDateFormat.WEEKS,
+            isExpanded = true,
+            onEditClicked = { },
+            onDeleteClicked = { },
+            onExpandOrShrinkRequest = { _: Int, _: Boolean -> }
+        )
     }
 }
 

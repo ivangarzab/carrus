@@ -11,7 +11,7 @@
             type="android.view.View"/>
         <variable
             name="car"
-            type="com.ivangarzab.carrus.data.Car" />
+            type="com.ivangarzab.carrus.data.models.Car" />
         <variable
             name="addCarClickListener"
             type="android.view.View.OnClickListener" />

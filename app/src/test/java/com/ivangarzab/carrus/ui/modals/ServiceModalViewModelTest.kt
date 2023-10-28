@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.TEST_SERVICE
 import com.ivangarzab.carrus.TEST_SERVICE_EMPTY
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import io.mockk.every
 import io.mockk.mockk

@@ -1,16 +1,15 @@
 package com.ivangarzab.carrus.ui.create
 
-import android.content.ContentResolver
-import android.content.Intent
-import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,12 +22,16 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CreateViewModel @Inject constructor(
-    private val carRepository: CarRepository
-    ) : ViewModel() {
+    private val carRepository: CarRepository,
+    private val contentResolverHelper: ContentResolverHelper
+) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
     val state: LiveData<CarModalState> = _state
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     enum class Type { CREATE, EDIT }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     lateinit var type: Type
 
     val onSubmit: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -62,11 +65,13 @@ class CreateViewModel @Inject constructor(
                 make = state.make,
                 model = state.model,
                 year = state.year,
+                licenseState = state.licenseState,
                 licenseNo = state.licenseNo,
                 vinNo = state.vinNo,
                 tirePressure = state.tirePressure,
                 totalMiles = state.totalMiles,
-                milesPerGallon = state.milesPerGallon,
+                milesPerGalCity = state.milesPerGalCity,
+                milesPerGalHighway = state.milesPerGalHighway,
                 services = emptyList(),
                 imageUri = state.imageUri
             ).let { data ->
@@ -87,11 +92,15 @@ class CreateViewModel @Inject constructor(
         onSubmit.postValue(true)
     }
 
-    fun onImageUriReceived(contentResolver: ContentResolver, uri: String) {
-        contentResolver.takePersistableUriPermission(
-            Uri.parse(uri),
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-        )
+    fun onImageUriReceived(uri: String) {
+        if (uri.isBlank()) return
+
+        Timber.v("Image uri '$uri' permission ${
+            when (contentResolverHelper.persistUriPermission(uri)) {
+                true -> "granted"
+                false -> "denied"
+            }
+        }")
         Analytics.logImageAdded()
         setState(state, _state) {
             copy(imageUri = uri)
@@ -107,15 +116,17 @@ class CreateViewModel @Inject constructor(
     }
 
     fun onUpdateStateData(
-        nickname: String = "",
+        nickname: String,
         make: String,
         model: String,
         year: String,
+        licenseState: String,
         licenseNo: String,
         vinNo: String,
         tirePressure: String,
         totalMiles: String,
-        milesPerGallon: String
+        milesPerGalCity: String,
+        milesPerGalHighway: String
     ) {
         setState(state, _state) {
             copy(
@@ -123,11 +134,13 @@ class CreateViewModel @Inject constructor(
                 make = make,
                 model = model,
                 year = year,
+                licenseState = licenseState,
                 licenseNo = licenseNo,
                 vinNo = vinNo,
                 tirePressure = tirePressure,
                 totalMiles = totalMiles,
-                milesPerGallon = milesPerGallon
+                milesPerGalCity = milesPerGalCity,
+                milesPerGalHighway = milesPerGalHighway
             )
         }
     }
@@ -141,11 +154,13 @@ class CreateViewModel @Inject constructor(
                 make = car.make,
                 model = car.model,
                 year = car.year,
+                licenseState = car.licenseState,
                 licenseNo = car.licenseNo,
                 vinNo = car.vinNo,
                 tirePressure = car.tirePressure,
                 totalMiles = car.totalMiles,
-                milesPerGallon = car.milesPerGallon,
+                milesPerGalCity = car.milesPerGalCity,
+                milesPerGalHighway = car.milesPerGalHighway,
                 imageUri = car.imageUri
             )
         }

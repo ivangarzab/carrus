@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.data.Car
+import com.ivangarzab.carrus.data.models.Car
 import org.junit.Test
 
 /**

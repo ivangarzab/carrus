@@ -13,8 +13,9 @@ import androidx.lifecycle.ViewModel
  * Set a new value for the state from the return value of the block, which is passed
  * to saved state as saved under the given key.
  */
-@Suppress("unused")
-@Deprecated("Use the mutable state setter instead")
+@Deprecated("Use LiveState class instead",
+    ReplaceWith("LiveState.setState(..)")
+)
 inline fun <T, S : LiveData<T>> ViewModel.setState(
     state: S,
     savedState: SavedStateHandle,
@@ -22,13 +23,16 @@ inline fun <T, S : LiveData<T>> ViewModel.setState(
     block: T.() -> T
 ) {
     state.value?.let {
-        savedState.set(key, block(it))
+        savedState[key] = block(it)
     } ?: throw IllegalStateException("Have you set an initial value for your state?")
 }
 
 /**
  * Set a new value into the [MutableLiveData] state, by using the [LiveData] state as a base.
  */
+@Deprecated("Use LiveState class instead",
+    ReplaceWith("LiveState.setState(..)")
+)
 fun <T, M: MutableLiveData<T>, S: LiveData<T>> ViewModel.setState(
     state: S,
     mutableState: M,
