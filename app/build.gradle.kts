@@ -145,14 +145,12 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.10.3")
 
     // https://github.com/google/truth
-    val truthVersion = "1.1.5"
-    testImplementation("com.google.truth:truth:$truthVersion")
-    androidTestImplementation("com.google.truth:truth:$truthVersion")
+    testImplementation(libs.truth)
+    androidTestImplementation(libs.truth)
 
     // https://github.com/mockk/mockk
-    val mockkVersion = "1.13.8"
-    testImplementation("io.mockk:mockk-android:$mockkVersion")
-    testImplementation("io.mockk:mockk-agent:$mockkVersion")
-    androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
-    androidTestImplementation("io.mockk:mockk-agent:$mockkVersion")
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.agent)
 }

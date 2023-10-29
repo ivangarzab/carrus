@@ -13,6 +13,8 @@ androidxNav = "2.5.3"
 googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
 hiltGradle = "2.44"
+truth = "1.1.5"
+mockk = "1.13.8"
 
 
 
@@ -46,6 +48,13 @@ espresso = { group = "androidx.test.espresso", name = "espresso-core", version.r
 nav-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidxNav" }
 nav-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidxNav" }
 nav-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNav" }
+
+# https://github.com/google/truth
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+
+# https://github.com/mockk/mockk
+mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
 
 
 
