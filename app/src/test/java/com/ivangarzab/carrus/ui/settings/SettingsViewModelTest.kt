@@ -14,6 +14,7 @@ import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -45,7 +46,8 @@ class SettingsViewModelTest {
             carRepository = carRepository,
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
-            alarmSettingsRepository = alarmSettingsRepository
+            alarmSettingsRepository = alarmSettingsRepository,
+            analytics = mockk(relaxUnitFun = true)
         )
     }
 
