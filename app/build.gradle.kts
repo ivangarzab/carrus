@@ -64,19 +64,18 @@ dependencies {
     implementation(project(":analytics"))
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation(libs.androidx.core)
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation(libs.app.compat)
     implementation("androidx.activity:activity-ktx:$activityVersion")
     implementation("androidx.activity:activity-compose:$activityVersion")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.cardview:cardview:1.0.0")
-    val navVersion: String by rootProject.extra
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(libs.nav.fragment)
+    implementation(libs.nav.ui)
+    implementation(libs.nav.compose)
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     testImplementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
 
@@ -104,25 +103,24 @@ dependencies {
     implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
 
     // https://github.com/google/dagger/tree/master/java/dagger/hilt
-    val hiltVersion = "2.44"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
-    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    testImplementation(libs.hilt.testing)
+    kaptTest(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.testing)
+    kaptAndroidTest(libs.hilt.compiler)
 
     // https://firebase.google.com/support/release-notes/android
-    implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     // https://github.com/square/leakcanary
     implementation("com.squareup.leakcanary:plumber-android:$leakCanaryVersion")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
 
     // https://github.com/JakeWharton/timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 
     // https://github.com/coil-kt/coil
     val coilVersion = "2.4.0"
@@ -133,14 +131,13 @@ dependencies {
     implementation("com.github.hadilq:live-event:1.3.0")
 
     // Unit & instrumented testing
-    val androidxJunitVersion = "1.1.5"
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
     testImplementation("com.google.code.gson:gson:$gsonVersion")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("androidx.test:core-ktx:1.5.0")
-    testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
-    androidTestImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso)
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 

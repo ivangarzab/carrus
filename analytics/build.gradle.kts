@@ -34,29 +34,23 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core)
+    implementation(libs.app.compat)
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.timber)
 
-    // https://github.com/JakeWharton/timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
-    // https://firebase.google.com/support/release-notes/android
-    implementation(platform("com.google.firebase:firebase-bom:31.1.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    testImplementation(libs.hilt.testing)
+    kaptTest(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.testing)
+    kaptAndroidTest(libs.hilt.compiler)
 
-    // https://github.com/google/dagger/tree/master/java/dagger/hilt
-    val hiltVersion = "2.44"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
-    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso)
 }
