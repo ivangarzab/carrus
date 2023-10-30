@@ -24,8 +24,9 @@ class AnalyticsRepositoryImpl @Inject constructor() : AnalyticsRepository {
 
     override fun logEvent(name: String, vararg params: Pair<String, Any>) {
         if (isValidForAnalytics(name).not()) return
+        params.forEach { if (isValidForAnalytics(it.first).not()) return }
 
-        Timber.v("Logging event '$name'")
+        Timber.v("Logging event '$name'") //TODO: call Timber.a() instead
         firebaseAnalytics.logEvent(name) {
             params.forEach {
                 when (it.second) {
@@ -38,14 +39,13 @@ class AnalyticsRepositoryImpl @Inject constructor() : AnalyticsRepository {
     }
 
     override fun logScreenView(screenName: String, screenClass: String) {
-        if (isValidForAnalytics(screenName).not() &&
-            isValidForAnalytics(screenClass)
-        ) return
-
-        Timber.v("Logging screen view event for '$screenName'")
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-            param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass)
-        }
+        if (isValidForAnalytics(screenClass).not() || screenName.isBlank()) return
+        logEvent(
+            name = FirebaseAnalytics.Event.SCREEN_VIEW,
+            params = arrayOf(
+                FirebaseAnalytics.Param.SCREEN_NAME to screenName,
+                FirebaseAnalytics.Param.SCREEN_CLASS to screenClass
+            )
+        )
     }
 }

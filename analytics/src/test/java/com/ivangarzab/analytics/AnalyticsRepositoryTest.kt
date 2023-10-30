@@ -48,72 +48,137 @@ class AnalyticsRepositoryTest {
     }
 
     @Test
-    fun test_logEvent_empty_name_failure() {
+    fun test_logEvent_empty_name_no_params_failure() {
         repository.logEvent(STRING_EMPTY)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logEvent_blank_name_failure() {
+    fun test_logEvent_blank_name_no_params_failure() {
         repository.logEvent(STRING_BLANK)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logEvent_invalid_name_failure() {
+    fun test_logEvent_invalid_name_no_params_failure() {
         repository.logEvent(STRING_INVALID)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logEvent_valid_name_success() {
+    fun test_logEvent_valid_name_no_params_success() {
         repository.logEvent(STRING_VALID)
         assertThat(callbackResult)
             .isTrue()
     }
-    //TODO: Test params variable for logEvent
 
     @Test
-    fun test_logScreenView_empty_screenName() {
+    fun test_logEvent_valid_name_empty_param_failure() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(STRING_EMPTY to STRING_EMPTY)
+        )
+        assertThat(callbackResult)
+            .isFalse()
+    }
+
+    @Test
+    fun test_logEvent_valid_name_blank_param_failure() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(STRING_BLANK to STRING_EMPTY)
+        )
+        assertThat(callbackResult)
+            .isFalse()
+    }
+
+    @Test
+    fun test_logEvent_valid_name_invalid_param_failure() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(STRING_INVALID to STRING_EMPTY)
+        )
+        assertThat(callbackResult)
+            .isFalse()
+    }
+
+    @Test
+    fun test_logEvent_valid_name_valid_param_success() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(STRING_VALID to STRING_EMPTY)
+        )
+        assertThat(callbackResult)
+            .isTrue()
+    }
+
+    @Test
+    fun test_logEvent_valid_name_two_params_second_invalid_success() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(
+                STRING_VALID to STRING_EMPTY,
+                STRING_INVALID to STRING_EMPTY,
+            )
+        )
+        assertThat(callbackResult)
+            .isFalse()
+    }
+
+    @Test
+    fun test_logEvent_valid_name_two_valid_params_success() {
+        repository.logEvent(
+            name = STRING_VALID,
+            params = arrayOf(
+                STRING_VALID to STRING_EMPTY,
+                STRING_VALID to STRING_EMPTY,
+            )
+        )
+        assertThat(callbackResult)
+            .isTrue()
+    }
+
+    @Test
+    fun test_logScreenView_empty_screenName_valid_screenClass() {
         repository.logScreenView(STRING_EMPTY, STRING_VALID)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logScreenView_blank_screenName() {
+    fun test_logScreenView_blank_screenName_valid_screenClass() {
         repository.logScreenView(STRING_BLANK, STRING_VALID)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logScreenView_invalid_screenName() {
-        repository.logScreenView(STRING_INVALID, STRING_VALID)
-        assertThat(callbackResult)
-            .isFalse()
-    }
-    //
-    @Test
-    fun test_logScreenView_empty_screenClass() {
+    fun test_logScreenView_valid_screenName_empty_screenClass() {
         repository.logScreenView(STRING_VALID, STRING_EMPTY)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logScreenView_blank_screenClass() {
+    fun test_logScreenView_valid_screenName_blank_screenClass() {
         repository.logScreenView(STRING_VALID, STRING_BLANK)
         assertThat(callbackResult)
             .isFalse()
     }
 
     @Test
-    fun test_logScreenView_invalid_screenClass() {
+    fun test_logScreenView_valid_screenName_invalid_screenClass() {
         repository.logScreenView(STRING_VALID, STRING_INVALID)
+        assertThat(callbackResult)
+            .isFalse()
+    }
+
+    @Test
+    fun test_logScreenView_invalid_screenName_invalid_screenClass() {
+        repository.logScreenView(STRING_INVALID, STRING_INVALID)
         assertThat(callbackResult)
             .isFalse()
     }
