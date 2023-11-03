@@ -44,21 +44,21 @@ class Analytics @Inject constructor(
     fun logCarCreated(id: String, name: String) {
         logEvent("car_created",
             Pair("car_id", id),
-            Pair("name", name)
+            Pair("car_name", name)
         )
     }
 
     fun logCarUpdated(id: String, name: String) {
         logEvent("car_updated",
             Pair("car_id", id),
-            Pair("name", name)
+            Pair("car_name", name)
         )
     }
 
     fun logCarDeleted(id: String, name: String) {
         logEvent("car_deleted",
             Pair("car_id", id),
-            Pair("name", name)
+            Pair("car_name", name)
         )
     }
 
@@ -186,7 +186,7 @@ class Analytics @Inject constructor(
 
     fun logAppMessageClicked() {
         logEvent("message_clicked")
-    }
+    }//TODO: Add message id or name
 
     fun logAddImageClicked() {
         logEvent("image_add_clicked")
@@ -264,9 +264,5 @@ class Analytics @Inject constructor(
 
     fun logServiceSubmitClicked() {
         logEvent("service_submit_clicked")
-    }
-
-    fun logCarDetailsClicked() {
-        logEvent("car_details_clicked")
     }
 }
