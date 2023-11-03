@@ -49,6 +49,7 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logOverviewScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 OverviewScreenStateful(

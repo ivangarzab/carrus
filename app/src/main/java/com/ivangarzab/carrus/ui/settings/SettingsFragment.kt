@@ -65,6 +65,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logSettingsScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 SettingsScreenStateful(
@@ -96,10 +97,12 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.onRequestAlarmPermission.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                SettingsFragmentDirections.actionSettingsFragmentToAlarmPermissionModal()
-            )
+        with(viewModel) {
+            onRequestAlarmPermission.observe(viewLifecycleOwner) {
+                findNavController().navigate(
+                    SettingsFragmentDirections.actionSettingsFragmentToAlarmPermissionModal()
+                )
+            }
         }
     }
 
