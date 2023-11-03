@@ -265,4 +265,46 @@ class Analytics @Inject constructor(
     fun logServiceSubmitClicked() {
         logEvent("service_submit_clicked")
     }
+
+    fun logCreateScreenView(className: String) {
+        logScreenView(
+            "create_screen",
+            className
+        )
+    }
+
+    fun logOverviewScreenView(className: String) {
+        logScreenView(
+            "overview_screen",
+            className
+        )
+    }
+
+    fun logSettingsScreenView(className: String) {
+        logScreenView(
+            "settings_screen",
+            className
+        )
+    }
+
+    fun logMapScreenView(className: String) {
+        logScreenView(
+            "map_screen",
+            className
+        )
+    }
+
+    fun logPrivacyPolicyScreenView(className: String) {
+        logScreenView(
+            "privacy_policy_screen",
+            className
+        )
+    }
+
+    fun logServiceModalScreenView(className: String) {
+        logScreenView(
+            "service_modal_screen",
+            className
+        )
+    }
 }
