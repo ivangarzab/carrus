@@ -594,4 +594,26 @@ class AnalyticsTest {
             )
         }
     }
+
+    @Test
+    fun test_logAlarmInterstitialScreenView() {
+        analytics.logAlarmInterstitialScreenView("class")
+        verify {
+            analyticsRepository.logScreenView(
+                "alarm_interstitial_screen",
+                "class"
+            )
+        }
+    }
+
+    @Test
+    fun test_logNotificationInterstitialScreenView() {
+        analytics.logNotificationInterstitialScreenView("class")
+        verify {
+            analyticsRepository.logScreenView(
+                "notification_interstitial_screen",
+                "class"
+            )
+        }
+    }
 }

@@ -31,6 +31,10 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+//    packaging {
+//        resources.excludes.add("META-INF/LICENSE.md")
+//        resources.excludes.add("META-INF/LICENSE-notice.md")
+//    } This block fixed a bug while building, once
 }
 
 dependencies {

@@ -307,4 +307,18 @@ class Analytics @Inject constructor(
             className
         )
     }
+
+    fun logAlarmInterstitialScreenView(className: String) {
+        logScreenView(
+            "alarm_interstitial_screen",
+            className
+        )
+    }
+
+    fun logNotificationInterstitialScreenView(className: String) {
+        logScreenView(
+            "notification_interstitial_screen",
+            className
+        )
+    }
 }
