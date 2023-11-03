@@ -13,7 +13,7 @@ class Analytics @Inject constructor(
 ) {
 
     private fun logEvent(name: String, vararg params: Pair<String, Any>) =
-        analyticsRepository.logEvent(name, )//TODO()
+        analyticsRepository.logEvent(name, *params)
 
     private fun logScreenView(screenName: String, className: String) =
         analyticsRepository.logScreenView(screenName, className)
