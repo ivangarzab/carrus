@@ -26,7 +26,7 @@ class AnalyticsRepositoryImpl @Inject constructor() : AnalyticsRepository {
         if (isValidForAnalytics(name).not()) return
         params.forEach { if (isValidForAnalytics(it.first).not()) return }
 
-        Timber.v("Logging event '$name'") //TODO: call Timber.a() instead
+        printLoggedEvent(name, *params) //TODO: call Timber.a() instead
         firebaseAnalytics.logEvent(name) {
             params.forEach {
                 when (it.second) {
@@ -47,5 +47,13 @@ class AnalyticsRepositoryImpl @Inject constructor() : AnalyticsRepository {
                 FirebaseAnalytics.Param.SCREEN_CLASS to screenClass
             )
         )
+    }
+
+    private fun printLoggedEvent(name: String, vararg params: Pair<String, Any>) {
+        var loggedEvent = "Logging event '$name'"
+        params.forEachIndexed { index, pair ->
+            loggedEvent += "${if (index > 0) " -" else " |"} '${pair.first}'=${pair.second}"
+        }
+        Timber.v(loggedEvent)
     }
 }
