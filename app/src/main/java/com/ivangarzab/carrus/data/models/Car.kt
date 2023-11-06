@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.models
 
 import android.os.Parcelable
 import com.google.gson.Gson
+import com.ivangarzab.carrus.data.models.Car.Companion.VERSION_CAR
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -9,6 +10,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Car(
+    val version: Int = 0,
     val uid: String,
     val nickname: String,
     val make: String,
@@ -68,6 +70,7 @@ data class Car(
     }
 
     companion object {
+        const val VERSION_CAR: Int = 1
         val empty: Car = Car(
             uid = "",
             nickname = "",
@@ -100,3 +103,5 @@ data class Car(
         )
     }
 }
+
+fun Car.needsUpgrade(): Boolean = this.version != VERSION_CAR
