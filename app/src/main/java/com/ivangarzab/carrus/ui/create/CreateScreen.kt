@@ -206,7 +206,7 @@ private fun CreateScreenContent(
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(shouldBeExpanded())
+        mutableStateOf(true)
     }
     var isImagePresent: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -220,7 +220,7 @@ private fun CreateScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp, end = 32.dp)
+                    .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                     .verticalScroll(
                         state = rememberScrollState(),
                         enabled = true
@@ -496,7 +496,7 @@ private fun CreateScreenContent(
                     }
                 )
                 BigPositiveButton(
-                    modifier = Modifier.padding(top = verticalSeparation),
+                    modifier = Modifier.padding(top = verticalSeparation, bottom = verticalSeparation),
                     text = state.actionButton,
                     onClick = { onActionButtonClicked(
                         state.make,
