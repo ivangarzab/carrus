@@ -11,6 +11,7 @@ import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
+import io.mockk.mockk
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
@@ -33,7 +34,8 @@ class CreateViewModelTest {
         carRepository = TestCarRepository()
         viewModel = CreateViewModel(
             carRepository = carRepository,
-            contentResolverHelper = TestContentResolverHelper()
+            contentResolverHelper = TestContentResolverHelper(),
+            analytics = mockk(relaxUnitFun = true)
         ).apply { init(null) }
     }
 

@@ -19,6 +19,7 @@ class PermissionAlarmInterstitial :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        analytics.logAlarmInterstitialScreenView(this::class.java.simpleName)
         viewModel = ViewModelProvider(this)[PermissionInterstitialViewModel::class.java].apply {
             init(PermissionInterstitialEnum.ALARMS)
         }

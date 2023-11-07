@@ -34,6 +34,7 @@ import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
 import com.ivangarzab.carrus.ui.overview.data.SortingType
+import com.ivangarzab.carrus.util.managers.Analytics
 
 /**
  * Created by Ivan Garza Bermea.

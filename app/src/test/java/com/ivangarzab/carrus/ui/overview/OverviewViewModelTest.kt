@@ -53,7 +53,8 @@ class OverviewViewModelTest {
             carRepository = carRepository,
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
-            messageQueueRepository = messageQueueRepository
+            messageQueueRepository = messageQueueRepository,
+            analytics = mockk(relaxUnitFun = true)
         )
     }
 

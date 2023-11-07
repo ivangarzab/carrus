@@ -39,7 +39,8 @@ class ServiceModalViewModelTest {
     fun setup() {
         val carRepository: CarRepository = mockk(relaxed = true)
         viewModel = ServiceModalViewModel(
-            carRepository = carRepository
+            carRepository = carRepository,
+            analytics = mockk(relaxUnitFun = true)
         )
         every { carRepository.fetchCarData() } returns Car.default
         every { carRepository.updateCarService(TEST_SERVICE) }
