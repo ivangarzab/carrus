@@ -2,7 +2,6 @@ package com.ivangarzab.carrus.util.managers
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.Gson
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.Car
@@ -141,7 +140,7 @@ operator fun SharedPreferences.set(
     is DueDateFormat -> edit { it.putString(key, value.value)}
     is TimeFormat -> edit { it.putString(key, value.value)}
     is AlarmFrequency -> edit { it.putString(key, value.value)}
-    else -> throw UnsupportedOperationException("Only native types are supported")
+    else -> throw UnsupportedOperationException(EXCEPTION_MESSAGE)
 }
 
 /**
@@ -159,7 +158,8 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     Float::class -> getFloat(key, defaultValue as? Float ?: -1f) as T
     Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
     Car::class -> getString(key, defaultValue as? String ?: "").let {
-        (Gson().fromJson(it, Car::class.java) ?: Car.empty) as T
+        CarValidator.validateCarData(it) as T
+    //        (Gson().fromJson(it, Car::class.java) ?: Car.empty) as T
     }
     DueDateFormat::class -> getString(key, defaultValue as String).let {
         DueDateFormat.get(it ?: DueDateFormat.DAYS.name) as T
@@ -170,5 +170,6 @@ inline operator fun <reified T : Any> SharedPreferences.get(
     AlarmFrequency::class -> getString(key, defaultValue as String).let {
         AlarmFrequency.get(it ?: AlarmFrequency.DAILY.name) as T
     }
-    else -> throw UnsupportedOperationException("Only native types are supported")
+    else -> throw UnsupportedOperationException(EXCEPTION_MESSAGE)
 }
+const val EXCEPTION_MESSAGE = "Type is not supported"
