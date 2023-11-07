@@ -117,6 +117,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onMessageClicked(id: String) {
         Timber.d("Got a message click with id=$id")
+        analytics.logAppMessageClicked(id)
         when (id) {
             Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
                 if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU) {

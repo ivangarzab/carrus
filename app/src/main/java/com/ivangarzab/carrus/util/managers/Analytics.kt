@@ -19,13 +19,15 @@ class Analytics @Inject constructor(
         analyticsRepository.logScreenView(screenName, className)
 
     private fun logPermissionGranted(permission: String) {
-        logEvent("permission_granted",
+        logEvent(
+            "permission_granted",
             Pair("permission_type", permission)
         )
     }
 
     private fun logPermissionDenied(permission: String) {
-        logEvent("permission_denied",
+        logEvent(
+            "permission_denied",
             Pair("permission_type", permission)
         )
     }
@@ -42,124 +44,143 @@ class Analytics @Inject constructor(
 
     // Instrumentation events
     fun logCarCreated(id: String, name: String) {
-        logEvent("car_created",
+        logEvent(
+            "car_created",
             Pair("car_id", id),
             Pair("car_name", name)
         )
     }
 
     fun logCarUpdated(id: String, name: String) {
-        logEvent("car_updated",
+        logEvent(
+            "car_updated",
             Pair("car_id", id),
             Pair("car_name", name)
         )
     }
 
     fun logCarDeleted(id: String, name: String) {
-        logEvent("car_deleted",
+        logEvent(
+            "car_deleted",
             Pair("car_id", id),
             Pair("car_name", name)
         )
     }
 
     fun logCarExported(id: String, name: String) {
-        logEvent("car_exported",
+        logEvent(
+            "car_exported",
             Pair("car_id", id),
             Pair("car_name", name)
         )
     }
 
     fun logCarImported(id: String, name: String) {
-        logEvent("car_imported",
+        logEvent(
+            "car_imported",
             Pair("car_id", id),
             Pair("car_name", name)
         )
     }
 
     fun logServiceCreated(id: String, name: String) {
-        logEvent("service_created",
+        logEvent(
+            "service_created",
             Pair("service_id", id),
             Pair("service_name", name)
         )
     }
 
     fun logServiceUpdated(id: String, name: String) {
-        logEvent("service_updated",
+        logEvent(
+            "service_updated",
             Pair("service_id", id),
             Pair("service_name", name)
         )
     }
 
     fun logServiceDeleted(id: String, name: String) {
-        logEvent("service_deleted",
+        logEvent(
+            "service_deleted",
             Pair("service_id", id),
             Pair("service_name", name)
         )
     }
 
     fun logServiceListSorted(type: String) {
-        logEvent("service_list_sorted",
+        logEvent(
+            "service_list_sorted",
             Pair("sort_type", type)
         )
     }
 
     fun logServiceListDeleted(carId: String) {
-        logEvent("service_list_deleted",
+        logEvent(
+            "service_list_deleted",
             Pair("car_id", carId)
         )
     }
 
     fun logAlarmScheduled(name: String, forced: Boolean) {
-        logEvent("alarm_scheduled",
+        logEvent(
+            "alarm_scheduled",
             Pair("alarm_type", name),
             Pair("forced", forced)
         )
     }
 
     fun logAlarmCancelled(name: String) {
-        logEvent("alarm_cancelled",
+        logEvent(
+            "alarm_cancelled",
             Pair("alarm_type", name)
         )
     }
 
     fun logAlarmFeatureToggled(enabled: Boolean) {
-        logEvent("alarm_feature_toggled",
+        logEvent(
+            "alarm_feature_toggled",
             Pair("enabled", enabled)
         )
     }
 
     fun logAlarmTimeChanged(alarmTime: Int) {
-        logEvent("alarm_time_changed",
+        logEvent(
+            "alarm_time_changed",
             Pair("alarm_time", alarmTime)
         )
     }
 
     fun logAlarmFrequencyChanged(frequency: String) {
-        logEvent("alarm_frequency_changed",
+        logEvent(
+            "alarm_frequency_changed",
             Pair("alarm_frequency", frequency)
         )
     }
 
     fun logNightThemeChanged(isNight: Boolean) {
-        logEvent("night_theme_changed",
+        logEvent(
+            "night_theme_changed",
             Pair("night", isNight)
         )
     }
 
     fun logDueDateFormatChanged(format: String) {
-        logEvent("due_date_format_changed",
+        logEvent(
+            "due_date_format_changed",
             Pair("format", format)
         )
     }
 
     fun logTimeFormatChanged(format: String) {
-        logEvent("time_format_changed",
+        logEvent(
+            "time_format_changed",
             Pair("format", format)
         )
     }
 
     fun logLeftHandedChanged(lefty: Boolean) {
-        logEvent("left_handed_changed",
+        logEvent(
+            "left_handed_changed",
             Pair("lefty", lefty)
         )
     }
@@ -184,9 +205,12 @@ class Analytics @Inject constructor(
         logEvent("settings_clicked")
     }
 
-    fun logAppMessageClicked() {
-        logEvent("message_clicked")
-    }//TODO: Add message id or name
+    fun logAppMessageClicked(id: String) {
+        logEvent(
+            "message_clicked",
+            "message_id" to id
+        )
+    }
 
     fun logAddImageClicked() {
         logEvent("image_add_clicked")
@@ -213,19 +237,22 @@ class Analytics @Inject constructor(
     }
 
     fun logAppMessageAdded(type: String) {
-        logEvent("message_added",
+        logEvent(
+            "message_added",
             Pair("message_type", type)
         )
     }
 
     fun logAppMessageRemoved(type: String) {
-        logEvent("message_removed",
+        logEvent(
+            "message_removed",
             Pair("message_type", type)
         )
     }
 
     fun logSortClicked(type: String) {
-        logEvent("sorting_by_type_clicked",
+        logEvent(
+            "sorting_by_type_clicked",
             Pair("sort_type", type)
         )
     }

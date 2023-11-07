@@ -370,9 +370,12 @@ class AnalyticsTest {
 
     @Test
     fun test_logAppMessageClicked() {
-        analytics.logAppMessageClicked()
+        analytics.logAppMessageClicked("id")
         verify {
-            analyticsRepository.logEvent("message_clicked")
+            analyticsRepository.logEvent(
+                "message_clicked",
+                Pair("message_id", "id")
+                )
         }
     }
 

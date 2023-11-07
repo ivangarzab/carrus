@@ -166,11 +166,12 @@ class SettingsViewModel @Inject constructor(
         contentResolver: ContentResolver,
         uri: Uri
     ): Boolean {
-        return carRepository.fetchCarData()?.let { data ->
+        return carRepository.fetchCarData()?.let { data -> //TODO: Grab the state data instead?
             CarExporter.exportToJson(data)?.let { json ->
                 appScope.launch(Dispatchers.IO) {
                     uri.writeInFile(contentResolver, json)
                 }
+                analytics.logCarExported(data.uid, data.getCarName())
                 true
             } ?: false
         } ?: false
