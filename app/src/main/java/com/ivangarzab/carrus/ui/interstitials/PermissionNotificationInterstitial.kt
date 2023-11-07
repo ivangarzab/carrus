@@ -16,6 +16,7 @@ class PermissionNotificationInterstitial :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        analytics.logNotificationInterstitialScreenView(this::class.java.simpleName)
         viewModel = ViewModelProvider(this)[PermissionInterstitialViewModel::class.java].apply {
             init(PermissionInterstitialEnum.NOTIFICATIONS)
         }

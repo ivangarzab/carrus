@@ -14,9 +14,11 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.CreateFragmentDirections
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -25,6 +27,9 @@ import java.util.Calendar
 class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val createDocumentsContract = registerForActivityResult(
         ActivityResultContracts.CreateDocument(DEFAULT_FILE_MIME_TYPE)
@@ -60,6 +65,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logSettingsScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 SettingsScreenStateful(
@@ -70,9 +76,16 @@ class SettingsFragment : Fragment() {
                     onNavSettingsPressed = { findNavController().navigate(
                         CreateFragmentDirections.actionGlobalSettingsFragment()
                     ) },
-                    onImportClicked = { openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE)) },
-                    onExportClicked = { createDocumentsContract.launch(generateExportFileName()) },
+                    onImportClicked = {
+                        analytics.logImportButtonClicked()
+                        openDocumentContract.launch(arrayOf(DEFAULT_FILE_MIME_TYPE))
+                                      },
+                    onExportClicked = {
+                        analytics.logExportButtonClicked()
+                        createDocumentsContract.launch(generateExportFileName())
+                                      },
                     onPrivacyPolicyClicked = {
+                        analytics.logPrivacyPolicyClicked()
                         findNavController().navigate(
                             SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicyFragment()
                         )
@@ -84,10 +97,12 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.onRequestAlarmPermission.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                SettingsFragmentDirections.actionSettingsFragmentToAlarmPermissionModal()
-            )
+        with(viewModel) {
+            onRequestAlarmPermission.observe(viewLifecycleOwner) {
+                findNavController().navigate(
+                    SettingsFragmentDirections.actionSettingsFragmentToAlarmPermissionModal()
+                )
+            }
         }
     }
 

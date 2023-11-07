@@ -18,6 +18,7 @@ import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -34,7 +35,8 @@ class OverviewViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
-    private val messageQueueRepository: MessageQueueRepository
+    private val messageQueueRepository: MessageQueueRepository,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     val state: LiveState<OverviewState> = LiveState(OverviewState())
@@ -102,6 +104,7 @@ class OverviewViewModel @Inject constructor(
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
+        analytics.logServiceDeleted(service.id, service.name)
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -109,10 +112,12 @@ class OverviewViewModel @Inject constructor(
         if (isGranted) {
             removeNotificationPermissionMessage()
         }
+        analytics.logNotificationPermissionResult(isGranted)
     }
 
     fun onMessageClicked(id: String) {
         Timber.d("Got a message click with id=$id")
+        analytics.logAppMessageClicked(id)
         when (id) {
             Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
                 if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU) {
@@ -128,19 +133,13 @@ class OverviewViewModel @Inject constructor(
                 removeAlarmPermissionMessage()
             }
 
-            Message.TEST.data.id -> removeTestMessage()
+            Message.TEST.data.id -> removeMessage(Message.TEST)
         }
-    }
-
-    fun onMessageDismissed() {
-        Timber.v("Removing message at the top of the queue")
-        messageQueueRepository.dismissMessage()
     }
 
     @VisibleForTesting
     fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
-        Timber.v("Adding ${this.name} message to the queue")
-        messageQueueRepository.addMessage(this)
+        addMessage(this)
         state.setState {
             copy(hasPromptedForPermissionNotification = true)
         }
@@ -148,8 +147,7 @@ class OverviewViewModel @Inject constructor(
 
     private fun removeNotificationPermissionMessage() =
         with(Message.MISSING_PERMISSION_NOTIFICATION) {
-            Timber.v("Removing ${this.name} message from queue")
-            messageQueueRepository.removeMessage(this)
+            removeMessage(this)
         }
 
     fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
@@ -165,20 +163,35 @@ class OverviewViewModel @Inject constructor(
 
     @VisibleForTesting
     fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
-        Timber.v("Adding ${this.name} message to the queue")
-        messageQueueRepository.addMessage(this)
+        addMessage(this)
         state.setState {
             copy(hasPromptedForPermissionAlarm = true)
         }
     }
 
     private fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+        removeMessage(this)
+    }
+
+    fun addTestMessage() = addMessage(Message.TEST)
+
+    private fun addMessage(type: Message) = with(type) {
+        Timber.v("Adding ${this.name} message to the queue")
+        analytics.logAppMessageAdded(this.name)
+        messageQueueRepository.addMessage(this)
+    }
+
+    private fun removeMessage(type: Message) = with(type) {
         Timber.v("Removing ${this.name} message from queue")
+        analytics.logAppMessageRemoved(this.name)
         messageQueueRepository.removeMessage(this)
     }
 
-    fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
-    private fun removeTestMessage() = messageQueueRepository.removeMessage(Message.TEST)
+    fun onMessageDismissed() {
+        Timber.v("Removing message at the top of the queue")
+        //TODO: How do we instrument this, or should we simply use removeMessage instead?
+        messageQueueRepository.dismissMessage()
+    }
 
     private fun onSortingByType(type: SortingType) {
         when (type) {
@@ -186,6 +199,7 @@ class OverviewViewModel @Inject constructor(
             SortingType.NAME -> sortServicesByName()
             SortingType.DATE -> sortServicesByDate()
         }
+        analytics.logServiceListSorted(type.name)
         state.setState {
             copy(serviceSortingType = type)
         }
@@ -222,6 +236,7 @@ class OverviewViewModel @Inject constructor(
 
     fun onSort(type: SortingType) {
         Timber.v("Got a sorting request with type=$type")
+        analytics.logSortClicked(type.name)
         onSortingByType(type)
     }
 

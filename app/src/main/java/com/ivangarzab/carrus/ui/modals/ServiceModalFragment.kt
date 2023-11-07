@@ -9,7 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -19,15 +21,20 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
 
     private val args: ServiceModalFragmentArgs by navArgs()
 
+    @Inject
+    lateinit var analytics: Analytics
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logServiceModalScreenView(this::class.java.simpleName)
         setContent {
             ServiceModalScreenStateful(
                 args = args,
                 onSubmissionSuccess = { submitSuccess ->
+                    analytics.logServiceSubmitClicked()
                     when (submitSuccess) {
                         true -> findNavController().popBackStack()
                         false -> toast("Missing required data")

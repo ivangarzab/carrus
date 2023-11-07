@@ -8,17 +8,23 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.util.managers.Analytics
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class PrivacyPolicyFragment : Fragment() {
 
+    @Inject
+    lateinit var analytics: Analytics
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logPrivacyPolicyScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 PrivacyPolicyScreen(
