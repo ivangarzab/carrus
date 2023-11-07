@@ -15,8 +15,10 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -27,6 +29,9 @@ class CreateFragment : Fragment() {
     private val viewModel: CreateViewModel by viewModels()
 
     private val args: CreateFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
         it?.let { uri ->
@@ -74,11 +79,13 @@ class CreateFragment : Fragment() {
                         CreateFragmentDirections.actionGlobalMapFragment()
                     ) },
                     onImportClicked = {
+                        analytics.logImportButtonClicked()
                         openDocumentContract.launch(
                             arrayOf(DEFAULT_FILE_MIME_TYPE)
                         )
                     },
                     onAddImageClicked = {
+                        analytics.logAddImageClicked()
                         pickMedia.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
@@ -90,6 +97,7 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        analytics.logCreateScreenView(this::class.java.simpleName)
         with(viewModel) {
             init(args.data)
             onSubmit.observe(viewLifecycleOwner) { success ->

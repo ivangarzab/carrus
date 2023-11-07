@@ -9,6 +9,8 @@ import androidx.fragment.app.DialogFragment
 import com.ivangarzab.carrus.databinding.ModalInterstitialPermissionBinding
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
+import com.ivangarzab.carrus.util.managers.Analytics
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -19,6 +21,9 @@ abstract class PermissionInterstitial<T : PermissionInterstitialViewModel> :
     private lateinit var binding: ModalInterstitialPermissionBinding
 
     lateinit var viewModel: T
+
+    @Inject
+    lateinit var analytics: Analytics
 
     override fun onCreateView(
         inflater: LayoutInflater,

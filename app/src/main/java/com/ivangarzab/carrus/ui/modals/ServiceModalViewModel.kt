@@ -10,6 +10,7 @@ import com.ivangarzab.carrus.util.extensions.empty
 import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.parseIntoMoney
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.Calendar
@@ -21,7 +22,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ServiceModalViewModel @Inject constructor(
-    private val carRepository: CarRepository
+    private val carRepository: CarRepository,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     private val _state = MutableLiveData(ServiceModalState())
@@ -101,11 +103,13 @@ class ServiceModalViewModel @Inject constructor(
     private fun onServiceCreated(service: Service) {
         carRepository.addCarService(service)
         Timber.d("New service created: ${service.name}")
+        analytics.logServiceCreated(service.id, service.name)
     }
 
     private fun onServiceUpdate(service: Service) {
         carRepository.updateCarService(service)
         Timber.d("Service updated: ${service.name}")
+        analytics.logServiceUpdated(service.id, service.name)
     }
 
     private fun setState(update: ServiceModalState) {

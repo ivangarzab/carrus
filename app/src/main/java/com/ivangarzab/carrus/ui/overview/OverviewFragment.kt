@@ -16,8 +16,10 @@ import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 
 /**
@@ -27,6 +29,9 @@ import timber.log.Timber
 class OverviewFragment : Fragment() {
 
     private val viewModel: OverviewViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -44,15 +49,34 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
+        analytics.logOverviewScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 OverviewScreenStateful(
-                    onFloatingActionButtonClicked = { navigateToNewServiceBottomSheet() },
-                    onCarEditButtonClicked = { navigateToEditFragment() },
-                    onServiceEditButtonClicked = { navigateToEditServiceBottomSheet(it) },
-                    onSettingsButtonClicked = { navigateToSettingsFragment() },
-                    onMapButtonClicked = { navigateToMapFragment() },
-                    onAddCarClicked = { navigateToCreateFragment() }
+                    onFloatingActionButtonClicked = {
+                        navigateToNewServiceBottomSheet()
+                        analytics.logAddNewServiceClicked()
+                    },
+                    onCarEditButtonClicked = {
+                        navigateToEditFragment()
+                        analytics.logEditCarClicked()
+                    },
+                    onServiceEditButtonClicked = {
+                        navigateToEditServiceBottomSheet(it)
+                        analytics.logEditServiceClicked()
+                    },
+                    onSettingsButtonClicked = {
+                        navigateToSettingsFragment()
+                        analytics.logSettingsClicked()
+                    },
+                    onAddCarClicked = {
+                        navigateToCreateFragment()
+                        analytics.logAddNewCarClicked()
+                    },
+                    onMapButtonClicked = {
+                        navigateToMapFragment()
+                        analytics.logMapClicked()
+                    }
                 )
             }
         }

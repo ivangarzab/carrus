@@ -10,6 +10,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
-    private val contentResolverHelper: ContentResolverHelper
+    private val contentResolverHelper: ContentResolverHelper,
+    private val analytics: Analytics
 ) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
@@ -75,10 +77,16 @@ class CreateViewModel @Inject constructor(
                 imageUri = state.imageUri
             ).let { data ->
                 when (type) {
-                    Type.CREATE -> carRepository.saveCarData(data)
-                    Type.EDIT -> carRepository.saveCarData(data.copy(
-                        services = carRepository.fetchCarData()?.services ?: emptyList()
-                    ))
+                    Type.CREATE -> {
+                        carRepository.saveCarData(data)
+                        analytics.logCarCreated(data.uid, data.getCarName())
+                    }
+                    Type.EDIT -> {
+                        carRepository.saveCarData(data.copy(
+                            services = carRepository.fetchCarData()?.services ?: emptyList()
+                        ))
+                        analytics.logCarUpdated(data.uid, data.getCarName())
+                    }
                 }
             }
         }
@@ -94,6 +102,7 @@ class CreateViewModel @Inject constructor(
                 false -> "denied"
             }
         }")
+        analytics.logImageAdded()
         setState(state, _state) {
             copy(imageUri = uri)
         }
@@ -101,6 +110,7 @@ class CreateViewModel @Inject constructor(
 
     fun onImageDeleted() {
         Timber.v("Deleting image")
+        analytics.logImageDeleted()
         setState(state, _state) {
             copy(imageUri = null)
         }
@@ -162,6 +172,7 @@ class CreateViewModel @Inject constructor(
             CarImporter.importFromJson(data)?.let { car ->
                 Timber.d("Got car data to import: $car")
                 carRepository.saveCarData(car)
+                analytics.logCarImported(car.uid, car.getCarName())
                 onSubmit.postValue(true)
                 true
             } ?: false

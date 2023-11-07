@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.appScope
+import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.models.Car
@@ -22,6 +23,7 @@ import com.ivangarzab.carrus.data.states.AlarmSettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.writeInFile
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +40,8 @@ class SettingsViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
-    private val alarmSettingsRepository: AlarmSettingsRepository
+    private val alarmSettingsRepository: AlarmSettingsRepository,
+    private val analytics: Analytics
     ) : ViewModel() {
 
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
@@ -69,16 +72,23 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
+        analytics.logDarkModeToggleClicked()
         Timber.v("Dark mode toggle was checked to: $checked")
         appSettingsRepository.setNightThemeSetting(checked)
+        analytics.logNightThemeChanged(checked)
     }
 
     fun onDeleteCarDataClicked() {
+        analytics.logDeleteCarDataClicked()
         Timber.d("Deleting car data")
+        carData?.let {
+            analytics.logCarDeleted(it.uid, it.getCarName())
+        }
         carRepository.deleteCarData()
     }
 
     fun onDeleteServicesClicked() {
+        analytics.logDeleteServiceListClicked()
         carData?.let {
             if (it.services.isNotEmpty()) {
                 Timber.d("Deleting all services from car data")
@@ -86,14 +96,18 @@ class SettingsViewModel @Inject constructor(
                     services = emptyList()
                 )
                 carRepository.saveCarData(newCar)
+                analytics.logServiceListDeleted(it.uid)
                 alarmsRepository.cancelAllAlarms()
+                analytics.logAlarmCancelled(Alarm.PAST_DUE.name)
             }
         } ?: Timber.wtf("There are no services to delete from car data")
     }
 
     fun onAlarmsToggled(enabled: Boolean) {
+        analytics.logAlarmsToggleClicked()
         Timber.d("Alarms enabled toggled: $enabled")
         alarmSettingsRepository.toggleAlarmFeature(enabled)
+        analytics.logAlarmFeatureToggled(enabled)
         if (enabled && isAlarmPermissionGranted.not()) {
             Timber.v("Attempting to request alarms permission")
             onRequestAlarmPermission.value = Any()
@@ -106,10 +120,12 @@ class SettingsViewModel @Inject constructor(
      * @param alarmTime alarm time in 24-hour clock format
      */
     fun onAlarmTimePicked(alarmTime: Int) {
+        analytics.logAlarmTimeClicked()
         state.value?.let { state ->
             val newAlarmTime = AlarmTime(alarmTime)
             Timber.d("Alarm time selected: ${newAlarmTime.getTimeAsString(state.clockTimeFormat)}")
             alarmSettingsRepository.setAlarmTime(alarmTime)
+            analytics.logAlarmTimeChanged(alarmTime)
             if (state.alarmTime.equals(newAlarmTime).not()) {
                 Timber.d("Rescheduling alarm after the time was changed")
                 rescheduleAlarms()
@@ -118,24 +134,30 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onAlarmFrequencyPicked(frequency: AlarmFrequency) {//TODO: Pass in a String instead to keep logic inside the VM
+        analytics.logAlarmFrequencyClicked()
         Timber.d("Alarm frequency selected: ${frequency.value}")
         alarmSettingsRepository.setAlarmFrequency(frequency)
+        analytics.logAlarmFrequencyChanged(frequency.value)
         Timber.d("Rescheduling alarm after the frequency was changed")
         rescheduleAlarms()
     }
 
     fun onDueDateFormatPicked(option: String) {
+        analytics.logDueDateFormatClicked()
         DueDateFormat.get(option).let { dueDateFormat ->
             Timber.d("Due Date format changed to: '$dueDateFormat'")
             appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
+            analytics.logDueDateFormatChanged(option)
         }
 
     }
 
     fun onClockTimeFormatPicked(option: String) {
+        analytics.logTimeFormatClicked()
         TimeFormat.get(option).let { timeFormat ->
             Timber.d("Clock Time format changed to: '$timeFormat'")
             appSettingsRepository.setTimeFormatSetting(timeFormat)
+            analytics.logTimeFormatChanged(option)
         }
     }
 
@@ -144,11 +166,12 @@ class SettingsViewModel @Inject constructor(
         contentResolver: ContentResolver,
         uri: Uri
     ): Boolean {
-        return carRepository.fetchCarData()?.let { data ->
+        return carRepository.fetchCarData()?.let { data -> //TODO: Grab the state data instead?
             CarExporter.exportToJson(data)?.let { json ->
                 appScope.launch(Dispatchers.IO) {
                     uri.writeInFile(contentResolver, json)
                 }
+                analytics.logCarExported(data.uid, data.getCarName())
                 true
             } ?: false
         } ?: false
@@ -163,6 +186,7 @@ class SettingsViewModel @Inject constructor(
             data?.let {
                 CarImporter.importFromJson(data)?.let { car ->
                     carRepository.saveCarData(car)
+                    analytics.logCarImported(car.uid, car.getCarName())
                     return true
                 }
                 Timber.w("Unable to import car data")
@@ -176,6 +200,7 @@ class SettingsViewModel @Inject constructor(
     private fun rescheduleAlarms() {
         //TODO: Revisit and reconsider this next call
         alarmsRepository.schedulePastDueAlarm(true)
+        analytics.logAlarmScheduled(Alarm.PAST_DUE.name, true)
     }
 
     private fun updateCarState(car: Car?) {
