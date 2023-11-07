@@ -3,7 +3,9 @@ package com.ivangarzab.carrus.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,8 +21,10 @@ import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
 import com.ivangarzab.carrus.util.delegates.viewBinding
+import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -29,6 +33,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val binding: FragmentMapBinding by viewBinding()
 
     private val viewModel: MapViewModel by viewModels()
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private lateinit var map: GoogleMap
 
@@ -40,6 +47,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     ) {
         viewModel.onLocationPermissionRequestResult(it)
         if (it) map.isMyLocationEnabled = true
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        analytics.logMapScreenView(this::class.java.simpleName)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
