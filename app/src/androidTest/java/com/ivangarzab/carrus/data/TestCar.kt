@@ -12,11 +12,13 @@ val EMPTY_CAR = Car(
     make = "",
     model = "",
     year = "",
+    licenseState = "",
     licenseNo = "",
     vinNo = "",
     tirePressure = "",
     totalMiles = "",
-    milesPerGallon = "",
+    milesPerGalCity = "",
+    milesPerGalHighway = "",
     services = emptyList()
 )
 
@@ -26,10 +28,12 @@ val TEST_CAR = Car(
     make = "Android",
     model = "",
     year = "2023",
+    licenseState = "Texas",
     licenseNo = "2637642",
     vinNo = "4Y1SL65848Z411439",
     tirePressure = "35",
     totalMiles = "99,999",
-    milesPerGallon = "26",
+    milesPerGalCity = "26",
+    milesPerGalHighway = "31",
     services = emptyList()
 )

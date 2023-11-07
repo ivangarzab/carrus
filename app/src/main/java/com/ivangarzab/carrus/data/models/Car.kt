@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.models
 
 import android.os.Parcelable
 import com.google.gson.Gson
+import com.ivangarzab.carrus.data.models.Car.Companion.VERSION_CAR
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -9,16 +10,19 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Car(
+    val version: Int = VERSION_CAR,
     val uid: String,
     val nickname: String,
     val make: String,
     val model: String,
     val year: String,
+    val licenseState: String,
     val licenseNo: String,
     val vinNo: String,
     val tirePressure: String,
     val totalMiles: String,
-    val milesPerGallon: String,
+    val milesPerGalCity: String,
+    val milesPerGalHighway: String,
     var services: List<Service>,
     val imageUri: String? = null
 ) : Parcelable, Comparable<Car> {
@@ -34,11 +38,13 @@ data class Car(
         { it.make },
         { it.model },
         { it.year },
+        { it.licenseState },
         { it.licenseNo },
         { it.vinNo },
         { it.tirePressure },
         { it.totalMiles },
-        { it.milesPerGallon },
+        { it.milesPerGalCity },
+        { it.milesPerGalHighway },
     )
 
     override fun toString(): String {
@@ -51,28 +57,33 @@ data class Car(
                 "\nmake='$make'" +
                 "\nmodel='$model'" +
                 "\nyear='$year'" +
+                "\nlicenseState='$licenseState'" +
                 "\nlicenseNo='$licenseNo'" +
                 "\nvinNo='$vinNo'" +
                 "\ntirePressure='$tirePressure'" +
                 "\ntotalMiles='$totalMiles'" +
-                "\nmi/gal='$milesPerGallon'" +
+                "\nmi/gal-City='$milesPerGalCity'" +
+                "\nmi/gal-Highway='$milesPerGalHighway'" +
                 "\nservices='$services'" +
                 "\nimageUri=$imageUri" +
                 "\n)"
     }
 
     companion object {
+        const val VERSION_CAR: Int = 1
         val empty: Car = Car(
             uid = "",
             nickname = "",
             make = "",
             model = "",
             year = "",
+            licenseState = "",
             licenseNo = "",
             vinNo = "",
             tirePressure = "",
             totalMiles = "",
-            milesPerGallon = "",
+            milesPerGalCity = "",
+            milesPerGalHighway = "",
             services = emptyList()
         )
         val default: Car = Car(
@@ -81,12 +92,16 @@ data class Car(
             make = "Chevrolet",
             model = "Malibu",
             year = "2006",
+            licenseState = "Texas",
             licenseNo = "IGB066",
             vinNo = "4Y1SL65848Z411439",
             tirePressure = "35",
             totalMiles = "99,999",
-            milesPerGallon = "26",
+            milesPerGalCity = "26",
+            milesPerGalHighway = "31",
             services = Service.serviceList
         )
     }
 }
+
+fun Car.needsUpgrade(): Boolean = this.version != VERSION_CAR

@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
@@ -16,6 +17,8 @@ import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
+import com.ivangarzab.carrus.ui.overview.data.SortingType
+import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -27,6 +30,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OverviewViewModel @Inject constructor(
+    private val buildVersionProvider: BuildVersionProvider,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
@@ -64,16 +68,34 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    //TODO: Break this function down into more digestible and manageable pieces
     fun processStateChange(
         state: OverviewState,
         areNotificationsEnabled: Boolean
     ) {
-        Timber.v("Processing overview state change")
         state.car?.let {
-            processCarServicesListForNotification(
-                services = it.services,
-                areNotificationsEnabled = areNotificationsEnabled
-            )
+            Timber.v("Processing overview state change")
+            if (it.services.isNotEmpty()) {
+                when (areNotificationsEnabled) {
+                    true -> {
+                        if (alarmsRepository.isPastDueAlarmActive().not()) {
+                            alarmsRepository.schedulePastDueAlarm()
+                        } else {
+                            Timber.v("'Past Due' alarm is already scheduled")
+                        }
+                    }
+
+                    false -> {
+                        if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU &&
+                            this.state.value?.hasPromptedForPermissionNotification?.not() == true
+                        ) {
+                            addNotificationPermissionMessage()
+                        } else {
+                            Timber.v("We don't need Notification permission for sdk=${buildVersionProvider.getSdkVersionInt()} (<33)")
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -93,14 +115,14 @@ class OverviewViewModel @Inject constructor(
         Timber.d("Got a message click with id=$id")
         when (id) {
             Message.MISSING_PERMISSION_NOTIFICATION.data.id -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU) {
                     triggerNotificationPermissionRequest.postValue(true)
                 }
                 removeNotificationPermissionMessage()
             }
 
             Message.MISSING_PERMISSION_ALARM.data.id -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.S) {
                     triggerAlarmsPermissionRequest.postValue(true)
                 }
                 removeAlarmPermissionMessage()
@@ -115,7 +137,8 @@ class OverviewViewModel @Inject constructor(
         messageQueueRepository.dismissMessage()
     }
 
-    private fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
+    @VisibleForTesting
+    fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         state.setState {
@@ -132,15 +155,16 @@ class OverviewViewModel @Inject constructor(
     fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
         val hasPromptedForPermissionAlarm = state.value?.hasPromptedForPermissionAlarm ?: false
         if (canScheduleExactAlarms.not() &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            hasPromptedForPermissionAlarm.not()
+            hasPromptedForPermissionAlarm.not() &&
+            buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.S
         ) {
             addAlarmPermissionMessage()
             Timber.d("Registering alarm permission state changed broadcast receiver")
         }
     }
 
-    private fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
+    @VisibleForTesting
+    fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         Timber.v("Adding ${this.name} message to the queue")
         messageQueueRepository.addMessage(this)
         state.setState {
@@ -156,11 +180,11 @@ class OverviewViewModel @Inject constructor(
     fun addTestMessage() = messageQueueRepository.addMessage(Message.TEST)
     private fun removeTestMessage() = messageQueueRepository.removeMessage(Message.TEST)
 
-    private fun onSortingByType(type: SortingCallback.SortingType) {
+    private fun onSortingByType(type: SortingType) {
         when (type) {
-            SortingCallback.SortingType.NONE -> resetServicesSort()
-            SortingCallback.SortingType.NAME -> sortServicesByName()
-            SortingCallback.SortingType.DATE -> sortServicesByDate()
+            SortingType.NONE -> resetServicesSort()
+            SortingType.NAME -> sortServicesByName()
+            SortingType.DATE -> sortServicesByDate()
         }
         state.setState {
             copy(serviceSortingType = type)
@@ -194,36 +218,9 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    private fun processCarServicesListForNotification(
-        services: List<Service>,
-        areNotificationsEnabled: Boolean
-    ) {
-        if (services.isNotEmpty()) {
-            when (areNotificationsEnabled) {
-                true -> {
-                    if (alarmsRepository.isPastDueAlarmActive().not()) {
-                        alarmsRepository.schedulePastDueAlarm()
-                    } else {
-                        Timber.v("'Past Due' alarm is already scheduled")
-                    }
-                }
-
-                false -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                        state.value?.hasPromptedForPermissionNotification?.not() == true
-                    ) {
-                        addNotificationPermissionMessage()
-                    } else {
-                        Timber.v("We don't need Notification permission for sdk=${Build.VERSION.SDK_INT} (<33)")
-                    }
-                }
-            }
-        }
-    }
-
     private fun updateCarState(car: Car?) = state.setState { copy(car = car) }
 
-    fun onSort(type: SortingCallback.SortingType) {
+    fun onSort(type: SortingType) {
         Timber.v("Got a sorting request with type=$type")
         onSortingByType(type)
     }

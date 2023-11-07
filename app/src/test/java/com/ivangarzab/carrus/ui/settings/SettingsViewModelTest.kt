@@ -1,23 +1,25 @@
 package com.ivangarzab.carrus.ui.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.MainDispatcherRule
 import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
-import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
-import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.carrus.ui.settings.data.SettingsState
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.ivangarzab.carrus.TEST_SERVICE
+import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.models.DueDateFormat
+import com.ivangarzab.carrus.data.models.TimeFormat
+import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
+import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
+import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
+import com.ivangarzab.carrus.data.repositories.TestCarRepository
+import com.ivangarzab.carrus.getOrAwaitValue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.util.concurrent.TimeoutException
 
 /**
  * Created by Ivan Garza Bermea.
@@ -32,56 +34,231 @@ class SettingsViewModelTest {
 
     private lateinit var viewModel: SettingsViewModel
 
-    private var state: SettingsState = SettingsState()
-    private val stateObserver = Observer<SettingsState> {
-        state = it
-    }
-
-    private val carRepository: CarRepository = mockk(relaxed = true)
-    private val appSettingsRepository: AppSettingsRepository = mockk(relaxed = true)
-    private val alarmSettingsRepository: AlarmSettingsRepository = mockk(relaxed = true)
+    private val carRepository: TestCarRepository = TestCarRepository()
+    private val appSettingsRepository: TestAppSettingsRepository = TestAppSettingsRepository()
+    private val alarmSettingsRepository: TestAlarmSettingsRepository = TestAlarmSettingsRepository()
+    private val alarmsRepository: TestAlarmsRepository = TestAlarmsRepository()
 
     @Before
     fun setup() {
         viewModel = SettingsViewModel(
             carRepository = carRepository,
             appSettingsRepository = appSettingsRepository,
-            alarmsRepository = mockk(),
+            alarmsRepository = alarmsRepository,
             alarmSettingsRepository = alarmSettingsRepository
-        ).apply {
-            state.observeForever(stateObserver)
-        }
-
-        every { carRepository.fetchCarData() } returns TEST_CAR
-        every { carRepository.observeCarData() } returns MutableStateFlow(TEST_CAR).asStateFlow()
+        )
     }
 
     @Test
     fun test_onDarkModeToggleClicked_true() {
-        every { appSettingsRepository.fetchNightThemeSetting() } returns true
         viewModel.onDarkModeToggleClicked(true)
-        assertThat(appSettingsRepository.fetchNightThemeSetting())
+        assertThat(appSettingsRepository.isNight)
             .isTrue()
     }
 
     @Test
     fun test_onDarkModeToggleClicked_false() {
-        every { appSettingsRepository.fetchNightThemeSetting() } returns false
         viewModel.onDarkModeToggleClicked(false)
-        assertThat(appSettingsRepository.fetchNightThemeSetting())
+        assertThat(appSettingsRepository.isNight)
             .isFalse()
     }
 
-    /*@Test TODO: Failing due to Kotlin Flows not working properly
-    fun test_onDeleteCarDataClicked_base() = runTest {
-        assertThat(state.isThereCarData)
-            .isTrue()
-    }*/
+    @Test
+    fun test_onDeleteCarDataClicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.isThereCarData)
+            .isFalse()
+    }
 
     @Test
-    fun test_onDeleteCarDataClicked_success() = runTest {
-        viewModel.onDeleteCarDataClicked()
-        assertThat(state.isThereCarData)
+    fun test_onDeleteCarDataClicked_with_data() = runTest {
+        saveCarData()
+        with(viewModel) {
+            val result = state.getOrAwaitValue {
+                onDeleteCarDataClicked()
+            }
+            assertThat(result.isThereCarData)
+                .isFalse()
+        }
+    }
+
+    @Test
+    fun test_onDeleteServicesClicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.isThereCarServicesData)
             .isFalse()
+    }
+
+    @Test
+    fun test_onDeleteServicesClicked_call_without_services() = with(viewModel) {
+        val result = state.getOrAwaitValue {
+            onDeleteServicesClicked()
+        }
+        assertThat(result.isThereCarServicesData)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onDeleteServicesClicked_with_services() = runTest {
+        with(viewModel) {
+            saveCarData()
+            addService()
+            assertThat(carRepository.carDataFlow.value?.services?.isNotEmpty())
+                .isTrue()
+
+            val result = state.getOrAwaitValue {
+                onDeleteServicesClicked()
+            }
+            assertThat(result.isThereCarServicesData)
+                .isFalse()
+        }
+    }
+
+    @Test
+    fun test_onAlarmsToggled_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.alarmsOn)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onAlarmsToggled_updated_false() = with(viewModel) {
+        val result = state.getOrAwaitValue {
+            onAlarmsToggled(true)
+        }
+        assertThat(result.alarmsOn)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onAlarmsToggled_updated_true_without_permissionGranted() = runTest {
+        with(viewModel) {
+            val result = state.getOrAwaitValue {
+                onAlarmsToggled(true)
+            }
+            assertThat(result.alarmsOn)
+                .isFalse()
+        }
+    }
+
+    @Test
+    fun test_onAlarmsToggled_updated_true_with_permissionGranted() = runTest {
+        with(viewModel) {
+            grantAlarmsPermission()
+            val result = state.getOrAwaitValue {
+                onAlarmsToggled(true)
+            }
+            assertThat(result.alarmsOn)
+                .isTrue()
+        }
+    }
+
+    @Test(expected = TimeoutException::class)
+    fun test_onAlarmsToggled_onRequestAlarmPermission_base() = runTest {
+        with(viewModel) {
+            grantAlarmsPermission()
+            val result = onRequestAlarmPermission.getOrAwaitValue {
+                onAlarmsToggled(true)
+            }
+            assertThat(result)
+                .isNotNull()
+        }
+    }
+
+    @Test
+    fun test_onAlarmsToggled_onRequestAlarmPermission_triggered() = runTest {
+        with(viewModel) {
+            val result = onRequestAlarmPermission.getOrAwaitValue {
+                onAlarmsToggled(true)
+            }
+            assertThat(result)
+                .isNotNull()
+        }
+    }
+
+    @Test
+    fun test_onAlarmTimePicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.alarmTime)
+            .isEqualTo(AlarmTime.default)
+    }
+
+    @Test
+    fun test_onAlarmTimePicked_state_updated() = runTest {
+        with(viewModel) {
+            val result = state.getOrAwaitValue {
+                onAlarmTimePicked(TEST_ALARM_TIME_VALUE)
+            }
+            assertThat(result.alarmTime)
+                .isEqualTo(AlarmTime(TEST_ALARM_TIME_VALUE))
+        }
+    }
+
+    @Test
+    fun test_onAlarmFrequencyPicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.alarmFrequency)
+            .isEqualTo(AlarmFrequency.DAILY)
+    }
+
+    @Test
+    fun test_onAlarmFrequencyPicked_updated() = runTest {
+        with(viewModel) {
+            val result = state.getOrAwaitValue {
+                onAlarmFrequencyPicked(AlarmFrequency.WEEKLY)
+            }
+            assertThat(result.alarmFrequency)
+                .isEqualTo(AlarmFrequency.WEEKLY)
+        }
+    }
+
+    @Test
+    fun test_onDueDateFormatPicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.dueDateFormat)
+            .isEqualTo(DueDateFormat.DATE)
+    }
+
+    @Test
+    fun test_onDueDateFormatPicked_ba() = with(viewModel) {
+        val result = state.getOrAwaitValue {
+            onDueDateFormatPicked("days")
+        }
+        assertThat(result.dueDateFormat)
+            .isEqualTo(DueDateFormat.DAYS)
+    }
+
+    @Test
+    fun test_onClockTimeFormatPicked_base() = with(viewModel) {
+        val result = state.getOrAwaitValue()
+        assertThat(result.clockTimeFormat)
+            .isEqualTo(TimeFormat.HR12)
+    }
+
+    @Test
+    fun test_onClockTimeFormatPicked_updated() = runTest {
+        with(viewModel) {
+            val result = state.getOrAwaitValue {
+                onClockTimeFormatPicked(TimeFormat.HR24.value)
+            }
+            assertThat(result.clockTimeFormat)
+                .isEqualTo(TimeFormat.HR24)
+        }
+    }
+
+    private fun addService() {
+        carRepository.addCarService(TEST_SERVICE)
+    }
+
+    private fun saveCarData() {
+        carRepository.saveCarData(TEST_CAR)
+    }
+
+    private fun grantAlarmsPermission() {
+        alarmSettingsRepository.setIsAlarmPermissionGranted(true)
+    }
+
+    companion object {
+        private const val TEST_ALARM_TIME_VALUE = 6
     }
 }

@@ -17,7 +17,7 @@ class AlarmSettingsRepositoryTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().context
 
-    private val repository = AlarmSettingsRepository(context)
+    private val repository = AlarmSettingsRepositoryImpl(context)
 
     @Before
     fun setup() {

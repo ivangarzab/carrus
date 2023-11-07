@@ -30,11 +30,15 @@
     <string name="dollar_sign">$</string>
     <string name="miles">miles</string>
     <string name="miles_per_gal">miles/gal</string>
+    <string name="mi_per_gal_city">mi/gal CIty</string>
+    <string name="mi_per_gal_highway">mi/gal Highway</string>
     <string name="psi">psi</string>
+    <string name="psi_cap">PSI</string>
     <string name="due">Due</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="days">Days</string>
     <string name="not_now">Not now</string>
+    <string name="state">State</string>
 
     <!-- Sorting -->
     <string name="none">none</string>

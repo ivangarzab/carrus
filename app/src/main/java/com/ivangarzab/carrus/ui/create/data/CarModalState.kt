@@ -15,10 +15,12 @@ data class CarModalState(
     val make: String = "",
     val model: String = "",
     val year: String = "",
+    val licenseState: String = "",
     val licenseNo: String = "",
     val vinNo: String = "",
     val tirePressure: String = "",
     val totalMiles: String = "",
-    val milesPerGallon: String = "",
+    val milesPerGalCity: String = "",
+    val milesPerGalHighway: String = "",
     val imageUri: String? = null
 ) : Parcelable

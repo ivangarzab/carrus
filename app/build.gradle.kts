@@ -19,8 +19,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 33
-        versionCode = 9
-        versionName = "1.0.0-alpha09"
+        versionCode = 11
+        versionName = "1.0.0-alpha11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +78,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    testImplementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
 
     // https://developer.android.com/jetpack/compose/bom/bom-mapping
     val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
@@ -136,13 +137,19 @@ dependencies {
     implementation("com.github.hadilq:live-event:1.3.0")
 
     // Unit & instrumented testing
+    val androidxJunitVersion = "1.1.5"
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.code.gson:gson:$gsonVersion")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test:core-ktx:1.5.0")
+    testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
+    androidTestImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+
+    // https://github.com/robolectric/robolectric
+    testImplementation("org.robolectric:robolectric:4.10.3")
 
     // https://github.com/google/truth
     val truthVersion = "1.1.5"

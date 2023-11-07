@@ -39,6 +39,7 @@ import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
+import com.ivangarzab.carrus.ui.overview.data.SortingType
 import java.util.Random
 
 /**
@@ -54,8 +55,8 @@ fun OverviewScreenContent(
     serviceList: List<Service> = Service.serviceList,
     detailsState: DetailsPanelState = DetailsPanelState(),
     dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
-    sortingType: SortingCallback.SortingType = SortingCallback.SortingType.NONE,
-    onSortRequest: (SortingCallback.SortingType) -> Unit = { },
+    sortingType: SortingType = SortingType.NONE,
+    onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
@@ -84,7 +85,6 @@ fun OverviewScreenContent(
             item {
                 OverviewScreenDetailsPanel(
                     modifier = Modifier,
-                    gridSize = 200.dp,
                     state = detailsState,
                     onEditCarClicked = onEditCarClicked
                 )
@@ -101,10 +101,7 @@ fun OverviewScreenContent(
                             .combinedClickable(
                                 onClick = { },
                                 onLongClick = {
-                                    if (App
-                                            .isRelease()
-                                            .not()
-                                    ) {
+                                    if (App.isRelease().not()) {
                                         // Easter egg for testing!
                                         addServiceList()
                                     }
@@ -133,9 +130,9 @@ fun OverviewScreenContent(
                     isVisible = isSortingPanelVisible,
                     onSortRequest = onSortRequest,
                     selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
-                        SortingCallback.SortingType.NONE -> 0
-                        SortingCallback.SortingType.NAME -> 1
-                        SortingCallback.SortingType.DATE -> 2
+                        SortingType.NONE -> 0
+                        SortingType.NAME -> 1
+                        SortingType.DATE -> 2
                     }
                 )
             }
@@ -215,6 +212,7 @@ fun EmptyListView(
     AppTheme {
         Box(
             modifier = modifier
+                .padding(top = 24.dp, bottom = 16.dp)
                 .fillMaxWidth()
         ) {
             Text(

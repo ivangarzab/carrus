@@ -36,10 +36,17 @@ import com.ivangarzab.carrus.util.extensions.parseIntoNumberWithCommas
 @Composable
 fun OverviewScreenDetailsPanel(
     modifier: Modifier = Modifier,
-    gridSize: Dp = 200.dp,
     state: DetailsPanelState = DetailsPanelState(),
     onEditCarClicked: () -> Unit,
 ) {
+    val totalValidFields = state.getTotalValidFields()
+    val gridSize: Dp = if (totalValidFields > 3) {
+        200.dp
+    } else if (totalValidFields in 1..3) {
+        100.dp
+    } else {
+        0.dp
+    }
     AppTheme {
         Column(
             modifier = modifier
@@ -54,7 +61,9 @@ fun OverviewScreenDetailsPanel(
                     text = stringResource(id = R.string.details)
                 )
                 PanelIcon(
-                    modifier = Modifier.align(Alignment.CenterEnd),
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp),
                     onClick = onEditCarClicked,
                     imageVector = Icons.Filled.Edit,
                     contentDescription = "Car edit icon button"
@@ -63,6 +72,7 @@ fun OverviewScreenDetailsPanel(
             OverviewScreenDetailsPanelGrid(
                 modifier = Modifier
                     .height(gridSize),
+                rows = if (state.getTotalValidFields() > 3) 2 else 1,
                 state = state
             )
         }
@@ -73,14 +83,20 @@ fun OverviewScreenDetailsPanel(
 @Composable
 fun OverviewScreenDetailsPanelGrid(
     modifier: Modifier = Modifier,
+    rows: Int = 1,
     state: DetailsPanelState = DetailsPanelState()
 ) {
     AppTheme {
         LazyHorizontalStaggeredGrid(
             modifier = modifier,
-            rows = StaggeredGridCells.Fixed(count = 2),
+            rows = StaggeredGridCells.Fixed(count = rows),
             contentPadding = PaddingValues(4.dp)
         ) {
+            state.year.takeIf { it.isNotEmpty() }?.let {
+                item {
+                    OverviewScreenDetailsItem(title = "Year", content = state.year)
+                }
+            }
             state.licenseState.takeIf { it.isNotEmpty() }?.let {
                 item {
                     OverviewScreenDetailsItem(title = "License State", content = state.licenseState)
@@ -166,15 +182,8 @@ fun OverviewScreenDetailsItem(
 fun OverviewScreenDetailsPanelPreview() {
     AppTheme {
         OverviewScreenDetailsPanel(
-            modifier = Modifier.height(250.dp),
+            modifier = Modifier,
             state = DetailsPanelState(
-                licenseState = "",
-                licenseNo = "DH9 L474",
-                vinNo = "ABCDEFGHIJKLMNOPQ",
-                tirePressure = "32",
-                totalMiles = "1000000",
-                milesPerGalCity = "23",
-                milesPerGalHighway = "30"
             ),
             onEditCarClicked = { }
         )
