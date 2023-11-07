@@ -3,8 +3,10 @@ package com.ivangarzab.carrus
 /**
  * Created by Ivan Garza Bermea.
  */
-val TEST_CAR_JSON = """
+//TODO: Rename & Update all relevant tests with v0 vs v1
+val TEST_CAR_JSON = """ 
     {
+        "uid":"123",
         "imageUri":"",
         "licenseNo":"DH9⭐L474",
         "make":"Nissan",
@@ -37,5 +39,42 @@ val TEST_CAR_JSON = """
         "totalMiles":"",
         "uid":"411ee2d7-03b7-4ccb-b231-97ce81444306",
         "year":"2012"
+    }
+""".trimIndent()
+
+val TEST_CAR_V0_JSON = """ 
+    {
+        "uid":"123",
+        "nickname":"",
+        "make":"Nissan",
+        "model":"Altima",
+        "year":"2012",
+        "licenseNo":"DH9⭐L474",
+        "vinNo":"ABCDEFGHI",
+        "tirePressure":"32",
+        "totalMiles":"100000",
+        "milesPerGallon":"26",
+        "services":[],
+        "imageUri":""
+    }
+""".trimIndent()
+
+val TEST_CAR_V1_JSON = """ 
+    {
+        "version":1,
+        "uid":"123",
+        "nickname":"",
+        "make":"Nissan",
+        "model":"Altima",
+        "year":"2012",
+        "licenseState":"Texas",
+        "licenseNo":"DH9⭐L474",
+        "vinNo":"ABCDEFGHI",
+        "tirePressure":"32",
+        "totalMiles":"100000",
+        "milesPerGalHighway":"26",
+        "milesPerGalCity":"26",
+        "services":[],
+        "imageUri":""
     }
 """.trimIndent()
