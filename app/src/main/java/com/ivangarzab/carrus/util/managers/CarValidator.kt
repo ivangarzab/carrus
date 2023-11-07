@@ -17,12 +17,17 @@ object CarValidator {
         val gson = Gson()
         try {
             val jsonObject = gson.fromJson(json, JsonObject::class.java)
-            jsonObject.get("version")?.let { version ->
+            jsonObject.get("version").let { version ->
                 when (version.asInt) {
                     Car.VERSION_CAR -> gson.fromJson(jsonObject, Car::class.java)
                     else -> upgradeCarJsonFromVersion0ToVersion1(jsonObject)
                 }
-            } ?: upgradeCarJsonFromVersion0ToVersion1(jsonObject)
+                /*if (version == null) {
+
+                } else {
+
+                }*/
+            }
         } catch (e: Exception) {
             //TODO: Log error
             Car.empty
@@ -31,7 +36,14 @@ object CarValidator {
 
     @VisibleForTesting
     fun upgradeCarJsonFromVersion0ToVersion1(jsonObject: JsonObject): Car {
-
-        return Car.default
+        val milesPerGal = jsonObject.get("milesPerGallon")
+        var result = Gson().fromJson(jsonObject, Car::class.java)
+        milesPerGal?.let {
+            result = result.copy(
+                milesPerGalCity = it.asString,
+                milesPerGalHighway = it.asString
+            )
+        }
+        return result
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Car(
-    val version: Int = 0,
+    val version: Int = VERSION_CAR,
     val uid: String,
     val nickname: String,
     val make: String,
