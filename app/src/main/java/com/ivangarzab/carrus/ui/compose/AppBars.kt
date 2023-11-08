@@ -39,7 +39,6 @@ fun TopBar(
     isNavigationIconEnabled: Boolean = false,
     onNavigationIconClicked: () -> Unit = { },
     isActionIconEnabled: Boolean = false,
-    onActionIconClicked: () -> Unit = { },
     action: @Composable () -> Unit = { }
 ) {
     AppTheme {
@@ -78,20 +77,7 @@ fun TopBar(
                     }
                 }
             },
-            actions = {
-                if (isActionIconEnabled) {
-                    Text(
-                        modifier = Modifier
-                            .clickable { onActionIconClicked() },
-                        text = "IMPORT",
-                        color = if (isSystemInDarkTheme()) {
-                            MaterialTheme.colorScheme.onBackground
-                        } else {
-                            MaterialTheme.colorScheme.onPrimary
-                        }
-                    )
-                }
-            }
+            actions = { if (isActionIconEnabled) action() }
         )
     }
 }
