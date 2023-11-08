@@ -333,7 +333,7 @@ fun SettingsScreenContentBottom(
         ) {
             Button(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 8.dp)
                     .weight(1f),
                 onClick = { onExportClicked() }
             ) {
@@ -341,7 +341,7 @@ fun SettingsScreenContentBottom(
             }
             Button(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(start = 8.dp, end = 16.dp)
                     .weight(1f),
                 onClick = { onImportClicked() }
             ) {

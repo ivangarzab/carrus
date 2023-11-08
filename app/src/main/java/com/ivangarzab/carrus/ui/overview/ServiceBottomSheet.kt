@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
 import com.ivangarzab.carrus.ui.compose.MoneyInputField
@@ -165,7 +166,7 @@ fun ServiceBottomSheetContent(
                         )
                     }
                 )
-                PositiveButton(
+                BigPositiveButton(
                     modifier = Modifier.padding(top = 16.dp),
                     text = stringResource(id = R.string.submit),
                     onClick = onActionButtonClicked
