@@ -94,7 +94,6 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analytics.logCreateScreenView(this::class.java.simpleName)
         with(viewModel) {
             init(args.data)
             onSubmit.observe(viewLifecycleOwner) { success ->
@@ -110,5 +109,10 @@ class CreateFragment : Fragment() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logCreateScreenView(this@CreateFragment::class.java.simpleName)
     }
 }

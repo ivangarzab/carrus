@@ -65,7 +65,6 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
-        analytics.logSettingsScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 SettingsScreenStateful(
@@ -104,6 +103,11 @@ class SettingsFragment : Fragment() {
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logSettingsScreenView(this@SettingsFragment::class.java.simpleName)
     }
 
     private fun generateExportFileName(): String =

@@ -49,7 +49,6 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
-        analytics.logOverviewScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 OverviewScreenStateful(
@@ -98,6 +97,11 @@ class OverviewFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logOverviewScreenView(this@OverviewFragment::class.java.simpleName)
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

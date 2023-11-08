@@ -29,7 +29,6 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
-        analytics.logServiceModalScreenView(this::class.java.simpleName)
         setContent {
             ServiceModalScreenStateful(
                 args = args,
@@ -43,5 +42,10 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                 }
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logServiceModalScreenView(this@ServiceModalFragment::class.java.simpleName)
     }
 }
