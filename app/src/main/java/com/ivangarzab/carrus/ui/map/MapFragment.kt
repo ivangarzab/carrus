@@ -49,15 +49,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         if (it) map.isMyLocationEnabled = true
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        analytics.logMapScreenView(this::class.java.simpleName)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupWindow()
@@ -88,6 +79,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logMapScreenView(this@MapFragment::class.java.simpleName)
     }
 
     private fun setupWindow() {
