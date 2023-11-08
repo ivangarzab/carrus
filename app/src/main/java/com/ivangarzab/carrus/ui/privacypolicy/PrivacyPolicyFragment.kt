@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.managers.Analytics
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class PrivacyPolicyFragment : Fragment() {
 
     @Inject
@@ -24,7 +26,6 @@ class PrivacyPolicyFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
-        analytics.logPrivacyPolicyScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 PrivacyPolicyScreen(
@@ -33,6 +34,11 @@ class PrivacyPolicyFragment : Fragment() {
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logPrivacyPolicyScreenView(this@PrivacyPolicyFragment::class.java.simpleName)
     }
 
     companion object {
