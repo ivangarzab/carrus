@@ -56,6 +56,9 @@ android {
     packaging {
         resources.excludes.add("META-INF/*")
     }
+    secrets {
+        defaultPropertiesFileName = "default.properties"
+    }
 }
 
 val activityVersion = "1.7.2"
