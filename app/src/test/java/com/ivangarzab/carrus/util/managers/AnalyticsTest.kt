@@ -369,6 +369,14 @@ class AnalyticsTest {
     }
 
     @Test
+    fun test_logMapClicked() {
+        analytics.logMapClicked()
+        verify {
+            analyticsRepository.logEvent("map_clicked")
+        }
+    }
+
+    @Test
     fun test_logAppMessageClicked() {
         analytics.logAppMessageClicked("id")
         verify {

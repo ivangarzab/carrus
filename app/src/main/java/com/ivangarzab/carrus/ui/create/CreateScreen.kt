@@ -10,6 +10,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -71,6 +75,7 @@ fun CreateScreenStateful(
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
     onNavHomePressed: () -> Unit,
+    onNavMapPressed: () -> Unit,
     onImportClicked: () -> Unit,
     onAddImageClicked: () -> Unit
 ) {
@@ -99,6 +104,7 @@ fun CreateScreenStateful(
             onBackPressed = { onBackPressed() },
             onNavigateHomePressed = onNavHomePressed,
             onNavigateSettingsPressed = onNavSettingsPressed,
+            onNavigateMapPressed = onNavMapPressed,
             onImportClicked = { onImportClicked() },
             onAddImageClicked = { onAddImageClicked() },
             onDeleteImageClicked = { viewModel.onImageDeleted() },
@@ -140,6 +146,7 @@ private fun CreateScreen(
     onBackPressed: () -> Unit = { },
     onNavigateHomePressed: () -> Unit = { },
     onNavigateSettingsPressed: () -> Unit = { },
+    onNavigateMapPressed: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onAddImageClicked: () -> Unit = { },
     onDeleteImageClicked: () -> Unit = { },
@@ -159,14 +166,24 @@ private fun CreateScreen(
                     isNavigationIconEnabled = true,
                     onNavigationIconClicked = onBackPressed,
                     isActionIconEnabled = true,
-                    onActionIconClicked = onImportClicked
+                    action = {
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 8.dp, end = 8.dp)
+                                .size(32.dp)
+                                .clickable { onImportClicked() },
+                            painter = painterResource(id = R.drawable.ic_import),
+                            contentDescription = stringResource(id = R.string.label_icon),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 )
             },
             bottomBar = {
                 NavigationBottomBar(
                     settingsButtonClicked = onNavigateSettingsPressed,
                     homeButtonClicked = onNavigateHomePressed,
-                    mapButtonClicked = { }
+                    mapButtonClicked = onNavigateMapPressed
                 )
             }
         ) { paddingValues ->
@@ -206,7 +223,7 @@ private fun CreateScreenContent(
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(shouldBeExpanded())
+        mutableStateOf(true)
     }
     var isImagePresent: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -220,7 +237,7 @@ private fun CreateScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 16.dp, end = 32.dp)
+                    .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                     .verticalScroll(
                         state = rememberScrollState(),
                         enabled = true
@@ -496,7 +513,7 @@ private fun CreateScreenContent(
                     }
                 )
                 BigPositiveButton(
-                    modifier = Modifier.padding(top = verticalSeparation),
+                    modifier = Modifier.padding(top = verticalSeparation, bottom = verticalSeparation),
                     text = state.actionButton,
                     onClick = { onActionButtonClicked(
                         state.make,

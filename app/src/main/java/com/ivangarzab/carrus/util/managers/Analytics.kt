@@ -205,6 +205,10 @@ class Analytics @Inject constructor(
         logEvent("settings_clicked")
     }
 
+    fun logMapClicked() {
+        logEvent("map_clicked")
+    }
+
     fun logAppMessageClicked(id: String) {
         logEvent(
             "message_clicked",

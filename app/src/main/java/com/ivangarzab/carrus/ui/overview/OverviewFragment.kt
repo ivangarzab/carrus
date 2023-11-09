@@ -49,7 +49,6 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireActivity()).apply {
-        analytics.logOverviewScreenView(this::class.java.simpleName)
         setContent {
             AppTheme {
                 OverviewScreenStateful(
@@ -72,6 +71,10 @@ class OverviewFragment : Fragment() {
                     onAddCarClicked = {
                         navigateToCreateFragment()
                         analytics.logAddNewCarClicked()
+                    },
+                    onMapButtonClicked = {
+                        navigateToMapFragment()
+                        analytics.logMapClicked()
                     }
                 )
             }
@@ -98,6 +101,11 @@ class OverviewFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logOverviewScreenView(this@OverviewFragment::class.java.simpleName)
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -145,5 +153,9 @@ class OverviewFragment : Fragment() {
 
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
+    )
+
+    private fun navigateToMapFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToMapFragment()
     )
 }

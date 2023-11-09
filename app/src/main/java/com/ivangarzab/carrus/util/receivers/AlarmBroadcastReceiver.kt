@@ -22,15 +22,18 @@ import javax.inject.Inject
  * Created by Ivan Garza Bermea.
  */
 @AndroidEntryPoint
-class AlarmBroadcastReceiver @Inject constructor(
-    private val analytics: Analytics
-) : BroadcastReceiver() {
+class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
     private lateinit var context: Context
     private lateinit var notificationController: NotificationController
 
-    @Inject lateinit var carRepository: CarRepository
-    @Inject lateinit var alarmsRepository: AlarmsRepository
-    @Inject lateinit var alarmSettingsRepository: AlarmSettingsRepository
+    @Inject
+    lateinit var carRepository: CarRepository
+    @Inject
+    lateinit var alarmsRepository: AlarmsRepository
+    @Inject
+    lateinit var alarmSettingsRepository: AlarmSettingsRepository
+    @Inject
+    lateinit var analytics: Analytics
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return

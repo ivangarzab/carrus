@@ -44,6 +44,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_overviewFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/createFragment"
@@ -103,6 +110,11 @@
         android:id="@+id/privacyPolicyFragment"
         android:name="com.ivangarzab.carrus.ui.privacypolicy.PrivacyPolicyFragment"
         android:label="PrivacyPolicyFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.ivangarzab.carrus.ui.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map"/>
     <action
         android:id="@+id/action_global_settingsFragment"
         app:destination="@id/settingsFragment"
@@ -116,5 +128,13 @@
         app:destination="@id/nav_graph"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_mapFragment"
+        app:destination="@id/mapFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:launchSingleTop="true" />
 </navigation>

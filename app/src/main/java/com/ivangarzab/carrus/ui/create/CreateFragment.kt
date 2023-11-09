@@ -75,6 +75,9 @@ class CreateFragment : Fragment() {
                     onNavSettingsPressed = { findNavController().navigate(
                         CreateFragmentDirections.actionGlobalSettingsFragment()
                     ) },
+                    onNavMapPressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionGlobalMapFragment()
+                    ) },
                     onImportClicked = {
                         analytics.logImportButtonClicked()
                         openDocumentContract.launch(
@@ -94,7 +97,6 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analytics.logCreateScreenView(this::class.java.simpleName)
         with(viewModel) {
             init(args.data)
             onSubmit.observe(viewLifecycleOwner) { success ->
@@ -110,5 +112,10 @@ class CreateFragment : Fragment() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logCreateScreenView(this@CreateFragment::class.java.simpleName)
     }
 }

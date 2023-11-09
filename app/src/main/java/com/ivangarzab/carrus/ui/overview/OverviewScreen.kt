@@ -45,6 +45,7 @@ fun OverviewScreenStateful(
     onFloatingActionButtonClicked: () -> Unit,
     onCarEditButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
+    onMapButtonClicked: () -> Unit,
     onServiceEditButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit
 ) {
@@ -63,6 +64,7 @@ fun OverviewScreenStateful(
             onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
+            onMapButtonClicked = onMapButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
             onServiceEditButtonClicked = onServiceEditButtonClicked,
@@ -86,6 +88,7 @@ private fun OverviewScreen(
     onFloatingActionButtonClicked: () -> Unit = { },
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
+    onMapButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingType) -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
@@ -143,7 +146,7 @@ private fun OverviewScreen(
                     bottomBar = {
                         NavigationBottomBar(
                             homeButtonClicked = { },
-                            mapButtonClicked = { /*TODO: Insert map code */ },
+                            mapButtonClicked = onMapButtonClicked,
                             settingsButtonClicked = onSettingsButtonClicked
                         )
                     },
