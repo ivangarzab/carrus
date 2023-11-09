@@ -7,19 +7,25 @@ import android.provider.Settings
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialEnum
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@AndroidEntryPoint
 class PermissionNotificationInterstitial :
     PermissionInterstitial<PermissionInterstitialViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        analytics.logNotificationInterstitialScreenView(this::class.java.simpleName)
         viewModel = ViewModelProvider(this)[PermissionInterstitialViewModel::class.java].apply {
             init(PermissionInterstitialEnum.NOTIFICATIONS)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.logNotificationInterstitialScreenView(this@PermissionNotificationInterstitial::class.java.simpleName)
     }
 
     override fun onSettingsClicked() {
