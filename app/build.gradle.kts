@@ -7,6 +7,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.dagger.hilt.android")
 }
 
@@ -55,6 +56,9 @@ android {
     packaging {
         resources.excludes.add("META-INF/*")
     }
+    secrets {
+        defaultPropertiesFileName = "default.properties"
+    }
 }
 
 val activityVersion = "1.7.2"
@@ -101,6 +105,11 @@ dependencies {
     val accompanistVersion = "0.30.1"
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
     implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
+
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.maps.android:places-ktx:2.0.0")
+    implementation("com.google.maps.android:android-maps-utils:0.5")
+    implementation("com.android.volley:volley:1.2.1")
 
     // https://github.com/google/dagger/tree/master/java/dagger/hilt
     implementation(libs.hilt)

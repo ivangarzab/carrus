@@ -71,6 +71,10 @@ class OverviewFragment : Fragment() {
                     onAddCarClicked = {
                         navigateToCreateFragment()
                         analytics.logAddNewCarClicked()
+                    },
+                    onMapButtonClicked = {
+                        navigateToMapFragment()
+                        analytics.logMapClicked()
                     }
                 )
             }
@@ -149,5 +153,9 @@ class OverviewFragment : Fragment() {
 
     private fun navigateToSettingsFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToSettingsFragment()
+    )
+
+    private fun navigateToMapFragment() = findNavController().navigate(
+        OverviewFragmentDirections.actionOverviewFragmentToMapFragment()
     )
 }

@@ -75,6 +75,9 @@ class CreateFragment : Fragment() {
                     onNavSettingsPressed = { findNavController().navigate(
                         CreateFragmentDirections.actionGlobalSettingsFragment()
                     ) },
+                    onNavMapPressed = { findNavController().navigate(
+                        CreateFragmentDirections.actionGlobalMapFragment()
+                    ) },
                     onImportClicked = {
                         analytics.logImportButtonClicked()
                         openDocumentContract.launch(
