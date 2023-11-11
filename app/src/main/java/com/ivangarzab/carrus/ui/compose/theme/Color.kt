@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.Color
 /**
  * Created by Ivan Garza Bermea.
  */
-val seed = Color(0xFF3F00FF)
-val blue = Color(0xFF006781)
-val green = Color(0xFF00cc99)
+val mediterraneo = Color(0xFF006781)
+val caribe = Color(0xFF00cc99)
+val indigo = Color(0xFF3F00FF)
 
 val md_theme_light_primary = Color(0xFF006781)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
