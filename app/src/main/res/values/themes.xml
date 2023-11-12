@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Carrus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -20,7 +20,7 @@
     </style>
 
     <style name="Theme.Carrus.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="windowSplashScreenBackground">@color/mediterraneo</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_anim_mark_i</item>
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.Carrus</item>
