@@ -168,7 +168,7 @@ fun MessageItem(
                             )
                         ),
                     imageVector = ImageVector.vectorResource(id = iconRes),
-                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
+                    colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.inversePrimary),
                     contentDescription = "Background image"
                 )
 
