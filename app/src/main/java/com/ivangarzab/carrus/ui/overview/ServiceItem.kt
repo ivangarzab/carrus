@@ -81,7 +81,8 @@ fun OverviewServiceItem(
                             .align(Alignment.CenterVertically),
                         text = data.name,
                         fontSize = 20.sp,
-                        fontStyle = FontStyle.Italic
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.Medium
                     )
                     Box(
                         modifier = Modifier
