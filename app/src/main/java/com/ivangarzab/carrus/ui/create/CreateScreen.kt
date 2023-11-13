@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,11 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -169,7 +170,6 @@ private fun CreateScreen(
                         Icon(
                             modifier = Modifier
                                 .padding(start = 8.dp, end = 8.dp)
-                                .size(32.dp)
                                 .clickable { onImportClicked() },
                             painter = painterResource(id = R.drawable.ic_import),
                             contentDescription = stringResource(id = R.string.label_icon),
@@ -297,7 +297,7 @@ private fun CreateScreenContent(
                         ) {
                             Icon(
                                 modifier = Modifier.padding(4.dp),
-                                painter = painterResource(id = R.drawable.ic_image_upload),
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_image_add),
                                 contentDescription = "Add image icon button",
                                 tint = MaterialTheme.colorScheme.primary
                             )
@@ -314,7 +314,7 @@ private fun CreateScreenContent(
                         ) {
                             Icon(
                                 modifier = Modifier.padding(4.dp),
-                                painter = painterResource(id = R.drawable.ic_delete_trash),
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
                                 contentDescription = "Delete image icon button",
                                 tint = MaterialTheme.colorScheme.primary
                             )

@@ -58,8 +58,7 @@
                 android:layout_marginBottom="@dimen/base_8"
                 android:padding="@dimen/base_2"
                 android:tint="@color/indigo"
-                android:contentDescription="Car Wash search button"
-                android:src="@drawable/ic_image_upload"/>
+                android:contentDescription="Car Wash search button" />
 
             <ImageView
                 android:id="@+id/mapRepairShopButton"
@@ -67,8 +66,7 @@
                 android:layout_height="42dp"
                 android:padding="@dimen/base_2"
                 android:contentDescription="Repair Shop search button"
-                android:tint="@color/indigo"
-                android:src="@drawable/ic_delete_trash"/>
+                android:tint="@color/indigo" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

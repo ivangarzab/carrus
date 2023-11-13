@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -28,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -151,7 +150,8 @@ fun OverviewServiceItem(
                         onClick = { onExpandOrShrinkClicked() }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
+                            modifier = Modifier.size(28.dp),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_expand),
                             contentDescription = "Dropdown arrow icon"
                         )
                     }
@@ -198,7 +198,7 @@ fun OverviewServiceItem(
                             ) {
                                 Icon(
                                     modifier = Modifier.padding(6.dp),
-                                    imageVector = Icons.Filled.Edit,
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                                     contentDescription = "Edit icon button"
                                 )
                             }
@@ -208,7 +208,7 @@ fun OverviewServiceItem(
                             ) {
                                 Icon(
                                     modifier = Modifier.padding(6.dp),
-                                    imageVector = Icons.Filled.Delete,
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
                                     contentDescription = "Edit icon button"
                                 )
                             }

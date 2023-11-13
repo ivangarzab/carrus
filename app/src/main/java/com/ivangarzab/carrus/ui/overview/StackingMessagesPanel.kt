@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -141,7 +142,8 @@ fun MessageItem(
                     onClick = onDeleteButtonClicked
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Close,
+                        modifier = Modifier.size(28.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
                         contentDescription = "Delete message button"
                     )
                 }
@@ -181,7 +183,8 @@ fun StackingMessagesBadge(
     AppTheme {
         AnimatedContent(
             modifier = modifier,
-            targetState = value
+            targetState = value,
+            label = "Message count = $value"
         ) { targetValue ->
             Text(
                 modifier = Modifier
