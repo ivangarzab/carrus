@@ -12,7 +12,8 @@ enum class Message(
         MessageData(
             id = "001",
             type = MessageType.INFO,
-            text = "This is our first test message inside the stacking layout!",
+            title = "Aversion hope evil decrepit value society grandeur moral. Self pious value noble christian snare ocean horror battle reason decieve abstract war.",
+            body = "Derive intentions ocean ubermensch prejudice. Pious transvaluation society justice sea evil convictions sea insofar madness fearful Zarathustra.",
             iconRes = R.drawable.ic_mark_i
         )
     ),
@@ -20,7 +21,8 @@ enum class Message(
         MessageData(
             id = "100",
             type = MessageType.WARNING,
-            text = "Please grant us notification permissions to maximize your experience.",
+            title = "Stay on the loop!",
+            body = "Please grant us notification permissions to maximize your experience and let us notify you.",
             iconRes = R.drawable.ic_notification
         )
     ),
@@ -28,7 +30,8 @@ enum class Message(
         MessageData(
             id = "101",
             type = MessageType.WARNING,
-            text = "Please grant us alarm permissions so that we can notify you when a service is due.",
+            title = "Let us notify you!",
+            body = "Please grant us alarm permissions so that we can notify you when a service is due.",
             iconRes = R.drawable.ic_alarm
         )
     )
@@ -42,6 +45,7 @@ enum class MessageType {
 data class MessageData(
     val id: String,
     val type: MessageType,
-    val text: String,
+    val title: String,
+    val body: String,
     val iconRes: Int
 )
