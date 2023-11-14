@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -23,7 +25,6 @@ import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
 import com.ivangarzab.carrus.ui.compose.MoneyInputField
-import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -70,7 +71,7 @@ fun ServiceBottomSheetContent(
 ) {
     AppTheme {
         Surface(
-            modifier = modifier,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
             Column(
@@ -86,7 +87,9 @@ fun ServiceBottomSheetContent(
                     modifier = Modifier.padding(bottom = 8.dp),
                     text = state.title ?: stringResource(id = R.string.services),
                     style = Typography.titleMediumLarge,
+                    fontWeight = FontWeight.Medium,
                     fontStyle = FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 TextInputField(
                     modifier = Modifier
