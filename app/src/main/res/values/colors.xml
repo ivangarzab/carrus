@@ -17,6 +17,8 @@
     <color name="black">#000000</color>
     <color name="indigo">#3F00FF</color>
     <color name="scarlet">#FF2400</color>
+    <color name="caribe">#00CC99</color>
+    <color name="mediterraneo">#006781</color>
 
     <!-- alphas -->
     <color name="transparent">#FFFFFFFF</color>

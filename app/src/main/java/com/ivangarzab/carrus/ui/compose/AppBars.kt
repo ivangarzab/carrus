@@ -1,14 +1,9 @@
 package com.ivangarzab.carrus.ui.compose
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,8 +15,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -36,7 +34,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 fun TopBar(
     modifier: Modifier = Modifier,
     title: String = "App Bar Title",
-    isNavigationIconEnabled: Boolean = false,
+    isNavigationIconEnabled: Boolean = true,
     onNavigationIconClicked: () -> Unit = { },
     isActionIconEnabled: Boolean = false,
     action: @Composable () -> Unit = { }
@@ -66,7 +64,8 @@ fun TopBar(
                 if (isNavigationIconEnabled) {
                     IconButton(onClick = { onNavigationIconClicked() }) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
+                            modifier = Modifier.size(28.dp),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_back),
                             contentDescription = "Back arrow",
                             tint = if (isSystemInDarkTheme()) {
                                 MaterialTheme.colorScheme.onBackground
@@ -98,7 +97,8 @@ fun NavigationBottomBar(
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Filled.Home,
+                        modifier = Modifier.size(28.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_home),
                         contentDescription = "Home navigation button"
                     )
                 }
@@ -112,7 +112,8 @@ fun NavigationBottomBar(
                     },
                     icon = {
                         Icon(
-                            imageVector = Icons.Filled.LocationOn,
+                            modifier = Modifier.size(28.dp),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_map),
                             contentDescription = "Home navigation button"
                         )
                     }
@@ -126,7 +127,8 @@ fun NavigationBottomBar(
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Filled.Settings,
+                        modifier = Modifier.size(28.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_settings),
                         contentDescription = "Home navigation button"
                     )
                 }

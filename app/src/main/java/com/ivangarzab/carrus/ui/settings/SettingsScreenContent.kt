@@ -253,7 +253,17 @@ private fun SettingsScreenContentItemSwitch(
             checked = isChecked,
             onCheckedChange = { onToggle(it) },
             colors = SwitchDefaults.colors(
-                uncheckedThumbColor = MaterialTheme.colorScheme.primary
+                uncheckedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.primaryContainer
+                } else {
+                    MaterialTheme.colorScheme.primary
+                },
+                checkedThumbColor = if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.background
+                }
             )
         )
     }
