@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,6 +45,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.MessageData
 import com.ivangarzab.carrus.data.structures.MessageQueue
@@ -178,7 +177,8 @@ fun MessageItem(
                     onClick = onDeleteButtonClicked
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Close,
+                        modifier = Modifier.size(28.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
                         contentDescription = "Delete message button"
                     )
                 }
@@ -249,7 +249,7 @@ fun StackingMessagesBadge(
         AnimatedContent(
             modifier = modifier,
             targetState = value,
-            label = ""
+            label = "Message count = $value"
         ) { targetValue ->
             Text(
                 modifier = Modifier

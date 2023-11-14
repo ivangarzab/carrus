@@ -14,7 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -191,7 +192,7 @@ fun CalendarInputField(
             },
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_calendar_event),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_calendar),
                 contentDescription = "Calendar icon",
                 tint = MaterialTheme.colorScheme.primary
             )
