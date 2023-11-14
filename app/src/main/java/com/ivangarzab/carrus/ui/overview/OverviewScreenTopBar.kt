@@ -77,10 +77,10 @@ fun OverviewScreenTopBar(
                         Brush.verticalGradient(
                             0.90f to topbarColor,
                             0.95f to topbarColor.copy(
-                                alpha = 0.75f
+                                alpha = 0.90f
                             ),
                             1.0f to topbarColor.copy(
-                                alpha = 0.50f
+                                alpha = 0.80f
                             )
                         )
                     )

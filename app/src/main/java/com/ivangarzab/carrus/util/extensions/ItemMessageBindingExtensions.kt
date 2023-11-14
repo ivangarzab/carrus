@@ -13,7 +13,7 @@ fun ItemMessageBinding.bind(
     onClickListener: ((id: String) -> Unit)? = null,
     onCloseClickListener: ((id: String) -> Unit)? = null
 ) {
-    this.message = message.text
+    this.message = message.body
     this.setCloseButtonClickListener {_ ->
         root.animate()
             .alpha(0f)

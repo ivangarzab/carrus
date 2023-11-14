@@ -163,7 +163,7 @@ fun OverviewScreenDetailsItem(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = title,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold //TODO: Make a diff color instead
+                    fontWeight = FontWeight.Medium
                 )
                 Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     Text(
