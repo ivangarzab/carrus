@@ -71,7 +71,7 @@ fun OverviewServiceItem(
         ) {
             Column(
                 modifier = modifier
-                    .padding(top = 8.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
+                    .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
             ) {
                 Row {
                     Text(
@@ -185,7 +185,7 @@ fun OverviewServiceItem(
                             }
                         }
                         Divider(
-                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.outline
                         )

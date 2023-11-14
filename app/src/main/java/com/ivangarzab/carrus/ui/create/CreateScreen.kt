@@ -10,7 +10,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -167,18 +166,19 @@ private fun CreateScreen(
                     onNavigationIconClicked = onBackPressed,
                     isActionIconEnabled = true,
                     action = {
-                        Icon(
-                            modifier = Modifier
-                                .padding(start = 8.dp, end = 8.dp)
-                                .clickable { onImportClicked() },
-                            painter = painterResource(id = R.drawable.ic_import),
-                            contentDescription = stringResource(id = R.string.label_icon),
-                            tint = if (isSystemInDarkTheme()) {
-                                MaterialTheme.colorScheme.onBackground
-                            } else {
-                                MaterialTheme.colorScheme.onPrimary
-                            }
-                        )
+                        IconButton(
+                            onClick = { onImportClicked() }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_import),
+                                contentDescription = stringResource(id = R.string.label_icon),
+                                tint = if (isSystemInDarkTheme()) {
+                                    MaterialTheme.colorScheme.onBackground
+                                } else {
+                                    MaterialTheme.colorScheme.onPrimary
+                                }
+                            )
+                        }
                     }
                 )
             },

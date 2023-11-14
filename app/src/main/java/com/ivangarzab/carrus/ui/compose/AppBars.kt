@@ -34,7 +34,7 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 fun TopBar(
     modifier: Modifier = Modifier,
     title: String = "App Bar Title",
-    isNavigationIconEnabled: Boolean = false,
+    isNavigationIconEnabled: Boolean = true,
     onNavigationIconClicked: () -> Unit = { },
     isActionIconEnabled: Boolean = false,
     action: @Composable () -> Unit = { }
