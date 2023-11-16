@@ -117,9 +117,7 @@ private fun OverviewScreen(
                         .nestedScroll(scrollBehavior.nestedScrollConnection),
                     topBar = {
                         OverviewScreenTopBar(
-                            title = it.nickname.ifBlank {
-                                "${it.make} ${it.model}"
-                            },
+                            title = it.getCarName(),
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
@@ -168,7 +166,7 @@ private fun OverviewScreen(
                             Icon(
                                 modifier = Modifier.size(48.dp),
                                 painter = painterResource(id = R.drawable.ic_add),
-                                contentDescription = "Add Service floating action button"
+                                contentDescription = "Add Service"
                             )
                         }
                     }
@@ -182,7 +180,7 @@ private fun OverviewScreen(
                 }
             }
         } else {
-            systemUiController.statusBarDarkContentEnabled = true
+//            systemUiController.statusBarDarkContentEnabled = true
             OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
         }
     }

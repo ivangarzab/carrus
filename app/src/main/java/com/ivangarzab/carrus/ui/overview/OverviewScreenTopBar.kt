@@ -25,7 +25,6 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.ui.compose.fadingEdge
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import java.lang.Float.min
@@ -42,7 +41,10 @@ fun OverviewScreenTopBar(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     addTestMessage: () -> Unit = { }
 ) {
-    val topbarColor = MaterialTheme.colorScheme.primary
+    val topbarColor = when (isSystemInDarkTheme()) {
+        true -> MaterialTheme.colorScheme.surface
+        false -> MaterialTheme.colorScheme.primary
+    }
 
     AppTheme {
         ConstraintLayout {
@@ -86,9 +88,7 @@ fun OverviewScreenTopBar(
                     )
                     .combinedClickable(
                         onClick = { },
-                        onLongClick = {
-                            if (App.isRelease().not()) addTestMessage()
-                        }
+                        onLongClick = addTestMessage
                     ),
                 title = {
                     Column {
@@ -100,29 +100,16 @@ fun OverviewScreenTopBar(
                     }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = if (isSystemInDarkTheme()) {
-                        imageUri?.let {
-                            val scrollState = scrollBehavior.state
-                            MaterialTheme.colorScheme.surface.copy(
-                                alpha = min(
-                                    1f,
-                                    (scrollState.heightOffset / scrollState.heightOffsetLimit)
-                                            + 0.4f
-                                )
+                    containerColor = imageUri?.let {
+                        val scrollState = scrollBehavior.state
+                        topbarColor.copy(
+                            alpha = min(
+                                1f,
+                                (scrollState.heightOffset / scrollState.heightOffsetLimit)
+                                        + 0.4f
                             )
-                        } ?: MaterialTheme.colorScheme.surface
-                    } else {
-                        imageUri?.let {
-                            val scrollState = scrollBehavior.state
-                            topbarColor.copy(
-                                alpha = min(
-                                    1f,
-                                    (scrollState.heightOffset / scrollState.heightOffsetLimit)
-                                            + 0.4f
-                                )
-                            )
-                        } ?: topbarColor
-                    }
+                        )
+                    } ?: topbarColor
                 ),
                 actions = actions,
                 scrollBehavior = scrollBehavior
