@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -88,35 +89,55 @@ fun OverviewScreenTopBar(
                     contentDescription = "Top App Bar background image",
                 )
             }
-            LargeTopAppBar(
-                modifier = Modifier
-                    .constrainAs(topbar) { /* No-op */ }
-                    .combinedClickable(
-                        onClick = { },
-                        onLongClick = addTestMessage
-                    ),
-                title = {
-                    Column {
-                        Text(
-                            modifier = Modifier,
-                            text = title,
-                            color = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = imageUri?.let {
-                        with(scrollBehavior.state) {
+            if (imageUri != null) {
+                LargeTopAppBar(
+                    modifier = Modifier
+                        .constrainAs(topbar) { /* No-op */ }
+                        .combinedClickable(
+                            onClick = { },
+                            onLongClick = addTestMessage
+                        ),
+                    title = {
+                        Column {
+                            Text(
+                                modifier = Modifier,
+                                text = title,
+                                color = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.largeTopAppBarColors(
+                        containerColor = with(scrollBehavior.state) {
                             topbarColor.copy(
                                 alpha = min(1f, (heightOffset / heightOffsetLimit) + 0.4f)
                             )
                         }
-                    } ?: topbarColor
-
-                ),
-                actions = actions,
-                scrollBehavior = scrollBehavior
-            )
+                    ),
+                    actions = actions,
+                    scrollBehavior = scrollBehavior
+                )
+            } else {
+                MediumTopAppBar(
+                    modifier = Modifier
+                        .constrainAs(topbar) { /* No-op */ }
+                        .combinedClickable(
+                            onClick = { },
+                            onLongClick = addTestMessage
+                        ),
+                    title = {
+                        Column {
+                            Text(
+                                modifier = Modifier,
+                                text = title,
+                                color = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = topbarColor),
+                    actions = actions,
+                    scrollBehavior = scrollBehavior
+                )
+            }
         }
     }
 }
