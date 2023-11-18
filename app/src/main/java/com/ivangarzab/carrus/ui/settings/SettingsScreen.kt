@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.models.TimeFormat
@@ -121,6 +122,9 @@ fun SettingsScreen(
     var showAlarmFrequencyDialog: Boolean by rememberSaveable {
         mutableStateOf(false)
     }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.statusBarDarkContentEnabled = false
 
     AppTheme {
         Scaffold(
