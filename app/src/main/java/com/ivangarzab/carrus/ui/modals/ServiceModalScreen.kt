@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import com.ivangarzab.carrus.ui.compose.NegativeButton
 import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.compose.theme.Typography
 import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel.Companion.DEFAULT_DUE_DATE_ADDITION
 import com.ivangarzab.carrus.ui.overview.ServiceBottomSheetContent
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
@@ -86,6 +88,7 @@ fun ServiceModalScreen(
         when {
             showRepairDateDialog -> {
                 CalendarDialog(
+                    title = "Repair Date",
                     onDismissed = { showRepairDateDialog = false },
                     onValueSelected = {
                         onUpdateState(
@@ -93,12 +96,17 @@ fun ServiceModalScreen(
                                 repairDate = it.getShortenedDate()
                             )
                         )
+                        // Trigger the next Calendar dialog, as needed
+                        if (state.dueDate.isNullOrBlank()) {
+                            showDueDateDialog = true
+                        }
                     }
                 )
             }
 
             showDueDateDialog -> {
                 CalendarDialog(
+                    title = "Due Date",
                     date = Calendar.getInstance().apply {
                         add(Calendar.DAY_OF_MONTH, DEFAULT_DUE_DATE_ADDITION)
                     },
@@ -121,6 +129,7 @@ fun ServiceModalScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CalendarDialog(
+    title: String = "Dialog Title",
     date: Calendar = Calendar.getInstance(),
     onDismissed: () -> Unit = { },
     onValueSelected: (Calendar) -> Unit = { },
@@ -134,6 +143,10 @@ fun CalendarDialog(
             isLarge = true,
             onDismissed = onDismissed
         ) {
+            Text(
+                text = title,
+                style = Typography.titleMediumLarge
+            )
             DatePicker(
                 modifier = Modifier.fillMaxWidth(),
                 state = datePickerState

@@ -36,7 +36,7 @@ class ServiceModalFragment : BottomSheetDialogFragment() {
                     analytics.logServiceSubmitClicked()
                     when (submitSuccess) {
                         true -> findNavController().popBackStack()
-                        false -> toast("Missing required data")
+                        false -> toast("Missing required field(s) or wrong data", true)
                     }
 
                 }
