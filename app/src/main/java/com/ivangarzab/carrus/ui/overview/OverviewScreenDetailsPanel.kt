@@ -2,9 +2,11 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -157,15 +159,17 @@ fun OverviewScreenDetailsItem(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = title,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Medium
                 )
-                Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Box(modifier = Modifier) {
                     Text(
                         text = content,
                         textAlign = TextAlign.Center
@@ -184,8 +188,24 @@ fun OverviewScreenDetailsPanelPreview() {
         OverviewScreenDetailsPanel(
             modifier = Modifier,
             state = DetailsPanelState(
+                year = "2099",
+                licenseState = "Texas",
+                tirePressure = "32",
+                totalMiles = "99999",
+                milesPerGalHighway = "32",
+                milesPerGalCity = "26"
             ),
             onEditCarClicked = { }
         )
     }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview
+@Composable
+fun OverviewScreenDetailsItemPreview() {
+    OverviewScreenDetailsItem(
+        title = "State",
+        content = "Texas"
+    )
 }

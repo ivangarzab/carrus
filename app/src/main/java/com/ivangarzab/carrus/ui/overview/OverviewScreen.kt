@@ -180,7 +180,7 @@ private fun OverviewScreen(
                 }
             }
         } else {
-//            systemUiController.statusBarDarkContentEnabled = true
+            systemUiController.statusBarDarkContentEnabled = isSystemInDarkTheme().not()
             OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
         }
     }

@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Car
@@ -153,6 +154,9 @@ private fun CreateScreen(
     // Easter egg
     addTestCarData: () -> Unit = { }
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.statusBarDarkContentEnabled = false
+
     AppTheme {
         Scaffold(
             topBar = {
@@ -226,7 +230,7 @@ private fun CreateScreenContent(
     val verticalSeparation: Dp = 12.dp
     val spaceInBetween: Dp = 8.dp
     var isExpanded: Boolean by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(shouldBeExpanded())
     }
     var isImagePresent: Boolean by rememberSaveable {
         mutableStateOf(false)

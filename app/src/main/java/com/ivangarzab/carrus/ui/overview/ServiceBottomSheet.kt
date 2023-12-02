@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -98,6 +99,9 @@ fun ServiceBottomSheetContent(
                     label = stringResource(id = R.string.service_name),
                     content = state.name ?: "",
                     isRequired = true,
+                    keyboardAction = KeyboardActions(
+                        onNext = { onRepairDateFieldClicked() }
+                    ),
                     updateListener = {
                         onUpdateState(
                             state.copy(
