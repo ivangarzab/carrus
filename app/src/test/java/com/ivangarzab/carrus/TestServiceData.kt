@@ -8,7 +8,9 @@ val TEST_SERVICE: Service = Service(
     id = "1",
     name = "Test",
     repairDate = Calendar.getInstance(),
-    dueDate = Calendar.getInstance(),
+    dueDate = Calendar.getInstance().apply {
+        add(Calendar.DAY_OF_MONTH, 1)
+    },
     brand = "testBrand",
     type = "testType",
     cost = 0.0f
