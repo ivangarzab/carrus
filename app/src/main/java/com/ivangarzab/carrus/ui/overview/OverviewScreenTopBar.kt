@@ -60,7 +60,7 @@ fun OverviewScreenTopBar(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(data = imageUri)
                     .size(Size.ORIGINAL) // Set the target size to load the image at.
-                    .listener { request, result ->
+                    .listener { _, result ->
                         Timber.d("Image request result: $result")
                     }
                     .build()
@@ -83,9 +83,13 @@ fun OverviewScreenTopBar(
                             }
                         },
                     painter = painter,
-                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(topbarColor, BlendMode.Color),
+                    contentScale = ContentScale.Crop,
+                    colorFilter = if (isSystemInDarkTheme()) {
+                        ColorFilter.tint(topbarColor, BlendMode.Color)
+                    } else {
+                        null
+                    },
                     contentDescription = "Top App Bar background image",
                 )
             }
