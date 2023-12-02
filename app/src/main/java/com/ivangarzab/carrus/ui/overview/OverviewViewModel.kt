@@ -173,7 +173,11 @@ class OverviewViewModel @Inject constructor(
         removeMessage(this)
     }
 
-    fun addTestMessage() = addMessage(Message.TEST)
+    fun addTestMessage() {
+        if (App.isRelease().not()) {
+            addMessage(Message.TEST)
+        }
+    }
 
     private fun addMessage(type: Message) = with(type) {
         Timber.v("Adding ${this.name} message to the queue")

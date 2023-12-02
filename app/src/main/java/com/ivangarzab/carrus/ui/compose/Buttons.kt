@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ fun PositiveButton(
         Button(
             modifier = modifier
                 .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
             onClick = { onClick() },
         ) {
             Text(text = text)
@@ -52,6 +54,7 @@ fun NegativeButton(
         TextButton(
             modifier = modifier
                 .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
             onClick = { onClick() },
         ) {
             Text(text = text)
@@ -71,6 +74,7 @@ fun NeutralButton(
         OutlinedButton(
             modifier = modifier
                 .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
             onClick = { onClick() },
         ) {
             Text(text = text)
