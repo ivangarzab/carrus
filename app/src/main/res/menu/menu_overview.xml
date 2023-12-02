@@ -25,6 +25,5 @@
         android:id="@+id/action_add_component"
         android:orderInCategory="200"
         android:title="@string/menu_add_component"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add_white" />
+        app:showAsAction="ifRoom" />
 </menu>
