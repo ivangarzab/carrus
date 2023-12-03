@@ -58,8 +58,14 @@ fun OverviewScreenSortingPanel(
                 SortingChipButton(
                     modifier = Modifier.padding(start = itemStartPadding),
                     isSelected = selectedIndex == 2,
+                    onClick = { onSortRequest(SortingType.REPAIR_DATE) },
+                    text = stringResource(id = R.string.repair_date).lowercase()
+                )
+                SortingChipButton(
+                    modifier = Modifier.padding(start = itemStartPadding),
+                    isSelected = selectedIndex == 3,
                     onClick = { onSortRequest(SortingType.DUE_DATE) },
-                    text = stringResource(id = R.string.date)
+                    text = stringResource(id = R.string.due_date).lowercase()
                 )
             }
         }
