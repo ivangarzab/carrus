@@ -18,7 +18,7 @@ open class App : Application() {
     override fun onCreate() {
         super.onCreate()
         setupCoil()
-        if (isRelease().not()) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
             setupLeakCanary()
