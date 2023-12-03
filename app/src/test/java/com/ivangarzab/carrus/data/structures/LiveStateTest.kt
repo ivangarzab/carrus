@@ -5,7 +5,7 @@ package com.ivangarzab.carrus.data.structures
  */
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.ivangarzab.carrus.TestLifecycleOwner
+import com.ivangarzab.test_data.TestLifecycleOwner
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify

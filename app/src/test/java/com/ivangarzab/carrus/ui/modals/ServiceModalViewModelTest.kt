@@ -3,10 +3,10 @@ package com.ivangarzab.carrus.ui.modals
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.TEST_SERVICE
-import com.ivangarzab.carrus.TEST_SERVICE_EMPTY
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.test_data.TEST_SERVICE
+import com.ivangarzab.test_data.TEST_SERVICE_EMPTY
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After

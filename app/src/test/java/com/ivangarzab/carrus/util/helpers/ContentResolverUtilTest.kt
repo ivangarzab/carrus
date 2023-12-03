@@ -3,7 +3,7 @@ package com.ivangarzab.carrus.util.helpers
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.STRING_EMPTY
+import com.ivangarzab.test_data.STRING_EMPTY
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

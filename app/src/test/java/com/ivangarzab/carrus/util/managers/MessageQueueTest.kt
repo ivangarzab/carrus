@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.TEST_MESSAGE_DATA_1
-import com.ivangarzab.carrus.TEST_MESSAGE_DATA_2
-import com.ivangarzab.carrus.TEST_MESSAGE_DATA_3
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.test_data.ONE
+import com.ivangarzab.test_data.TEST_MESSAGE_DATA_1
+import com.ivangarzab.test_data.TEST_MESSAGE_DATA_2
+import com.ivangarzab.test_data.TEST_MESSAGE_DATA_3
 import com.ivangarzab.test_data.TWO
 import com.ivangarzab.test_data.ZERO
 import junit.framework.TestCase.assertEquals

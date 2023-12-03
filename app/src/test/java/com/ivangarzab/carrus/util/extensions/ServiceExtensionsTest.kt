@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.util.extensions
 
-import com.ivangarzab.carrus.TEST_SERVICE
-import com.ivangarzab.carrus.TEST_SERVICE_EMPTY
+import com.ivangarzab.test_data.TEST_SERVICE
+import com.ivangarzab.test_data.TEST_SERVICE_EMPTY
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.util.*
+import java.util.Calendar
 
 class ServiceExtensionsTest {
 

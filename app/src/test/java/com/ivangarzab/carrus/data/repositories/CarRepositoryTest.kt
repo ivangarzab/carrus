@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.EMPTY_CAR
-import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.TEST_SERVICE
 import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.TEST_CAR
+import com.ivangarzab.test_data.TEST_SERVICE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

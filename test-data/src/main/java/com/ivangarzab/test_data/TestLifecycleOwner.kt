@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ivangarzab.carrus
+package com.ivangarzab.test_data
 
 import androidx.annotation.NonNull
 import androidx.lifecycle.Lifecycle

@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.test_data
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

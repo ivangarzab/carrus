@@ -2,15 +2,15 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.EMPTY_CAR
-import com.ivangarzab.carrus.STRING_BLANK
-import com.ivangarzab.carrus.STRING_EMPTY
-import com.ivangarzab.carrus.TEST_CAR_JSON
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
+import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.STRING_BLANK
+import com.ivangarzab.test_data.STRING_EMPTY
+import com.ivangarzab.test_data.TEST_CAR_JSON
+import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.mockk
 import junit.framework.TestCase
 import org.junit.Before

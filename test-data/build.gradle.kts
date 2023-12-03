@@ -35,9 +35,17 @@ android {
 
 dependencies {
     compileOnly(project(":app"))
+    testApi(project(":app"))
+
     implementation(libs.androidx.core)
     implementation(libs.app.compat)
+    implementation(libs.junit)
+    implementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso)
 }
