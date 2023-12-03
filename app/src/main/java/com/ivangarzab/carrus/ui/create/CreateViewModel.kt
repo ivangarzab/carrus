@@ -12,6 +12,7 @@ import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.UUID
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
     private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
@@ -179,6 +181,26 @@ class CreateViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.w("Unable to import data", e)
             false
+        }
+    }
+
+    fun setupDataEasterEggForTesting() {
+        if (debugFlagProvider.isDebugEnabled()) {
+            with(Car.default) {
+                onUpdateStateData(
+                    nickname = nickname,
+                    make = make,
+                    model = model,
+                    year = year,
+                    licenseState = licenseState,
+                    licenseNo = licenseNo,
+                    vinNo = vinNo,
+                    tirePressure = tirePressure,
+                    totalMiles = totalMiles,
+                    milesPerGalCity = milesPerGalCity,
+                    milesPerGalHighway = milesPerGalHighway
+                )
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
@@ -100,12 +99,7 @@ fun OverviewScreenContent(
                             .align(Alignment.CenterStart)
                             .combinedClickable(
                                 onClick = { },
-                                onLongClick = {
-                                    if (App.isRelease().not()) {
-                                        // Easter egg for testing!
-                                        addServiceList()
-                                    }
-                                }
+                                onLongClick = addServiceList // Easter egg for testing!
                             ),
                         text = stringResource(id = R.string.services)
                     )
