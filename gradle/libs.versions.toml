@@ -15,6 +15,8 @@ firebaseCrashlyticsGradle = "2.9.9"
 hiltGradle = "2.44"
 truth = "1.1.5"
 mockk = "1.13.8"
+agp2 = "8.1.2"
+org-jetbrains-kotlin-android = "1.8.10"
 
 
 
@@ -60,3 +62,5 @@ mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" 
 
 [plugins]
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hiltGradle" }
+android-library = { id = "com.android.library", version.ref = "agp2" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
