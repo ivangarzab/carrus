@@ -8,7 +8,7 @@ import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.states.AppSettingsState
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.managers.Preferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class AppSettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
+    private val prefs: Preferences
 ) : AppSettingsRepository {
 
     private val _appSettingsStateFlow = MutableStateFlow(AppSettingsState())

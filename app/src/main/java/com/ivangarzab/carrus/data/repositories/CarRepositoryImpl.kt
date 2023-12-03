@@ -2,7 +2,7 @@ package com.ivangarzab.carrus.data.repositories
 
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Service
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.managers.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class CarRepositoryImpl @Inject constructor(
-    private val appScope: CoroutineScope
+    private val appScope: CoroutineScope,
+    private val prefs: Preferences
 ) : CarRepository {
 
     private val _carDataChannel: MutableStateFlow<Car?> = MutableStateFlow(null)

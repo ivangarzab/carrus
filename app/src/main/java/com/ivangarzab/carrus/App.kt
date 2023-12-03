@@ -6,24 +6,17 @@ import coil.ImageLoader
 import coil.memory.MemoryCache
 import com.google.android.libraries.places.api.Places
 import com.ivangarzab.carrus.util.managers.LeakUploader
-import com.ivangarzab.carrus.util.managers.Preferences
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
-// Global instance of our shared preferences
-val prefs: Preferences by lazy {
-    App.preferences!!
-} //TODO: Rework this solution
-
 @HiltAndroidApp
 open class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        preferences = Preferences(applicationContext)
         setupCoil()
         if (isRelease().not()) {
             Timber.plant(Timber.DebugTree())
@@ -51,8 +44,6 @@ open class App : Application() {
     }
 
     companion object {
-        var preferences: Preferences? = null
-
         fun isRelease(): Boolean = BuildConfig.BUILD_TYPE == "release"
     }
 }

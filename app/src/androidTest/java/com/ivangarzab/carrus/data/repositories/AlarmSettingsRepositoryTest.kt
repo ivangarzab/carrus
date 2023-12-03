@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.managers.Preferences
 import org.junit.Before
 import org.junit.Test
 
@@ -17,7 +17,9 @@ class AlarmSettingsRepositoryTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().context
 
-    private val repository = AlarmSettingsRepositoryImpl(context)
+    private val prefs: Preferences = Preferences(context)
+
+    private val repository = AlarmSettingsRepositoryImpl(context, prefs)
 
     @Before
     fun setup() {

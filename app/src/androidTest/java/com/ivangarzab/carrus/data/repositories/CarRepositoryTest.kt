@@ -1,12 +1,13 @@
 package com.ivangarzab.carrus.data.repositories
 
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.EMPTY_CAR
 import com.ivangarzab.carrus.data.SERVICE_EMPTY
 import com.ivangarzab.carrus.data.SERVICE_TEST_1
 import com.ivangarzab.carrus.data.SERVICE_TEST_2
 import com.ivangarzab.carrus.data.TEST_CAR
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.util.managers.Preferences
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
@@ -19,7 +20,11 @@ import org.junit.Test
  */
 class CarRepositoryTest {
 
-    private val repository = CarRepositoryImpl(mockk())
+    private val prefs: Preferences = Preferences(
+        InstrumentationRegistry.getInstrumentation().context
+    )
+
+    private val repository = CarRepositoryImpl(mockk(), prefs)
 
     @Before
     fun setup() {

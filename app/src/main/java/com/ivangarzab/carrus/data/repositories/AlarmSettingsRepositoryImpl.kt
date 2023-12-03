@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.states.AlarmSettingsState
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
+import com.ivangarzab.carrus.util.managers.Preferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class AlarmSettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
+    private val prefs: Preferences
 ) : AlarmSettingsRepository {
 
     private val _alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
