@@ -7,6 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * As copied [from source](https://medium.com/androiddevelopers/create-an-application-coroutinescope-using-hilt-dd444e721528)
+ */
 @InstallIn(SingletonComponent::class)
 @Module
 object CoroutinesDispatchersModule {
