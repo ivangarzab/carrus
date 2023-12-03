@@ -49,20 +49,40 @@ import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+fun SettingsScreenContentPreview() {
+    SettingsScreenContent(
+        state = SettingsState().copy(
+            alarmsOn = true
+        ),
+        onDarkModeToggle = { },
+        onAlarmsToggle = { },
+        onAlarmTimeClicked = { },
+        onAlarmFrequencyClicked = { },
+        onDueDateFormatClicked = { },
+        onClockTimeFormatClicked = { },
+        onDeleteCarServicesClicked = { },
+        onDeleteCarDataClicked = { },
+        onImportClicked = { },
+        onExportClicked = { },
+        onPrivacyPolicyClicked = { }
+    )
+}
+
+@Composable
 fun SettingsScreenContent(
     modifier: Modifier = Modifier,
     @PreviewParameter(SettingsStatePreview::class) state: SettingsState,
-    onDarkModeToggle: (Boolean) -> Unit = { },
-    onAlarmsToggle: (Boolean) -> Unit = { },
-    onAlarmTimeClicked: () -> Unit = { },
-    onAlarmFrequencyClicked: () -> Unit = { },
-    onDueDateFormatClicked: () -> Unit = { },
-    onClockTimeFormatClicked: () -> Unit = { },
-    onDeleteCarServicesClicked: () -> Unit = { },
-    onDeleteCarDataClicked: () -> Unit = { },
-    onImportClicked: () -> Unit = { },
-    onExportClicked: () -> Unit = { },
-    onPrivacyPolicyClicked: () -> Unit = { }
+    onDarkModeToggle: (Boolean) -> Unit,
+    onAlarmsToggle: (Boolean) -> Unit,
+    onAlarmTimeClicked: () -> Unit,
+    onAlarmFrequencyClicked: () -> Unit,
+    onDueDateFormatClicked: () -> Unit,
+    onClockTimeFormatClicked: () -> Unit,
+    onDeleteCarServicesClicked: () -> Unit,
+    onDeleteCarDataClicked: () -> Unit,
+    onImportClicked: () -> Unit,
+    onExportClicked: () -> Unit,
+    onPrivacyPolicyClicked: () -> Unit
 ) {
     AppTheme {
         val scrollState = rememberScrollState()
@@ -77,7 +97,7 @@ fun SettingsScreenContent(
         ) {
 
             var areAlarmsEnabled: Boolean by rememberSaveable {
-                mutableStateOf(value = false)
+                mutableStateOf(value = true)
             }
             areAlarmsEnabled = state.alarmsOn
 

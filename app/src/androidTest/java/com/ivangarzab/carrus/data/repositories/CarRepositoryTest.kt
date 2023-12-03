@@ -7,6 +7,7 @@ import com.ivangarzab.carrus.data.SERVICE_TEST_1
 import com.ivangarzab.carrus.data.SERVICE_TEST_2
 import com.ivangarzab.carrus.data.TEST_CAR
 import com.ivangarzab.carrus.prefs
+import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -18,7 +19,7 @@ import org.junit.Test
  */
 class CarRepositoryTest {
 
-    private val repository = CarRepositoryImpl()
+    private val repository = CarRepositoryImpl(mockk())
 
     @Before
     fun setup() {
