@@ -5,8 +5,8 @@ import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
-import com.ivangarzab.test_data.TEST_SERVICE
-import com.ivangarzab.test_data.TEST_SERVICE_EMPTY
+import com.ivangarzab.test_data.SERVICE_EMPTY
+import com.ivangarzab.test_data.SERVICE_TEST_1
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
@@ -43,7 +43,7 @@ class ServiceModalViewModelTest {
             analytics = mockk(relaxUnitFun = true)
         )
         every { carRepository.fetchCarData() } returns Car.default
-        every { carRepository.updateCarService(TEST_SERVICE) }
+        every { carRepository.updateCarService(SERVICE_TEST_1) }
 
         viewModel.state.observeForever(stateObserver)
         viewModel.onSubmission.observeForever(onSubmissionObserver)
@@ -118,8 +118,8 @@ class ServiceModalViewModelTest {
             .isTrue()
     }
 
-    private fun setEmptyArgsData() = viewModel.setArgsData(TEST_SERVICE_EMPTY)
-    private fun setArgsData() = viewModel.setArgsData(TEST_SERVICE)
+    private fun setEmptyArgsData() = viewModel.setArgsData(SERVICE_EMPTY)
+    private fun setArgsData() = viewModel.setArgsData(SERVICE_TEST_1)
 
     companion object {
         private val SERVICE_MODAL_STATE_INVALID = ServiceModalState(

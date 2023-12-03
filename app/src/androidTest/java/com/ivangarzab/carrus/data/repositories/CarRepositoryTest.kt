@@ -1,12 +1,12 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.data.EMPTY_CAR
-import com.ivangarzab.carrus.data.SERVICE_EMPTY
-import com.ivangarzab.carrus.data.SERVICE_TEST_1
-import com.ivangarzab.carrus.data.SERVICE_TEST_2
-import com.ivangarzab.carrus.data.TEST_CAR
 import com.ivangarzab.carrus.prefs
+import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.SERVICE_EMPTY
+import com.ivangarzab.test_data.SERVICE_TEST_1
+import com.ivangarzab.test_data.SERVICE_TEST_2
+import com.ivangarzab.test_data.TEST_CAR
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

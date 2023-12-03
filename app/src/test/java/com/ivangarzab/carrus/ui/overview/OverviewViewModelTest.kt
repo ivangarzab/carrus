@@ -11,8 +11,8 @@ import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import com.ivangarzab.test_data.MainDispatcherRule
+import com.ivangarzab.test_data.SERVICE_TEST_1
 import com.ivangarzab.test_data.TEST_CAR
-import com.ivangarzab.test_data.TEST_SERVICE
 import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.every
 import io.mockk.mockk
@@ -62,16 +62,16 @@ class OverviewViewModelTest {
     fun test_onServiceDeleted_success() = with(viewModel) {
         carRepository.let {
             it.saveCarData(TEST_CAR)
-            it.addCarService(TEST_SERVICE)
+            it.addCarService(SERVICE_TEST_1)
         }
         state.getOrAwaitValue().let {
             assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isTrue()
+            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isTrue()
         }
         val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
+            onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
+        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 
@@ -80,12 +80,12 @@ class OverviewViewModelTest {
         carRepository.saveCarData(TEST_CAR)
         state.getOrAwaitValue().let {
             assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isFalse()
+            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isFalse()
         }
         val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
+            onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
+        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 
