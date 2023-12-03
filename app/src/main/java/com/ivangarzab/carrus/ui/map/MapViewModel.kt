@@ -20,7 +20,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.maps.android.SphericalUtil
-import com.ivangarzab.carrus.data.PlaceData
+import com.ivangarzab.carrus.data.models.PlaceData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -173,11 +173,13 @@ class MapViewModel @Inject constructor(
                 state.value?.let { state ->
                     _state.postValue(state.copy(
                         searchList = state.searchList.toMutableList().apply {
-                            add(com.ivangarzab.carrus.data.PlaceData(
+                            add(
+                                PlaceData(
                                 id = "",
                                 name = it.place.name ?: "",
                                 latLng = it.place.latLng ?: LatLng(0.0, 0.0)
-                            ))
+                            )
+                            )
                         }
                     ))
                 }

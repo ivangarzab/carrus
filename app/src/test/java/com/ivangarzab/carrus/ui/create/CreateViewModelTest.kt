@@ -6,7 +6,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
-import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.CAR_EMPTY
 import com.ivangarzab.test_data.STRING_BLANK
 import com.ivangarzab.test_data.STRING_EMPTY
 import com.ivangarzab.test_data.TEST_CAR_JSON
@@ -47,7 +47,7 @@ class CreateViewModelTest {
 
     @Test
     fun test_init_with_data_edit() = with(viewModel) {
-        init(EMPTY_CAR)
+        init(CAR_EMPTY)
         assertThat(type)
             .isSameInstanceAs(CreateViewModel.Type.EDIT)
     }

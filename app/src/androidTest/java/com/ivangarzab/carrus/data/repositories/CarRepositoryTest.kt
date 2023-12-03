@@ -2,11 +2,11 @@ package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.prefs
-import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.CAR_EMPTY
+import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.SERVICE_EMPTY
 import com.ivangarzab.test_data.SERVICE_TEST_1
 import com.ivangarzab.test_data.SERVICE_TEST_2
-import com.ivangarzab.test_data.TEST_CAR
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -41,28 +41,28 @@ class CarRepositoryTest {
 
     @Test
     fun test_fetchCarData_success() = with(repository) {
-        prefs.defaultCar = TEST_CAR
+        prefs.defaultCar = CAR_TEST
         assertThat(fetchCarData())
-            .isEqualTo(TEST_CAR)
+            .isEqualTo(CAR_TEST)
     }
 
     @Test
     fun test_saveCarData_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         assertThat(fetchCarData())
-            .isEqualTo(TEST_CAR)
+            .isEqualTo(CAR_TEST)
     }
 
     @Test
     fun test_saveCarData_failure() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         assertThat(fetchCarData())
-            .isNotEqualTo(EMPTY_CAR)
+            .isNotEqualTo(CAR_EMPTY)
     }
 
     @Test
     fun test_deleteCarData_control() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         deleteCarData()
         assertThat(fetchCarData())
             .isNull()
@@ -70,14 +70,14 @@ class CarRepositoryTest {
     
     @Test
     fun test_empty_service_list_control() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         assertThat(fetchCarData()?.services)
             .isEmpty()
     }
 
     @Test
     fun test_addCarService_non_empty_list() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         assertThat(fetchCarData()?.services)
             .isNotEmpty()
@@ -85,7 +85,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_addCarService_contains_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         val expected = SERVICE_TEST_1
         addCarService(expected)
         assertThat(fetchCarData()?.services)
@@ -94,7 +94,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_addCarService_equals_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         val expected = SERVICE_TEST_1
         addCarService(expected)
         assertThat(fetchCarData()?.services?.get(0))
@@ -103,7 +103,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_addCarService_fail() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         assertThat(fetchCarData()?.services)
             .doesNotContain(SERVICE_EMPTY)
@@ -111,7 +111,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_removeCarService_doesNotContain_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         removeCarService(SERVICE_TEST_1)
         assertThat(fetchCarData()?.services)
@@ -120,7 +120,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_removeCarService_empty_list_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         val expected = SERVICE_TEST_1
         addCarService(expected)
         removeCarService(expected)
@@ -130,7 +130,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_removeCarService_fail() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         removeCarService(SERVICE_TEST_1)
         assertThat(fetchCarData()?.services)
@@ -139,7 +139,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_updateCarService_success() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         val expected = SERVICE_TEST_1.copy( brand = "newBrand" )
         updateCarService(expected)
@@ -149,7 +149,7 @@ class CarRepositoryTest {
 
     @Test
     fun test_updateCarService_fail() = with(repository) {
-        saveCarData(TEST_CAR)
+        saveCarData(CAR_TEST)
         addCarService(SERVICE_TEST_1)
         updateCarService(SERVICE_TEST_1.copy( brand = "newBrand" ))
         assertThat(fetchCarData()?.services?.get(0))

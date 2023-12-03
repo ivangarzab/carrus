@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data
+package com.ivangarzab.carrus.data.models
 
 import com.google.android.gms.maps.model.LatLng
 

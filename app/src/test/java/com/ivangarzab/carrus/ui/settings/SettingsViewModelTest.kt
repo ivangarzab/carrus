@@ -10,9 +10,9 @@ import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
+import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.MainDispatcherRule
 import com.ivangarzab.test_data.SERVICE_TEST_1
-import com.ivangarzab.test_data.TEST_CAR
 import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -253,7 +253,7 @@ class SettingsViewModelTest {
     }
 
     private fun saveCarData() {
-        carRepository.saveCarData(TEST_CAR)
+        carRepository.saveCarData(CAR_TEST)
     }
 
     private fun grantAlarmsPermission() {

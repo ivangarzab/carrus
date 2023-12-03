@@ -1,6 +1,5 @@
-package com.ivangarzab.carrus.util.managers
+package com.ivangarzab.carrus.data.structures
 
-import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.test_data.ONE
 import com.ivangarzab.test_data.TEST_MESSAGE_DATA_1
 import com.ivangarzab.test_data.TEST_MESSAGE_DATA_2

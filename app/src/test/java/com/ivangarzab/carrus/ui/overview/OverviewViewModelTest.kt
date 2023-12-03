@@ -10,9 +10,9 @@ import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
+import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.MainDispatcherRule
 import com.ivangarzab.test_data.SERVICE_TEST_1
-import com.ivangarzab.test_data.TEST_CAR
 import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.every
 import io.mockk.mockk
@@ -61,7 +61,7 @@ class OverviewViewModelTest {
     @Test
     fun test_onServiceDeleted_success() = with(viewModel) {
         carRepository.let {
-            it.saveCarData(TEST_CAR)
+            it.saveCarData(CAR_TEST)
             it.addCarService(SERVICE_TEST_1)
         }
         state.getOrAwaitValue().let {
@@ -77,7 +77,7 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onServiceDeleted_service_not_there() = with(viewModel) {
-        carRepository.saveCarData(TEST_CAR)
+        carRepository.saveCarData(CAR_TEST)
         state.getOrAwaitValue().let {
             assertThat(it.car).isNotNull()
             assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isFalse()

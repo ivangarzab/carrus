@@ -2,9 +2,9 @@ package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.models.Car
-import com.ivangarzab.test_data.EMPTY_CAR
+import com.ivangarzab.test_data.CAR_EMPTY
+import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.SERVICE_TEST_1
-import com.ivangarzab.test_data.TEST_CAR
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +38,7 @@ class CarRepositoryTest {
     }
 
     private fun populateData() {
-        repository._carDataChannel.value = EMPTY_CAR.copy(
+        repository._carDataChannel.value = CAR_EMPTY.copy(
             services = emptyList()
         )
     }
@@ -75,10 +75,10 @@ class CarRepositoryTest {
     @Test
     fun test_saveCarData_base() = runTest {
         with(repository) {
-            saveCarData(TEST_CAR)
+            saveCarData(CAR_TEST)
             val result = carDataFlow.first()
             assertThat(result)
-                .isEqualTo(TEST_CAR)
+                .isEqualTo(CAR_TEST)
         }
     }
 

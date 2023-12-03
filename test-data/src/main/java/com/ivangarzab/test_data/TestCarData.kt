@@ -6,7 +6,7 @@ import com.ivangarzab.carrus.data.models.Car
  * Created by Ivan Garza Bermea.
  */
 
-val EMPTY_CAR = Car(
+val CAR_EMPTY = Car(
     uid = "0",
     nickname = "",
     make = "",
@@ -22,7 +22,7 @@ val EMPTY_CAR = Car(
     services = emptyList()
 )
 
-val TEST_CAR = Car(
+val CAR_TEST = Car(
     uid = "1",
     nickname = "testy",
     make = "Android",
