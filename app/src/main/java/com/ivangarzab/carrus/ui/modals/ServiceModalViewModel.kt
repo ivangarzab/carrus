@@ -76,7 +76,8 @@ class ServiceModalViewModel @Inject constructor(
     private fun verifyServiceData(data: Service): Boolean =
         data.name.isNotBlank() &&
                 data.repairDate.timeInMillis != 0L &&
-                data.dueDate.timeInMillis != 0L
+                data.dueDate.timeInMillis != 0L &&
+                data.repairDate.timeInMillis < data.dueDate.timeInMillis
 
     private fun verifyServiceData(
         name: String?,

@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -14,7 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -40,6 +42,7 @@ private fun BaseInputField(
     isLastField: Boolean = false,
     textStyle: TextStyle? = null,
     keyboardOptions: KeyboardOptions? = null,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     leadingIcon: @Composable (() -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     updateListener: (String) -> Unit = { }
@@ -80,6 +83,7 @@ private fun BaseInputField(
                     ImeAction.Next
                 }
             ),
+            keyboardActions = keyboardActions,
             leadingIcon = leadingIcon,
             interactionSource = interactionSource ?: remember { MutableInteractionSource() }
         )
@@ -92,6 +96,7 @@ fun TextInputField(
     content: String? = null,
     isRequired: Boolean = false,
     isLastField: Boolean = false,
+    keyboardAction: KeyboardActions? = null,
     updateListener: (String) -> Unit = { }
 ) {
     AppTheme {
@@ -103,6 +108,7 @@ fun TextInputField(
                 capitalization = KeyboardCapitalization.Words,
                 keyboardType = KeyboardType.Text
             ),
+            keyboardActions = keyboardAction ?: KeyboardActions.Default,
             isRequired = isRequired,
             isLastField = isLastField,
             updateListener = updateListener
@@ -191,7 +197,7 @@ fun CalendarInputField(
             },
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_calendar_event),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_calendar),
                 contentDescription = "Calendar icon",
                 tint = MaterialTheme.colorScheme.primary
             )

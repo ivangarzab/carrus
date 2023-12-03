@@ -2,22 +2,24 @@ package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,7 +67,7 @@ fun OverviewScreenDetailsPanel(
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp),
                     onClick = onEditCarClicked,
-                    imageVector = Icons.Filled.Edit,
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                     contentDescription = "Car edit icon button"
                 )
             }
@@ -157,15 +159,17 @@ fun OverviewScreenDetailsItem(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = title,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold //TODO: Make a diff color instead
+                    fontWeight = FontWeight.Medium
                 )
-                Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Box(modifier = Modifier) {
                     Text(
                         text = content,
                         textAlign = TextAlign.Center
@@ -184,8 +188,24 @@ fun OverviewScreenDetailsPanelPreview() {
         OverviewScreenDetailsPanel(
             modifier = Modifier,
             state = DetailsPanelState(
+                year = "2099",
+                licenseState = "Texas",
+                tirePressure = "32",
+                totalMiles = "99999",
+                milesPerGalHighway = "32",
+                milesPerGalCity = "26"
             ),
             onEditCarClicked = { }
         )
     }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview
+@Composable
+fun OverviewScreenDetailsItemPreview() {
+    OverviewScreenDetailsItem(
+        title = "State",
+        content = "Texas"
+    )
 }

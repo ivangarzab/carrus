@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.R
@@ -34,7 +36,6 @@ import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
 import com.ivangarzab.carrus.ui.overview.data.SortingType
-import com.ivangarzab.carrus.util.managers.Analytics
 
 /**
  * Created by Ivan Garza Bermea.
@@ -116,9 +117,7 @@ private fun OverviewScreen(
                         .nestedScroll(scrollBehavior.nestedScrollConnection),
                     topBar = {
                         OverviewScreenTopBar(
-                            title = it.nickname.ifBlank {
-                                "${it.make} ${it.model}"
-                            },
+                            title = it.getCarName(),
                             imageUri = it.imageUri,
                             scrollBehavior = scrollBehavior,
                             addTestMessage = addTestMessage
@@ -165,8 +164,9 @@ private fun OverviewScreen(
                             onClick = onFloatingActionButtonClicked
                         ) {
                             Icon(
+                                modifier = Modifier.size(48.dp),
                                 painter = painterResource(id = R.drawable.ic_add),
-                                contentDescription = "Add Service floating action button"
+                                contentDescription = "Add Service"
                             )
                         }
                     }
@@ -180,7 +180,7 @@ private fun OverviewScreen(
                 }
             }
         } else {
-            systemUiController.statusBarDarkContentEnabled = true
+            systemUiController.statusBarDarkContentEnabled = isSystemInDarkTheme().not()
             OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
         }
     }

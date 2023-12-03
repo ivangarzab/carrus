@@ -39,5 +39,7 @@
             android:value="${GOOGLE_MAPS_API_KEY}" />
         <!-- Halt automatic screen_view logging -->
         <meta-data android:name="google_analytics_automatic_screen_reporting_enabled" android:value="false" />
+        <!-- Disable collecting the AD_ID -->
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     </application>
 </manifest>

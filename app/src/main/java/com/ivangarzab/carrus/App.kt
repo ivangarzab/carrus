@@ -1,6 +1,9 @@
 package com.ivangarzab.carrus
 
 import android.app.Application
+import coil.Coil
+import coil.ImageLoader
+import coil.memory.MemoryCache
 import com.google.android.libraries.places.api.Places
 import com.ivangarzab.carrus.util.managers.LeakUploader
 import com.ivangarzab.carrus.util.managers.Preferences
@@ -34,6 +37,7 @@ open class App : Application() {
         appScope = CoroutineScope(
             appGlobalJob + Dispatchers.Default
         )
+        setupCoil()
         if (isRelease().not()) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
@@ -46,6 +50,17 @@ open class App : Application() {
     open fun setupLeakCanary() {
         Timber.v("Setting up leak event listener")
         LeakUploader().setupCrashlyticsLeakUploader()
+    }
+
+    open fun setupCoil() = with(applicationContext) {
+        Coil.setImageLoader(ImageLoader.Builder(this)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            .build()
+        )
     }
 
     companion object {
