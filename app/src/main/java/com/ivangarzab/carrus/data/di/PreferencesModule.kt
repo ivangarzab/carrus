@@ -24,5 +24,5 @@ object PreferencesModule {
             instance = Preferences(context, debugFlagProvider)
         }
         return instance
-    }
+    } //TODO: Test this without all of the instance field setup to confirm the Singleton piece works
 }

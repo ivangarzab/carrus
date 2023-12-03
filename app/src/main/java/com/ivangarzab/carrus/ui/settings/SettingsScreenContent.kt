@@ -64,6 +64,7 @@ fun SettingsScreenContentPreview() {
         onDeleteCarDataClicked = { },
         onImportClicked = { },
         onExportClicked = { },
+        onDebugModeToggle = { },
         onPrivacyPolicyClicked = { }
     )
 }
@@ -82,6 +83,7 @@ fun SettingsScreenContent(
     onDeleteCarDataClicked: () -> Unit,
     onImportClicked: () -> Unit,
     onExportClicked: () -> Unit,
+    onDebugModeToggle: () -> Unit,
     onPrivacyPolicyClicked: () -> Unit
 ) {
     AppTheme {
@@ -199,7 +201,8 @@ fun SettingsScreenContent(
 
             SettingsScreenBottomBar(
                 modifier = Modifier,
-                versionName = BuildConfig.VERSION_NAME
+                versionName = BuildConfig.VERSION_NAME,
+                onDebugToggled = onDebugModeToggle
             )
         }
     }

@@ -78,6 +78,7 @@ fun SettingsScreenStateful(
             onDeleteCarDataClicked = { viewModel.onDeleteCarDataClicked() },
             onImportClicked = { onImportClicked() },
             onExportClicked = { onExportClicked() },
+            onDebugModeToggle = { viewModel.onDebugModeToggle() },
             onPrivacyPolicyClicked = onPrivacyPolicyClicked
         )
     }
@@ -102,6 +103,7 @@ fun SettingsScreen(
     onDeleteCarDataClicked: () -> Unit = { },
     onImportClicked: () -> Unit = { },
     onExportClicked: () -> Unit = { },
+    onDebugModeToggle: () -> Unit = { },
     onPrivacyPolicyClicked: () -> Unit = { }
 ) {
     var showAlarmTimePickerDialog: Boolean by rememberSaveable {
@@ -149,6 +151,7 @@ fun SettingsScreen(
                     onDeleteCarServicesClicked = { showDeleteCarServicesDialog = true },
                     onImportClicked = { onImportClicked() },
                     onExportClicked = { onExportClicked() },
+                    onDebugModeToggle = { onDebugModeToggle() },
                     onPrivacyPolicyClicked = onPrivacyPolicyClicked
                 )
             },
@@ -238,7 +241,8 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenBottomBar(
     modifier: Modifier = Modifier,
-    versionName: String = "0.0.0-test"
+    versionName: String = "0.0.0-test",
+    onDebugToggled: () -> Unit = { }
 ) {
     AppTheme {
         Column(
@@ -256,13 +260,7 @@ fun SettingsScreenBottomBar(
                     .fillMaxWidth()
                     .combinedClickable(
                         onClick = { },
-                        onLongClick = {
-                            /*if (App.isRelease().not()) {
-                                // Easter egg: Turn off LeakCanary🔥
-                                LeakCanary.config = LeakCanary.config.copy(dumpHeap = false)
-                                Timber.d("LeakCanary has been put back in the cage")
-                            }*/
-                        }
+                        onLongClick = onDebugToggled
                     ),
                 text = versionName,
                 style = TextStyle(fontStyle = FontStyle.Italic),

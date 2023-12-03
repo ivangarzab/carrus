@@ -17,13 +17,12 @@ open class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        setupCoil()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
             setupLeakCanary()
         }
-
+        setupCoil()
         Places.initialize(this, BuildConfig.GOOGLE_MAPS_API_KEY)
     }
 
@@ -41,9 +40,5 @@ open class App : Application() {
             }
             .build()
         )
-    }
-
-    companion object {
-        fun isRelease(): Boolean = BuildConfig.BUILD_TYPE == "release"
     }
 }

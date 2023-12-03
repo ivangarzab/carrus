@@ -25,6 +25,7 @@ import com.ivangarzab.carrus.util.extensions.writeInFile
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +42,8 @@ class SettingsViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
     @Inject
@@ -198,6 +200,11 @@ class SettingsViewModel @Inject constructor(
         }
         Timber.w("Unable to import data from uri path")
         return false
+    }
+
+    fun onDebugModeToggle() = with(debugFlagProvider) {
+        this.forceDebug = forceDebug.not()
+        Timber.i("Forced debug mode toggled: $forceDebug")
     }
 
     private fun rescheduleAlarms() {
