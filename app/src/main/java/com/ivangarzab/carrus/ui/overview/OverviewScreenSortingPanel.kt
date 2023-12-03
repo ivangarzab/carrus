@@ -58,7 +58,7 @@ fun OverviewScreenSortingPanel(
                 SortingChipButton(
                     modifier = Modifier.padding(start = itemStartPadding),
                     isSelected = selectedIndex == 2,
-                    onClick = { onSortRequest(SortingType.DATE) },
+                    onClick = { onSortRequest(SortingType.DUE_DATE) },
                     text = stringResource(id = R.string.date)
                 )
             }

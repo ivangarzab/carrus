@@ -115,7 +115,7 @@
                     app:cardCornerRadius="@dimen/base_16"
                     android:focusable="true"
                     android:clickable="true"
-                    android:onClick="@{() -> sortingCallback.onSort(SortingType.DATE)}">
+                    android:onClick="@{() -> sortingCallback.onSort(SortingType.DUE_DATE)}">
                     <TextView
                         android:id="@+id/overviewServiceSortDateLabel"
                         android:layout_width="wrap_content"

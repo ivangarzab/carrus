@@ -132,7 +132,8 @@ fun OverviewScreenContent(
                     selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
                         SortingType.NONE -> 0
                         SortingType.NAME -> 1
-                        SortingType.DATE -> 2
+                        SortingType.DUE_DATE -> 2
+                        SortingType.REPAIR_DATE -> 3
                     }
                 )
             }
