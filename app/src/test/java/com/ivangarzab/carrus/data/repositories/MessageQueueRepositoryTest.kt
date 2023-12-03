@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.ANSWER_0
-import com.ivangarzab.carrus.ANSWER_1
-import com.ivangarzab.carrus.ANSWER_2
 import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.test_data.ONE
+import com.ivangarzab.test_data.TWO
+import com.ivangarzab.test_data.ZERO
 import org.junit.Test
 
 /**
@@ -19,7 +19,7 @@ class MessageQueueRepositoryTest {
     @Test
     fun test_observeMessageQueueFlow_size_base() {
         assertThat(queue.size())
-            .isEqualTo(ANSWER_0)
+            .isEqualTo(ZERO)
     }
 
     @Test
@@ -35,7 +35,7 @@ class MessageQueueRepositoryTest {
             assertThat(observeMessageQueueFlow()
                 .value
                 .size()
-            ).isEqualTo(ANSWER_1)
+            ).isEqualTo(ONE)
         }
     }
 
@@ -53,7 +53,7 @@ class MessageQueueRepositoryTest {
         addMessage(Message.TEST)
         addMessage(Message.MISSING_PERMISSION_ALARM)
         assertThat(queue.size())
-            .isEqualTo(ANSWER_2)
+            .isEqualTo(TWO)
     }
 
     @Test
@@ -72,7 +72,7 @@ class MessageQueueRepositoryTest {
             addMessage(it)
             addMessage(it)
             assertThat(queue.size())
-                .isEqualTo(ANSWER_1)
+                .isEqualTo(ONE)
         }
     }
 
@@ -80,7 +80,7 @@ class MessageQueueRepositoryTest {
     fun test_removeMessage_empty_list_size_base() = with(repository) {
         removeMessage(Message.TEST)
         assertThat(queue.size())
-            .isEqualTo(ANSWER_0)
+            .isEqualTo(ZERO)
     }
 
     @Test
@@ -89,7 +89,7 @@ class MessageQueueRepositoryTest {
             addMessage(it)
             removeMessage(it)
             assertThat(queue.size())
-                .isEqualTo(ANSWER_0)
+                .isEqualTo(ZERO)
         }
     }
 
@@ -100,7 +100,7 @@ class MessageQueueRepositoryTest {
             addMessage(Message.MISSING_PERMISSION_ALARM)
             removeMessage(it)
             assertThat(queue.size())
-                .isEqualTo(ANSWER_1)
+                .isEqualTo(ONE)
         }
     }
 
@@ -125,7 +125,7 @@ class MessageQueueRepositoryTest {
     @Test
     fun test_dismissMessage_empty_list_size_base() {
         assertThat(queue.size())
-            .isEqualTo(ANSWER_0)
+            .isEqualTo(ZERO)
     }
 
     @Test
@@ -133,7 +133,7 @@ class MessageQueueRepositoryTest {
         addMessage(Message.TEST)
         dismissMessage()
         assertThat(queue.size())
-            .isEqualTo(ANSWER_0)
+            .isEqualTo(ZERO)
     }
 
     @Test
@@ -142,7 +142,7 @@ class MessageQueueRepositoryTest {
         addMessage(Message.MISSING_PERMISSION_ALARM)
         dismissMessage()
         assertThat(queue.size())
-            .isEqualTo(ANSWER_1)
+            .isEqualTo(ONE)
     }
 
     @Test

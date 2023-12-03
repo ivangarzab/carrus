@@ -1,12 +1,12 @@
 package com.ivangarzab.carrus.util.managers
 
-import com.ivangarzab.carrus.ANSWER_0
-import com.ivangarzab.carrus.ANSWER_1
-import com.ivangarzab.carrus.ANSWER_2
 import com.ivangarzab.carrus.TEST_MESSAGE_DATA_1
 import com.ivangarzab.carrus.TEST_MESSAGE_DATA_2
 import com.ivangarzab.carrus.TEST_MESSAGE_DATA_3
 import com.ivangarzab.carrus.data.structures.MessageQueue
+import com.ivangarzab.test_data.ONE
+import com.ivangarzab.test_data.TWO
+import com.ivangarzab.test_data.ZERO
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -79,27 +79,27 @@ class MessageQueueTest {
 
     @Test
     fun test_size_base() {
-        assertEquals(ANSWER_0, messageQueue.size())
+        assertEquals(ZERO, messageQueue.size())
     }
 
     @Test
     fun test_size_add_one() {
         messageQueue.add(TEST_MESSAGE_DATA_1)
-        assertEquals(ANSWER_1, messageQueue.size())
+        assertEquals(ONE, messageQueue.size())
     }
 
     @Test
     fun test_size_add_one_pop() {
         messageQueue.add(TEST_MESSAGE_DATA_1)
         messageQueue.pop()
-        assertEquals(ANSWER_0, messageQueue.size())
+        assertEquals(ZERO, messageQueue.size())
     }
 
     @Test
     fun test_size_add_two() {
         messageQueue.add(TEST_MESSAGE_DATA_1)
         messageQueue.add(TEST_MESSAGE_DATA_1)
-        assertEquals(ANSWER_2, messageQueue.size())
+        assertEquals(TWO, messageQueue.size())
     }
 
     @Test
@@ -107,7 +107,7 @@ class MessageQueueTest {
         messageQueue.add(TEST_MESSAGE_DATA_1)
         messageQueue.add(TEST_MESSAGE_DATA_1)
         messageQueue.pop()
-        assertEquals(ANSWER_1, messageQueue.size())
+        assertEquals(ONE, messageQueue.size())
     }
 
     @Test(expected = NoSuchElementException::class)
@@ -203,7 +203,7 @@ class MessageQueueTest {
         messageQueue.add(TEST_MESSAGE_DATA_1)
         val result = messageQueue.remove(TEST_MESSAGE_DATA_1.id)
         assertEquals(TRUE, result)
-        assertEquals(ANSWER_1, messageQueue.size())
+        assertEquals(ONE, messageQueue.size())
     }
 
     @Test(expected = NoSuchElementException::class)

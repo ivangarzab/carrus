@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus
+package com.ivangarzab.test_data
 
 /**
  * Created by Ivan Garza Bermea.
