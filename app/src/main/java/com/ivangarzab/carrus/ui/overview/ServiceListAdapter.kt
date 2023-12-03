@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Ivan Garza Bermea.
  */
+@Suppress("DEPRECATION")
 @Deprecated("Use Compose instead")
 class ServiceListAdapter(
     private val resources: Resources,
@@ -68,8 +69,8 @@ class ServiceListAdapter(
                             }
                         }
 
-                        binding.root.setOnClickListener { onExpandToggle(binding, this) }
-                        binding.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding, this) }
+                        binding.root.setOnClickListener { onExpandToggle(binding) }
+                        binding.serviceItemExpandIcon.setOnClickListener { onExpandToggle(binding) }
                         binding.serviceItemTrashIcon.setOnClickListener { onDeleteClicked?.let { it(this) } }
                         binding.serviceItemEditIcon.setOnClickListener { onEditClicked?.let { it(this) } }
                     }
@@ -91,7 +92,7 @@ class ServiceListAdapter(
         notifyDataSetChanged()
     }
 
-    private fun onExpandToggle(binding: ItemServiceBinding, service: Service) {
+    private fun onExpandToggle(binding: ItemServiceBinding) {
         binding.state = binding.state?.let { state ->
             state.expanded.let {
                 TransitionManager.beginDelayedTransition(binding.serviceItemInnerRoot, AutoTransition().apply {

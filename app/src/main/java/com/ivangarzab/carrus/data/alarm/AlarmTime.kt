@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.data.alarm
 import android.os.Parcelable
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -14,7 +15,8 @@ data class AlarmTime(
     private val raw24HourValue: Int = 7
 ) : Parcelable {
 
-    val isPM: Boolean = raw24HourValue > 12
+    @IgnoredOnParcel
+    private val isPM: Boolean = raw24HourValue > 12
 
     /**
      * Return the current alarm time in a 24-hour clock format.

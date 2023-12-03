@@ -148,9 +148,9 @@ fun OverviewScreenContent(
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked,
-                        onExpandOrShrinkRequest = { index, expand ->
+                        onExpandOrShrinkRequest = { i, expand ->
                             expandedItemIndex = if (expand) {
-                                index
+                                i
                             } else {
                                 NO_ITEM_EXPANDED
                             }
