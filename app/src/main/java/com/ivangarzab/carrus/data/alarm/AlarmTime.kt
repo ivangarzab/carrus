@@ -1,6 +1,7 @@
 package com.ivangarzab.carrus.data.alarm
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import kotlinx.parcelize.Parcelize
@@ -11,7 +12,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AlarmTime(
     /** range between 0 - 23 */
-    private val raw24HourValue: Int = 7
+    @get:VisibleForTesting
+    val raw24HourValue: Int = 7
 ) : Parcelable {
 
     val isPM: Boolean = raw24HourValue > 12
