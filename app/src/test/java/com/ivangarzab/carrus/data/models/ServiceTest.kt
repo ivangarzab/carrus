@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.models
 
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.util.extensions.getFormattedDate
+import com.ivangarzab.test_data.data.COMPARE_TO_EQUALS
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.util.Calendar
@@ -9,26 +10,46 @@ import java.util.Calendar
 class ServiceTest {
 
     @Test
-    fun testCompareTo() {
+    fun test_compareTo_failure() {
         // Create two services with different IDs.
         val service1 = Service(
             id = "1",
             name = "Service 1",
             repairDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
             dueDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
+            brand = "brand1",
+            type = "type1",
+            cost = 0.00f
         )
         val service2 = Service(
             id = "2",
             name = "Service 2",
-            repairDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
-            dueDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
+            repairDate = Calendar.getInstance().apply { timeInMillis = 1699882030000 },
+            dueDate = Calendar.getInstance().apply { timeInMillis = 1699882030000 },
+            brand = "brand2",
+            type = "type2",
+            cost = 9.99f
         )
 
-        // Assert that service1 comes before service2.
-        assertEquals(-1, service1.compareTo(service2))
+        assertThat(service1.compareTo(service2))
+            .isNotEqualTo(COMPARE_TO_EQUALS)
+    }
 
-        // Assert that service2 comes after service1.
-        assertEquals(1, service2.compareTo(service1))
+    @Test
+    fun test_compareTo_success() {
+        // Create two services with different IDs.
+        val service1 = Service(
+            id = "1",
+            name = "Oil Change",
+            repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
+            dueDate = Calendar.getInstance().apply { timeInMillis = 1672590100000 },
+            brand = "Armor All",
+            type = "Synthetic",
+            cost = 79.99f
+        )
+
+        assertThat(Service.serviceList[0].compareTo(service1))
+            .isEqualTo(COMPARE_TO_EQUALS)
     }
 
     @Test

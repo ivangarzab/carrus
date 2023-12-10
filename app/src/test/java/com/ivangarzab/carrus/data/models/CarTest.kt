@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.models
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
+import com.ivangarzab.test_data.data.COMPARE_TO_EQUALS
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -78,7 +79,7 @@ class CarTest {
         )
 
         assertThat(defaultCar.compareTo(anotherCar))
-            .isNotEqualTo(COMPARE_ANSWER_EQUALS)
+            .isNotEqualTo(COMPARE_TO_EQUALS)
     }
 
     @Test
@@ -101,10 +102,20 @@ class CarTest {
 
         val comparisonResult = defaultCar.compareTo(anotherCar)
 
-        assertEquals(COMPARE_ANSWER_EQUALS, comparisonResult)
+        assertEquals(COMPARE_TO_EQUALS, comparisonResult)
     }
 
-    companion object {
-        private const val COMPARE_ANSWER_EQUALS = 0
+    @Test
+    fun test_needsUpgrade_true() {
+        val car = Car.empty.copy(version = 0)
+        assertThat(car.needsUpgrade())
+            .isTrue()
+    }
+
+    @Test
+    fun test_needsUpgrade_false() {
+        val car = Car.empty
+        assertThat(car.needsUpgrade())
+            .isFalse()
     }
 }
