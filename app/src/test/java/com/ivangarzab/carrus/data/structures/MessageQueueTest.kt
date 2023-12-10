@@ -1,5 +1,7 @@
 package com.ivangarzab.carrus.data.structures
 
+import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.test_data.ONE
 import com.ivangarzab.test_data.TEST_MESSAGE_DATA_1
 import com.ivangarzab.test_data.TEST_MESSAGE_DATA_2
@@ -222,5 +224,14 @@ class MessageQueueTest {
         messageQueue.add(TEST_MESSAGE_DATA_1)
         val result = messageQueue.get()
         assertEquals(TEST_MESSAGE_DATA_1, result)
+    }
+
+    @Test
+    fun `test companion object test data`() {
+        val data =  MessageQueue.test
+        assertThat(data.queue.contains(Message.TEST.data))
+            .isTrue()
+        assertThat(data.queue.contains(Message.MISSING_PERMISSION_ALARM.data))
+            .isFalse()
     }
 }
