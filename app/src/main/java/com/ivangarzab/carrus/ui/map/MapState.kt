@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.ui.map
 
 import com.google.android.gms.maps.model.LatLng
-import com.ivangarzab.carrus.data.PlaceData
+import com.ivangarzab.carrus.data.models.PlaceData
 
 /**
  * Created by Ivan Garza Bermea.

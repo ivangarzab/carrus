@@ -1,8 +1,8 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.TEST_CAR_JSON
 import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.test_data.TEST_CAR_JSON
 import org.junit.Test
 
 /**

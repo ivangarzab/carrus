@@ -66,6 +66,8 @@ val gsonVersion = "2.10.1"
 val leakCanaryVersion = "2.12"
 dependencies {
     implementation(project(":analytics"))
+    testImplementation(project(":test-data"))
+    androidTestImplementation(project(":test-data"))
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation(libs.androidx.core)

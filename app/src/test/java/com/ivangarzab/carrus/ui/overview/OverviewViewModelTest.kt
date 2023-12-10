@@ -3,17 +3,17 @@ package com.ivangarzab.carrus.ui.overview
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.MainDispatcherRule
-import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.TEST_SERVICE
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.providers.BuildVersionProvider
+import com.ivangarzab.test_data.CAR_TEST
+import com.ivangarzab.test_data.MainDispatcherRule
+import com.ivangarzab.test_data.SERVICE_TEST_1
+import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -61,31 +61,31 @@ class OverviewViewModelTest {
     @Test
     fun test_onServiceDeleted_success() = with(viewModel) {
         carRepository.let {
-            it.saveCarData(TEST_CAR)
-            it.addCarService(TEST_SERVICE)
+            it.saveCarData(CAR_TEST)
+            it.addCarService(SERVICE_TEST_1)
         }
         state.getOrAwaitValue().let {
             assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isTrue()
+            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isTrue()
         }
         val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
+            onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
+        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 
     @Test
     fun test_onServiceDeleted_service_not_there() = with(viewModel) {
-        carRepository.saveCarData(TEST_CAR)
+        carRepository.saveCarData(CAR_TEST)
         state.getOrAwaitValue().let {
             assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isFalse()
+            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isFalse()
         }
         val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
+            onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
+        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 

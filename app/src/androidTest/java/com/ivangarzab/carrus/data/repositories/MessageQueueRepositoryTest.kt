@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.data.repositories
 
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.ONE
-import com.ivangarzab.carrus.TWO
-import com.ivangarzab.carrus.ZERO
 import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.test_data.ONE
+import com.ivangarzab.test_data.TWO
+import com.ivangarzab.test_data.ZERO
 import org.junit.Test
 
 /**
