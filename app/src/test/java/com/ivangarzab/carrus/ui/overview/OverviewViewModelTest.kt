@@ -249,7 +249,7 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onSort_date_state_update() = with(viewModel) {
-        val test = SortingType.DATE
+        val test = SortingType.DUE_DATE
         val result = state.getOrAwaitValue {
             onSort(test)
         }

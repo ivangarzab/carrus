@@ -154,7 +154,7 @@ fun SettingsScreen(
             },
             bottomBar = {
                 NavigationBottomBar(
-                    settingsButtonClicked = { },
+                    settingsButtonClicked = onNavigateSettingsPressed,
                     homeButtonClicked = onNavigateHomePressed,
                     mapButtonClicked = onNavigateMapPressed
                 )
