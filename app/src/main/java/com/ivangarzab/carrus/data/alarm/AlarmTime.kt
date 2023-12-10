@@ -16,7 +16,7 @@ data class AlarmTime(
     @get:VisibleForTesting
     val raw24HourValue: Int = 7
 ) : Parcelable {
-    
+
     @IgnoredOnParcel
     private val isPM: Boolean = raw24HourValue > 12
 
