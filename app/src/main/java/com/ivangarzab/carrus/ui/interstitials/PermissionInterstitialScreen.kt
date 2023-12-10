@@ -86,6 +86,7 @@ fun PermissionInterstitialScreenContent(
     }
 }
 
+@Suppress("SENSELESS_COMPARISON")
 @Composable
 fun PermissionInterstitialScreen(
     viewModel: PermissionInterstitialViewModel,

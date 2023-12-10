@@ -65,7 +65,7 @@ private fun BaseInputField(
             textStyle = textStyle ?: LocalTextStyle.current,
             onValueChange = {
                 updateListener(
-                    it.length.let { len ->
+                    it.length.let { _ ->
                         if (it.takeLast(2) == "  ") {
                             it.trim().plus(" ")
                         } else {

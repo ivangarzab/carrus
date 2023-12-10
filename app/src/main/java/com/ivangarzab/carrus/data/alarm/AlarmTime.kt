@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.VisibleForTesting
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -15,7 +16,8 @@ data class AlarmTime(
     @get:VisibleForTesting
     val raw24HourValue: Int = 7
 ) : Parcelable {
-
+    
+    @IgnoredOnParcel
     private val isPM: Boolean = raw24HourValue > 12
 
     /**

@@ -37,6 +37,7 @@ object CarImporter {
      * for fields that are not expecting null values.  Additionally, we're nullifying the
      * 'imageUri' field as to avoid any trouble with the storage rules.
      */
+    @Suppress("USELESS_ELVIS")
     private fun cleanImportedData(data: Car): Car = Car(
         uid = UUID.randomUUID().toString(),
         nickname = data.nickname ?: "",

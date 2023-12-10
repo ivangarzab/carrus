@@ -132,7 +132,8 @@ fun OverviewScreenContent(
                     selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
                         SortingType.NONE -> 0
                         SortingType.NAME -> 1
-                        SortingType.DATE -> 2
+                        SortingType.REPAIR_DATE -> 2
+                        SortingType.DUE_DATE -> 3
                     }
                 )
             }
@@ -147,9 +148,9 @@ fun OverviewScreenContent(
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked,
-                        onExpandOrShrinkRequest = { index, expand ->
+                        onExpandOrShrinkRequest = { i, expand ->
                             expandedItemIndex = if (expand) {
-                                index
+                                i
                             } else {
                                 NO_ITEM_EXPANDED
                             }
