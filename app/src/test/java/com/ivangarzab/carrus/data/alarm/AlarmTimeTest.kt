@@ -19,7 +19,7 @@ class AlarmTimeTest {
         val alarmTime = AlarmTime(raw24HourValue = 7) // Sample raw value
 
         assertEquals(7, alarmTime.getTime(TimeFormat.HR24))
-        assertEquals(1, alarmTime.getTime(TimeFormat.HR12))
+        assertEquals(7, alarmTime.getTime(TimeFormat.HR12))
     }
 
     @Test

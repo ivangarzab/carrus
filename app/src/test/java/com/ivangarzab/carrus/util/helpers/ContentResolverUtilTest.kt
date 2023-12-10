@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ContentResolverUtilTest {
 
-    private lateinit var helper: TestContentResolverHelper
+    private lateinit var helper: ContentResolverHelper
 
     @Before
     fun setup() {

@@ -16,7 +16,7 @@ data class AlarmTime(
     val raw24HourValue: Int = 7
 ) : Parcelable {
 
-    val isPM: Boolean = raw24HourValue > 12
+    private val isPM: Boolean = raw24HourValue > 12
 
     /**
      * Return the current alarm time in a 24-hour clock format.
@@ -24,7 +24,7 @@ data class AlarmTime(
     fun getTime(timeFormat: TimeFormat): Int = when (timeFormat) {
         TimeFormat.HR24 -> raw24HourValue
         TimeFormat.HR12 -> when (isPM) {
-            true -> raw24HourValue + 12
+            true -> raw24HourValue - 12
             false -> raw24HourValue
         }
     }
