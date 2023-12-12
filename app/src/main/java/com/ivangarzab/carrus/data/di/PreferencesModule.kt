@@ -13,16 +13,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object PreferencesModule {
-    private lateinit var instance: Preferences
+
     @Singleton
     @Provides
     fun providesPreferences(
         @ApplicationContext context: Context,
         debugFlagProvider: DebugFlagProvider
-    ): Preferences {
-        if (this::instance.isInitialized.not()) {
-            instance = Preferences(context, debugFlagProvider)
-        }
-        return instance
-    } //TODO: Test this without all of the instance field setup to confirm the Singleton piece works
+    ): Preferences = Preferences(context, debugFlagProvider)
 }
