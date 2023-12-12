@@ -1,14 +1,13 @@
 package com.ivangarzab.carrus.ui.create
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.create.data.CarModalState
-import com.ivangarzab.carrus.util.extensions.setState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
@@ -29,8 +28,7 @@ class CreateViewModel @Inject constructor(
     private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
-    private val _state: MutableLiveData<CarModalState> = MutableLiveData(CarModalState())
-    val state: LiveData<CarModalState> = _state
+    val state: LiveState<CarModalState> = LiveState(CarModalState())
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     enum class Type { CREATE, EDIT }
@@ -105,7 +103,7 @@ class CreateViewModel @Inject constructor(
             }
         }")
         analytics.logImageAdded()
-        setState(state, _state) {
+        state.setState {
             copy(imageUri = uri)
         }
     }
@@ -113,7 +111,7 @@ class CreateViewModel @Inject constructor(
     fun onImageDeleted() {
         Timber.v("Deleting image")
         analytics.logImageDeleted()
-        setState(state, _state) {
+        state.setState {
             copy(imageUri = null)
         }
     }
@@ -131,7 +129,7 @@ class CreateViewModel @Inject constructor(
         milesPerGalCity: String,
         milesPerGalHighway: String
     ) {
-        setState(state, _state) {
+        state.setState {
             copy(
                 nickname = nickname,
                 make = make,
@@ -149,7 +147,7 @@ class CreateViewModel @Inject constructor(
     }
 
     private fun onSetupContent(car: Car) {
-        setState(state, _state) {
+        state.setState {
             copy(
                 title = "Edit Car",
                 actionButton = "Update",

@@ -2,9 +2,6 @@ package com.ivangarzab.carrus.ui.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.MainDispatcherRule
-import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.TEST_SERVICE
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.models.DueDateFormat
@@ -13,7 +10,10 @@ import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
+import com.ivangarzab.test_data.CAR_TEST
+import com.ivangarzab.test_data.MainDispatcherRule
+import com.ivangarzab.test_data.SERVICE_TEST_1
+import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -249,11 +249,11 @@ class SettingsViewModelTest {
     }
 
     private fun addService() {
-        carRepository.addCarService(TEST_SERVICE)
+        carRepository.addCarService(SERVICE_TEST_1)
     }
 
     private fun saveCarData() {
-        carRepository.saveCarData(TEST_CAR)
+        carRepository.saveCarData(CAR_TEST)
     }
 
     private fun grantAlarmsPermission() {

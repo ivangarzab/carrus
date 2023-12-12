@@ -202,7 +202,8 @@ class OverviewViewModel @Inject constructor(
         when (type) {
             SortingType.NONE -> resetServicesSort()
             SortingType.NAME -> sortServicesByName()
-            SortingType.DATE -> sortServicesByDate()
+            SortingType.DUE_DATE -> sortServicesByDueDate()
+            SortingType.REPAIR_DATE -> sortServicesByRepairDate()
         }
         analytics.logServiceListSorted(type.name)
         state.setState {
@@ -226,12 +227,23 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
-    private fun sortServicesByDate() {
+    private fun sortServicesByDueDate() {
         Timber.v("Sorting services by due date")
         state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.dueDate }
+                )
+            )
+        }
+    }
+
+    private fun sortServicesByRepairDate() {
+        Timber.v("Sorting services by repair date")
+        state.value?.car?.let { car ->
+            updateCarState(
+                car.copy(
+                    services = car.services.sortedBy { it.repairDate }
                 )
             )
         }
