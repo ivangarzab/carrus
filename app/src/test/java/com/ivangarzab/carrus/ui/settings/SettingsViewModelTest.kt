@@ -10,6 +10,7 @@ import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
+import com.ivangarzab.carrus.util.providers.DebugFlagProviderImpl
 import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.MainDispatcherRule
 import com.ivangarzab.test_data.SERVICE_TEST_1
@@ -47,7 +48,8 @@ class SettingsViewModelTest {
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
             alarmSettingsRepository = alarmSettingsRepository,
-            analytics = mockk(relaxUnitFun = true)
+            analytics = mockk(relaxUnitFun = true),
+            DebugFlagProviderImpl().apply { forceDebug = true }
         )
     }
 

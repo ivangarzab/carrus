@@ -7,6 +7,7 @@ import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.util.managers.Preferences
+import com.ivangarzab.carrus.util.providers.DebugFlagProviderImpl
 import org.junit.Before
 import org.junit.Test
 
@@ -17,7 +18,10 @@ class AppSettingsRepositoryTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().context
 
-    private val prefs: Preferences = Preferences(context)
+    private val prefs: Preferences = Preferences(
+        context,
+        DebugFlagProviderImpl().apply { forceDebug = true }
+    )
 
     private val repository = AppSettingsRepositoryImpl(context, prefs)
 

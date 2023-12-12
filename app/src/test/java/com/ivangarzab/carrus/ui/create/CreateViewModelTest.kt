@@ -6,6 +6,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
+import com.ivangarzab.carrus.util.providers.DebugFlagProviderImpl
 import com.ivangarzab.test_data.CAR_EMPTY
 import com.ivangarzab.test_data.STRING_BLANK
 import com.ivangarzab.test_data.STRING_EMPTY
@@ -35,7 +36,8 @@ class CreateViewModelTest {
         viewModel = CreateViewModel(
             carRepository = carRepository,
             contentResolverHelper = TestContentResolverHelper(),
-            analytics = mockk(relaxUnitFun = true)
+            analytics = mockk(relaxUnitFun = true),
+            DebugFlagProviderImpl().apply { forceDebug = true }
         ).apply { init(null) }
     }
 
