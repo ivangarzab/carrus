@@ -3,13 +3,13 @@ package com.ivangarzab.carrus.ui.overview
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.data.di.BuildVersionProvider
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.overview.data.SortingType
-import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import com.ivangarzab.carrus.util.providers.DebugFlagProviderImpl
 import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.MainDispatcherRule

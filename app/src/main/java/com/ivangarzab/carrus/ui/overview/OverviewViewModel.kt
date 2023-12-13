@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.data.di.BuildVersionProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
@@ -18,7 +19,6 @@ import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.managers.Analytics
-import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
