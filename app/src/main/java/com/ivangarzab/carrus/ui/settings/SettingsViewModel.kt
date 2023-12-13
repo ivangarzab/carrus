@@ -11,6 +11,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
@@ -25,7 +26,6 @@ import com.ivangarzab.carrus.util.extensions.writeInFile
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
-import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

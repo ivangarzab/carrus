@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

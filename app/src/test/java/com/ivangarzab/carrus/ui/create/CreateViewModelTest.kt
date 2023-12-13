@@ -2,11 +2,11 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
-import com.ivangarzab.carrus.util.providers.DebugFlagProviderImpl
 import com.ivangarzab.test_data.CAR_EMPTY
 import com.ivangarzab.test_data.STRING_BLANK
 import com.ivangarzab.test_data.STRING_EMPTY

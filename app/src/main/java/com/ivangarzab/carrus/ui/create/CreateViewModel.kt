@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.structures.LiveState
@@ -11,7 +12,6 @@ import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
-import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.UUID

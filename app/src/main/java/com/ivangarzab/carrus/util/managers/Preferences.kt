@@ -3,12 +3,12 @@ package com.ivangarzab.carrus.util.managers
 import android.content.Context
 import android.content.SharedPreferences
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.models.VERSION_SERVICE
-import com.ivangarzab.carrus.util.providers.DebugFlagProvider
 import timber.log.Timber
 import java.util.UUID
 

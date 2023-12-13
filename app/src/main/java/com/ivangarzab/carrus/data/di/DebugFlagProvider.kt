@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.util.providers
+package com.ivangarzab.carrus.data.di
 
 import com.ivangarzab.carrus.BuildConfig
 import dagger.Binds
