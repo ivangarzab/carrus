@@ -13,12 +13,12 @@ plugins {
 
 android {
     namespace = "com.ivangarzab.carrus"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 15
         versionName = "1.0.0-alpha15"
 
