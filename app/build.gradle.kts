@@ -1,14 +1,15 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.kotlin.android)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.gradle)
 }
 
 android {

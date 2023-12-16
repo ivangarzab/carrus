@@ -12,15 +12,16 @@ buildscript {
 
         classpath(libs.google.services)
         classpath(libs.firebase.crashlytics.gradle)
-        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+        classpath(libs.secrets.gradle.plugin)
     }
 }
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.hilt.gradle) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.hilt.gradle) apply false
 }
 
 tasks.register<Delete>("clean") {
