@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.ivangarzab.test_data"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
@@ -40,12 +40,12 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.app.compat)
     implementation(libs.junit)
-    implementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    implementation(libs.androidx.lifecycle.runtime.testing)
+    implementation(libs.kotlinx.coroutines.test)
 
     testImplementation(libs.junit)
     testImplementation(libs.truth)
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation(libs.androidx.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso)
 }
