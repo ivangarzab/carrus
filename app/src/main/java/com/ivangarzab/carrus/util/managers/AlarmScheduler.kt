@@ -10,7 +10,6 @@ import android.os.SystemClock
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.receivers.AlarmBroadcastReceiver
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -21,7 +20,8 @@ import java.util.concurrent.TimeUnit
  * Created by Ivan Garza Bermea.
  */
 class AlarmScheduler(
-    context: Context
+    context: Context,
+    private val prefs: Preferences
 ) {
     private val weakContext: WeakReference<Context> = WeakReference(context)
 

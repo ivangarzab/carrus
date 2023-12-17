@@ -5,7 +5,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.App
+import com.ivangarzab.carrus.data.di.BuildVersionProvider
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
@@ -19,7 +20,6 @@ import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.managers.Analytics
-import com.ivangarzab.carrus.util.providers.BuildVersionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -36,7 +36,8 @@ class OverviewViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val messageQueueRepository: MessageQueueRepository,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
     val state: LiveState<OverviewState> = LiveState(OverviewState())
@@ -174,7 +175,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun addTestMessage() {
-        if (App.isRelease().not()) {
+        if (debugFlagProvider.isDebugEnabled()) {
             addMessage(Message.TEST)
         }
     }
@@ -257,7 +258,7 @@ class OverviewViewModel @Inject constructor(
     }
 
     fun setupEasterEggForTesting() {
-        if (App.isRelease().not()) {
+        if (debugFlagProvider.isDebugEnabled()) {
             state.value?.car?.let {
                 carRepository.saveCarData(
                     it.copy(

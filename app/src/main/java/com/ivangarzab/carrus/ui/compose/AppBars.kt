@@ -14,15 +14,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.carrus.App
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
+import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -83,10 +90,15 @@ fun TopBar(
 
 @Composable
 fun NavigationBottomBar(
+    viewModel: NavigationBottomBarViewModel = viewModel(),
     settingsButtonClicked: () -> Unit,
     homeButtonClicked: () -> Unit,
     mapButtonClicked: () -> Unit
 ) {
+    val state: NavigationBottomBarViewModel.NavigationBottomBarState by viewModel
+        .state
+        .observeAsState(initial = NavigationBottomBarViewModel.NavigationBottomBarState())
+
     AppTheme {
         NavigationBar {
             NavigationBarItem(
@@ -103,7 +115,7 @@ fun NavigationBottomBar(
                     )
                 }
             )
-            if (App.isRelease().not()) {
+            if (state.showMapButton) {
                 NavigationBarItem(
                     selected = false,
                     onClick = mapButtonClicked,
@@ -145,5 +157,19 @@ private fun NavigationBottomBarPreview() {
         homeButtonClicked = { },
         mapButtonClicked = { },
         settingsButtonClicked = { }
+    )
+}
+
+@HiltViewModel
+class NavigationBottomBarViewModel @Inject constructor(
+    debugFlagProvider: DebugFlagProvider
+) : ViewModel() {
+    data class NavigationBottomBarState(
+        val showMapButton: Boolean = false
+    )
+    val state: LiveState<NavigationBottomBarState> = LiveState(
+        NavigationBottomBarState(
+            showMapButton = debugFlagProvider.isDebugEnabled()
+        )
     )
 }

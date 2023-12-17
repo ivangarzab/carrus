@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.structures.LiveState
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
     val state: LiveState<CarModalState> = LiveState(CarModalState())
@@ -177,6 +179,26 @@ class CreateViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.w("Unable to import data", e)
             false
+        }
+    }
+
+    fun setupDataEasterEggForTesting() {
+        if (debugFlagProvider.isDebugEnabled()) {
+            with(Car.default) {
+                onUpdateStateData(
+                    nickname = nickname,
+                    make = make,
+                    model = model,
+                    year = year,
+                    licenseState = licenseState,
+                    licenseNo = licenseNo,
+                    vinNo = vinNo,
+                    tirePressure = tirePressure,
+                    totalMiles = totalMiles,
+                    milesPerGalCity = milesPerGalCity,
+                    milesPerGalHighway = milesPerGalHighway
+                )
+            }
         }
     }
 }
