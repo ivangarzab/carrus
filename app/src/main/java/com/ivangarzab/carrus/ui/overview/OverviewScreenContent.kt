@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.carrus.App
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
@@ -100,12 +99,7 @@ fun OverviewScreenContent(
                             .align(Alignment.CenterStart)
                             .combinedClickable(
                                 onClick = { },
-                                onLongClick = {
-                                    if (App.isRelease().not()) {
-                                        // Easter egg for testing!
-                                        addServiceList()
-                                    }
-                                }
+                                onLongClick = addServiceList // Easter egg for testing!
                             ),
                         text = stringResource(id = R.string.services)
                     )
@@ -132,7 +126,8 @@ fun OverviewScreenContent(
                     selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
                         SortingType.NONE -> 0
                         SortingType.NAME -> 1
-                        SortingType.DATE -> 2
+                        SortingType.REPAIR_DATE -> 2
+                        SortingType.DUE_DATE -> 3
                     }
                 )
             }
@@ -147,9 +142,9 @@ fun OverviewScreenContent(
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked,
-                        onExpandOrShrinkRequest = { index, expand ->
+                        onExpandOrShrinkRequest = { i, expand ->
                             expandedItemIndex = if (expand) {
-                                index
+                                i
                             } else {
                                 NO_ITEM_EXPANDED
                             }

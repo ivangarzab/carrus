@@ -2,8 +2,8 @@ package com.ivangarzab.carrus.util.managers
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
@@ -18,10 +18,17 @@ import java.util.UUID
  * Created by Ivan Garza Bermea.
  */
 @Suppress("ReplaceGetOrSet")
-class Preferences(context: Context) {
+class Preferences(
+    context: Context,
+    debugFlagProvider: DebugFlagProvider
+) {
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
-        if (isRelease()) DEFAULT_SHARED_PREFS else TEST_SHARED_PREFS,
+        if (debugFlagProvider.isDebugEnabled().not()) {
+            DEFAULT_SHARED_PREFS
+        } else {
+            TEST_SHARED_PREFS
+        },
         Context.MODE_PRIVATE
     )
 

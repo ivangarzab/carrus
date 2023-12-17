@@ -3,11 +3,11 @@ package com.ivangarzab.carrus.util.managers
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.ivangarzab.carrus.STRING_BLANK
-import com.ivangarzab.carrus.STRING_EMPTY
-import com.ivangarzab.carrus.TEST_CAR_V0_JSON
-import com.ivangarzab.carrus.TEST_CAR_V1_JSON
 import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.test_data.STRING_BLANK
+import com.ivangarzab.test_data.STRING_EMPTY
+import com.ivangarzab.test_data.TEST_CAR_V0_JSON
+import com.ivangarzab.test_data.TEST_CAR_V1_JSON
 import org.junit.Test
 
 /**

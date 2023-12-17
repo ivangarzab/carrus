@@ -1,26 +1,26 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
-    id("androidx.navigation.safeargs.kotlin")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.gms.google.services)
+    alias(libs.plugins.firebase.crashlytics.plugin)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.androidx.nav.safeargs)
+    alias(libs.plugins.android.mapsplatform.secrets)
+    alias(libs.plugins.hilt.gradle)
 }
 
 android {
     namespace = "com.ivangarzab.carrus"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
-        targetSdk = 33
-        versionCode = 15
-        versionName = "1.0.0-alpha15"
+        targetSdk = 34
+        versionCode = 16
+        versionName = "1.0.0-beta01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,7 +51,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources.excludes.add("META-INF/*")
@@ -61,57 +61,51 @@ android {
     }
 }
 
-val activityVersion = "1.7.2"
-val gsonVersion = "2.10.1"
-val leakCanaryVersion = "2.12"
 dependencies {
     implementation(project(":analytics"))
+    testImplementation(project(":test-data"))
+    androidTestImplementation(project(":test-data"))
 
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.core)
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.app.compat)
-    implementation("androidx.activity:activity-ktx:$activityVersion")
-    implementation("androidx.activity:activity-compose:$activityVersion")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.cardview)
     implementation(libs.nav.fragment)
     implementation(libs.nav.ui)
     implementation(libs.nav.compose)
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    testImplementation("androidx.lifecycle:lifecycle-runtime-testing:2.6.2")
+    implementation(libs.androidx.lifecycle.extensions)
+    testImplementation(libs.androidx.lifecycle.runtime.testing)
 
-    // https://developer.android.com/jetpack/compose/bom/bom-mapping
-    val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.runtime:runtime-livedata")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
-    // Android Studio Preview support
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui-util")
-    // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
+    implementation(libs.compose.material3)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.lifecycle.runtime)
+    implementation(libs.compose.lifecycle.viewmodel)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.util)
+    androidTestImplementation(libs.compose.ui.test.junit)
+    debugImplementation(libs.compose.ui.test.manifest)
 
-    implementation("com.google.android.material:material:1.9.0") //TODO: Prob don't need anymore
-    implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation(libs.material)
+    implementation(libs.gson)
 
-    val accompanistVersion = "0.30.1"
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.webview)
 
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation("com.google.maps.android:places-ktx:2.0.0")
-    implementation("com.google.maps.android:android-maps-utils:0.5")
-    implementation("com.android.volley:volley:1.2.1")
+    implementation(libs.play.services.maps)
+    implementation(libs.places.ktx)
+    implementation(libs.android.maps.utils)
+    implementation(libs.volley)
 
-    // https://github.com/google/dagger/tree/master/java/dagger/hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     testImplementation(libs.hilt.testing)
@@ -119,45 +113,36 @@ dependencies {
     androidTestImplementation(libs.hilt.testing)
     kaptAndroidTest(libs.hilt.compiler)
 
-    // https://firebase.google.com/support/release-notes/android
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
-    // https://github.com/square/leakcanary
-    implementation("com.squareup.leakcanary:plumber-android:$leakCanaryVersion")
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion")
+    implementation(libs.plumber.android)
+    debugImplementation(libs.leakcanary.android)
 
-    // https://github.com/JakeWharton/timber
     implementation(libs.timber)
 
-    // https://github.com/coil-kt/coil
-    val coilVersion = "2.4.0"
-    implementation("io.coil-kt:coil:$coilVersion")
-    implementation("io.coil-kt:coil-compose:$coilVersion")
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
-    // https://github.com/hadilq/LiveEvent
-    implementation("com.github.hadilq:live-event:1.3.0")
+    implementation(libs.live.event)
 
     // Unit & instrumented testing
     testImplementation(libs.junit)
-    testImplementation("com.google.code.gson:gson:$gsonVersion")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("androidx.test:core-ktx:1.5.0")
+    testImplementation(libs.gson)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.androidx.core.ktx)
     testImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso)
 
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation(libs.kotlinx.coroutines.test)
 
-    // https://github.com/robolectric/robolectric
-    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation(libs.robolectric)
 
-    // https://github.com/google/truth
     testImplementation(libs.truth)
     androidTestImplementation(libs.truth)
 
-    // https://github.com/mockk/mockk
     testImplementation(libs.mockk)
     testImplementation(libs.mockk.agent)
     androidTestImplementation(libs.mockk)

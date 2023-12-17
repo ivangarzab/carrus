@@ -1,8 +1,10 @@
 package com.ivangarzab.carrus.data.alarm
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -11,10 +13,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AlarmTime(
     /** range between 0 - 23 */
-    private val raw24HourValue: Int = 7
+    @get:VisibleForTesting
+    val raw24HourValue: Int = 7
 ) : Parcelable {
 
-    val isPM: Boolean = raw24HourValue > 12
+    @IgnoredOnParcel
+    private val isPM: Boolean = raw24HourValue > 12
 
     /**
      * Return the current alarm time in a 24-hour clock format.
@@ -22,7 +26,7 @@ data class AlarmTime(
     fun getTime(timeFormat: TimeFormat): Int = when (timeFormat) {
         TimeFormat.HR24 -> raw24HourValue
         TimeFormat.HR12 -> when (isPM) {
-            true -> raw24HourValue + 12
+            true -> raw24HourValue - 12
             false -> raw24HourValue
         }
     }
