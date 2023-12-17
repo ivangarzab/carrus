@@ -5,7 +5,6 @@ buildscript {
     }
 
     dependencies {
-        val navVersion: String by rootProject.extra
         classpath(libs.android.gradle.plugin)
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.nav.safe.args)
