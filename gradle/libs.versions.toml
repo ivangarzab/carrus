@@ -27,7 +27,7 @@ playServicesMapsVersion = "18.2.0"
 robolectricVersion = "4.10.3"
 secretsGradlePluginVersion = "2.0.1"
 timber = "5.0.1"
-hilt = "2.44"
+hilt = "2.49"
 junit = "4.13.2"
 androidxJunit = "1.1.5"
 espresso = "3.5.1"
@@ -36,7 +36,6 @@ kgp = "1.8.10"
 androidxNav = "2.5.3"
 googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
-hiltGradle = "2.44"
 truth = "1.1.5"
 mockk = "1.13.8"
 org-jetbrains-kotlin-android = "1.8.10"
@@ -142,4 +141,4 @@ secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.se
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
-hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hiltGradle" }
+hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
