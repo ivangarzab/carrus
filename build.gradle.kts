@@ -5,22 +5,28 @@ buildscript {
     }
 
     dependencies {
-        val navVersion: String by rootProject.extra
         classpath(libs.android.gradle.plugin)
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.nav.safe.args)
 
         classpath(libs.google.services)
         classpath(libs.firebase.crashlytics.gradle)
-        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+        classpath(libs.secrets.gradle.plugin)
     }
 }
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.hilt.gradle) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.hilt.gradle) apply false
+    alias(libs.plugins.gms.google.services) apply false
+    alias(libs.plugins.firebase.crashlytics.plugin) apply false
+    alias(libs.plugins.androidx.nav.safeargs) apply false
+    alias(libs.plugins.android.mapsplatform.secrets) apply false
 }
 
 tasks.register<Delete>("clean") {

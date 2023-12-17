@@ -1,55 +1,121 @@
 [versions]
-androidxCore = "1.10.1"
+accompanistVersion = "0.32.0"
+activityVersion = "1.8.2"
+androidMapsUtilsVersion = "0.5"
+androidxCore = "1.12.0"
 appCompat = "1.6.1"
-firebaseBom = "32.3.1"
+cardviewVersion = "1.0.0"
+coilVersion = "2.5.0"
+constraintlayoutComposeVersion = "1.0.1"
+constraintlayoutVersion = "2.1.4"
+coreKtxVersion = "1.5.0"
+coreSplashscreen = "1.0.1"
+coreTestingVersion = "2.2.0"
+firebaseBom = "32.7.0"
+composeBom = "2023.10.01"
+fragmentKtxVersion = "1.6.2"
+gsonVersion = "2.10.1"
+leakCanaryVersion = "2.12"
+kotlinxCoroutinesTestVersion = "1.7.3"
+legacySupportV4 = "1.0.0"
+lifecycleRuntimeTestingVersion = "2.6.2"
+lifecycleExtensionsVersion = "2.2.0"
+liveEventVersion = "1.3.0"
+materialVersion = "1.11.0"
+placesKtxVersion = "2.0.0"
+playServicesMapsVersion = "18.2.0"
+robolectricVersion = "4.11.1"
+secretsGradlePluginVersion = "2.0.1"
 timber = "5.0.1"
-hilt = "2.44"
+hilt = "2.49"
 junit = "4.13.2"
 androidxJunit = "1.1.5"
 espresso = "3.5.1"
-agp = "8.1.2"
+agp = "8.2.0"
 kgp = "1.8.10"
-androidxNav = "2.5.3"
+androidxNav = "2.7.6"
 googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
-hiltGradle = "2.44"
 truth = "1.1.5"
 mockk = "1.13.8"
-agp2 = "8.1.2"
-org-jetbrains-kotlin-android = "1.8.10"
+volleyVersion = "1.2.1"
 
 
 
 [libraries]
-android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kgp" }
-nav-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "androidxNav" }
-google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
-firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
-
+androidx-legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtxVersion" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutComposeVersion" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardviewVersion" }
+nav-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidxNav" }
+nav-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidxNav" }
+nav-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNav" }
+androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensionsVersion" }
+androidx-lifecycle-runtime-testing = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycleRuntimeTestingVersion" }
 
-# https://github.com/JakeWharton/timber
-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+# https://developer.android.com/jetpack/compose/bom/bom-mapping
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+compose-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose" }
+compose-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose" }
+# Android Studio Preview support
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+# UI Tests
+compose-ui-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
-# https://firebase.google.com/support/release-notes/android
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+#TODO: Prob don't need anymore
+material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gsonVersion" }
+
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanistVersion" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistVersion" }
+
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
+places-ktx = { module = "com.google.maps.android:places-ktx", version.ref = "placesKtxVersion" }
+android-maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtilsVersion" }
+volley = { module = "com.android.volley:volley", version.ref = "volleyVersion" }
 
 # https://github.com/google/dagger/tree/master/java/dagger/hilt
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
+# https://firebase.google.com/support/release-notes/android
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+
+# https://github.com/square/leakcanary
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanaryVersion" }
+plumber-android = { module = "com.squareup.leakcanary:plumber-android", version.ref = "leakCanaryVersion" }
+
+# https://github.com/JakeWharton/timber
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# https://github.com/coil-kt/coil
+coil = { module = "io.coil-kt:coil", version.ref = "coilVersion" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilVersion" }
+
+# https://github.com/hadilq/LiveEvent
+live-event = { module = "com.github.hadilq:live-event", version.ref = "liveEventVersion" }
+
+# Unit & instrumented testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
-nav-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidxNav" }
-nav-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidxNav" }
-nav-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNav" }
+# https://github.com/robolectric/robolectric
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
 
 # https://github.com/google/truth
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
@@ -58,9 +124,27 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
 
+# plugins
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+androidx-core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtxVersion" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTestingVersion" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kgp" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
+nav-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "androidxNav" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
+firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePluginVersion" }
+
 
 
 [plugins]
-hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hiltGradle" }
-android-library = { id = "com.android.library", version.ref = "agp2" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kgp" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kgp" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kgp" }
+androidx-nav-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNav" }
+hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
+android-mapsplatform-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePluginVersion" }
