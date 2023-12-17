@@ -1,6 +1,5 @@
 package com.ivangarzab.carrus.ui.settings
 
-import android.content.ContentResolver
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,8 +20,7 @@ import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.states.AlarmSettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
-import com.ivangarzab.carrus.util.extensions.readFromFile
-import com.ivangarzab.carrus.util.extensions.writeInFile
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
@@ -41,7 +39,8 @@ class SettingsViewModel @Inject constructor(
     private val appSettingsRepository: AppSettingsRepository,
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val contentResolverHelper: ContentResolverHelper
     ) : ViewModel() {
 
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
@@ -162,14 +161,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     //TODO: Needs testing
-    fun onExportData(
-        contentResolver: ContentResolver,
-        uri: Uri
-    ): Boolean {
+    fun onExportData(uri: Uri): Boolean {
         return carRepository.fetchCarData()?.let { data -> //TODO: Grab the state data instead?
             CarExporter.exportToJson(data)?.let { json ->
                 appScope.launch(Dispatchers.IO) {
-                    uri.writeInFile(contentResolver, json)
+                    contentResolverHelper.writeInFile(uri, json)
                 }
                 analytics.logCarExported(data.uid, data.getCarName())
                 true
@@ -178,11 +174,8 @@ class SettingsViewModel @Inject constructor(
     }
 
     //TODO: Needs testing
-    fun onImportData(
-        contentResolver: ContentResolver,
-        uri: Uri
-    ): Boolean {
-        uri.readFromFile(contentResolver).let { data ->
+    fun onImportData(uri: Uri): Boolean {
+        contentResolverHelper.readFromFile(uri).let { data ->
             data?.let {
                 CarImporter.importFromJson(data)?.let { car ->
                     carRepository.saveCarData(car)

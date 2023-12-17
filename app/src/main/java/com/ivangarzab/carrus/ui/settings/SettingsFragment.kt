@@ -36,9 +36,7 @@ class SettingsFragment : Fragment() {
     ) { uri ->
         uri?.let {
             Timber.d("Got result uri from create document contract: $uri")
-            when(viewModel.onExportData(
-                requireContext().contentResolver, it
-            )) {
+            when(viewModel.onExportData(it)) {
                 true -> { toast("Data export success") }
                 false -> toast("Unable to export data")
             }
@@ -50,9 +48,7 @@ class SettingsFragment : Fragment() {
     ) { uri ->
         uri?.let {
             Timber.d("Got result uri from open document contract: $it")
-            toast(when (viewModel.onImportData(
-                requireContext().contentResolver, it
-            )) {
+            toast(when (viewModel.onImportData(it)) {
                 true -> "Data import successful"
                 false -> "Unable to import data"
             })

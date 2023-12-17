@@ -8,4 +8,6 @@ import android.net.Uri
 interface ContentResolverHelper {
     fun persistUriPermission(uri: String): Boolean
     fun persistUriPermission(uri: Uri): Boolean
+    fun writeInFile(uri: Uri, content: String)
+    fun readFromFile(uri: Uri): String?
 }

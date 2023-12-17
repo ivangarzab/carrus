@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
-import com.ivangarzab.carrus.util.extensions.readFromFile
 import com.ivangarzab.carrus.util.extensions.toast
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -29,6 +29,9 @@ class CreateFragment : Fragment() {
     private val viewModel: CreateViewModel by viewModels()
 
     private val args: CreateFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var contentResolverHelper: ContentResolverHelper
 
     @Inject
     lateinit var analytics: Analytics
@@ -47,7 +50,8 @@ class CreateFragment : Fragment() {
     ) { uri ->
         Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
         uri?.let {
-            it.readFromFile(requireContext().contentResolver).let { data ->
+            //TODO: Move this logic into the VM
+            contentResolverHelper.readFromFile(it).let { data ->
                 data?.let {
                     viewModel.onImportData(data).let { success ->
                         when (success) {
