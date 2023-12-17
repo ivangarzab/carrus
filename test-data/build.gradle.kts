@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.ivangarzab.test_data"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26

@@ -38,7 +38,6 @@ googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
 truth = "1.1.5"
 mockk = "1.13.8"
-org-jetbrains-kotlin-android = "1.8.10"
 volleyVersion = "1.2.1"
 
 
@@ -137,8 +136,15 @@ firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePluginVersion" }
 
 
+
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kgp" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kgp" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kgp" }
+androidx-nav-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNav" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
+android-mapsplatform-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePluginVersion" }
