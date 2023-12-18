@@ -22,6 +22,7 @@ import kotlin.reflect.KProperty
  * @param fragmentBinder to be associated with [Fragment]
  * @param onClear High-order function to add some specialized teardown for any given [Fragment]
  */
+@Deprecated("Delete once we're fully migrated into Compose")
 class FragmentViewBinding<T : ViewBinding>(
     private val fragmentBinder: (Fragment) -> T,
     private val onClear: (() -> Unit)?
@@ -83,6 +84,7 @@ class FragmentViewBinding<T : ViewBinding>(
  *
  * @param viewBindingClass to be used for reflection.
  */
+@Deprecated("Delete once we're fully migrated into Compose")
 class FragmentViewBinder<T : ViewBinding>(
     private val viewBindingClass: Class<T>
 ) {
@@ -106,6 +108,7 @@ class FragmentViewBinder<T : ViewBinding>(
  * while using reflection under the hood.
  */
 @Suppress("unused")
+@Deprecated("Delete once we're fully migrated into Compose")
 inline fun <reified T : ViewBinding> Fragment.viewBinding(noinline onClear: (() -> Unit)? = null):
         ReadOnlyProperty<Fragment, T> =
     FragmentViewBinding(FragmentViewBinder(T::class.java)::bind, onClear)

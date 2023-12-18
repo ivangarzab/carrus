@@ -6,10 +6,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
@@ -23,7 +28,7 @@ fun MapScreen(
     onNavHomePressed: () -> Unit,
     onNavMapPressed: () -> Unit
 ) {
-    val defaultMapZoom = 11f
+    val defaultMapZoom = 12f
     val state: MapState by viewModel
         .state
         .observeAsState(initial = MapState())
@@ -34,6 +39,23 @@ fun MapScreen(
             defaultMapZoom
         )
     }
+    val uiSettings by remember { mutableStateOf(
+        MapUiSettings(
+            zoomControlsEnabled = true,
+            compassEnabled = true,
+            myLocationButtonEnabled = true
+        )
+    )}
+    val properties by remember {
+        mutableStateOf(
+            MapProperties(
+                isMyLocationEnabled = true
+            )
+        )
+    }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.statusBarDarkContentEnabled = true
 
     AppTheme {
         Scaffold(
@@ -50,7 +72,9 @@ fun MapScreen(
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize(),
-                cameraPositionState = cameraPositionState
+                cameraPositionState = cameraPositionState,
+                uiSettings = uiSettings,
+                properties = properties
             )
         }
     }

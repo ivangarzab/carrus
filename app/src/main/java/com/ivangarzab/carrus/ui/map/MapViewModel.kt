@@ -18,6 +18,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.maps.android.SphericalUtil
+import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.models.PlaceData
 import com.ivangarzab.carrus.data.structures.LiveState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +38,7 @@ class MapViewModel @Inject constructor(
 
     private val autoCompleteSessionToken: AutocompleteSessionToken = AutocompleteSessionToken.newInstance()
 
-    private val placesClient = Places.createClient(context)
+    private val placesClient by lazy {  Places.createClient(context) }
 
     private val locationManager = GeoLocationManager(context)
 
@@ -51,6 +52,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    init {
+        Places.initialize(context, BuildConfig.GOOGLE_MAPS_API_KEY)
+    }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
