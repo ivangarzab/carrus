@@ -11,9 +11,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +31,6 @@ class MapFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) {
         viewModel.onLocationPermissionRequestResult(it)
-//        if (it) map.isMyLocationEnabled = true
     }
 
     override fun onCreateView(
@@ -68,7 +64,6 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupMap()
         requestLocationPermission()
 
         /*viewModel.apply {
@@ -79,17 +74,6 @@ class MapFragment : Fragment() {
                     if (currentLocationSet.not()) {
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(it, MAP_ZOOM))
                         currentLocationSet = true
-                    }
-                }
-                // Mark all search results
-                if (state.searchList.isNotEmpty()) {
-                    state.searchList.forEach { item ->
-                        with(viewModel) {
-                            if (isPlaceMarked(item).not()) {
-                                placeMarker(item.latLng, item.name)
-                                onPlaceMarked(item)
-                            }
-                        }
                     }
                 }
             }
@@ -106,17 +90,5 @@ class MapFragment : Fragment() {
         locationPermissionRequestLauncher.launch(
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-    }
-
-    private fun placeMarker(location: LatLng, title: String?) {
-        Timber.v("Placing location '$title' at $location")
-        val map: GoogleMap? = null
-        with(map!!) {
-            addMarker(
-                MarkerOptions()
-                    .position(location)
-                    .title(title)
-            )
-        }
     }
 }

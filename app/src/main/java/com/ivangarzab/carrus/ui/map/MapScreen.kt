@@ -10,13 +10,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
+import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.map.MapViewModel.Companion.DEFAULT_LOCATION
 
@@ -28,7 +30,7 @@ fun MapScreen(
     onNavHomePressed: () -> Unit,
     onNavMapPressed: () -> Unit
 ) {
-    val defaultMapZoom = 12f
+    val defaultMapZoom = 12f //TODO: Add this into state
     val state: MapState by viewModel
         .state
         .observeAsState(initial = MapState())
@@ -54,11 +56,15 @@ fun MapScreen(
         )
     }
 
-    val systemUiController = rememberSystemUiController()
-    systemUiController.statusBarDarkContentEnabled = true
-
     AppTheme {
         Scaffold(
+            topBar = {
+                TopBar(
+                    title = "Navigate",
+                    isNavigationIconEnabled = true,
+                    onNavigationIconClicked = onBackPressed
+                )
+            },
             bottomBar = {
                 NavigationBottomBar(
                     settingsButtonClicked = onNavSettingsPressed,
@@ -75,7 +81,19 @@ fun MapScreen(
                 cameraPositionState = cameraPositionState,
                 uiSettings = uiSettings,
                 properties = properties
-            )
+            ) {
+                state.searchList.forEach { place ->
+                    with(viewModel) {
+                        if (isPlaceMarked(place).not()) {
+                            Marker(
+                                state = MarkerState(position = place.latLng),
+                                title = place.name
+                            )
+                            onPlaceMarked(place)
+                        }
+                    }
+                }
+            }
         }
     }
 }
