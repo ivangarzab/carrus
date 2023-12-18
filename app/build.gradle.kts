@@ -104,6 +104,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.places.ktx)
     implementation(libs.android.maps.utils)
+    implementation(libs.android.maps.compose)
     implementation(libs.volley)
 
     implementation(libs.hilt)

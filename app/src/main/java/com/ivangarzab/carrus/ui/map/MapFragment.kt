@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.gms.maps.CameraUpdateFactory
+import androidx.navigation.findNavController
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.databinding.FragmentMapBinding
+import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.delegates.viewBinding
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +30,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MapFragment : Fragment(R.layout.fragment_map) {
+class MapFragment : Fragment() {
 
     private val binding: FragmentMapBinding by viewBinding()
 
@@ -46,17 +48,46 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         ActivityResultContracts.RequestPermission()
     ) {
         viewModel.onLocationPermissionRequestResult(it)
-        if (it) map.isMyLocationEnabled = true
+//        if (it) map.isMyLocationEnabled = true
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ComposeView(requireActivity()).apply {
+        setContent {
+            AppTheme {
+                MapScreen(
+                    onBackPressed = { findNavController().popBackStack() },
+                    onNavSettingsPressed = {
+                        findNavController().navigate(
+                            MapFragmentDirections.actionGlobalSettingsFragment()
+                        )
+                    },
+                    onNavHomePressed = {
+                        findNavController().navigate(
+                            MapFragmentDirections.actionNavGraphSelf()
+                        )
+                    },
+                    onNavMapPressed = {
+                        findNavController().navigate(
+                            MapFragmentDirections.actionGlobalMapFragment()
+                        )
+                    }
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupWindow()
-        setupViews()
-        setupMap()
+//        setupWindow()
+//        setupViews()
+//        setupMap()
         requestLocationPermission()
 
-        viewModel.apply {
+        /*viewModel.apply {
             lifecycle.addObserver(this)
             state.observe(viewLifecycleOwner) { state ->
                 // Set current location
@@ -78,7 +109,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                     }
                 }
             }
-        }
+        }*/
     }
 
     override fun onResume() {

@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationCallback
@@ -21,6 +19,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.maps.android.SphericalUtil
 import com.ivangarzab.carrus.data.models.PlaceData
+import com.ivangarzab.carrus.data.structures.LiveState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -34,8 +33,7 @@ class MapViewModel @Inject constructor(
     @ApplicationContext context: Context
 ) : ViewModel(), LifecycleEventObserver {
 
-    private val _state: MutableLiveData<MapState> = MutableLiveData(MapState())
-    val state: LiveData<MapState> = _state
+    val state: LiveState<MapState> = LiveState(initialValue = MapState())
 
     private val autoCompleteSessionToken: AutocompleteSessionToken = AutocompleteSessionToken.newInstance()
 
@@ -48,8 +46,7 @@ class MapViewModel @Inject constructor(
     private val markedPlaces: MutableList<String> = mutableListOf()
 
     private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult ?: return
+        override fun onLocationResult(locationResult: LocationResult) {
             onLocationResultReceived(locationResult)
         }
     }
@@ -83,9 +80,9 @@ class MapViewModel @Inject constructor(
         for (location in locationResult.locations) {
             val latitude = location.latitude
             val longitude = location.longitude
-            _state.value = (state.value?.copy(
-                currentLocation = LatLng(latitude, longitude)
-            ))
+            state.setState {
+                copy(currentLocation = LatLng(latitude, longitude))
+            }
             /*if (predictionsRequested) {
                 fetchPlacesPredictions("gas station")
                 predictionsRequested = false
@@ -170,18 +167,18 @@ class MapViewModel @Inject constructor(
             val place = it.place
             val placeLatLng = place.latLng
             if (placeLatLng != null) {
-                state.value?.let { state ->
-                    _state.postValue(state.copy(
-                        searchList = state.searchList.toMutableList().apply {
+                state.setState {
+                    copy(
+                        searchList = this.searchList.toMutableList().apply {
                             add(
                                 PlaceData(
-                                id = "",
-                                name = it.place.name ?: "",
-                                latLng = it.place.latLng ?: LatLng(0.0, 0.0)
-                            )
+                                    id = "",
+                                    name = it.place.name ?: "",
+                                    latLng = it.place.latLng ?: LatLng(0.0, 0.0)
+                                )
                             )
                         }
-                    ))
+                    )
                 }
             }
         }.addOnFailureListener {
@@ -209,5 +206,6 @@ class MapViewModel @Inject constructor(
         private const val PHRASE_GAS_STATION: String = "gas station"
         private const val PHRASE_CAR_WASH: String = "car wash"
         private const val PHRASE_REPAIR_SHOP: String = "repair shop"
+        val DEFAULT_LOCATION: LatLng = LatLng(37.773972, -122.431297)
     }
 }
