@@ -15,7 +15,6 @@ import javax.inject.Singleton
  * Created by Ivan Garza Bermea.
  */
 @Singleton
-
 class AlarmsRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context,
     private val prefs: Preferences,
