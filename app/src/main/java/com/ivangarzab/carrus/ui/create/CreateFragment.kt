@@ -14,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.extensions.toast
-import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -31,37 +30,29 @@ class CreateFragment : Fragment() {
     private val args: CreateFragmentArgs by navArgs()
 
     @Inject
-    lateinit var contentResolverHelper: ContentResolverHelper
-
-    @Inject
     lateinit var analytics: Analytics
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        //TODO: Move null check to VM
         it?.let { uri ->
             Timber.d("Got image uri: $uri")
-            uri.toString().apply {
-                viewModel.onImageUriReceived(uri = this)
-            }
+            viewModel.onImageUriReceived(uri = uri.toString())
         } ?: Timber.d("No media selected")
     }
 
     private val openDocumentContract = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
-        Timber.d("Got result from open document contract: ${uri ?: "<nil>"}")
+        Timber.d("Got result from open document contract: $uri")
+        //TODO: Move null check to VM
         uri?.let {
-            //TODO: Move this logic into the VM
-            contentResolverHelper.readFromFile(it).let { data ->
-                data?.let {
-                    viewModel.onImportData(data).let { success ->
-                        when (success) {
-                            true -> toast("Data imported successfully!")
-                            false -> toast("Unable to import data")
-                        }
-                    }
-                } ?: Timber.w("Unable to parse data from file with uri: $uri")
+            viewModel.onImportData(it).let { success ->
+                when (success) {
+                    true -> toast("Data imported successfully!")
+                    false -> toast("Unable to import data")
+                }
             }
-        } ?: Timber.w("Unable to read from file with uri: $uri")
+        } ?: Timber.w("Unable to read from null uri")
     }
 
     override fun onCreateView(

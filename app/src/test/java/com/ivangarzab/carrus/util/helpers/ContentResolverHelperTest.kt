@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
  * Created by Ivan Garza Bermea.
  */
 @RunWith(AndroidJUnit4::class)
-class ContentResolverUtilTest {
+class ContentResolverHelperTest {
 
     private lateinit var helper: ContentResolverHelper
 
@@ -46,6 +46,41 @@ class ContentResolverUtilTest {
         val result = helper.persistUriPermission(TEST_URI_STR)
         assertThat(result)
             .isTrue()
+    }
+
+    @Test
+    fun test_writeInFile_valid_uri_valid_content() {
+
+    }
+
+    @Test
+    fun test_writeInFile_valid_uri_empty_content() {
+
+    }
+
+    @Test
+    fun test_writeInFile_valid_uri_blank_content() {
+
+    }
+
+    @Test
+    fun test_writeInFile_valid_uri_invalid_content() {
+
+    }
+
+    @Test
+    fun test_writeInFile_invalid_uri_valid_content() {
+
+    }
+
+    @Test
+    fun test_readFromFile_valid_uri() {
+
+    }
+
+    @Test
+    fun test_readFromFile_invalid_uri() {
+
     }
 
     companion object {

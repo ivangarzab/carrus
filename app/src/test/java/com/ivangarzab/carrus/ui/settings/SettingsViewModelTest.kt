@@ -47,7 +47,8 @@ class SettingsViewModelTest {
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
             alarmSettingsRepository = alarmSettingsRepository,
-            analytics = mockk(relaxUnitFun = true)
+            analytics = mockk(relaxUnitFun = true),
+            mockk()
         )
     }
 
