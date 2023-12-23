@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.create.data.CarModalState
@@ -37,6 +38,7 @@ class CreateViewModelTest {
             carRepository = carRepository,
             contentResolverHelper = TestContentResolverHelper(),
             analytics = mockk(relaxUnitFun = true),
+            DebugFlagProviderImpl().apply { forceDebug = true },
             CarImporter()
         ).apply { init(null) }
     }

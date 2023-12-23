@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
@@ -50,6 +51,7 @@ class SettingsViewModelTest {
             alarmsRepository = alarmsRepository,
             alarmSettingsRepository = alarmSettingsRepository,
             analytics = mockk(relaxUnitFun = true),
+            DebugFlagProviderImpl().apply { forceDebug = true },
             mockk(),
             CarExporter(),
             CarImporter()

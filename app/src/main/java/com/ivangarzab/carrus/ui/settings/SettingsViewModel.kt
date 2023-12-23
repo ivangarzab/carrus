@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.appScope
 import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
@@ -25,6 +25,7 @@ import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -40,10 +41,14 @@ class SettingsViewModel @Inject constructor(
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository,
     private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider,
     private val contentResolverHelper: ContentResolverHelper,
     private val carExporter: CarExporter,
     private val carImporter: CarImporter
-    ) : ViewModel() {
+) : ViewModel() {
+
+    @Inject
+    lateinit var appScope: CoroutineScope
 
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
     val state: LiveData<SettingsState> = _state
@@ -190,6 +195,11 @@ class SettingsViewModel @Inject constructor(
         }
         Timber.w("Unable to import data from uri path")
         return false
+    }
+
+    fun onDebugModeToggle() = with(debugFlagProvider) {
+        this.forceDebug = forceDebug.not()
+        Timber.i("Forced debug mode toggled: $forceDebug")
     }
 
     private fun rescheduleAlarms() {

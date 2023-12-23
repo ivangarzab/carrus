@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.structures.LiveState
@@ -25,6 +26,7 @@ class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
     private val analytics: Analytics,
+    private val debugFlagProvider: DebugFlagProvider,
     private val carImporter: CarImporter
 ) : ViewModel() {
 
@@ -186,6 +188,26 @@ class CreateViewModel @Inject constructor(
             }
             Timber.w("Unable to parse data from file with uri: $uri")
             return false
+        }
+    }
+
+    fun setupDataEasterEggForTesting() {
+        if (debugFlagProvider.isDebugEnabled()) {
+            with(Car.default) {
+                onUpdateStateData(
+                    nickname = nickname,
+                    make = make,
+                    model = model,
+                    year = year,
+                    licenseState = licenseState,
+                    licenseNo = licenseNo,
+                    vinNo = vinNo,
+                    tirePressure = tirePressure,
+                    totalMiles = totalMiles,
+                    milesPerGalCity = milesPerGalCity,
+                    milesPerGalHighway = milesPerGalHighway
+                )
+            }
         }
     }
 }

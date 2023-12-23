@@ -1,12 +1,17 @@
 package com.ivangarzab.carrus.data.repositories
 
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.prefs
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.util.managers.Preferences
 import com.ivangarzab.test_data.CAR_EMPTY
 import com.ivangarzab.test_data.CAR_TEST
 import com.ivangarzab.test_data.SERVICE_EMPTY
 import com.ivangarzab.test_data.SERVICE_TEST_1
 import com.ivangarzab.test_data.SERVICE_TEST_2
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -18,7 +23,15 @@ import org.junit.Test
  */
 class CarRepositoryTest {
 
-    private val repository = CarRepositoryImpl()
+    private val prefs: Preferences = Preferences(
+        InstrumentationRegistry.getInstrumentation().context,
+        DebugFlagProviderImpl().apply { forceDebug = true }
+    )
+
+    private val repository = CarRepositoryImpl(
+        CoroutineScope(SupervisorJob() + Dispatchers.Default),
+        prefs
+    )
 
     @Before
     fun setup() {
