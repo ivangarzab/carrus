@@ -40,7 +40,9 @@ class SettingsViewModel @Inject constructor(
     private val alarmsRepository: AlarmsRepository,
     private val alarmSettingsRepository: AlarmSettingsRepository,
     private val analytics: Analytics,
-    private val contentResolverHelper: ContentResolverHelper
+    private val contentResolverHelper: ContentResolverHelper,
+    private val carExporter: CarExporter,
+    private val carImporter: CarImporter
     ) : ViewModel() {
 
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
@@ -163,7 +165,7 @@ class SettingsViewModel @Inject constructor(
     //TODO: Needs testing
     fun onExportData(uri: Uri): Boolean {
         return carRepository.fetchCarData()?.let { data -> //TODO: Grab the state data instead?
-            CarExporter.exportToJson(data)?.let { json ->
+            carExporter.exportToJson(data)?.let { json ->
                 appScope.launch(Dispatchers.IO) {
                     contentResolverHelper.writeInFile(uri, json)
                 }
@@ -177,7 +179,7 @@ class SettingsViewModel @Inject constructor(
     fun onImportData(uri: Uri): Boolean {
         contentResolverHelper.readFromFile(uri).let { data ->
             data?.let {
-                CarImporter.importFromJson(data)?.let { car ->
+                carImporter.importFromJson(data)?.let { car ->
                     carRepository.saveCarData(car)
                     analytics.logCarImported(car.uid, car.getCarName())
                     return true

@@ -24,7 +24,8 @@ import javax.inject.Inject
 class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val carImporter: CarImporter
 ) : ViewModel() {
 
     val state: LiveState<CarModalState> = LiveState(CarModalState())
@@ -171,7 +172,7 @@ class CreateViewModel @Inject constructor(
         contentResolverHelper.readFromFile(uri).let { data ->
             data?.let {
                 return try {
-                    CarImporter.importFromJson(data)?.let { car ->
+                    carImporter.importFromJson(data)?.let { car ->
                         Timber.d("Got car data to import: $car")
                         carRepository.saveCarData(car)
                         analytics.logCarImported(car.uid, car.getCarName())
