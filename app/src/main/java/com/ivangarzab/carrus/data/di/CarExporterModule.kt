@@ -16,9 +16,7 @@ object CarExporterModule : SingletonModule<CarExporter>() {
     @Singleton
     @Provides
     fun provideCarExporter(): CarExporter {
-        if (instance == null) {
-            instance = CarExporter()
-        }
+        checkForInstanceAndCreateAsNeeded(CarExporter::class.java)
         return instance as CarExporter
     }
 }
