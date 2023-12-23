@@ -46,18 +46,20 @@ class ContentResolverHelperImpl@Inject constructor(
         }
     }
 
-    override fun writeInFile(uri: Uri, content: String) {
-        try {
-            getContentResolver().openOutputStream(uri).let { outputStream ->
+    override fun writeInFile(uri: Uri, content: String): Boolean {
+        return try {
+            getContentResolver().openOutputStream(uri)?.let { outputStream ->
                 BufferedWriter(OutputStreamWriter(outputStream)).apply {
                     write(content)
                     flush()
                     close()
                 }
                 Timber.v("Successful write to file with uri: $this")
-            }
+                true
+            } ?: false
         } catch (e: IOException) {
             Timber.w("Unable to write to file with uri: $this", e)
+            false
         }
     }
 
