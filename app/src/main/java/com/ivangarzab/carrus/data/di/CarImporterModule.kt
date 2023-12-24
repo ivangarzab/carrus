@@ -12,13 +12,14 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object CarImporterModule : SingletonModule<CarImporter>() {
+object CarImporterModule {
+    private lateinit var instance: CarImporter
     @Singleton
     @Provides
     fun provideCarImporter(): CarImporter {
-        if (instance == null) {
+        if (this::instance.isInitialized.not()) {
             instance = CarImporter()
         }
-        return instance as CarImporter
+        return instance
     }
 }

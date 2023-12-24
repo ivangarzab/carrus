@@ -9,8 +9,16 @@ class CoroutineScopeModuleTest {
 
     @Test
     fun test_binding() {
-        val result = CoroutinesScopeModule.providesCoroutineScope(Dispatchers.Default)
+        val result = CoroutineScopeModule.providesCoroutineScope(Dispatchers.Default)
         assertThat(result).isNotNull()
         assertThat(result).isInstanceOf(CoroutineScope::class.java)
+    }
+
+    @Test
+    fun test_singleton() {
+        val result1 = CoroutineScopeModule.providesCoroutineScope(Dispatchers.Default)
+        val result2 = CoroutineScopeModule.providesCoroutineScope(Dispatchers.Default)
+        assertThat(result1)
+            .isEqualTo(result2)
     }
 }

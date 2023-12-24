@@ -29,4 +29,18 @@ class PreferencesModuleTest {
         Truth.assertThat(result).isNotNull()
         Truth.assertThat(result).isInstanceOf(Preferences::class.java)
     }
+
+    @Test
+    fun test_singleton() {
+        val result1 = PreferencesModule.providesPreferences(
+            context,
+            TestDebugFlagProvider()
+        )
+        val result2 = PreferencesModule.providesPreferences(
+            context,
+            TestDebugFlagProvider()
+        )
+        Truth.assertThat(result1)
+            .isEqualTo(result2)
+    }
 }

@@ -11,10 +11,16 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object CoroutinesScopeModule {
+object CoroutineScopeModule {
+    private lateinit var instance: CoroutineScope
     @Singleton
     @Provides
     fun providesCoroutineScope(
         @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
-    ): CoroutineScope = CoroutineScope(SupervisorJob() + defaultDispatcher)
+    ): CoroutineScope {
+        if (this::instance.isInitialized.not()) {
+            instance = CoroutineScope(SupervisorJob() + defaultDispatcher)
+        }
+        return instance
+    }
 }
