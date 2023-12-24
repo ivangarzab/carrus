@@ -16,7 +16,9 @@ object CarImporterModule : SingletonModule<CarImporter>() {
     @Singleton
     @Provides
     fun provideCarImporter(): CarImporter {
-        checkForInstanceAndCreateAsNeeded(CarImporter::class.java)
+        if (instance == null) {
+            instance = CarImporter()
+        }
         return instance as CarImporter
     }
 }
