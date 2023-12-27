@@ -1,21 +1,10 @@
 package com.ivangarzab.carrus.ui.overview.data
 
-import android.os.Parcelable
-import com.ivangarzab.carrus.data.models.Car
-import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
-import kotlinx.parcelize.Parcelize
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Parcelize
-data class OverviewState(
-    val car: Car? = null,
-    val dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
-    val serviceSortingType: SortingType = SortingType.NONE,
-) : Parcelable
-
 data class OverviewStaticState(
     val isDataEmpty: Boolean = true,
     val carName: String = "",
@@ -23,7 +12,7 @@ data class OverviewStaticState(
 )
 
 data class OverviewServicesState(
-    val serviceList: List<ServiceItemState> = emptyList(),
+    val serviceItemList: List<ServiceItemState> = emptyList(),
     val showSortingOptions: Boolean = false,
     val selectedSortingOption: Int = 0
 )

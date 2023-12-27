@@ -66,7 +66,7 @@ fun OverviewScreenContent(
         mutableIntStateOf(NO_ITEM_EXPANDED)
     }
     var isSortingPanelVisible: Boolean by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(servicesState.showSortingOptions)
     }
 
     AppTheme {
@@ -125,8 +125,8 @@ fun OverviewScreenContent(
                     selectedIndex = servicesState.selectedSortingOption
                 )
             }
-            if (servicesState.serviceList.isNotEmpty()) {
-                val serviceList = servicesState.serviceList
+            if (servicesState.serviceItemList.isNotEmpty()) {
+                val serviceList = servicesState.serviceItemList
                 itemsIndexed(serviceList) { index, _ ->
                     OverviewServiceItem(
                         modifier = Modifier
