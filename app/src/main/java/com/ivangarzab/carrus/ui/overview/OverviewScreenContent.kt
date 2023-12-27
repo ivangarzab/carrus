@@ -38,7 +38,7 @@ import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
-import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
+import com.ivangarzab.carrus.ui.overview.data.ServicePanelState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import java.util.Random
 
@@ -52,7 +52,7 @@ import java.util.Random
 fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     messageQueue: MessageQueue = MessageQueue.test,
-    servicesState: OverviewServicesState = OverviewServicesState(),
+    servicesState: ServicePanelState = ServicePanelState(),
     detailsState: DetailsPanelState = DetailsPanelState(),
     onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },

@@ -19,9 +19,9 @@ import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
-import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
 import com.ivangarzab.carrus.ui.overview.data.ServiceItemState
+import com.ivangarzab.carrus.ui.overview.data.ServicePanelState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
@@ -52,7 +52,7 @@ class OverviewViewModel @Inject constructor(
     //TODO: Rename towards a common pattern
     val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
     val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
-    val servicePanelState: LiveState<OverviewServicesState> = LiveState(OverviewServicesState())
+    val servicePanelState: LiveState<ServicePanelState> = LiveState(ServicePanelState())
 
     val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
 

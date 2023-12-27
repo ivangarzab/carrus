@@ -32,8 +32,8 @@ import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
-import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
+import com.ivangarzab.carrus.ui.overview.data.ServicePanelState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 
 /**
@@ -57,9 +57,9 @@ fun OverviewScreenStateful(
         .detailsPanelState
         .observeAsState(initial = DetailsPanelState())
 
-    val servicePanelState: OverviewServicesState by viewModel
+    val servicePanelState: ServicePanelState by viewModel
         .servicePanelState
-        .observeAsState(initial = OverviewServicesState())
+        .observeAsState(initial = ServicePanelState())
 
     val queueState: MessageQueueState by viewModel
         .queueState
@@ -93,7 +93,7 @@ fun OverviewScreenStateful(
 private fun OverviewScreen(
     staticState: OverviewStaticState,
     detailsPanelState: DetailsPanelState,
-    servicePanelState: OverviewServicesState,
+    servicePanelState: ServicePanelState,
     messageQueue: MessageQueue = MessageQueue.test,
     onFloatingActionButtonClicked: () -> Unit = { },
     onEditCarButtonClicked: () -> Unit = { },
@@ -201,7 +201,7 @@ private fun OverviewScreenPreview() {
             carName = "Shaq"
         ),
         detailsPanelState = DetailsPanelState(),
-        servicePanelState = OverviewServicesState(),
+        servicePanelState = ServicePanelState(),
         messageQueue = MessageQueue.test,
         onFloatingActionButtonClicked = { },
         onEditCarButtonClicked = { },
