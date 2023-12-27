@@ -49,7 +49,6 @@ class OverviewViewModel @Inject constructor(
     private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
-    //TODO: Rename towards a common pattern
     val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
     val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
     val servicePanelState: LiveState<ServicePanelState> = LiveState(ServicePanelState())
@@ -98,7 +97,8 @@ class OverviewViewModel @Inject constructor(
             staticState.setState {
                 copy(
                     carName = it.getCarName(),
-                    isDataEmpty = false
+                    isDataEmpty = false,
+                    imageUri = it.imageUri
                 )
             }
             // Update dynamic state(s)

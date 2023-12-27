@@ -471,6 +471,7 @@ private fun CreateScreenContent(
                         }
                         TextInputField(
                             modifier = Modifier
+                                .padding(top = verticalSeparation)
                                 .fillMaxWidth(),
                             label = stringResource(id = R.string.vin_no),
                             content = state.vinNo,
