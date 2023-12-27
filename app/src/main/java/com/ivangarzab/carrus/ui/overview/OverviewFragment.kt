@@ -90,6 +90,7 @@ class OverviewFragment : Fragment() {
                 //TODO: Consider moving this call
                 checkForAlarmPermission(requireContext().canScheduleExactAlarms())
             }
+
             triggerNotificationPermissionRequest.observe(viewLifecycleOwner) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     attemptToRequestNotificationPermission()

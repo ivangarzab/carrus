@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -31,13 +32,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
+import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import java.util.Random
 
@@ -51,10 +52,8 @@ import java.util.Random
 fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     messageQueue: MessageQueue = MessageQueue.test,
-    serviceList: List<Service> = Service.serviceList,
+    servicesState: OverviewServicesState = OverviewServicesState(),
     detailsState: DetailsPanelState = DetailsPanelState(),
-    dueDateFormat: DueDateFormat = DueDateFormat.DAYS,
-    sortingType: SortingType = SortingType.NONE,
     onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
@@ -64,7 +63,7 @@ fun OverviewScreenContent(
     onMessageContentClicked: (String) -> Unit = { }
 ) {
     var expandedItemIndex: Int by rememberSaveable {
-        mutableStateOf(NO_ITEM_EXPANDED)
+        mutableIntStateOf(NO_ITEM_EXPANDED)
     }
     var isSortingPanelVisible: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -123,22 +122,17 @@ fun OverviewScreenContent(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                     isVisible = isSortingPanelVisible,
                     onSortRequest = onSortRequest,
-                    selectedIndex = when (sortingType) { //TODO: Move into VM's new uiState
-                        SortingType.NONE -> 0
-                        SortingType.NAME -> 1
-                        SortingType.REPAIR_DATE -> 2
-                        SortingType.DUE_DATE -> 3
-                    }
+                    selectedIndex = servicesState.selectedSortingOption
                 )
             }
-            if (serviceList.isNotEmpty()) {
+            if (servicesState.serviceList.isNotEmpty()) {
+                val serviceList = servicesState.serviceList
                 itemsIndexed(serviceList) { index, _ ->
                     OverviewServiceItem(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp),
                         index = index,
                         data = serviceList[index],
-                        dueDateFormat = dueDateFormat,
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked,
@@ -239,7 +233,7 @@ fun RotationalQuotePanel() {
         )
     }
 }
-
+//TODO: Move logic into VM
 private val quoteList: List<String> = listOf(
     "Winning isn't everything, but wanting to win is.",
     "Second place is just the first loser.",

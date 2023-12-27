@@ -8,6 +8,7 @@ import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.di.BuildVersionProvider
 import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
@@ -16,14 +17,23 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
+import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
+import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
 import com.ivangarzab.carrus.ui.overview.data.OverviewState
+import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
+import com.ivangarzab.carrus.ui.overview.data.ServiceItemState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
+import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.text.NumberFormat
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -42,23 +52,37 @@ class OverviewViewModel @Inject constructor(
 
     val state: LiveState<OverviewState> = LiveState(OverviewState())
 
+    //TODO: Rename towards a common pattern
+    val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
+    val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
+    val servicePanelState: LiveState<OverviewServicesState> = LiveState(OverviewServicesState())
+
     val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
 
+    private var carDataInternal: Car? = null
+
+    private var hasPromptedForPermissionNotification: Boolean = false
     val triggerNotificationPermissionRequest: LiveEvent<Boolean> = LiveEvent()
+    private var hasPromptedForPermissionAlarm: Boolean = false
     val triggerAlarmsPermissionRequest: LiveEvent<Boolean> = LiveEvent()
+
+    private var dueDateFormat: DueDateFormat = DueDateFormat.DAYS
+    private var serviceSortingType: SortingType = SortingType.NONE
 
     init {
         viewModelScope.launch {
             carRepository.observeCarData()
-                .catch { Timber.d("Something went wrong collecting the car data") }
+                .catch { Timber.w("Something went wrong collecting the car data") }
                 .collect {
                     Timber.d("Got a car update from the repository: $it")
-                    updateCarState(it)
+//                    updateCarState(it)
+                    processCarDataChange(it)
                 }
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                state.setState { copy(dueDateFormat = it.dueDateFormat) }
+//                state.setState { copy(dueDateFormat = it.dueDateFormat) }
+                dueDateFormat = it.dueDateFormat
             }
         }
         viewModelScope.launch {
@@ -68,6 +92,84 @@ class OverviewViewModel @Inject constructor(
                     copy(messageQueue = it.asUniqueMessageQueue())
                 }
             }
+        }
+    }
+
+    private fun processCarDataChange(car: Car?) {
+        // Save car data for future complex operations
+        carDataInternal = car
+        car?.let {
+            // Update static state
+            staticState.setState {
+                copy(
+                    carName = it.getCarName(),
+                    isDataEmpty = false
+                )
+            }
+            // Update dynamic state(s)
+            detailsPanelState.setState {//TODO: Use DetailsPanelState.fromCar(..)
+                copy(
+                    year = it.year,
+                    licenseState = it.licenseState,
+                    licenseNo = it.licenseNo,
+                    vinNo = it.vinNo,
+                    tirePressure = it.tirePressure,
+                    totalMiles = it.totalMiles,
+                    milesPerGalCity = it.milesPerGalCity,
+                    milesPerGalHighway = it.milesPerGalHighway
+                )
+            }
+            servicePanelState.setState {
+                copy(serviceList = generateServiceItemStateList(it.services))
+            }
+        } ?: resetScreenState()
+    }
+
+    private fun generateServiceItemStateList(
+        services: List<Service>
+    ): List<ServiceItemState> = services.mapIndexed { index, service ->
+        ServiceItemState(
+            index = index,
+            name = service.name,
+            details = "${service.brand} - ${service.type}",
+            price = NumberFormat.getCurrencyInstance().format(service.cost),
+            repairDate = "on ${service.repairDate.getShortenedDate()}",
+            dueDateFormatted = when (service.isPastDue()) {
+                true -> "DUE"
+                false -> (service.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
+                    TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
+                        when (daysLeft) {
+                            0L -> "Tomorrow"
+                            else -> when (dueDateFormat) {
+                                DueDateFormat.DATE -> service.dueDate.getShortenedDate()
+                                DueDateFormat.WEEKS -> "${
+                                    String.format(
+                                        "%.1f",
+                                        daysLeft / MULTIPLIER_DAYS_TO_WEEKS
+                                    )
+                                } weeks"
+                                DueDateFormat.MONTHS -> "${String.format(
+                                    "%.2f",
+                                    daysLeft / MULTIPLIER_DAYS_TO_MONTHS
+                                )} mo."
+                                else -> "$daysLeft days"
+                            }
+                        }
+                    }
+                }
+            },
+            isPastDue = service.isPastDue(),
+            data = service
+        )
+    }
+
+    private fun resetScreenState() {
+        //TODO: Reset everything!
+        staticState.setState {
+            copy(
+                carName = "",
+                isDataEmpty = false
+            )
         }
     }
 
@@ -90,7 +192,7 @@ class OverviewViewModel @Inject constructor(
 
                     false -> {
                         if (buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.TIRAMISU &&
-                            this.state.value?.hasPromptedForPermissionNotification?.not() == true
+                            hasPromptedForPermissionNotification.not()
                         ) {
                             addNotificationPermissionMessage()
                         } else {
@@ -141,9 +243,7 @@ class OverviewViewModel @Inject constructor(
     @VisibleForTesting
     fun addNotificationPermissionMessage() = with(Message.MISSING_PERMISSION_NOTIFICATION) {
         addMessage(this)
-        state.setState {
-            copy(hasPromptedForPermissionNotification = true)
-        }
+        hasPromptedForPermissionNotification = true
     }
 
     private fun removeNotificationPermissionMessage() =
@@ -152,7 +252,6 @@ class OverviewViewModel @Inject constructor(
         }
 
     fun checkForAlarmPermission(canScheduleExactAlarms: Boolean) {
-        val hasPromptedForPermissionAlarm = state.value?.hasPromptedForPermissionAlarm ?: false
         if (canScheduleExactAlarms.not() &&
             hasPromptedForPermissionAlarm.not() &&
             buildVersionProvider.getSdkVersionInt() >= Build.VERSION_CODES.S
@@ -165,9 +264,7 @@ class OverviewViewModel @Inject constructor(
     @VisibleForTesting
     fun addAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
         addMessage(this)
-        state.setState {
-            copy(hasPromptedForPermissionAlarm = true)
-        }
+        hasPromptedForPermissionAlarm = true
     }
 
     private fun removeAlarmPermissionMessage() = with(Message.MISSING_PERMISSION_ALARM) {
@@ -206,50 +303,67 @@ class OverviewViewModel @Inject constructor(
             SortingType.REPAIR_DATE -> sortServicesByRepairDate()
         }
         analytics.logServiceListSorted(type.name)
-        state.setState {
+        serviceSortingType = type
+        /*state.setState {
             copy(serviceSortingType = type)
-        }
+        }*/
     }
 
     private fun resetServicesSort() {
-        Timber.v("Resetting services sorting")
-        updateCarState(carRepository.fetchCarData())
+        carDataInternal?.let { car ->
+            Timber.v("Resetting services sorting")
+            updateSortedList(car.services)
+        }
+//        updateCarState(carRepository.fetchCarData())
     }
 
     private fun sortServicesByName() {
-        Timber.v("Sorting services by name")
-        state.value?.car?.let { car ->
+        carDataInternal?.let { car ->
+            Timber.v("Sorting services by name")
+            updateSortedList(car.services.sortedBy { it.name })
+        }
+        /*state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.name }
                 )
             )
-        }
+        }*/
     }
 
     private fun sortServicesByDueDate() {
-        Timber.v("Sorting services by due date")
-        state.value?.car?.let { car ->
+        carDataInternal?.let { car ->
+            Timber.v("Sorting services by due date")
+            updateSortedList(car.services.sortedBy { it.dueDate })
+        }
+        /*state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.dueDate }
                 )
             )
-        }
+        }*/
     }
 
     private fun sortServicesByRepairDate() {
-        Timber.v("Sorting services by repair date")
-        state.value?.car?.let { car ->
+        carDataInternal?.let { car ->
+            Timber.v("Sorting services by repair date")
+            updateSortedList(car.services.sortedBy { it.repairDate })
+        }
+        /*state.value?.car?.let { car ->
             updateCarState(
                 car.copy(
                     services = car.services.sortedBy { it.repairDate }
                 )
             )
-        }
+        }*/
     }
 
-    private fun updateCarState(car: Car?) = state.setState { copy(car = car) }
+    private fun updateSortedList(sortedServiceList: List<Service>) {
+        servicePanelState.setState {
+            copy(serviceList = generateServiceItemStateList(sortedServiceList))
+        }
+    }
 
     fun onSort(type: SortingType) {
         Timber.v("Got a sorting request with type=$type")
@@ -259,6 +373,7 @@ class OverviewViewModel @Inject constructor(
 
     fun setupEasterEggForTesting() {
         if (debugFlagProvider.isDebugEnabled()) {
+            //TODO: Handle state data
             state.value?.car?.let {
                 carRepository.saveCarData(
                     it.copy(
@@ -269,3 +384,6 @@ class OverviewViewModel @Inject constructor(
         }
     }
 }
+
+private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
+private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f

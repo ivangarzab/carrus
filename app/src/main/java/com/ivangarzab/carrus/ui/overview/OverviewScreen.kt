@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -33,8 +32,8 @@ import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
-import com.ivangarzab.carrus.ui.overview.data.OverviewState
-import com.ivangarzab.carrus.ui.overview.data.OverviewStatePreviewProvider
+import com.ivangarzab.carrus.ui.overview.data.OverviewServicesState
+import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 
 /**
@@ -50,9 +49,17 @@ fun OverviewScreenStateful(
     onServiceEditButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit
 ) {
-    val state: OverviewState by viewModel
-        .state
-        .observeAsState(initial = OverviewState())
+    val staticState: OverviewStaticState by viewModel
+        .staticState
+        .observeAsState(initial = OverviewStaticState())
+
+    val detailsPanelState: DetailsPanelState by viewModel
+        .detailsPanelState
+        .observeAsState(initial = DetailsPanelState())
+
+    val servicePanelState: OverviewServicesState by viewModel
+        .servicePanelState
+        .observeAsState(initial = OverviewServicesState())
 
     val queueState: MessageQueueState by viewModel
         .queueState
@@ -60,7 +67,9 @@ fun OverviewScreenStateful(
 
     AppTheme {
         OverviewScreen(
-            state = state,
+            staticState = staticState,
+            detailsPanelState = detailsPanelState,
+            servicePanelState = servicePanelState,
             messageQueue = queueState.messageQueue,
             onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditCarButtonClicked = onCarEditButtonClicked,
@@ -80,11 +89,11 @@ fun OverviewScreenStateful(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun OverviewScreen(
-    @PreviewParameter(OverviewStatePreviewProvider::class) state: OverviewState,
+    staticState: OverviewStaticState,
+    detailsPanelState: DetailsPanelState,
+    servicePanelState: OverviewServicesState,
     messageQueue: MessageQueue = MessageQueue.test,
     onFloatingActionButtonClicked: () -> Unit = { },
     onEditCarButtonClicked: () -> Unit = { },
@@ -109,79 +118,102 @@ private fun OverviewScreen(
     } //TODO: Start using this variables instead of the BottomSheetDialogFragment
 
     AppTheme {
-        if (state.car != null) {
-            state.car.let {
-                systemUiController.statusBarDarkContentEnabled = false
-                Scaffold(
-                    modifier = Modifier
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        OverviewScreenTopBar(
-                            title = it.getCarName(),
-                            imageUri = it.imageUri,
-                            scrollBehavior = scrollBehavior,
-                            addTestMessage = addTestMessage
+        if (staticState.isDataEmpty.not()) {
+            systemUiController.statusBarDarkContentEnabled = false
+            Scaffold(
+                modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {
+                    OverviewScreenTopBar(
+                        title = staticState.carName,
+                        imageUri = staticState.imageUri,
+                        scrollBehavior = scrollBehavior,
+                        addTestMessage = addTestMessage
+                    )
+                },
+                content = { paddingValues ->
+                    OverviewScreenContent(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        messageQueue = messageQueue,
+                        servicesState = servicePanelState,
+                        detailsState = detailsPanelState,
+                        onSortRequest = onSortRequest,
+                        onEditCarClicked = onEditCarButtonClicked,
+                        onServiceEditButtonClicked = onServiceEditButtonClicked,
+                        onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
+                        addServiceList = addServiceList,
+                        onMessageContentClicked = { onMessageContentClicked(it) },
+                        onMessageDismissClicked = onMessageDismissClicked
+                    )
+                },
+                bottomBar = {
+                    NavigationBottomBar(
+                        homeButtonClicked = { },
+                        mapButtonClicked = onMapButtonClicked,
+                        settingsButtonClicked = onSettingsButtonClicked
+                    )
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        containerColor = if (isSystemInDarkTheme()) {
+                            MaterialTheme.colorScheme.surface
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        },
+                        contentColor = if (isSystemInDarkTheme()) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                        },
+                        onClick = onFloatingActionButtonClicked
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(48.dp),
+                            painter = painterResource(id = R.drawable.ic_add),
+                            contentDescription = "Add Service"
                         )
-                    },
-                    content = { paddingValues ->
-                        OverviewScreenContent(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(paddingValues),
-                            messageQueue = messageQueue,
-                            serviceList = it.services,
-                            detailsState = DetailsPanelState.fromCar(state.car),
-                            dueDateFormat = state.dueDateFormat,
-                            sortingType = state.serviceSortingType,
-                            onSortRequest = onSortRequest,
-                            onEditCarClicked = onEditCarButtonClicked,
-                            onServiceEditButtonClicked = onServiceEditButtonClicked,
-                            onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
-                            addServiceList = addServiceList,
-                            onMessageContentClicked = { onMessageContentClicked(it) },
-                            onMessageDismissClicked = onMessageDismissClicked
-                        )
-                    },
-                    bottomBar = {
-                        NavigationBottomBar(
-                            homeButtonClicked = { },
-                            mapButtonClicked = onMapButtonClicked,
-                            settingsButtonClicked = onSettingsButtonClicked
-                        )
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            containerColor = if (isSystemInDarkTheme()) {
-                                MaterialTheme.colorScheme.surface
-                            } else {
-                                MaterialTheme.colorScheme.primary
-                            },
-                            contentColor = if (isSystemInDarkTheme()) {
-                                MaterialTheme.colorScheme.onSurface
-                            } else {
-                                MaterialTheme.colorScheme.onPrimary
-                            },
-                            onClick = onFloatingActionButtonClicked
-                        ) {
-                            Icon(
-                                modifier = Modifier.size(48.dp),
-                                painter = painterResource(id = R.drawable.ic_add),
-                                contentDescription = "Add Service"
-                            )
-                        }
                     }
-                )
-                // Dialog
-                when {
-                    showServiceModal -> ServiceBottomSheet(
-                        modifier = Modifier,
-                        onDismissed = { showServiceModal = false }
-                    ) //TODO: Start using this!
                 }
+            )
+            // Dialog
+            when {
+                showServiceModal -> ServiceBottomSheet(
+                    modifier = Modifier,
+                    onDismissed = { showServiceModal = false }
+                ) //TODO: Start using this!
             }
         } else {
             systemUiController.statusBarDarkContentEnabled = isSystemInDarkTheme().not()
             OverviewScreenEmpty(onAddCarClicked = onAddCarClicked)
         }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun OverviewScreenPreview() {
+    OverviewScreen(
+        staticState = OverviewStaticState(
+            isDataEmpty = false,
+            carName = "Shaq"
+        ),
+        detailsPanelState = DetailsPanelState(),
+        servicePanelState = OverviewServicesState(),
+        messageQueue = MessageQueue.test,
+        onFloatingActionButtonClicked = { },
+        onEditCarButtonClicked = { },
+        onSettingsButtonClicked = { },
+        onMapButtonClicked = { },
+        onAddCarClicked = { },
+        onSortRequest = { },
+        onServiceEditButtonClicked = { },
+        onServiceDeleteButtonClicked = { },
+        onMessageDismissClicked = { },
+        onMessageContentClicked = { },
+        addTestMessage = { },
+        addServiceList = { }
+    )
 }
