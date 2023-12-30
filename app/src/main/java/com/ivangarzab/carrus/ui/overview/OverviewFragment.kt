@@ -85,11 +85,14 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         with(viewModel) {
             //TODO: Move into Compose
-            state.observe(viewLifecycleOwner) {
-                processStateChange(it, requireContext().areNotificationsEnabled())
-                //TODO: Consider moving this call
+            servicePanelState.observe(viewLifecycleOwner) {
+                processServiceDataChange(
+                    it.serviceItemList.isEmpty(),
+                    requireContext().areNotificationsEnabled()
+                )
                 checkForAlarmPermission(requireContext().canScheduleExactAlarms())
             }
+
             triggerNotificationPermissionRequest.observe(viewLifecycleOwner) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     attemptToRequestNotificationPermission()
@@ -147,7 +150,8 @@ class OverviewFragment : Fragment() {
 
     private fun navigateToEditFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment(
-            data = viewModel.state.value?.car
+            // We're sort of assuming the data is there...
+            data = viewModel.carDataInternal
         )
     )
 

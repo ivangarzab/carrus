@@ -16,7 +16,7 @@ data class DetailsPanelState(
     val milesPerGalHighway: String = ""
 ) {
     fun getTotalValidFields(): Int {
-        var result: Int = 0
+        var result = 0
         if (year.isNotEmpty()) result+=1
         if (licenseState.isNotEmpty()) result+=1
         if (licenseNo.isNotEmpty()) result+=1
