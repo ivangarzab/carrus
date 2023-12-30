@@ -60,7 +60,7 @@ fun MapScreen(
         Scaffold(
             topBar = {
                 TopBar(
-                    title = "Navigate",
+                    title = "Explore",
                     isNavigationIconEnabled = true,
                     onNavigationIconClicked = onBackPressed
                 )

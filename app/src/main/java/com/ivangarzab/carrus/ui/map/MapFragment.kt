@@ -65,7 +65,6 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestLocationPermission()
-
         /*viewModel.apply {
             lifecycle.addObserver(this)
             state.observe(viewLifecycleOwner) { state ->
