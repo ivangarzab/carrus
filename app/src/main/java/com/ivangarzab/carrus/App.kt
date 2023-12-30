@@ -1,10 +1,7 @@
 package com.ivangarzab.carrus
 
 import android.app.Application
-import coil.Coil
-import coil.ImageLoader
-import coil.memory.MemoryCache
-import com.google.android.libraries.places.api.Places
+import com.ivangarzab.carrus.util.managers.Coiler
 import com.ivangarzab.carrus.util.managers.LeakUploader
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -15,6 +12,10 @@ import timber.log.Timber
 @HiltAndroidApp
 open class App : Application() {
 
+    open val leakUploader: LeakUploader = LeakUploader()
+
+    open val coiler: Coiler = Coiler()
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
@@ -23,22 +24,18 @@ open class App : Application() {
             setupLeakCanary()
         }
         setupCoil()
-        Places.initialize(this, BuildConfig.GOOGLE_MAPS_API_KEY)
+        /*TODO: Not needed + will get deleted with maps_compose
+        Places.initialize(this, BuildConfig.GOOGLE_MAPS_API_KEY)*/
     }
 
     open fun setupLeakCanary() {
         Timber.v("Setting up leak event listener")
-        LeakUploader().setupCrashlyticsLeakUploader()
+        leakUploader.setupCrashlyticsLeakUploader()
     }
 
-    open fun setupCoil() = with(applicationContext) {
-        Coil.setImageLoader(ImageLoader.Builder(this)
-            .memoryCache {
-                MemoryCache.Builder(this)
-                    .maxSizePercent(0.25)
-                    .build()
-            }
-            .build()
-        )
+    open fun setupCoil() {
+        Timber.v("Setting up Coil")
+        coiler.setImageLoader(this)
     }
 }
+

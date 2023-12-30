@@ -10,27 +10,29 @@ import org.junit.Test
  */
 class CarImporterTest {
 
+    private val importer = CarImporter()
+
     @Test
     fun test_importFromJson_empty_string_null() {
-        assertThat(CarImporter.importFromJson(TEST_EMPTY_CAR_DATA))
+        assertThat(importer.importFromJson(TEST_EMPTY_CAR_DATA))
             .isNull()
     }
 
     @Test
     fun test_importFromJson_bad_string_null() {
-        assertThat(CarImporter.importFromJson(TEST_BAD_CAR_DATA))
+        assertThat(importer.importFromJson(TEST_BAD_CAR_DATA))
             .isNull()
     }
 
     @Test
     fun test_importFromJson_success() {
-        assertThat(CarImporter.importFromJson(TEST_CAR_JSON))
+        assertThat(importer.importFromJson(TEST_CAR_JSON))
             .isInstanceOf(Car::class.java)
     }
 
     @Test
     fun test_importFromJson_success_no_imageUri() = with(
-        CarImporter.importFromJson(TEST_CAR_JSON)
+        importer.importFromJson(TEST_CAR_JSON)
     ) {
         assertThat(this?.imageUri)
             .isNull()

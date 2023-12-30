@@ -9,7 +9,7 @@ import org.junit.Test
  */
 class CarExporterTest {
 
-    private val exporter = CarExporter
+    private val exporter = CarExporter()
 
     @Test
     fun test_exportFromJson_empty_car_data_not_null() {

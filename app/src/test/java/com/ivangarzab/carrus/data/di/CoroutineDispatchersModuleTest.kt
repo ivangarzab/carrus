@@ -4,9 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import org.junit.Test
 
-class CoroutineDispatcherModuleTest {
+class CoroutineDispatchersModuleTest {
 
-    private val module: CoroutinesDispatchersModule = CoroutinesDispatchersModule
+    private val module: CoroutineDispatchersModule = CoroutineDispatchersModule
 
     @Test
     fun test_providesDefaultDispatcher() {
