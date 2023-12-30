@@ -4,11 +4,14 @@ import com.google.gson.Gson
 import com.ivangarzab.carrus.data.models.Car
 import timber.log.Timber
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-object CarImporter {
+@Singleton
+class CarImporter @Inject constructor() {
 
     /**
      * Using the JSON received as a parameter, utilize [Gson] in order to import the data.

@@ -16,4 +16,15 @@ class TestContentResolverHelper : ContentResolverHelper {
     override fun persistUriPermission(uri: Uri): Boolean {
         return uri != Uri.EMPTY
     }
+
+    override fun writeInFile(uri: Uri, content: String): Boolean {
+        return uri != Uri.EMPTY && content.isNotBlank()
+    }
+
+    override fun readFromFile(uri: Uri): String? {
+        return when (uri != Uri.EMPTY) {
+            true -> "success"
+            false -> null
+        }
+    }
 }
