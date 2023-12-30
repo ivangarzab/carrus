@@ -45,8 +45,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
+        viewBinding = true //TODO: Remove once Activity is migrated into Compose
         compose = true
     }
     composeOptions {

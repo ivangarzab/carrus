@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.DialogFragment
-import com.ivangarzab.carrus.databinding.ModalInterstitialPermissionBinding
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.clearBackgroundForRoundedCorners
 import com.ivangarzab.carrus.util.managers.Analytics
@@ -17,8 +16,6 @@ import javax.inject.Inject
  */
 abstract class PermissionInterstitial<T : PermissionInterstitialViewModel> :
     DialogFragment() {
-
-    private lateinit var binding: ModalInterstitialPermissionBinding
 
     lateinit var viewModel: T
 
