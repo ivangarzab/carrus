@@ -169,7 +169,6 @@ class CreateViewModel @Inject constructor(
         }
     }
 
-    //TODO: Revise testing
     fun onImportData(uri: Uri): Boolean {
         contentResolverHelper.readFromFile(uri).let { data ->
             data?.let {
