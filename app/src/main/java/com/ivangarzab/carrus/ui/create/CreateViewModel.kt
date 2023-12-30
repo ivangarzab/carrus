@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.ui.create
 
+import android.net.Uri
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,8 @@ class CreateViewModel @Inject constructor(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
     private val analytics: Analytics,
-    private val debugFlagProvider: DebugFlagProvider
+    private val debugFlagProvider: DebugFlagProvider,
+    private val carImporter: CarImporter
 ) : ViewModel() {
 
     val state: LiveState<CarModalState> = LiveState(CarModalState())
@@ -167,18 +169,24 @@ class CreateViewModel @Inject constructor(
         }
     }
 
-    fun onImportData(data: String): Boolean {
-        return try {
-            CarImporter.importFromJson(data)?.let { car ->
-                Timber.d("Got car data to import: $car")
-                carRepository.saveCarData(car)
-                analytics.logCarImported(car.uid, car.getCarName())
-                onSubmit.postValue(true)
-                true
-            } ?: false
-        } catch (e: Exception) {
-            Timber.w("Unable to import data", e)
-            false
+    fun onImportData(uri: Uri): Boolean {
+        contentResolverHelper.readFromFile(uri).let { data ->
+            data?.let {
+                return try {
+                    carImporter.importFromJson(data)?.let { car ->
+                        Timber.d("Got car data to import: $car")
+                        carRepository.saveCarData(car)
+                        analytics.logCarImported(car.uid, car.getCarName())
+                        onSubmit.postValue(true)
+                        true
+                    } ?: false
+                } catch (e: Exception) {
+                    Timber.w("Unable to import data", e)
+                    false
+                }
+            }
+            Timber.w("Unable to parse data from file with uri: $uri")
+            return false
         }
     }
 
