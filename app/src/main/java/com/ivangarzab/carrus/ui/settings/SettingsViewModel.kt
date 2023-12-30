@@ -25,7 +25,6 @@ import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -46,9 +45,6 @@ class SettingsViewModel @Inject constructor(
     private val carExporter: CarExporter,
     private val carImporter: CarImporter
 ) : ViewModel() {
-
-    @Inject
-    lateinit var appScope: CoroutineScope
 
     private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
     val state: LiveData<SettingsState> = _state
@@ -167,11 +163,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    //TODO: Needs testing
     fun onExportData(uri: Uri): Boolean {
         return carRepository.fetchCarData()?.let { data -> //TODO: Grab the state data instead?
             carExporter.exportToJson(data)?.let { json ->
-                appScope.launch(Dispatchers.IO) {
+                viewModelScope.launch(Dispatchers.IO) {
                     contentResolverHelper.writeInFile(uri, json)
                 }
                 analytics.logCarExported(data.uid, data.getCarName())
@@ -180,18 +175,15 @@ class SettingsViewModel @Inject constructor(
         } ?: false
     }
 
-    //TODO: Needs testing
     fun onImportData(uri: Uri): Boolean {
-        contentResolverHelper.readFromFile(uri).let { data ->
-            data?.let {
-                carImporter.importFromJson(data)?.let { car ->
-                    carRepository.saveCarData(car)
-                    analytics.logCarImported(car.uid, car.getCarName())
-                    return true
-                }
-                Timber.w("Unable to import car data")
-                return false
-            } ?: Timber.w("Unable to parse data from file with uri: $uri")
+        contentResolverHelper.readFromFile(uri)?.let { data ->
+            carImporter.importFromJson(data)?.let { car ->
+                carRepository.saveCarData(car)
+                analytics.logCarImported(car.uid, car.getCarName())
+                return true
+            }
+            Timber.w("Unable to import car data")
+            return false
         }
         Timber.w("Unable to import data from uri path")
         return false
