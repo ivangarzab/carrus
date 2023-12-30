@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 /**
  * Created by Ivan Garza Bermea.
  */
+@Deprecated("Moved into Compose")
 @Parcelize
 data class ItemServiceState(
     var position: Int,

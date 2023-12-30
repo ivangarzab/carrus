@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -35,15 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import com.ivangarzab.carrus.util.extensions.getShortenedDate
-import com.ivangarzab.carrus.util.extensions.isPastDue
+import com.ivangarzab.carrus.ui.overview.data.ServiceItemState
 import java.text.NumberFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by Ivan Garza Bermea.
@@ -53,8 +47,7 @@ import java.util.concurrent.TimeUnit
 fun OverviewServiceItem(
     modifier: Modifier = Modifier,
     index: Int,
-    data: Service,
-    dueDateFormat: DueDateFormat,
+    data: ServiceItemState,
     isExpanded: Boolean = true,
     onEditClicked: (Service) -> Unit,
     onDeleteClicked: (Service) -> Unit,
@@ -91,49 +84,20 @@ fun OverviewServiceItem(
                         Text(
                             modifier = Modifier
                                 .align(Alignment.CenterEnd),
-                            text = when (data.isPastDue()) {
-                                true -> stringResource(id = R.string.due).uppercase(Locale.ROOT)
-                                false -> (data.dueDate.timeInMillis - Calendar.getInstance().timeInMillis).let { timeLeftInMillis ->
-                                    TimeUnit.MILLISECONDS.toDays(timeLeftInMillis).let { daysLeft ->
-                                        when (daysLeft) {
-                                            0L -> stringResource(R.string.tomorrow)
-                                            else -> when (dueDateFormat) {
-                                                DueDateFormat.DATE -> data.dueDate.getShortenedDate()
-                                                DueDateFormat.WEEKS -> stringResource(
-                                                    R.string.service_due_date_week_format,
-                                                    String.format(
-                                                        "%.1f",
-                                                        daysLeft / MULTIPLIER_DAYS_TO_WEEKS
-                                                    )
-                                                )
-
-                                                DueDateFormat.MONTHS -> stringResource(
-                                                    R.string.service_due_date_months_format,
-                                                    String.format(
-                                                        "%.2f",
-                                                        daysLeft / MULTIPLIER_DAYS_TO_MONTHS
-                                                    )
-                                                )
-
-                                                else -> "$daysLeft ${stringResource(R.string.days).lowercase()}"
-                                            }
-                                        }
-                                    } //TODO: Set up logic in VM
-                                }
-                            },
-                            style = when (data.isPastDue()) {
+                            text = data.dueDateFormatted,
+                            style = when (data.isPastDue) {
                                 true -> MaterialTheme.typography.titleMedium
                                 false -> MaterialTheme.typography.titleSmall
                             },
-                            fontStyle = when (data.isPastDue()) {
+                            fontStyle = when (data.isPastDue) {
                                 true -> FontStyle.Italic
                                 false -> null
                             },
-                            fontWeight = when (data.isPastDue()) {
+                            fontWeight = when (data.isPastDue) {
                                 true -> FontWeight.Bold
                                 false -> null
                             },
-                            color = when (data.isPastDue()) {
+                            color = when (data.isPastDue) {
                                 true -> MaterialTheme.colorScheme.error
                                 false -> MaterialTheme.colorScheme.onSurface
                             }
@@ -167,7 +131,7 @@ fun OverviewServiceItem(
                         Row {
                             Text(
                                 modifier = Modifier.weight(7f),
-                                text = "${data.brand} - ${data.type}", //TODO: Format this dat in VM
+                                text = data.details,
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             val costAndDateTextStyle: TextStyle =
@@ -175,12 +139,12 @@ fun OverviewServiceItem(
                             Column(modifier = Modifier.weight(3f)) {
                                 Text(
                                     modifier = Modifier.align(Alignment.End),
-                                    text = NumberFormat.getCurrencyInstance().format(data.cost),
+                                    text = data.price,
                                     style = costAndDateTextStyle
                                 )
                                 Text(
                                     modifier = Modifier.align(Alignment.End),
-                                    text = "on ${data.repairDate.getShortenedDate()}",
+                                    text = data.repairDate,
                                     style = costAndDateTextStyle
                                 )
                             }
@@ -195,7 +159,7 @@ fun OverviewServiceItem(
                         ) {
                             IconButton(
                                 modifier = Modifier.align(Alignment.CenterStart),
-                                onClick = { onEditClicked(data) }
+                                onClick = { onEditClicked(data.data) }
                             ) {
                                 Icon(
                                     modifier = Modifier.padding(6.dp),
@@ -205,7 +169,7 @@ fun OverviewServiceItem(
                             }
                             IconButton(
                                 modifier = Modifier.align(Alignment.CenterEnd),
-                                onClick = { onDeleteClicked(data) }
+                                onClick = { onDeleteClicked(data.data) }
                             ) {
                                 Icon(
                                     modifier = Modifier.padding(6.dp),
@@ -229,8 +193,18 @@ private fun OverviewServiceItemPreview() {
         OverviewServiceItem(
             modifier = Modifier,
             index = -1,
-            data = Service.serviceList[1],
-            dueDateFormat = DueDateFormat.WEEKS,
+            data = Service.serviceList[1].let {
+                ServiceItemState(
+                    index = 1,
+                    name = it.name,
+                    details = "No deets",
+                    price = NumberFormat.getCurrencyInstance().format(it.cost),
+                    repairDate = "on 9/12/1992",
+                    dueDateFormatted = "DUE",
+                    isPastDue = true,
+                    data = it
+                )
+            },
             isExpanded = true,
             onEditClicked = { },
             onDeleteClicked = { },
@@ -238,6 +212,3 @@ private fun OverviewServiceItemPreview() {
         )
     }
 }
-
-private const val MULTIPLIER_DAYS_TO_WEEKS: Float = 7.0f
-private const val MULTIPLIER_DAYS_TO_MONTHS: Float = 30.43684f

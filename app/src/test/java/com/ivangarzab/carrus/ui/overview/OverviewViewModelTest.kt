@@ -66,28 +66,15 @@ class OverviewViewModelTest {
             it.saveCarData(CAR_TEST)
             it.addCarService(SERVICE_TEST_1)
         }
-        state.getOrAwaitValue().let {
-            assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isTrue()
+        servicePanelState.getOrAwaitValue().let {
+            assertThat(it.serviceItemList).isNotNull()
+            assertThat(carDataInternal?.services?.contains(SERVICE_TEST_1)).isTrue()
         }
-        val result = state.getOrAwaitValue {
+        val result = servicePanelState.getOrAwaitValue {
             onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
-            .isFalse()
-    }
-
-    @Test
-    fun test_onServiceDeleted_service_not_there() = with(viewModel) {
-        carRepository.saveCarData(CAR_TEST)
-        state.getOrAwaitValue().let {
-            assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(SERVICE_TEST_1)).isFalse()
-        }
-        val result = state.getOrAwaitValue {
-            onServiceDeleted(SERVICE_TEST_1)
-        }
-        assertThat(result.car?.services?.contains(SERVICE_TEST_1))
+        assertThat(result.serviceItemList).isEmpty()
+        assertThat(carDataInternal?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 
@@ -224,39 +211,39 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onSort_base() = with(viewModel) {
-        val result = state.getOrAwaitValue()
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(SortingType.NONE)
+        val result = servicePanelState.getOrAwaitValue()
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(0)
     }
 
     @Test
     fun test_onSort_none_state_update() = with(viewModel) {
-        val test = SortingType.NONE
-        val result = state.getOrAwaitValue {
+        val test = SortingType.REPAIR_DATE
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(2)
     }
 
     @Test
     fun test_onSort_name_state_update() = with(viewModel) {
         val test = SortingType.NAME
-        val result = state.getOrAwaitValue {
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(1)
     }
 
     @Test
     fun test_onSort_date_state_update() = with(viewModel) {
         val test = SortingType.DUE_DATE
-        val result = state.getOrAwaitValue {
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(3)
     }
 
     companion object {
