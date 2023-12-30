@@ -90,7 +90,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onDeleteCarDataClicked_with_data() = runTest {
+    fun test_onDeleteCarDataClicked_with_data() {
         saveCarData()
         with(viewModel) {
             val result = state.getOrAwaitValue {
@@ -150,7 +150,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onAlarmsToggled_updated_true_without_permissionGranted() = runTest {
+    fun test_onAlarmsToggled_updated_true_without_permissionGranted() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onAlarmsToggled(true)
@@ -203,7 +203,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onAlarmTimePicked_state_updated() = runTest {
+    fun test_onAlarmTimePicked_state_updated() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onAlarmTimePicked(TEST_ALARM_TIME_VALUE)
@@ -255,7 +255,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onClockTimeFormatPicked_updated() = runTest {
+    fun test_onClockTimeFormatPicked_updated() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onClockTimeFormatPicked(TimeFormat.HR24.value)
