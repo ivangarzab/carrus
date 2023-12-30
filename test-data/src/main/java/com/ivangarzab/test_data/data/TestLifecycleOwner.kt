@@ -15,7 +15,6 @@
  */
 package com.ivangarzab.test_data
 
-import androidx.annotation.NonNull
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -25,7 +24,6 @@ class TestLifecycleOwner : LifecycleOwner {
     private val registry = LifecycleRegistry(this)
 
     val currentState: Lifecycle.State
-        @NonNull
         get() = registry.currentState
 
     fun create(): TestLifecycleOwner {
@@ -52,7 +50,7 @@ class TestLifecycleOwner : LifecycleOwner {
         return handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 
-    private fun handleLifecycleEvent(@NonNull event: Lifecycle.Event): TestLifecycleOwner {
+    private fun handleLifecycleEvent(event: Lifecycle.Event): TestLifecycleOwner {
         registry.handleLifecycleEvent(event)
         return this
     }
