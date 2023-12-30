@@ -15,6 +15,7 @@ import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.NotificationController
 import com.ivangarzab.carrus.util.managers.NotificationData
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,9 +24,11 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
-    private lateinit var context: Context
-    private lateinit var notificationController: NotificationController
 
+    @ApplicationContext
+    lateinit var context: Context
+    @Inject
+    lateinit var notificationController: NotificationController
     @Inject
     lateinit var carRepository: CarRepository
     @Inject
@@ -36,10 +39,6 @@ class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
     lateinit var analytics: Analytics
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        context ?: return
-        this.context = context
-        this.notificationController = NotificationController(context)
-
         intent?.let {
             Timber.d("We got an alarm intent with action: ${it.action}")
             when (it.action) {
@@ -77,7 +76,7 @@ class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
                     Timber.v("Service '${it.name}' is past due with date: ${it.dueDate.getFormattedDate()}")
                 }
                 // TODO: Schedule Notification based on the Setting's constraints
-                notificationController.notificationManager.notify(
+                notificationController.getNotificationManager().notify(
                     NOTIFICATION_ID_PAST_DUE,
                     notificationController.getReminderNotification(
                         NotificationData(
