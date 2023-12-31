@@ -45,8 +45,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
+        viewBinding = true //TODO: Remove once Activity is migrated into Compose
         compose = true
     }
     composeOptions {
@@ -103,6 +102,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.places.ktx)
     implementation(libs.android.maps.utils)
+    implementation(libs.android.maps.compose)
     implementation(libs.volley)
 
     implementation(libs.hilt)
