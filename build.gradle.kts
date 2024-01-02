@@ -21,6 +21,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.hilt.gradle) apply false
     alias(libs.plugins.gms.google.services) apply false
     alias(libs.plugins.firebase.crashlytics.plugin) apply false

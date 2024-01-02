@@ -145,6 +145,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kgp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kgp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kgp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kgp" }
 androidx-nav-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNav" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

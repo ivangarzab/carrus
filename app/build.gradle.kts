@@ -60,6 +60,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation(project(":analytics"))
     testImplementation(project(":test-data"))
     androidTestImplementation(project(":test-data"))
