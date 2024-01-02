@@ -12,7 +12,7 @@ kotlin {
         }
     }
     
-    /*listOf(
+    listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
@@ -21,7 +21,7 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-    }*/
+    }
 
     /*sourceSets {
         commonMain.dependencies {
