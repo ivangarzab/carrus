@@ -1,9 +1,4 @@
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
     dependencies {
         classpath(libs.android.gradle.plugin)
         classpath(libs.kotlin.gradle.plugin)
@@ -27,8 +22,4 @@ plugins {
     alias(libs.plugins.firebase.crashlytics.plugin) apply false
     alias(libs.plugins.androidx.nav.safeargs) apply false
     alias(libs.plugins.android.mapsplatform.secrets) apply false
-}
-
-tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
 }

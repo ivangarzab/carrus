@@ -24,12 +24,12 @@ kotlin {
     }
 
     /*sourceSets {
-        commonMain.dependencies {
+        *//*commonMain.dependencies {
             //put your multiplatform dependencies here
-        }
-        commonTest.dependencies {
+        }*//*
+        *//*commonTest.dependencies {
 //            implementation(libs.kotlin.test)
-        }
+        }*//*
     }*/
 }
 
