@@ -23,14 +23,14 @@ kotlin {
         }
     }
 
-    /*sourceSets {
-        *//*commonMain.dependencies {
+    sourceSets {
+        commonMain.dependencies {
             //put your multiplatform dependencies here
-        }*//*
-        *//*commonTest.dependencies {
+        }
+        /*commonTest.dependencies {
 //            implementation(libs.kotlin.test)
-        }*//*
-    }*/
+        }*/
+    }
 }
 
 android {

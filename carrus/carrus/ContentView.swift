@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
-//import shared
+import shared
 
 struct ContentView: View {
+    var greet = Greeting().greet()
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text(greet)
         }
         .padding()
     }
