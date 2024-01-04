@@ -32,3 +32,6 @@
 # Custom exceptions start here:
 -keep class com.ivangarzab.carrus.data.models.Car { *; }
 -keep class com.ivangarzab.carrus.data.models.Service { *; }
+# Needed for Places API
+-dontwarn io.grpc.internal.DnsNameResolverProvider
+-dontwarn io.grpc.internal.PickFirstLoadBalancerProvider
