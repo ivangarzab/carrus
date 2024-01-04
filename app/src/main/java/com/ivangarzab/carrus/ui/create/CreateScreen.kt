@@ -53,9 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ivangarzab.carrus.App.Companion.isRelease
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.ui.compose.BigNeutralButton
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
@@ -111,27 +109,7 @@ fun CreateScreenStateful(
             onActionButtonClicked = { make, model, year ->
                 viewModel.verifyData(make, model, year)
             },
-            addTestCarData = {
-                if (isRelease().not()) {
-                    viewModel.apply {
-                        with(Car.default) {
-                            onUpdateStateData(
-                                nickname = nickname,
-                                make = make,
-                                model = model,
-                                year = year,
-                                licenseState = licenseState,
-                                licenseNo = licenseNo,
-                                vinNo = vinNo,
-                                tirePressure = tirePressure,
-                                totalMiles = totalMiles,
-                                milesPerGalCity = milesPerGalCity,
-                                milesPerGalHighway = milesPerGalHighway
-                            )
-                        }
-                    }
-                }
-            }
+            addTestCarData = { viewModel.setupDataEasterEggForTesting() }
         )
     }
 }
@@ -493,6 +471,7 @@ private fun CreateScreenContent(
                         }
                         TextInputField(
                             modifier = Modifier
+                                .padding(top = verticalSeparation)
                                 .fillMaxWidth(),
                             label = stringResource(id = R.string.vin_no),
                             content = state.vinNo,

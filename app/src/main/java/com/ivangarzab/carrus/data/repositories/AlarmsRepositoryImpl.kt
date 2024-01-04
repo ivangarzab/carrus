@@ -1,11 +1,9 @@
 package com.ivangarzab.carrus.data.repositories
 
-import android.content.Context
 import com.ivangarzab.carrus.data.alarm.Alarm
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
-import com.ivangarzab.carrus.prefs
 import com.ivangarzab.carrus.util.managers.AlarmScheduler
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.ivangarzab.carrus.util.managers.Preferences
 import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
@@ -15,13 +13,11 @@ import javax.inject.Singleton
  * Created by Ivan Garza Bermea.
  */
 @Singleton
-
 class AlarmsRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context,
-    private val alarmSettingsRepository: AlarmSettingsRepository
+    private val prefs: Preferences,
+    private val alarmSettingsRepository: AlarmSettingsRepository,
+    private val scheduler: AlarmScheduler
 ) : AlarmsRepository {
-
-    private val scheduler = AlarmScheduler(context)
 
     init {
         if (alarmSettingsRepository.isAlarmFeatureOn().not()) {

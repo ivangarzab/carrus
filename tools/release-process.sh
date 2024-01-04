@@ -3,12 +3,6 @@
 # process one after the other, with the intent of partially automating the given process.
 
 VERSION_NAME="$1"
-SED_OPTION=
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  SED_OPTION="-i ''"
-else
-  SED_OPTION="-i"
-fi
 
 
 # Step 1
@@ -22,4 +16,4 @@ echo "Updating both 'develop' & 'master' branches with release branch"
 ./tools/release/release-step3.sh "$VERSION_NAME"
 # Step 4
 echo "Pushing all changes up to the 'origin'"
-#./tools/release/release-step4.sh "$VERSION_NAME"
+./tools/release/release-step4.sh "$VERSION_NAME"

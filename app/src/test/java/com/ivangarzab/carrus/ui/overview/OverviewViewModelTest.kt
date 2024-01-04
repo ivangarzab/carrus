@@ -3,17 +3,18 @@ package com.ivangarzab.carrus.ui.overview
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.MainDispatcherRule
-import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.TEST_SERVICE
+import com.ivangarzab.carrus.data.di.BuildVersionProvider
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.overview.data.SortingType
-import com.ivangarzab.carrus.util.providers.BuildVersionProvider
+import com.ivangarzab.test_data.CAR_TEST
+import com.ivangarzab.test_data.MainDispatcherRule
+import com.ivangarzab.test_data.SERVICE_TEST_1
+import com.ivangarzab.test_data.getOrAwaitValue
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
@@ -54,38 +55,26 @@ class OverviewViewModelTest {
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
             messageQueueRepository = messageQueueRepository,
-            analytics = mockk(relaxUnitFun = true)
+            analytics = mockk(relaxUnitFun = true),
+            DebugFlagProviderImpl().apply { forceDebug = true }
         )
     }
 
     @Test
     fun test_onServiceDeleted_success() = with(viewModel) {
         carRepository.let {
-            it.saveCarData(TEST_CAR)
-            it.addCarService(TEST_SERVICE)
+            it.saveCarData(CAR_TEST)
+            it.addCarService(SERVICE_TEST_1)
         }
-        state.getOrAwaitValue().let {
-            assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isTrue()
+        servicePanelState.getOrAwaitValue().let {
+            assertThat(it.serviceItemList).isNotNull()
+            assertThat(carDataInternal?.services?.contains(SERVICE_TEST_1)).isTrue()
         }
-        val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
+        val result = servicePanelState.getOrAwaitValue {
+            onServiceDeleted(SERVICE_TEST_1)
         }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
-            .isFalse()
-    }
-
-    @Test
-    fun test_onServiceDeleted_service_not_there() = with(viewModel) {
-        carRepository.saveCarData(TEST_CAR)
-        state.getOrAwaitValue().let {
-            assertThat(it.car).isNotNull()
-            assertThat(it.car?.services?.contains(TEST_SERVICE)).isFalse()
-        }
-        val result = state.getOrAwaitValue {
-            onServiceDeleted(TEST_SERVICE)
-        }
-        assertThat(result.car?.services?.contains(TEST_SERVICE))
+        assertThat(result.serviceItemList).isEmpty()
+        assertThat(carDataInternal?.services?.contains(SERVICE_TEST_1))
             .isFalse()
     }
 
@@ -222,39 +211,39 @@ class OverviewViewModelTest {
 
     @Test
     fun test_onSort_base() = with(viewModel) {
-        val result = state.getOrAwaitValue()
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(SortingType.NONE)
+        val result = servicePanelState.getOrAwaitValue()
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(0)
     }
 
     @Test
     fun test_onSort_none_state_update() = with(viewModel) {
-        val test = SortingType.NONE
-        val result = state.getOrAwaitValue {
+        val test = SortingType.REPAIR_DATE
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(2)
     }
 
     @Test
     fun test_onSort_name_state_update() = with(viewModel) {
         val test = SortingType.NAME
-        val result = state.getOrAwaitValue {
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(1)
     }
 
     @Test
     fun test_onSort_date_state_update() = with(viewModel) {
-        val test = SortingType.DATE
-        val result = state.getOrAwaitValue {
+        val test = SortingType.DUE_DATE
+        val result = servicePanelState.getOrAwaitValue {
             onSort(test)
         }
-        assertThat(result.serviceSortingType)
-            .isSameInstanceAs(test)
+        assertThat(result.selectedSortingOption)
+            .isEqualTo(3)
     }
 
     companion object {

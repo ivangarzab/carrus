@@ -2,18 +2,25 @@ package com.ivangarzab.carrus.ui.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.MainDispatcherRule
-import com.ivangarzab.carrus.TEST_CAR
-import com.ivangarzab.carrus.TEST_SERVICE
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
+import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
+import com.ivangarzab.carrus.util.managers.CarExporter
+import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.test_data.CAR_TEST
+import com.ivangarzab.test_data.MainDispatcherRule
+import com.ivangarzab.test_data.SERVICE_TEST_1
+import com.ivangarzab.test_data.getOrAwaitValue
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -39,15 +46,25 @@ class SettingsViewModelTest {
     private val appSettingsRepository: TestAppSettingsRepository = TestAppSettingsRepository()
     private val alarmSettingsRepository: TestAlarmSettingsRepository = TestAlarmSettingsRepository()
     private val alarmsRepository: TestAlarmsRepository = TestAlarmsRepository()
+    private lateinit var carImporter: CarImporter
+    private lateinit var carExporter: CarExporter
+    private lateinit var contentResolverHelper: ContentResolverHelper
 
     @Before
     fun setup() {
+        carImporter = mockk()
+        carExporter = mockk()
+        contentResolverHelper = mockk(relaxUnitFun = true)
         viewModel = SettingsViewModel(
             carRepository = carRepository,
             appSettingsRepository = appSettingsRepository,
             alarmsRepository = alarmsRepository,
             alarmSettingsRepository = alarmSettingsRepository,
-            analytics = mockk(relaxUnitFun = true)
+            analytics = mockk(relaxUnitFun = true),
+            debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
+            contentResolverHelper = contentResolverHelper,
+            carExporter = carExporter,
+            carImporter = carImporter
         )
     }
 
@@ -73,7 +90,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onDeleteCarDataClicked_with_data() = runTest {
+    fun test_onDeleteCarDataClicked_with_data() {
         saveCarData()
         with(viewModel) {
             val result = state.getOrAwaitValue {
@@ -133,7 +150,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onAlarmsToggled_updated_true_without_permissionGranted() = runTest {
+    fun test_onAlarmsToggled_updated_true_without_permissionGranted() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onAlarmsToggled(true)
@@ -186,7 +203,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onAlarmTimePicked_state_updated() = runTest {
+    fun test_onAlarmTimePicked_state_updated() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onAlarmTimePicked(TEST_ALARM_TIME_VALUE)
@@ -238,7 +255,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_onClockTimeFormatPicked_updated() = runTest {
+    fun test_onClockTimeFormatPicked_updated() {
         with(viewModel) {
             val result = state.getOrAwaitValue {
                 onClockTimeFormatPicked(TimeFormat.HR24.value)
@@ -248,12 +265,109 @@ class SettingsViewModelTest {
         }
     }
 
+    @Test
+    fun test_onImportData_contentResolver_return_null() {
+        every { contentResolverHelper.readFromFile(any()) } returns null
+
+        val result = viewModel.onImportData(mockk())
+        assertThat(result)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onImportData_carImporter_return_null() {
+        every { contentResolverHelper.readFromFile(any()) } returns "success"
+        every { carImporter.importFromJson(any()) } returns null
+
+        val result = viewModel.onImportData(mockk())
+        assertThat(result)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onImportData_return_true() {
+        every { contentResolverHelper.readFromFile(any()) } returns "success"
+        every { carImporter.importFromJson(any()) } returns Car.default
+
+        val result = viewModel.onImportData(mockk())
+        assertThat(result)
+            .isTrue()
+    }
+
+    @Test
+    fun test_onExportData_carRepository_return_false() {
+        val mockCarRepository: CarRepository = mockk(relaxUnitFun = true)
+        viewModel = SettingsViewModel(
+            carRepository = mockCarRepository,
+            appSettingsRepository = appSettingsRepository,
+            alarmsRepository = alarmsRepository,
+            alarmSettingsRepository = alarmSettingsRepository,
+            analytics = mockk(relaxUnitFun = true),
+            debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
+            contentResolverHelper = contentResolverHelper,
+            carExporter = carExporter,
+            carImporter = carImporter
+        )
+
+        every { mockCarRepository.fetchCarData() } returns null
+
+        val result = viewModel.onExportData(mockk())
+        assertThat(result)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onExportData_carExporter_return_false() {
+        val mockCarRepository: CarRepository = mockk(relaxUnitFun = true)
+        viewModel = SettingsViewModel(
+            carRepository = mockCarRepository,
+            appSettingsRepository = appSettingsRepository,
+            alarmsRepository = alarmsRepository,
+            alarmSettingsRepository = alarmSettingsRepository,
+            analytics = mockk(relaxUnitFun = true),
+            debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
+            contentResolverHelper = contentResolverHelper,
+            carExporter = carExporter,
+            carImporter = carImporter
+        )
+
+        every { mockCarRepository.fetchCarData() } returns Car.default
+        every { carExporter.exportToJson(any()) } returns null
+
+        val result = viewModel.onExportData(mockk())
+        assertThat(result)
+            .isFalse()
+    }
+
+    @Test
+    fun test_onExportData_return_true() {
+        val mockCarRepository: CarRepository = mockk(relaxUnitFun = true)
+        viewModel = SettingsViewModel(
+            carRepository = mockCarRepository,
+            appSettingsRepository = appSettingsRepository,
+            alarmsRepository = alarmsRepository,
+            alarmSettingsRepository = alarmSettingsRepository,
+            analytics = mockk(relaxUnitFun = true),
+            debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
+            contentResolverHelper = contentResolverHelper,
+            carExporter = carExporter,
+            carImporter = carImporter
+        )
+
+        every { mockCarRepository.fetchCarData() } returns Car.default
+        every { carExporter.exportToJson(Car.default) } returns "success"
+
+        val result = viewModel.onExportData(mockk())
+        assertThat(result)
+            .isTrue()
+    }
+
     private fun addService() {
-        carRepository.addCarService(TEST_SERVICE)
+        carRepository.addCarService(SERVICE_TEST_1)
     }
 
     private fun saveCarData() {
-        carRepository.saveCarData(TEST_CAR)
+        carRepository.saveCarData(CAR_TEST)
     }
 
     private fun grantAlarmsPermission() {

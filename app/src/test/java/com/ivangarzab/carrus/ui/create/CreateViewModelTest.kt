@@ -2,16 +2,21 @@ package com.ivangarzab.carrus.ui.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.EMPTY_CAR
-import com.ivangarzab.carrus.STRING_BLANK
-import com.ivangarzab.carrus.STRING_EMPTY
-import com.ivangarzab.carrus.TEST_CAR_JSON
+import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
-import com.ivangarzab.carrus.getOrAwaitValue
 import com.ivangarzab.carrus.ui.create.data.CarModalState
-import com.ivangarzab.carrus.util.helpers.TestContentResolverHelper
+import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
+import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.test_data.CAR_EMPTY
+import com.ivangarzab.test_data.STRING_BLANK
+import com.ivangarzab.test_data.STRING_EMPTY
+import com.ivangarzab.test_data.STRING_TEST
+import com.ivangarzab.test_data.getOrAwaitValue
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
@@ -28,14 +33,20 @@ class CreateViewModelTest {
 
     private lateinit var viewModel: CreateViewModel
     private lateinit var carRepository: CarRepository
+    private lateinit var carImporter: CarImporter
+    private lateinit var contentResolverHelper: ContentResolverHelper
 
     @Before
     fun setup() {
         carRepository = TestCarRepository()
+        carImporter = spyk()
+        contentResolverHelper = mockk(relaxUnitFun = true)
         viewModel = CreateViewModel(
             carRepository = carRepository,
-            contentResolverHelper = TestContentResolverHelper(),
-            analytics = mockk(relaxUnitFun = true)
+            contentResolverHelper = contentResolverHelper,
+            analytics = mockk(relaxUnitFun = true),
+            debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
+            carImporter = carImporter
         ).apply { init(null) }
     }
 
@@ -47,7 +58,7 @@ class CreateViewModelTest {
 
     @Test
     fun test_init_with_data_edit() = with(viewModel) {
-        init(EMPTY_CAR)
+        init(CAR_EMPTY)
         assertThat(type)
             .isSameInstanceAs(CreateViewModel.Type.EDIT)
     }
@@ -85,9 +96,22 @@ class CreateViewModelTest {
     }
 
     @Test
-    fun test_onImageUriReceived_success() = with(viewModel) {
+    fun test_onImageUriReceived_failure() = with(viewModel) {
+        every { contentResolverHelper.persistUriPermission(STRING_TEST) } returns false
+
         val result = state.getOrAwaitValue {
-            onImageUriReceived("uri")
+            onImageUriReceived(STRING_TEST)
+        }
+        assertThat(result.imageUri)
+            .isNotNull()
+    }
+
+    @Test
+    fun test_onImageUriReceived_success() = with(viewModel) {
+        every { contentResolverHelper.persistUriPermission(STRING_TEST) } returns true
+
+        val result = state.getOrAwaitValue {
+            onImageUriReceived(STRING_TEST)
         }
         assertThat(result.imageUri)
             .isNotNull()
@@ -120,7 +144,9 @@ class CreateViewModelTest {
 
     @Test
     fun test_onImageDeleted_with_data() = with(viewModel) {
-        onImageUriReceived(TEST_URI)
+        every { contentResolverHelper.persistUriPermission(STRING_TEST) } returns true
+
+        onImageUriReceived(STRING_TEST)
         val result = state.getOrAwaitValue {
             onImageDeleted()
         }
@@ -184,31 +210,46 @@ class CreateViewModelTest {
     }
 
     @Test
-    fun test_onImportData_empty_string_failure() {
-        assertThat(viewModel.onImportData(STRING_EMPTY))
+    fun test_onImportData_empty_uri_return_false() {
+        every { contentResolverHelper.readFromFile(any()) } returns null
+
+        val result = viewModel.onImportData(uri = mockk())
+        assertThat(result)
             .isFalse()
     }
 
     @Test
-    fun test_onImportData_blank_string_failure() {
-        assertThat(viewModel.onImportData(STRING_BLANK))
+    fun test_onImportData_valid_uri_invalid_car_data_return_false() {
+        every { contentResolverHelper.readFromFile(any()) } returns "success"
+
+        val result = viewModel.onImportData(uri = mockk())
+        assertThat(result)
             .isFalse()
     }
 
     @Test
-    fun test_onImportData_invalid_json_failure() {
-        assertThat(viewModel.onImportData(TEST_URI))
-            .isFalse()
+    fun test_onImportData_valid_uri_valid_car_data_return_true() {
+        every { contentResolverHelper.readFromFile(any()) } returns "success"
+        every { carImporter.importFromJson(any()) } returns Car.default
+
+        val result = viewModel.onImportData(uri = mockk())
+        assertThat(result)
+            .isTrue()
     }
 
     @Test
-    fun test_onImportData_valid_json_success() = with(viewModel) {
-        assertThat(onImportData(TEST_CAR_JSON))
+    fun test_onImportData_valid_uri_valid_car_data_onSubmit_true() {
+        every { contentResolverHelper.readFromFile(any()) } returns "success"
+        every { carImporter.importFromJson(any()) } returns Car.default
+
+        val result = viewModel.onSubmit.getOrAwaitValue {
+            viewModel.onImportData(uri = mockk())
+        }
+        assertThat(result)
             .isTrue()
     }
 
     companion object {
-        private const val TEST_URI = "uri"
         private const val NICKNAME = "Shaq"
         private const val MODEL = "Malibu"
         private const val MAKE = "Chevrolet"
