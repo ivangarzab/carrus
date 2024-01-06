@@ -2,6 +2,11 @@
 ## failing scenarios, before culminating in the creation of our 'alpha' test Service.
 appId: com.ivangarzab.carrus.debug
 ---
+- runFlow: # make sure the create service modal is open
+    when:
+      notVisible: "Create Service"
+    commands:
+      - tapOn: "Add Service"
 - tapOn: "Submit"
 - assertVisible: "Missing required field(s) or wrong data"
 - tapOn: "Service name*"
