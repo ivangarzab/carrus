@@ -1,0 +1,60 @@
+# The purpose of this script is to go over the entire Create screen and try out all of the
+# failing scenarios, before culminating in the creation of our test Car.
+appId: com.ivangarzab.carrus.debug
+---
+- launchApp:
+    appId: "com.ivangarzab.carrus.debug"
+    stopApp: true
+    clearState: true
+- tapOn:
+    text: "ADD NEW CAR"
+    index: 1
+- tapOn: "Back arrow"
+- tapOn:
+    text: "ADD NEW CAR"
+    index: 1
+- tapOn:
+    text: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "Make*"
+- inputText: "Chevrolet"
+- tapOn:
+    id: "android:id/input_method_nav_back"
+- tapOn:
+    text: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "License No."
+- inputText: "IGB123"
+- tapOn: "Nickname"
+- inputText: "Shaq"
+- tapOn: "State"
+- inputText: "Texas"
+- tapOn:
+    id: "android:id/input_method_nav_back"
+- tapOn: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "More Details"
+- tapOn: "Total Miles"
+- inputText: "100000"
+- tapOn: "Pressure"
+- inputText: 32
+- tapOn:
+    id: "android:id/input_method_nav_back"
+- "scroll"
+- tapOn: "mi/gal City"
+- inputText: 26
+- tapOn: "mi/gal Highway"
+- inputText: 30
+- tapOn: "VIN No."
+- inputText: "123ABC456HIJ78Z"
+- tapOn:
+    id: "android:id/input_method_nav_back"
+- tapOn: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "Model*"
+- inputText: "Malibu"
+- tapOn: "Year*"
+- inputText: 2009
+- tapOn:
+    id: "android:id/input_method_nav_back"
+- tapOn: "Submit"

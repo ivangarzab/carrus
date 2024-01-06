@@ -1,0 +1,50 @@
+# The purpose of this script is to identify the entire Overview screen, given the
+# 'base Car' scenario to start with.
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow:
+      when:
+          visible:
+              text: "ADD NEW CAR"
+      file: "flow_creation_quick.yaml"
+- assertVisible: "Shaq"
+- assertVisible: "Details"
+- assertVisible: "Car edit icon button"
+- runFlow:
+    when:
+      notVisible: "Year"
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: "Year"
+          direction: LEFT
+          speed: 80
+- assertVisible: "Year"
+- assertVisible: "2009"
+- assertVisible: "License Plate"
+- assertVisible: "IGB123"
+- assertVisible: "License State"
+- assertVisible: "Texas"
+- assertVisible: "Total Miles"
+- assertVisible: "100,000"
+- assertVisible: "Tire Pressure"
+- assertVisible: "32"
+- scrollUntilVisible:
+    element:
+      text: "Vin Number"
+    direction: RIGHT
+    speed: 80
+- assertVisible: "City mi/gal"
+- assertVisible: "26"
+- assertVisible: "Highway mi/gal"
+- assertVisible: "30"
+- assertVisible: "Vin Number"
+- assertVisible: "123ABC456HIJ78Z"
+- assertVisible: "Services"
+- assertVisible: "Service sort icon button"
+- assertVisible: "No services scheduled at this time"
+- assertVisible: "Add Service"
+- assertVisible: "Home"
+- assertVisible: "Map"
+- assertVisible: "Settings"
+- "scroll"

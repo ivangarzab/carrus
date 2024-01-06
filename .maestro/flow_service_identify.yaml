@@ -1,0 +1,16 @@
+# The purpose of this script is to identify the entire Service modal on creation mode,
+# given an empty state to start with.
+appId: com.ivangarzab.carrus.debug
+---
+- tapOn: "Add Service"
+- assertVisible: "Create Service"
+- assertVisible: "Service name*"
+- assertVisible: "Repair date*"
+- assertVisible: "Due date*"
+- assertVisible: "Service material brand"
+- assertVisible: "Service material type/specs"
+- assertVisible: "Service price"
+- assertVisible: "Submit"
+- tapOn:
+    point: "50%,10%"
+- tapOn: "Add Service"
