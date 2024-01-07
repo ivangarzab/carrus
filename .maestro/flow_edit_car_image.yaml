@@ -1,0 +1,28 @@
+appId: com.ivangarzab.carrus.debug
+---
+- assertVisible:
+    id: "Medium Top Bar"
+- tapOn: "Car edit icon button"
+- tapOn: "Add a Photo"
+- tapOn:
+    id: "com.google.android.providers.media.module:id/icon_thumbnail"
+    index: 1
+- assertNotVisible: "Add a Photo"
+- tapOn: "Delete image icon button"
+- assertVisible: "Add a Photo"
+- tapOn: "Add a Photo"
+- tapOn:
+    id: "com.google.android.providers.media.module:id/icon_thumbnail"
+    index: 0
+- assertVisible: "Car image"
+- assertNotVisible: "Add a Photo"
+- tapOn: "Add image icon button"
+- tapOn:
+    id: "com.google.android.providers.media.module:id/icon_thumbnail"
+    index: 1
+- "scroll"
+- tapOn: "Update"
+- assertNotVisible:
+    id: "Medium Top Bar"
+- assertVisible:
+    id: "Large Top Bar"

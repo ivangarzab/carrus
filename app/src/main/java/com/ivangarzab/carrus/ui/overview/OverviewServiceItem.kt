@@ -174,7 +174,7 @@ fun OverviewServiceItem(
                                 Icon(
                                     modifier = Modifier.padding(6.dp),
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
-                                    contentDescription = "Edit icon button"
+                                    contentDescription = "Delete icon button"
                                 )
                             }
                         }

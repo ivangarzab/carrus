@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -38,7 +42,9 @@ import java.lang.Float.min
 /**
  * Created by Ivan Garza Bermea.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun OverviewScreenTopBar(
     title: String,
@@ -82,6 +88,7 @@ fun OverviewScreenTopBar(
                                 alpha = 1f - ((heightOffset / heightOffsetLimit) * 1.2f)
                             }
                         },
+                    contentDescription = "Top App Bar background image",
                     painter = painter,
                     alignment = Alignment.Center,
                     contentScale = ContentScale.Crop,
@@ -90,12 +97,12 @@ fun OverviewScreenTopBar(
                     } else {
                         null
                     },
-                    contentDescription = "Top App Bar background image",
                 )
             }
             if (imageUri != null) {
                 LargeTopAppBar(
                     modifier = Modifier
+                        .semantics { testTagsAsResourceId = true }.testTag("Large Top Bar")
                         .constrainAs(topbar) { /* No-op */ }
                         .combinedClickable(
                             onClick = { },
@@ -123,6 +130,7 @@ fun OverviewScreenTopBar(
             } else {
                 MediumTopAppBar(
                     modifier = Modifier
+                        .semantics { testTagsAsResourceId = true }.testTag("Medium Top Bar")
                         .constrainAs(topbar) { /* No-op */ }
                         .combinedClickable(
                             onClick = { },

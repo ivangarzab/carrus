@@ -1,6 +1,8 @@
 # The purpose of this script is to identify the entire Overview screen, given the
 # 'base Car' scenario to start with.
 appId: com.ivangarzab.carrus.debug
+env:
+    isEmpty: true
 ---
 - runFlow: # make sure there's car data
       when:
@@ -42,9 +44,12 @@ appId: com.ivangarzab.carrus.debug
 - assertVisible: "123ABC456HIJ78Z"
 - assertVisible: "Services"
 - assertVisible: "Service sort icon button"
-- assertVisible: "No services scheduled at this time"
+- runFlow:
+    when:
+      true: ${isEmpty == false}
+    commands:
+      - assertVisible: "No services scheduled at this time"
 - assertVisible: "Add Service"
 - assertVisible: "Home"
 - assertVisible: "Map"
 - assertVisible: "Settings"
-- "scroll"

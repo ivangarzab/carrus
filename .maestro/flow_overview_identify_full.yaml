@@ -1,0 +1,35 @@
+# The purpose of this script is to identify the entire Overview screen, given the
+# 'base Car' scenario to start with.
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure there's car data
+    when:
+      visible:
+        text: "ADD NEW CAR"
+    file: "flow_creation_quick.yaml"
+#    TODO: add service data quickly
+- runFlow:
+    file: "flow_overview_identify.yaml"
+    env:
+      isEmpty: false
+- assertVisible:
+    id: "Large Top Bar"
+- "scroll"
+- assertVisible: "alpha"
+- assertVisible: "7 days"
+- assertVisible: "zetta"
+- assertVisible: "DUE"
+- assertVisible: "omega"
+- assertVisible: "30 days"
+- tapOn: Dropdown arrow icon
+- tapOn:
+  text: Dropdown arrow icon
+  index: 2
+- tapOn: Edit icon button
+- tapOn: omega
+- "eraseText"
+- inputText: phi
+- "back"
+- tapOn: Submit
+- tapOn: Delete icon button
+- runFlow: "flow_service_create_full.yaml"
