@@ -1,0 +1,25 @@
+appId: com.ivangarzab.carrus.debug
+---
+- tapOn: "Settings"
+- assertVisible:
+    id: "Dark mode switch OFF"
+- assertVisible: "Toggle between light and dark themes"
+- tapOn:
+    id: "Dark mode switch OFF"
+- assertVisible:
+    id: "Dark mode switch ON"
+- assertNotVisible:
+    id: "Dark mode switch OFF"
+- "scroll"
+- assertVisible: "Privacy policy"
+- assertVisible: "Click here to open the privacy policy"
+- tapOn: "Privacy policy"
+- assertVisible: "Privacy Policy"
+- assertVisible: "Back arrow"
+- assertVisible: "mark_I"
+- tapOn: "Back arrow"
+- assertVisible: "Settings"
+- assertVisible: "Home"
+- assertVisible: "Map"
+- assertVisible: "Settings"
+- tapOn: "Home"

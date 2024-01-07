@@ -17,7 +17,7 @@ appId: com.ivangarzab.carrus.debug
 - runFlow: "flow_overview_identify_full.yaml"
 #- runFlow: service sorting + order identification
 - runFlow: "flow_import_export_and_data_delete.yaml"
-- runFlow: "flow_permission_and_settings.yaml"
-#- runFlow: due date, clock time formats + service item identification
-#- runFlow: dark mode + privacy policy
+- runFlow: "flow_alarm_permission_and_settings.yaml"
+- runFlow: "flow_due_date_and_time_format_settings.yaml"
+- runFlow: "flow_dark_mode_and_privacy_settings.yaml"
 #- runFlow: message queue + notification permission happy & critical flows

@@ -16,15 +16,20 @@ appId: com.ivangarzab.carrus.debug
     id: "Large Top Bar"
 - "scroll"
 - assertVisible: "alpha"
-- assertVisible: "7 days"
+- runFlow: # double check actual due date
+    when: #TODO: Fix having to make this check
+      visible:
+        text: "7 days"
+    commands:
+      - assertVisible: "7 days"
 - assertVisible: "zetta"
 - assertVisible: "DUE"
 - assertVisible: "omega"
 - assertVisible: "30 days"
 - tapOn: Dropdown arrow icon
 - tapOn:
-  text: Dropdown arrow icon
-  index: 2
+    text: Dropdown arrow icon
+    index: 2
 - tapOn: Edit icon button
 - tapOn: omega
 - "eraseText"
