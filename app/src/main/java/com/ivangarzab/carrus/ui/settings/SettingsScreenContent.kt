@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.ivangarzab.carrus.ui.settings
 
 import android.content.res.Configuration
@@ -26,8 +28,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -273,6 +279,9 @@ private fun SettingsScreenContentItemSwitch(
         subtitle = subTitle
     ) {
         Switch(
+            modifier = Modifier
+                .semantics { testTagsAsResourceId = true }
+                .testTag("$title switch ${if (isChecked) "ON" else "OFF"}"),
             checked = isChecked,
             onCheckedChange = { onToggle(it) },
             colors = SwitchDefaults.colors(
@@ -296,6 +305,7 @@ private fun SettingsScreenContentItemSwitch(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SettingsScreenContentItemBase(
+    modifier: Modifier = Modifier,
     title: String = "Title",
     subtitle: String = "This is a very long subtitle for explanation.",
     onClick: () -> Unit = { },
@@ -303,7 +313,7 @@ private fun SettingsScreenContentItemBase(
 ) {
     AppTheme {
         Box(
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.background)
                 .clickable { onClick() }

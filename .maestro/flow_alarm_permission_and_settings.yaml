@@ -1,0 +1,51 @@
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure there's car data
+      when:
+          visible:
+              text: "ADD NEW CAR"
+      file: "flow_creation_quick.yaml"
+- runFlow: # make sure the alarm message is present
+      when:
+          visible:
+              text: "Stay on the loop!"
+      commands:
+          - tapOn: "Delete message button"
+- assertVisible: "Let us notify you!"
+- tapOn: "Let us notify you!"
+- assertVisible: "We cannot set alarms!"
+- assertVisible: "Please enable the alarms permission directly from your settings\
+    \ to continue"
+- assertVisible: "Go To Settings"
+- assertVisible: "Not Now"
+- tapOn: "Not Now"
+- tapOn: "Settings"
+- assertVisible:
+    id: "Alarms switch OFF"
+- tapOn:
+    id: "Alarms switch OFF"
+- assertVisible: "We cannot set alarms!"
+- tapOn: "Go To Settings"
+- "scroll"
+- tapOn: "Alarms & reminders"
+- assertVisible: "Allow setting alarms and reminders"
+- tapOn: "Allow setting alarms and reminders"
+- "back"
+- "back"
+- assertVisible:
+    id: "Alarms switch ON"
+- assertVisible: "Alarm time"
+- assertVisible: "7 AM"
+- assertVisible: "Alarm frequency"
+- assertVisible: "daily"
+- tapOn: "7 AM"
+- tapOn: "8 o'clock"
+- tapOn: "Submit"
+- assertVisible: "8 AM"
+- tapOn: "Alarm frequency"
+- swipe:
+    start: "62%,43%"
+    end: "63%,47%"
+    duration: 2398
+- tapOn: "Submit"
+- assertVisible: "weekly"

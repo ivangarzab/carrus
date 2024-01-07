@@ -13,13 +13,11 @@ appId: com.ivangarzab.carrus.debug
 - runFlow: "flow_service_create_with_failures.yaml"
 - runFlow: "flow_service_create_quick.yaml"
 - runFlow: "flow_service_create_full.yaml"
-- runFlow: "flow_import_export_and_data_delete.yaml"
 - runFlow: "flow_edit_car_image.yaml"
 - runFlow: "flow_overview_identify_full.yaml"
 #- runFlow: service sorting + order identification
-#- runFlow: import, export and service list deletion
-#- runFlow: alarms happy and critical permission flows
-#- runFlow: alarm scheduling settings
+- runFlow: "flow_import_export_and_data_delete.yaml"
+- runFlow: "flow_permission_and_settings.yaml"
 #- runFlow: due date, clock time formats + service item identification
 #- runFlow: dark mode + privacy policy
 #- runFlow: message queue + notification permission happy & critical flows
