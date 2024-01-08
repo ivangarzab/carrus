@@ -22,11 +22,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +47,7 @@ import java.text.NumberFormat
  * Created by Ivan Garza Bermea.
  */
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun OverviewServiceItem(
     modifier: Modifier = Modifier,
@@ -64,6 +69,8 @@ fun OverviewServiceItem(
         ) {
             Column(
                 modifier = modifier
+                     .semantics { testTagsAsResourceId = true }
+                     .testTag("Service ${data.name} index ${data.index}")
                     .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
             ) {
                 Row {

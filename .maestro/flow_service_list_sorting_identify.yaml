@@ -1,0 +1,54 @@
+# The purpose of this script is to identify the entire Overview screen, given the
+# 'base Car' scenario to start with.
+#
+# Sorting Schema:
+# none   = alpha, zetta, omega
+# name   = alpha, omega, zetta
+# repair = zetta, alpha, omega
+# due    = zetta, omega, alpha
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure there's car data
+    when:
+      visible:
+        text: "ADD NEW CAR"
+    file: "flow_creation_quick.yaml"
+- runFlow: # make sure there's service list data
+    when:
+      visible:
+        text: "No services scheduled at this time"
+    file: "flow_service_list_create_quick.yaml"
+- "scroll"
+- assertVisible: "Service sort icon button"
+- tapOn: "Service sort icon button"
+- assertVisible: "none"
+- assertVisible: "name"
+- assertVisible: "repair date"
+- assertVisible: "due date"
+- assertVisible:
+    id: "Service alpha index 0"
+- assertVisible:
+    id: "Service zetta index 1"
+- assertVisible:
+    id: "Service omega index 2"
+- tapOn: "name"
+- assertVisible:
+    id: "Service alpha index 0"
+- assertVisible:
+    id: "Service omega index 1"
+- assertVisible:
+    id: "Service zetta index 2"
+- tapOn: "repair date"
+- assertVisible:
+    id: "Service zetta index 0"
+- assertVisible:
+    id: "Service omega index 1"
+- assertVisible:
+    id: "Service alpha index 2"
+- tapOn: "due date"
+- assertVisible:
+    id: "Service zetta index 0"
+- assertVisible:
+    id: "Service alpha index 1"
+- assertVisible:
+    id: "Service omega index 2"
