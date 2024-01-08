@@ -10,14 +10,14 @@ appId: com.ivangarzab.carrus.debug
 - runFlow:
     file: "flow_service_identify.yaml"
     env:
-        isEmpty: true
+        isEmpty: true #TODO: do we really need this var?
 - runFlow: "flow_service_create_with_failures.yaml"
 - runFlow: "flow_service_create_quick.yaml"
 - runFlow: "flow_service_create_full.yaml"
 - runFlow: "flow_edit_car_image.yaml"
+- runFlow: "flow_alarm_permission_and_settings.yaml"
 - runFlow: "flow_overview_identify_full.yaml"
 #- runFlow: service sorting + order identification
 - runFlow: "flow_import_export_and_data_delete.yaml"
-- runFlow: "flow_alarm_permission_and_settings.yaml"
 - runFlow: "flow_due_date_and_time_format_settings.yaml"
 - runFlow: "flow_dark_mode_and_privacy_settings.yaml"

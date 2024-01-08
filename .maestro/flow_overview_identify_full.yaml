@@ -2,6 +2,12 @@
 # 'base Car' scenario to start with.
 appId: com.ivangarzab.carrus.debug
 ---
+- runFlow: # make sure we've on the Overview screen
+    when:
+      notVisible:
+        text: "Details"
+    commands:
+      - tapOn: "Home"
 - runFlow: # make sure there's car data
     when:
       visible:
@@ -27,6 +33,7 @@ appId: com.ivangarzab.carrus.debug
 - assertVisible: "omega"
 - assertVisible: "30 days"
 - tapOn: Dropdown arrow icon
+- "scroll"
 - tapOn:
     text: Dropdown arrow icon
     index: 2
