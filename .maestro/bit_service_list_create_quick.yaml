@@ -1,0 +1,8 @@
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure there's car data
+    when:
+      visible:
+        text: "ADD NEW CAR"
+    file: "flow_creation_quick.yaml"
+- longPressOn: "Services"
