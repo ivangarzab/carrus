@@ -1,3 +1,4 @@
+# The purpose of this script is to test data export, import, as well as car and service data deletion.
 appId: com.ivangarzab.carrus.debug
 ---
 - tapOn: "Settings"
@@ -10,7 +11,7 @@ appId: com.ivangarzab.carrus.debug
 - assertVisible: "Data export success"
 - tapOn: "Delete all car services"
 - tapOn:
-    point: "49%,49%"
+    point: "50%,50%"
 - assertNotVisible: "Delete all car services"
 - "back"
 - assertVisible: "No services scheduled at this time"

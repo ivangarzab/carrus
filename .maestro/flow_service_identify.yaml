@@ -2,7 +2,12 @@
 # given an empty state to start with.
 appId: com.ivangarzab.carrus.debug
 ---
-- tapOn: "Add Service"
+- runFlow: # make sure the Service modal is open
+    when:
+      notVisible:
+        text: "Create Service"
+    commands:
+      - tapOn: "Add Service"
 - assertVisible: "Create Service"
 - assertVisible: "Service name*"
 - assertVisible: "Repair date*"

@@ -1,5 +1,5 @@
-# The purpose of this script is to identify the entire Overview screen, given the
-# 'base Car' scenario to start with.
+# The purpose of this script is to fully test the sorting panel and all sorting combinations
+# by identifying the order of the test services.
 #
 # Sorting Schema:
 # none   = alpha, zetta, omega

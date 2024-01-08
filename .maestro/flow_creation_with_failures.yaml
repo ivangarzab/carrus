@@ -14,8 +14,7 @@ appId: com.ivangarzab.carrus.debug
 - assertVisible: "Missing required fields"
 - tapOn: "Make*"
 - inputText: "Chevrolet"
-- tapOn:
-    id: "android:id/input_method_nav_back"
+- "back"
 - tapOn:
     text: "Submit"
 - assertVisible: "Missing required fields"
@@ -25,8 +24,7 @@ appId: com.ivangarzab.carrus.debug
 - inputText: "Shaq"
 - tapOn: "State"
 - inputText: "Texas"
-- tapOn:
-    id: "android:id/input_method_nav_back"
+- "back"
 - tapOn: "Submit"
 - assertVisible: "Missing required fields"
 - tapOn: "More Details"
@@ -34,8 +32,7 @@ appId: com.ivangarzab.carrus.debug
 - inputText: "100000"
 - tapOn: "Pressure"
 - inputText: 32
-- tapOn:
-    id: "android:id/input_method_nav_back"
+- "back"
 - "scroll"
 - tapOn: "mi/gal City"
 - inputText: 26
@@ -43,14 +40,12 @@ appId: com.ivangarzab.carrus.debug
 - inputText: 30
 - tapOn: "VIN No."
 - inputText: "123ABC456HIJ78Z"
-- tapOn:
-    id: "android:id/input_method_nav_back"
+- "back"
 - tapOn: "Submit"
 - assertVisible: "Missing required fields"
 - tapOn: "Model*"
 - inputText: "Malibu"
 - tapOn: "Year*"
 - inputText: 2009
-- tapOn:
-    id: "android:id/input_method_nav_back"
+- "back"
 - tapOn: "Submit"

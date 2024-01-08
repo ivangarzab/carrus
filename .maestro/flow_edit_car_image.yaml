@@ -1,3 +1,5 @@
+# The purpose of this script is to edit the car data by going through the edit flow,
+# and adding an image as well as deleting, changing, and finally identifying in the Overview screen.
 appId: com.ivangarzab.carrus.debug
 ---
 - assertVisible:

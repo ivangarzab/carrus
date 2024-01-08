@@ -13,7 +13,11 @@ appId: com.ivangarzab.carrus.debug
       visible:
         text: "ADD NEW CAR"
     file: "flow_creation_quick.yaml"
-#    TODO: add service data quickly
+- runFlow: # make sure there's service list data
+    when:
+      visible:
+        text: "No services scheduled at this time"
+    file: "flow_service_list_create_quick.yaml"
 - runFlow:
     file: "flow_overview_identify.yaml"
     env:

@@ -1,3 +1,5 @@
+# The purpose of this script is to serve as the main flow to execute all the main flow 'steps'
+# in order as to test the application exhaustively.
 appId: com.ivangarzab.carrus.debug
 ---
 - launchApp:

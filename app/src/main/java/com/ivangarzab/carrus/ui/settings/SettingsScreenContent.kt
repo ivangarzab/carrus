@@ -305,7 +305,6 @@ private fun SettingsScreenContentItemSwitch(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SettingsScreenContentItemBase(
-    modifier: Modifier = Modifier,
     title: String = "Title",
     subtitle: String = "This is a very long subtitle for explanation.",
     onClick: () -> Unit = { },
@@ -313,7 +312,7 @@ private fun SettingsScreenContentItemBase(
 ) {
     AppTheme {
         Box(
-            modifier
+            Modifier
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.background)
                 .clickable { onClick() }

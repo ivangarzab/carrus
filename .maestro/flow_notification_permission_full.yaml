@@ -1,3 +1,5 @@
+# The purpose of this script is to test the complete notification permission flow, including
+# happy and critical paths.
 appId: com.ivangarzab.carrus.debug
 ---
 - runFlow: # make sure there's car data
@@ -5,7 +7,6 @@ appId: com.ivangarzab.carrus.debug
       visible:
         text: "ADD NEW CAR"
     file: "flow_creation_quick.yaml"
-#    TODO: add service data quickly
 - runFlow: # make sure that the notifications message is present
     when:
       visible:

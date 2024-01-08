@@ -1,3 +1,5 @@
+# The purpose of this script is to go through the alarm permission flow by denying it in the
+# Overview screen, and then following it in the Settings screen.
 appId: com.ivangarzab.carrus.debug
 ---
 - runFlow: # make sure there's car data
@@ -45,7 +47,7 @@ appId: com.ivangarzab.carrus.debug
 - tapOn: "Alarm frequency"
 - swipe:
     start: "62%,43%"
-    end: "63%,47%"
-    duration: 2398
+    end: "62%,47%"
+    duration: 1500
 - tapOn: "Submit"
 - assertVisible: "weekly"

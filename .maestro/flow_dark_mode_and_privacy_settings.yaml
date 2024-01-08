@@ -1,3 +1,5 @@
+# The purpose of this script is to test the dark mode toggle, as well as the privacy policy
+# flow in the Settings screen.
 appId: com.ivangarzab.carrus.debug
 ---
 - tapOn: "Settings"
