@@ -2,10 +2,6 @@
 # failing scenarios, before culminating in the creation of our test Car.
 appId: com.ivangarzab.carrus.debug
 ---
-- launchApp:
-    appId: "com.ivangarzab.carrus.debug"
-    stopApp: true
-    clearState: true
 - tapOn:
     text: "ADD NEW CAR"
     index: 1
