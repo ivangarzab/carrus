@@ -13,6 +13,12 @@ appId: com.ivangarzab.carrus.debug
       visible:
         text: "ADD NEW CAR"
     file: "flow_creation_quick.yaml"
+- runFlow: # make sure we're in the Overview screen
+    when:
+      notVisible:
+        text: "Services"
+    commands:
+        - tapOn: "Home"
 - runFlow: # make sure there's service list data
     when:
       visible:
