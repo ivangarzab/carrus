@@ -1,5 +1,5 @@
 # The purpose of this script is to go over the entire Service modal and try out all of the
-## failing scenarios, before culminating in the creation of our full 'omega' test Service.
+## failing scenarios, before culminating in the creation of our full 'zetta' test Service.
 appId: com.ivangarzab.carrus.debug
 ---
 - runFlow: # make sure the create service modal is open

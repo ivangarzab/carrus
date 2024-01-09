@@ -20,8 +20,6 @@ appId: com.ivangarzab.carrus.debug
 - assertVisible: "Missing required fields"
 - tapOn: "License No."
 - inputText: "IGB123"
-- tapOn: "Nickname"
-- inputText: "Shaq"
 - tapOn: "State"
 - inputText: "Texas"
 - "back"

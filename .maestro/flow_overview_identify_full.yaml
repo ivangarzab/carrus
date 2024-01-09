@@ -21,9 +21,10 @@ appId: com.ivangarzab.carrus.debug
 - runFlow:
     file: "flow_overview_identify.yaml"
     env:
-      isEmpty: false
+      alt: true
 - assertVisible:
     id: "Large Top Bar"
+- assertVisible: "Shaq"
 - "scroll"
 - assertVisible: "alpha"
 - runFlow: # double check actual due date

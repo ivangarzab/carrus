@@ -4,6 +4,7 @@ appId: com.ivangarzab.carrus.debug
 ---
 - assertVisible:
     id: "Medium Top Bar"
+- assertVisible: "Chevrolet Malibu"
 - tapOn: "Car edit icon button"
 - tapOn: "Add a Photo"
 - tapOn:
@@ -22,9 +23,14 @@ appId: com.ivangarzab.carrus.debug
 - tapOn:
     id: "com.google.android.providers.media.module:id/icon_thumbnail"
     index: 1
+- tapOn: "Nickname"
+- inputText: "Shaq"
+- "back"
 - "scroll"
 - tapOn: "Update"
 - assertNotVisible:
     id: "Medium Top Bar"
 - assertVisible:
     id: "Large Top Bar"
+- assertNotVisible: "Chevrolet Malibu"
+- assertVisible: "Shaq"

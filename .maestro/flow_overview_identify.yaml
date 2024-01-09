@@ -2,14 +2,18 @@
 # 'base Car' scenario to start with.
 appId: com.ivangarzab.carrus.debug
 env:
-    isEmpty: true
+    alt: false
 ---
 - runFlow: # make sure there's car data
       when:
           visible:
               text: "ADD NEW CAR"
       file: "flow_creation_quick.yaml"
-- assertVisible: "Shaq"
+- runFlow:
+    when:
+      true: ${alt == false}
+    commands:
+      - assertVisible: "Chevrolet Malibu"
 - assertVisible: "Details"
 - assertVisible: "Car edit icon button"
 - runFlow:
@@ -46,7 +50,7 @@ env:
 - assertVisible: "Service sort icon button"
 - runFlow:
     when:
-      true: ${isEmpty == false}
+      true: ${alt == false}
     commands:
       - assertVisible: "No services scheduled at this time"
 - assertVisible: "Add Service"
