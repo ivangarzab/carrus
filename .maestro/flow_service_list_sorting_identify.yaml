@@ -4,8 +4,8 @@
 # Sorting Schema:
 # none   = alpha, zetta, omega
 # name   = alpha, omega, zetta
-# repair = zetta, alpha, omega
-# due    = zetta, omega, alpha
+# repair = zetta, omega, alpha
+# due    = omega, alpha, zetta
 appId: com.ivangarzab.carrus.debug
 ---
 - runFlow: # make sure there's car data
@@ -53,8 +53,8 @@ appId: com.ivangarzab.carrus.debug
     id: "Service alpha index 2"
 - tapOn: "due date"
 - assertVisible:
-    id: "Service zetta index 0"
+    id: "Service omega index 0"
 - assertVisible:
     id: "Service alpha index 1"
 - assertVisible:
-    id: "Service omega index 2"
+    id: "Service zetta index 2"

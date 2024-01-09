@@ -48,4 +48,4 @@ appId: com.ivangarzab.carrus.debug
 - "back"
 - tapOn: Submit
 - tapOn: Delete icon button
-- runFlow: "flow_service_create_full.yaml"
+- runFlow: "flow_service_create_quick.yaml"

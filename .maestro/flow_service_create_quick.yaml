@@ -8,7 +8,7 @@ appId: com.ivangarzab.carrus.debug
     commands:
       - tapOn: "Add Service"
 - tapOn: "Service name*"
-- inputText: "zetta"
+- inputText: "omega"
 - pressKey: "enter"
 - assertVisible: "Repair Date"
 - tapOn:

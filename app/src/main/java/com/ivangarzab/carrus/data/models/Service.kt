@@ -68,9 +68,11 @@ data class Service(
                     add(Calendar.MONTH, -1)
                 },
                 dueDate = Calendar.getInstance().apply {
-                    add(Calendar.MONTH, -1)
-                    add(Calendar.DAY_OF_MONTH, 1)
+                    add(Calendar.MONTH, 1)
                 },
+                brand = "brand",
+                type = "type/spec",
+                cost = 150.00f
             ),
             Service(
                 id = "3",
@@ -79,11 +81,9 @@ data class Service(
                     add(Calendar.MONTH, -1)
                 },
                 dueDate = Calendar.getInstance().apply {
-                    add(Calendar.MONTH, 1)
+                    add(Calendar.MONTH, -1)
+                    add(Calendar.DAY_OF_MONTH, 1)
                 },
-                brand = "brand",
-                type = "type/spec",
-                cost = 150.00f
             )
         )
     }
