@@ -2,7 +2,7 @@
 
 ##### Link to docs: https://maestro.mobile.dev/
 
-### How to run
+### Run on Command Line
 
 #### Run all tests (not recommended)
 ```shell
@@ -19,7 +19,11 @@ maestro test .maestro/flow_main.yaml
 maestro test .maestro/flow_main_quick.yaml
 ```
 
-### Run other test flow
+#### Run other test flow
 ```shell
 maestro test <.yaml flow>
 ```
+
+### Run Configurations
+- Full Maestro Suit
+- Quick Maestro Suit
