@@ -52,39 +52,38 @@ data class Service(
         val serviceList: List<Service> = listOf(
             Service(
                 id = "1",
-                name = "Oil Change",
-                repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-                dueDate = Calendar.getInstance().apply { timeInMillis = 1672590100000 },
-                brand = "Armor All",
-                type = "Synthetic",
-                cost = 79.99f
+                name = "alpha",
+                repairDate = Calendar.getInstance(),
+                dueDate = Calendar.getInstance().apply {
+                    add(Calendar.DAY_OF_MONTH, 7)
+                },
+                brand = "the brand",
+                type = "type & spec",
+                cost = 99.99f
             ),
             Service(
                 id = "2",
-                name = "Window Wipes",
-                repairDate = Calendar.getInstance().apply { timeInMillis = 1662358975427 },
-                dueDate = Calendar.getInstance().apply { timeInMillis = 1699882020000 },
-                brand = "Walmart",
-                type = "6'', long",
-                cost = 25.00f
+                name = "zetta",
+                repairDate = Calendar.getInstance().apply {
+                    add(Calendar.MONTH, -1)
+                },
+                dueDate = Calendar.getInstance().apply {
+                    add(Calendar.MONTH, 1)
+                },
+                brand = "brand",
+                type = "type/spec",
+                cost = 150.00f
             ),
             Service(
                 id = "3",
-                name = "Tires",
-                repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-                dueDate = Calendar.getInstance().apply { timeInMillis = 1662916020000 },
-                brand = "Michelin",
-                type = "24''",
-                cost = 500.69f
-            ),
-            Service(
-                id = "4",
-                name = "Rims",
-                repairDate = Calendar.getInstance().apply { timeInMillis = 1644909780000 },
-                dueDate = Calendar.getInstance().apply { timeInMillis = 1697276100000 },
-                brand = "Auto Zone Express",
-                type = "24'', black",
-                cost = 420.00f
+                name = "omega",
+                repairDate = Calendar.getInstance().apply {
+                    add(Calendar.MONTH, -1)
+                },
+                dueDate = Calendar.getInstance().apply {
+                    add(Calendar.MONTH, -1)
+                    add(Calendar.DAY_OF_MONTH, 1)
+                },
             )
         )
     }

@@ -15,7 +15,6 @@ import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.NotificationController
 import com.ivangarzab.carrus.util.managers.NotificationData
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,7 +24,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
 
-    @ApplicationContext
     lateinit var context: Context
     @Inject
     lateinit var notificationController: NotificationController
@@ -39,6 +37,8 @@ class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
     lateinit var analytics: Analytics
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        context ?: return
+        this.context = context
         intent?.let {
             Timber.d("We got an alarm intent with action: ${it.action}")
             when (it.action) {

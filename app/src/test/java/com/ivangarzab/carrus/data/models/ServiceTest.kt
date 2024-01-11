@@ -37,18 +37,19 @@ class ServiceTest {
 
     @Test
     fun test_compareTo_success() {
+        val baseService = Service.serviceList[0]
         // Create two services with different IDs.
-        val service1 = Service(
+        val otherService = Service(
             id = "1",
-            name = "Oil Change",
-            repairDate = Calendar.getInstance().apply { timeInMillis = 1639120980000 },
-            dueDate = Calendar.getInstance().apply { timeInMillis = 1672590100000 },
-            brand = "Armor All",
-            type = "Synthetic",
-            cost = 79.99f
+            name = "alpha",
+            repairDate = baseService.repairDate,
+            dueDate = baseService.dueDate,
+            brand = "the brand",
+            type = "type & spec",
+            cost = 99.99f
         )
 
-        assertThat(Service.serviceList[0].compareTo(service1))
+        assertThat(baseService.compareTo(otherService))
             .isEqualTo(COMPARE_TO_EQUALS)
     }
 

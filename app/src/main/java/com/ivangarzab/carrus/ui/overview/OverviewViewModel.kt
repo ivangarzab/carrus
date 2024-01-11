@@ -76,7 +76,10 @@ class OverviewViewModel @Inject constructor(
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                dueDateFormat = it.dueDateFormat
+                if (dueDateFormat != it.dueDateFormat) {
+                    dueDateFormat = it.dueDateFormat
+                    updateServiceListWithNewDueDateFormat()
+                }
             }
         }
         viewModelScope.launch {
@@ -335,6 +338,14 @@ class OverviewViewModel @Inject constructor(
             )
         }
         onSortingByType(type)
+    }
+
+    private fun updateServiceListWithNewDueDateFormat() {
+        carDataInternal?.let {
+            servicePanelState.setState {
+                copy(serviceItemList = generateServiceItemStateList(it.services))
+            }
+        }
     }
 
     fun setupEasterEggForTesting() {

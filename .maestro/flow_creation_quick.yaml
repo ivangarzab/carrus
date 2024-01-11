@@ -1,0 +1,7 @@
+# The purpose of this script is to, given the 'fresh install' scenario to start with,
+# quickly create a new car using the test data hidden on the Create screen.
+appId: com.ivangarzab.carrus.debug
+---
+- tapOn: "ADD NEW CAR"
+- longPressOn: "Add a Car"
+- tapOn: "Submit"

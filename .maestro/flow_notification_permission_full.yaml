@@ -1,0 +1,45 @@
+# The purpose of this script is to test the complete notification permission flow, including
+# happy and critical paths.
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure there's car data
+    when:
+      visible:
+        text: "ADD NEW CAR"
+    file: "flow_creation_quick.yaml"
+- runFlow: # make sure that the notifications message is present
+    when:
+      visible:
+        text: "Stay on the loop!"
+    commands:
+        - assertVisible: "Message background image"
+        - assertVisible: "Please grant us notification permissions to maximize your experience\
+            \ and let us notify you."
+        - tapOn: "Stay on the loop!"
+        - tapOn:
+            id: "com.android.permissioncontroller:id/permission_deny_button"
+        - assertVisible: "We cannot notify you!"
+        - assertVisible: "Please enable notification permission directly from your settings\
+            \ to continue"
+        - tapOn: "Go To Settings"
+        - assertVisible: "Permissions"
+        - tapOn: "Permissions"
+        - assertVisible: "Notifications"
+        - tapOn: "Notifications"
+        - tapOn:
+            id: "android:id/switch_widget"
+        - "back"
+        - "back"
+        - "back"
+        - assertNotVisible: "Stay on the loop!"
+        - pressKey: "home"
+        - longPressOn: "Carrus"
+        - tapOn: "App info"
+        - tapOn: "Permissions"
+        - tapOn: "Notifications"
+        - tapOn: "All Carrus notifications"
+        - pressKey: "home"
+        - tapOn: "Carrus"
+        - tapOn: "Stay on the loop!"
+        - tapOn: "Allow"
+        - assertNotVisible: "Stay on the loop!"

@@ -91,14 +91,14 @@ data class Car(
             nickname = "Shaq",
             make = "Chevrolet",
             model = "Malibu",
-            year = "2006",
+            year = "2009",
             licenseState = "Texas",
-            licenseNo = "IGB066",
-            vinNo = "4Y1SL65848Z411439",
-            tirePressure = "35",
-            totalMiles = "99,999",
+            licenseNo = "IGB123",
+            vinNo = "123ABC456HIJ78Z",
+            tirePressure = "32",
+            totalMiles = "100,000",
             milesPerGalCity = "26",
-            milesPerGalHighway = "31",
+            milesPerGalHighway = "30",
             services = Service.serviceList
         )
     }

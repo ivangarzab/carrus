@@ -1,0 +1,49 @@
+# The purpose of this script is to go over the entire Create screen and try out all of the
+# failing scenarios, before culminating in the creation of our test Car.
+appId: com.ivangarzab.carrus.debug
+---
+- tapOn:
+    text: "ADD NEW CAR"
+    index: 1
+- tapOn: "Back arrow"
+- tapOn:
+    text: "ADD NEW CAR"
+    index: 1
+- tapOn:
+    text: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "Make*"
+- inputText: "Chevrolet"
+- "back"
+- tapOn:
+    text: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "License No."
+- inputText: "IGB123"
+- tapOn: "State"
+- inputText: "Texas"
+- "back"
+- tapOn: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "More Details"
+- tapOn: "Total Miles"
+- inputText: "100000"
+- tapOn: "Pressure"
+- inputText: 32
+- "back"
+- "scroll"
+- tapOn: "mi/gal City"
+- inputText: 26
+- tapOn: "mi/gal Highway"
+- inputText: 30
+- tapOn: "VIN No."
+- inputText: "123ABC456HIJ78Z"
+- "back"
+- tapOn: "Submit"
+- assertVisible: "Missing required fields"
+- tapOn: "Model*"
+- inputText: "Malibu"
+- tapOn: "Year*"
+- inputText: 2009
+- "back"
+- tapOn: "Submit"
