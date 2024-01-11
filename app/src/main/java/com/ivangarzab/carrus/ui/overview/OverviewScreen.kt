@@ -42,11 +42,9 @@ import com.ivangarzab.carrus.ui.overview.data.SortingType
 @Composable
 fun OverviewScreenStateful(
     viewModel: OverviewViewModel = viewModel(),
-    onFloatingActionButtonClicked: () -> Unit,
     onCarEditButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
-    onServiceEditButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit
 ) {
     val staticState: OverviewStaticState by viewModel
@@ -71,13 +69,11 @@ fun OverviewScreenStateful(
             detailsPanelState = detailsPanelState,
             servicePanelState = servicePanelState,
             messageQueue = queueState.messageQueue,
-            onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onMapButtonClicked = onMapButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
-            onServiceEditButtonClicked = onServiceEditButtonClicked,
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
             onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
@@ -95,13 +91,11 @@ private fun OverviewScreen(
     detailsPanelState: DetailsPanelState,
     servicePanelState: ServicePanelState,
     messageQueue: MessageQueue = MessageQueue.test,
-    onFloatingActionButtonClicked: () -> Unit = { },
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onMapButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingType) -> Unit = { },
-    onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { },
@@ -113,9 +107,12 @@ private fun OverviewScreen(
 
     val systemUiController = rememberSystemUiController()
 
-    var showServiceModal: Boolean by rememberSaveable {
+    /*var showServiceModal: Boolean by rememberSaveable {
         mutableStateOf(false)
-    } //TODO: Start using this variables instead of the BottomSheetDialogFragment
+    }*/ //TODO: Start using this variables instead of the BottomSheetDialogFragment
+    var serviceModalState: Pair<Boolean, Service?> by rememberSaveable {
+        mutableStateOf(Pair(false, null))
+    }
 
     AppTheme {
         if (staticState.isDataEmpty.not()) {
@@ -141,7 +138,7 @@ private fun OverviewScreen(
                         detailsState = detailsPanelState,
                         onSortRequest = onSortRequest,
                         onEditCarClicked = onEditCarButtonClicked,
-                        onServiceEditButtonClicked = onServiceEditButtonClicked,
+                        onServiceEditButtonClicked = { service -> serviceModalState = Pair(true, service) },
                         onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
                         addServiceList = addServiceList,
                         onMessageContentClicked = { onMessageContentClicked(it) },
@@ -167,7 +164,7 @@ private fun OverviewScreen(
                         } else {
                             MaterialTheme.colorScheme.onPrimary
                         },
-                        onClick = onFloatingActionButtonClicked
+                        onClick = { serviceModalState = Pair(true, null) }
                     ) {
                         Icon(
                             modifier = Modifier.size(48.dp),
@@ -179,10 +176,11 @@ private fun OverviewScreen(
             )
             // Dialog
             when {
-                showServiceModal -> ServiceBottomSheet(
+                serviceModalState.first -> ServiceBottomSheet(
                     modifier = Modifier,
-                    onDismissed = { showServiceModal = false }
-                ) //TODO: Start using this!
+                    inputData = serviceModalState.second,
+                    onDismissed = { serviceModalState = Pair(false, null) }
+                )
             }
         } else {
             systemUiController.statusBarDarkContentEnabled = isSystemInDarkTheme().not()
@@ -203,13 +201,11 @@ private fun OverviewScreenPreview() {
         detailsPanelState = DetailsPanelState(),
         servicePanelState = ServicePanelState(),
         messageQueue = MessageQueue.test,
-        onFloatingActionButtonClicked = { },
         onEditCarButtonClicked = { },
         onSettingsButtonClicked = { },
         onMapButtonClicked = { },
         onAddCarClicked = { },
         onSortRequest = { },
-        onServiceEditButtonClicked = { },
         onServiceDeleteButtonClicked = { },
         onMessageDismissClicked = { },
         onMessageContentClicked = { },

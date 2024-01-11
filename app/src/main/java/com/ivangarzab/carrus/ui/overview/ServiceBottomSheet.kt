@@ -1,10 +1,10 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,14 +14,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
@@ -30,6 +32,7 @@ import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
+import com.ivangarzab.carrus.ui.modals.ServiceModalScreen
 import com.ivangarzab.carrus.ui.modals.ServiceModalState
 import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
 
@@ -40,45 +43,56 @@ import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: ServiceModalViewModel = viewModel(),
-    onDismissed: () -> Unit = { },
+    inputData: Service?,
+    onDismissed: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     val state: ServiceModalState by viewModel
         .state
         .observeAsState(initial = ServiceModalState())
+
+    viewModel.apply {
+        setArgsData(inputData)
+        onSubmission.observe(LocalLifecycleOwner.current) { success ->
+            when (success) {
+                true -> onDismissed()
+                false -> Toast.makeText(
+                    context,
+                    "Missing required field(s) or wrong data",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
 
     AppTheme {
         BottomSheet(
             modifier = modifier,
             onDismissed = onDismissed
         ) {
-            ServiceBottomSheetContent(
-                modifier = Modifier,
-                state = state
+            ServiceModalScreen(
+                state = state,
+                onUpdateState = { viewModel.onUpdateServiceModalState(it) },
+                onActionButtonClicked = { viewModel.onActionButtonClicked() }
             )
         }
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ServiceBottomSheetContent(
     modifier: Modifier = Modifier,
-    @PreviewParameter(ServiceModalStatePreviewProvider::class) state: ServiceModalState,
-    onUpdateState: (ServiceModalState) -> Unit = { },
-    onRepairDateFieldClicked: () -> Unit = { },
-    onDueDateFieldClicked: () -> Unit = { },
-    onActionButtonClicked: () -> Unit = { }
+    state: ServiceModalState,
+    onUpdateState: (ServiceModalState) -> Unit,
+    onRepairDateFieldClicked: () -> Unit,
+    onDueDateFieldClicked: () -> Unit,
+    onActionButtonClicked: () -> Unit
 ) {
     AppTheme {
-        Surface(
-            modifier = modifier,
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
-        ) {
+        Surface(modifier = modifier) {
             Column(
                 modifier = Modifier.padding(
-                    top = 24.dp,
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 24.dp
@@ -182,4 +196,17 @@ fun ServiceBottomSheetContent(
             }
         }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ServiceBottomSheetContentPreview() {
+    ServiceBottomSheetContent(
+        state = ServiceModalStatePreviewProvider().values.first(),
+        onUpdateState = { },
+        onRepairDateFieldClicked = { },
+        onDueDateFieldClicked = { },
+        onActionButtonClicked = { }
+    )
 }

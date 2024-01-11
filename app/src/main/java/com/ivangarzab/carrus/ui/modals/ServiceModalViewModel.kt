@@ -37,6 +37,9 @@ class ServiceModalViewModel @Inject constructor(
 
     private var validatedService: Service? = null
 
+    /**
+     * This call is necessary under the current design.
+     */
     fun setArgsData(data: Service?) {
         modalType = data?.let {
             validatedService = it
