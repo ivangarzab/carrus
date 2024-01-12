@@ -12,6 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +29,7 @@ import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
+import com.ivangarzab.carrus.ui.compose.CalendarDialog
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
 import com.ivangarzab.carrus.ui.compose.MoneyInputField
 import com.ivangarzab.carrus.ui.compose.TextInputField
@@ -33,6 +37,8 @@ import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvide
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
+import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import java.util.Calendar
 
 /**
  * Created by Ivan Garza Bermea.
@@ -64,15 +70,62 @@ fun ServiceBottomSheet(
         }
     }
 
+    var showRepairDateDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showDueDateDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     AppTheme {
         BottomSheet(
             modifier = modifier,
             onDismissed = onDismissed
         ) {
-            ServiceModalScreen(
+            ServiceBottomSheetContent(
+                modifier = modifier,
                 state = state,
+                onActionButtonClicked = { viewModel.onActionButtonClicked() },
                 onUpdateState = { viewModel.onUpdateServiceModalState(it) },
-                onActionButtonClicked = { viewModel.onActionButtonClicked() }
+                onRepairDateFieldClicked = { showRepairDateDialog = true },
+                onDueDateFieldClicked = { showDueDateDialog = true }
+            )
+        }
+    }
+
+    when {
+        showRepairDateDialog -> {
+            CalendarDialog(
+                title = "Repair Date",
+                onDismissed = { showRepairDateDialog = false },
+                onValueSelected = {
+                    viewModel.onUpdateServiceModalState(
+                        state.copy(
+                            repairDate = it.getShortenedDate()
+                        )
+                    )
+                    // Trigger the next Calendar dialog, as needed
+                    if (state.dueDate.isNullOrBlank()) {
+                        showDueDateDialog = true
+                    }
+                }
+            )
+        }
+
+        showDueDateDialog -> {
+            CalendarDialog(
+                title = "Due Date",
+                date = Calendar.getInstance().apply {
+                    add(Calendar.DAY_OF_MONTH, ServiceModalViewModel.DEFAULT_DUE_DATE_ADDITION)
+                },
+                onDismissed = { showDueDateDialog = false },
+                onValueSelected = {
+                    viewModel.onUpdateServiceModalState(
+                        state.copy(
+                            dueDate = it.getShortenedDate()
+                        )
+                    )
+                }
             )
         }
     }
