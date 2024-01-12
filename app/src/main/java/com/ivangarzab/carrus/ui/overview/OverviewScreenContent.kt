@@ -57,6 +57,7 @@ fun OverviewScreenContent(
     onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
+    onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     addServiceList: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
@@ -135,6 +136,7 @@ fun OverviewScreenContent(
                         data = serviceList[index],
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
+                        onCompleteClicked = onServiceCompleteClicked,
                         onDeleteClicked = onServiceDeleteButtonClicked,
                         onExpandOrShrinkRequest = { i, expand ->
                             expandedItemIndex = if (expand) {

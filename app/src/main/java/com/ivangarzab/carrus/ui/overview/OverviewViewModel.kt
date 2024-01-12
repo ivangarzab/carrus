@@ -188,6 +188,13 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    fun onServiceCompleted(service: Service) {
+        Timber.d("Service completed: $service")
+        //TODO: Handle service completion task
+        analytics
+        onServiceDeleted(service)
+    }
+
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
