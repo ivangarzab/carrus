@@ -48,7 +48,7 @@ fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: ServiceModalViewModel = viewModel(),
     inputData: Service?,
-    onDismissed: () -> Unit,
+    onDismissed: (success: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -60,7 +60,7 @@ fun ServiceBottomSheet(
         setArgsData(inputData)
         onSubmission.observe(LocalLifecycleOwner.current) { success ->
             when (success) {
-                true -> onDismissed()
+                true -> onDismissed(true)
                 false -> Toast.makeText(
                     context,
                     "Missing required field(s) or wrong data",
@@ -80,7 +80,7 @@ fun ServiceBottomSheet(
     AppTheme {
         BottomSheet(
             modifier = modifier,
-            onDismissed = onDismissed
+            onDismissed = { onDismissed(false) }
         ) {
             ServiceBottomSheetContent(
                 modifier = modifier,

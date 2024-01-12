@@ -189,11 +189,14 @@ private fun OverviewScreen(
                 serviceModalState.first -> ServiceBottomSheet(
                     modifier = Modifier,
                     inputData = serviceModalState.second,
-                    onDismissed = {
-                        when (serviceModalState.second == null) {
-                            true -> showServiceScheduledConfirmation = true
-                            false -> showServiceUpdatedConfirmation = true
+                    onDismissed = { success ->
+                        if (success) {
+                            when (serviceModalState.second == null) {
+                                true -> showServiceScheduledConfirmation = true
+                                false -> showServiceUpdatedConfirmation = true
+                            }
                         }
+                        // dismiss service modal and clear data
                         serviceModalState = Pair(false, null)
                     }
                 )
