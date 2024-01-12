@@ -195,6 +195,12 @@ class OverviewViewModel @Inject constructor(
         onServiceDeleted(service)
     }
 
+    fun onServiceRescheduled(service: Service) {
+        Timber.d("Rescheduling Service: $service")
+        analytics.logServiceRescheduled(service.id, service.name)
+        //TODO: Perform reschedule function(s)
+    }
+
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)

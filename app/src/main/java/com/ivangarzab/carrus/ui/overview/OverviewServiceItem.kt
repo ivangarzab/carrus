@@ -56,6 +56,7 @@ fun OverviewServiceItem(
     isExpanded: Boolean = true,
     onEditClicked: (Service) -> Unit,
     onCompleteClicked: (Service) -> Unit,
+    onRescheduleClicked: (Service) -> Unit,
     onDeleteClicked: (Service) -> Unit,
     onExpandOrShrinkRequest: (index: Int, expand: Boolean) -> Unit
 ) {
@@ -177,6 +178,19 @@ fun OverviewServiceItem(
                                         contentDescription = "Delete icon button"
                                     )
                                 }
+                            }
+                            Row(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                            ) {
+                                IconButton(
+                                    onClick = { onRescheduleClicked(data.data) }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(6.dp),
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_repeat),
+                                        contentDescription = "Reschedule icon button"
+                                    )
+                                }
                                 IconButton(
                                     onClick = { onCompleteClicked(data.data) }
                                 ) {
@@ -186,10 +200,6 @@ fun OverviewServiceItem(
                                         contentDescription = "Complete icon button"
                                     )
                                 }
-                            }
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterEnd),
-                            ) {
                                 IconButton(
                                     onClick = { onEditClicked(data.data) }
                                 ) {
@@ -231,6 +241,7 @@ private fun OverviewServiceItemPreview() {
             isExpanded = true,
             onEditClicked = { },
             onCompleteClicked = { },
+            onRescheduleClicked = { },
             onDeleteClicked = { },
             onExpandOrShrinkRequest = { _: Int, _: Boolean -> }
         )

@@ -110,6 +110,11 @@ class Analytics @Inject constructor(
         )
     }
 
+    fun logServiceRescheduled(id: String, name: String) {
+        logServiceCompleted(id, name)
+        logServiceCreated(id, name)
+    }
+
     fun logServiceDeleted(id: String, name: String) {
         logEvent(
             "service_deleted",
