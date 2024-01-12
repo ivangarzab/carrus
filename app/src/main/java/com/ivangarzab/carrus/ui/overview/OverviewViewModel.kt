@@ -190,8 +190,8 @@ class OverviewViewModel @Inject constructor(
 
     fun onServiceCompleted(service: Service) {
         Timber.d("Service completed: $service")
-        //TODO: Handle service completion task
-        analytics
+        analytics.logServiceCompleted(service.id, service.name)
+        //TODO: Update services completed count property
         onServiceDeleted(service)
     }
 
