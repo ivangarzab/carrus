@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.modals
+package com.ivangarzab.carrus.ui.modal_service
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ivangarzab.carrus.ui.modals.ServiceModalFragmentArgs
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.managers.Analytics
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +17,7 @@ import javax.inject.Inject
 /**
  * Created by Ivan Garza Bermea.
  */
+@Deprecated("Moved into Compose inside the OverviewScreen")
 @AndroidEntryPoint
 class ServiceModalFragment : BottomSheetDialogFragment() {
 

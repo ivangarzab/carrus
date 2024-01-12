@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.modals
+package com.ivangarzab.carrus.ui.modal_service.data
 
 /**
  * Created by Ivan Garza Bermea.

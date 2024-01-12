@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.modals
+package com.ivangarzab.carrus.ui.modal_service
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.util.extensions.empty
 import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
@@ -43,7 +44,8 @@ class ServiceModalViewModel @Inject constructor(
     fun setArgsData(data: Service?) {
         modalType = data?.let {
             validatedService = it
-            setState(ServiceModalState(
+            setState(
+                ServiceModalState(
                 title = "Update Service",
                 name = data.name,
                 repairDate = data.repairDate.getShortenedDate(),
@@ -51,7 +53,8 @@ class ServiceModalViewModel @Inject constructor(
                 brand = data.brand,
                 type = data.type,
                 price = "%.2f".format(data.cost)
-            ))
+            )
+            )
             Type.EDIT
         } ?: Type.CREATE.also { setState(ServiceModalState(title = "Create Service")) }
     }

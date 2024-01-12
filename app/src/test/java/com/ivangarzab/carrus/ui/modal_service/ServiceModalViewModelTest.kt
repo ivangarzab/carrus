@@ -1,10 +1,11 @@
-package com.ivangarzab.carrus.ui.modals
+package com.ivangarzab.carrus.ui.modal_service
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.repositories.CarRepository
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.test_data.SERVICE_EMPTY
 import com.ivangarzab.test_data.SERVICE_TEST_1
 import io.mockk.every

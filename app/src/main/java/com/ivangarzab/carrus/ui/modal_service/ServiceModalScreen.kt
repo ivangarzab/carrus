@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.modals
+package com.ivangarzab.carrus.ui.modal_service
 
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -31,8 +31,9 @@ import com.ivangarzab.carrus.ui.compose.PositiveButton
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
-import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel.Companion.DEFAULT_DUE_DATE_ADDITION
-import com.ivangarzab.carrus.ui.overview.ServiceBottomSheetContent
+import com.ivangarzab.carrus.ui.modal_service.ServiceModalViewModel.Companion.DEFAULT_DUE_DATE_ADDITION
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
+import com.ivangarzab.carrus.ui.modals.ServiceModalFragmentArgs
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -43,6 +44,7 @@ import java.util.TimeZone
 /**
  * Created by Ivan Garza Bermea.
  */
+@Deprecated("No longer in use... for now")
 @Composable
 fun ServiceModalScreenStateful(
     viewModel: ServiceModalViewModel = viewModel(),
@@ -138,7 +140,7 @@ fun ServiceModalScreen(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun CalendarDialog(
+private fun CalendarDialog(
     title: String = "Dialog Title",
     date: Calendar = Calendar.getInstance(),
     onDismissed: () -> Unit = { },

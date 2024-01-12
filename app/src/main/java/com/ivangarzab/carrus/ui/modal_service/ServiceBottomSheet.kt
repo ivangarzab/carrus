@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.ui.overview
+package com.ivangarzab.carrus.ui.modal_service
 
 import android.content.res.Configuration
 import android.widget.Toast
@@ -32,9 +32,7 @@ import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
-import com.ivangarzab.carrus.ui.modals.ServiceModalScreen
-import com.ivangarzab.carrus.ui.modals.ServiceModalState
-import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 
 /**
  * Created by Ivan Garza Bermea.
