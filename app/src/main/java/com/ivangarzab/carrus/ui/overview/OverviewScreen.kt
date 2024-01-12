@@ -1,6 +1,10 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -108,11 +112,16 @@ private fun OverviewScreen(
 
     val systemUiController = rememberSystemUiController()
 
-    /*var showServiceModal: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }*/ //TODO: Start using this variables instead of the BottomSheetDialogFragment
     var serviceModalState: Pair<Boolean, Service?> by rememberSaveable {
         mutableStateOf(Pair(false, null))
+    }
+
+    var showServiceScheduledConfirmation: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var showServiceUpdatedConfirmation: Boolean by rememberSaveable {
+        mutableStateOf(false)
     }
 
     AppTheme {
@@ -180,7 +189,44 @@ private fun OverviewScreen(
                 serviceModalState.first -> ServiceBottomSheet(
                     modifier = Modifier,
                     inputData = serviceModalState.second,
-                    onDismissed = { serviceModalState = Pair(false, null) }
+                    onDismissed = {
+                        when (serviceModalState.second == null) {
+                            true -> showServiceScheduledConfirmation = true
+                            false -> showServiceUpdatedConfirmation = true
+                        }
+                        serviceModalState = Pair(false, null)
+                    }
+                )
+            }
+            // Confirmation scrims
+            AnimatedVisibility(
+                visible = showServiceScheduledConfirmation,
+                enter = fadeIn(),
+                exit = fadeOut(
+                    animationSpec = TweenSpec(
+                        delay = 600
+                    )
+                )
+            ) {
+                OverviewServiceScheduledScrim(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "Service scheduled",
+                    onFinishWaiting = { showServiceScheduledConfirmation = false }
+                )
+            }
+            AnimatedVisibility(
+                visible = showServiceUpdatedConfirmation,
+                enter = fadeIn(),
+                exit = fadeOut(
+                    animationSpec = TweenSpec(
+                        delay = 600
+                    )
+                )
+            ) {
+                OverviewServiceScheduledScrim(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "Service updated",
+                    onFinishWaiting = { showServiceUpdatedConfirmation = false }
                 )
             }
         } else {
