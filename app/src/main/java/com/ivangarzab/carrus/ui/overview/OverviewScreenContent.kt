@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,12 +35,15 @@ import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
+import com.ivangarzab.carrus.ui.compose.CalendarDialog
 import com.ivangarzab.carrus.ui.compose.PanelIcon
 import com.ivangarzab.carrus.ui.compose.PanelTitleText
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.modal_service.ServiceModalViewModel
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.ServicePanelState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
+import java.util.Calendar
 import java.util.Random
 
 /**
@@ -54,11 +58,14 @@ fun OverviewScreenContent(
     messageQueue: MessageQueue = MessageQueue.test,
     servicesState: ServicePanelState = ServicePanelState(),
     detailsState: DetailsPanelState = DetailsPanelState(),
+    serviceReschedule: OverviewViewModel.RescheduleFlowState = OverviewViewModel.RescheduleFlowState(),
     onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceRescheduleClicked: (Service) -> Unit = { },
+    onServiceRescheduled: (Service, Service) -> Unit = { old, new -> },
+    onServiceNotRescheduled: () -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     addServiceList: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
@@ -137,9 +144,18 @@ fun OverviewScreenContent(
                         data = serviceList[index],
                         isExpanded = index == expandedItemIndex,
                         onEditClicked = onServiceEditButtonClicked,
-                        onCompleteClicked = onServiceCompleteClicked,
-                        onRescheduleClicked = onServiceRescheduleClicked,
-                        onDeleteClicked = onServiceDeleteButtonClicked,
+                        onCompleteClicked = {
+                            expandedItemIndex = NO_ITEM_EXPANDED
+                            onServiceCompleteClicked(it)
+                        },
+                        onRescheduleClicked = {
+                            expandedItemIndex = NO_ITEM_EXPANDED
+                            onServiceRescheduleClicked(it)
+                        },
+                        onDeleteClicked = {
+                            expandedItemIndex = NO_ITEM_EXPANDED
+                            onServiceDeleteButtonClicked(it)
+                        },
                         onExpandOrShrinkRequest = { i, expand ->
                             expandedItemIndex = if (expand) {
                                 i
@@ -156,6 +172,24 @@ fun OverviewScreenContent(
             }
             item {
                 RotationalQuotePanel()
+            }
+        }
+    }
+    with(serviceReschedule) {
+        if (visible) {
+            RescheduleCalendarFlow { repairDate, dueDate ->
+                if (oldService != null && repairDate != null && dueDate != null) {
+                    onServiceRescheduled(
+                        oldService,
+                        oldService.copy(
+                            repairDate = repairDate,
+                            dueDate = dueDate
+                        )
+                    )
+                } else {
+                    // service rescheduling halted
+                    onServiceNotRescheduled()
+                }
             }
         }
     }
@@ -215,6 +249,47 @@ fun EmptyListView(
                 fontStyle = FontStyle.Italic
             )
         }
+    }
+}
+
+@Composable
+fun RescheduleCalendarFlow(
+    callback: (Calendar?, Calendar?) -> Unit
+) {
+    var answer1: Calendar? by remember {
+        mutableStateOf(null)
+    }
+    var showSecondDialog: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
+    if (answer1 == null) {
+        CalendarDialog(
+            title = "Repair Date",
+            onDismissed = {
+                answer1 = Calendar.getInstance()
+                callback(null, null)
+            },
+            onValueSelected = {
+                showSecondDialog = true
+                answer1 = it
+            }
+        )
+    }
+    if (showSecondDialog) {
+        CalendarDialog(
+            title = "Due Date",
+            date = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_MONTH, ServiceModalViewModel.DEFAULT_DUE_DATE_ADDITION)
+            },
+            onDismissed = {
+                showSecondDialog = false
+                callback(null, null)
+            },
+            onValueSelected = {
+                showSecondDialog = false
+                callback(answer1, it)
+            }
+        )
     }
 }
 
