@@ -35,7 +35,6 @@ import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.modal_service.ServiceBottomSheet
-import com.ivangarzab.carrus.ui.overview.OverviewViewModel.RescheduleFlowState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -65,10 +64,6 @@ fun OverviewScreenStateful(
         .servicePanelState
         .observeAsState(initial = ServicePanelState())
 
-    val serviceRescheduleFlow: RescheduleFlowState by viewModel
-        .serviceRescheduleFlow
-        .observeAsState(initial = RescheduleFlowState())
-
     val queueState: MessageQueueState by viewModel
         .queueState
         .observeAsState(initial = MessageQueueState())
@@ -78,7 +73,6 @@ fun OverviewScreenStateful(
             staticState = staticState,
             detailsPanelState = detailsPanelState,
             servicePanelState = servicePanelState,
-            serviceReschedule = serviceRescheduleFlow,
             messageQueue = queueState.messageQueue,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
@@ -86,9 +80,7 @@ fun OverviewScreenStateful(
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
             onServiceCompleteClicked = { viewModel.onServiceCompleted(it) },
-            onServiceRescheduleClicked = { viewModel.onServiceRescheduleStarted(it) },
-            onServiceRescheduled = { old, new -> viewModel.onServiceRescheduled(old, new) },
-            onServiceNotRescheduled = { viewModel.onServiceNotRescheduled() },
+            onServiceRescheduleClicked = { /* TODO */  },
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
             onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
@@ -105,7 +97,6 @@ private fun OverviewScreen(
     staticState: OverviewStaticState,
     detailsPanelState: DetailsPanelState,
     servicePanelState: ServicePanelState,
-    serviceReschedule: RescheduleFlowState,
     messageQueue: MessageQueue = MessageQueue.test,
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
@@ -114,8 +105,6 @@ private fun OverviewScreen(
     onSortRequest: (SortingType) -> Unit = { },
     onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceRescheduleClicked: (Service) -> Unit = { },
-    onServiceRescheduled: (Service, Service) -> Unit = { old, new -> },
-    onServiceNotRescheduled: () -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { },
@@ -161,16 +150,10 @@ private fun OverviewScreen(
                         messageQueue = messageQueue,
                         servicesState = servicePanelState,
                         detailsState = detailsPanelState,
-                        serviceReschedule = serviceReschedule,
                         onSortRequest = onSortRequest,
                         onEditCarClicked = onEditCarButtonClicked,
                         onServiceCompleteClicked = onServiceCompleteClicked,
                         onServiceRescheduleClicked = onServiceRescheduleClicked,
-                        onServiceRescheduled = { old, new ->
-                            showServiceScheduledConfirmation = true
-                            onServiceRescheduled(old, new)
-                        },
-                        onServiceNotRescheduled = onServiceNotRescheduled,
                         onServiceEditButtonClicked = { service -> serviceModalState = Pair(true, service) },
                         onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
                         addServiceList = addServiceList,
@@ -273,7 +256,6 @@ private fun OverviewScreenPreview() {
         ),
         detailsPanelState = DetailsPanelState(),
         servicePanelState = ServicePanelState(),
-        serviceReschedule = RescheduleFlowState(),
         messageQueue = MessageQueue.test,
         onEditCarButtonClicked = { },
         onSettingsButtonClicked = { },

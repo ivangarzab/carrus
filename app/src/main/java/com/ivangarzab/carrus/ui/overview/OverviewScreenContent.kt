@@ -58,14 +58,11 @@ fun OverviewScreenContent(
     messageQueue: MessageQueue = MessageQueue.test,
     servicesState: ServicePanelState = ServicePanelState(),
     detailsState: DetailsPanelState = DetailsPanelState(),
-    serviceReschedule: OverviewViewModel.RescheduleFlowState = OverviewViewModel.RescheduleFlowState(),
     onSortRequest: (SortingType) -> Unit = { },
     onEditCarClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceRescheduleClicked: (Service) -> Unit = { },
-    onServiceRescheduled: (Service, Service) -> Unit = { old, new -> },
-    onServiceNotRescheduled: () -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
     addServiceList: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
@@ -172,24 +169,6 @@ fun OverviewScreenContent(
             }
             item {
                 RotationalQuotePanel()
-            }
-        }
-    }
-    with(serviceReschedule) {
-        if (visible) {
-            RescheduleCalendarFlow { repairDate, dueDate ->
-                if (oldService != null && repairDate != null && dueDate != null) {
-                    onServiceRescheduled(
-                        oldService,
-                        oldService.copy(
-                            repairDate = repairDate,
-                            dueDate = dueDate
-                        )
-                    )
-                } else {
-                    // service rescheduling halted
-                    onServiceNotRescheduled()
-                }
             }
         }
     }

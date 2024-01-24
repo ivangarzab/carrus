@@ -49,15 +49,9 @@ class OverviewViewModel @Inject constructor(
     private val debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
 
-    data class RescheduleFlowState(
-        val visible: Boolean = false,
-        val oldService: Service? = null
-    )
-
     val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
     val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
     val servicePanelState: LiveState<ServicePanelState> = LiveState(ServicePanelState())
-    val serviceRescheduleFlow: LiveState<RescheduleFlowState> = LiveState(RescheduleFlowState())
 
     val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
 
@@ -199,37 +193,6 @@ class OverviewViewModel @Inject constructor(
         analytics.logServiceCompleted(service.id, service.name)
         //TODO: Update services completed count property
         onServiceDeleted(service)
-    }
-
-    fun onServiceRescheduleStarted(service: Service) {
-        Timber.d("Attempting to rescheduling Service: $service")
-        serviceRescheduleFlow.setState {
-            copy(
-                visible = true,
-                oldService = service
-            )
-        }
-    }
-
-    fun onServiceRescheduled(old: Service, new: Service) {
-        Timber.d("Rescheduling Service: $new")
-        onServiceDeleted(old)
-        carRepository.addCarService(new)
-        analytics.logServiceRescheduled(new.id, new.name)
-        serviceRescheduleFlow.setState {
-            RescheduleFlowState()
-        }
-    }
-
-    fun onServiceNotRescheduled() {
-        Timber.w("Service reschedule interrupted")
-        onServiceRescheduleEnded()
-    }
-
-    private fun onServiceRescheduleEnded() {
-        serviceRescheduleFlow.setState {
-            RescheduleFlowState()
-        }
     }
 
     fun onServiceDeleted(service: Service) {
