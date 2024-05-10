@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data.di
+package com.ivangarzab.carrus.data.providers
 
 import com.ivangarzab.carrus.BuildConfig
 

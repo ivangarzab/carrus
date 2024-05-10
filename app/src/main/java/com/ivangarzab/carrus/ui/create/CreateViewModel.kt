@@ -5,8 +5,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.create.data.CarModalState

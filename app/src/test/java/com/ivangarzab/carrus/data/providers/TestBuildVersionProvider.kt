@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data.di
+package com.ivangarzab.carrus.data.providers
 
 class TestBuildVersionProvider : BuildVersionProvider {
     override fun getSdkVersionInt(): Int = TEST_SDK_VERSION

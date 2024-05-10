@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel

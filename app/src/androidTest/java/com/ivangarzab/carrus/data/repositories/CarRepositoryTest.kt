@@ -2,7 +2,7 @@ package com.ivangarzab.carrus.data.repositories
 
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
 import com.ivangarzab.carrus.util.managers.Preferences
 import com.ivangarzab.test_data.CAR_EMPTY
 import com.ivangarzab.test_data.CAR_TEST

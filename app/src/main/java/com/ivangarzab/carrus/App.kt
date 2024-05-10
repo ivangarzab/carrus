@@ -3,11 +3,10 @@ package com.ivangarzab.carrus
 import android.app.Application
 import com.ivangarzab.analytics.AnalyticsRepository
 import com.ivangarzab.analytics.AnalyticsRepositoryImpl
-import com.ivangarzab.analytics.BuildConfig
-import com.ivangarzab.carrus.data.di.BuildVersionProvider
-import com.ivangarzab.carrus.data.di.BuildVersionProviderImpl
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
-import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.providers.BuildVersionProvider
+import com.ivangarzab.carrus.data.providers.BuildVersionProviderImpl
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
+import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepositoryImpl
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
@@ -36,6 +35,7 @@ import com.ivangarzab.carrus.util.managers.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -47,6 +47,8 @@ import timber.log.Timber
  */
 open class App : Application() {
 
+    val debugFlagProvider: DebugFlagProvider by inject()
+
     open val leakUploader: LeakUploader = LeakUploader()
 
     open val coiler: Coiler = Coiler()
@@ -54,7 +56,7 @@ open class App : Application() {
     override fun onCreate() {
         super.onCreate()
         setupKoin()
-        if (BuildConfig.DEBUG) {
+        if (debugFlagProvider.isDebugEnabled()) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
             setupLeakCanary()

@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.ivangarzab.carrus.util.managers.Analytics
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
@@ -15,8 +15,7 @@ class AlarmPermissionStateChangedReceiver(
     val onStateChanged: (isGranted: Boolean) -> Unit
 ) : BroadcastReceiver() {
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject(Analytics::class.java)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {

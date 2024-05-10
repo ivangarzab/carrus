@@ -1,14 +1,13 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.ivangarzab.analytics.AnalyticsRepository
-import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @Singleton
-class Analytics @Inject constructor(
+class Analytics(
     private val analyticsRepository: AnalyticsRepository
 ) {
 

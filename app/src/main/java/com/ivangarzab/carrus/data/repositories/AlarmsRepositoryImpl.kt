@@ -6,14 +6,11 @@ import com.ivangarzab.carrus.util.managers.AlarmScheduler
 import com.ivangarzab.carrus.util.managers.Preferences
 import timber.log.Timber
 import java.util.Calendar
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class AlarmsRepositoryImpl @Inject constructor(
+class AlarmsRepositoryImpl(
     private val prefs: Preferences,
     private val alarmSettingsRepository: AlarmSettingsRepository,
     private val scheduler: AlarmScheduler

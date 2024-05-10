@@ -1,8 +1,8 @@
-package com.ivangarzab.carrus.data.di
+package com.ivangarzab.carrus.data.providers
 
 import android.os.Build
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.data.di.TestBuildVersionProvider.Companion.TEST_SDK_VERSION
+import com.ivangarzab.carrus.data.providers.TestBuildVersionProvider.Companion.TEST_SDK_VERSION
 import org.junit.Test
 
 class BuildVersionProviderTest {
