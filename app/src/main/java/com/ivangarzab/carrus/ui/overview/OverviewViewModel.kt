@@ -26,20 +26,17 @@ import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class OverviewViewModel @Inject constructor(
+class OverviewViewModel(
     private val buildVersionProvider: BuildVersionProvider,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,

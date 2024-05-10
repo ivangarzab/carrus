@@ -13,16 +13,13 @@ import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarImporter
-import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.UUID
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class CreateViewModel @Inject constructor(
+class CreateViewModel(
     private val carRepository: CarRepository,
     private val contentResolverHelper: ContentResolverHelper,
     private val analytics: Analytics,

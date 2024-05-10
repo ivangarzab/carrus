@@ -14,27 +14,20 @@ import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.NotificationController
 import com.ivangarzab.carrus.util.managers.NotificationData
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
-class AlarmBroadcastReceiver @Inject constructor() : BroadcastReceiver() {
+class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     lateinit var context: Context
-    @Inject
-    lateinit var notificationController: NotificationController
-    @Inject
-    lateinit var carRepository: CarRepository
-    @Inject
-    lateinit var alarmsRepository: AlarmsRepository
-    @Inject
-    lateinit var alarmSettingsRepository: AlarmSettingsRepository
-    @Inject
-    lateinit var analytics: Analytics
+    val notificationController: NotificationController by inject(NotificationController::class.java)
+    val carRepository: CarRepository by inject(CarRepository::class.java)
+    val alarmsRepository: AlarmsRepository by inject(AlarmsRepository::class.java)
+    val alarmSettingsRepository: AlarmSettingsRepository by inject(AlarmSettingsRepository::class.java)
+    val analytics: Analytics by inject(Analytics::class.java)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return

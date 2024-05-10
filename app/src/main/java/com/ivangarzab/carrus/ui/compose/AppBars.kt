@@ -23,13 +23,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Ivan Garza Bermea.
@@ -90,7 +88,7 @@ fun TopBar(
 
 @Composable
 fun NavigationBottomBar(
-    viewModel: NavigationBottomBarViewModel = viewModel(),
+    viewModel: NavigationBottomBarViewModel = koinViewModel(),
     settingsButtonClicked: () -> Unit,
     homeButtonClicked: () -> Unit,
     mapButtonClicked: () -> Unit
@@ -160,8 +158,8 @@ private fun NavigationBottomBarPreview() {
     )
 }
 
-@HiltViewModel
-class NavigationBottomBarViewModel @Inject constructor(
+//TODO: Move into its own file
+class NavigationBottomBarViewModel(
     debugFlagProvider: DebugFlagProvider
 ) : ViewModel() {
     data class NavigationBottomBarState(

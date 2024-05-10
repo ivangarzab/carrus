@@ -7,12 +7,10 @@ import android.provider.Settings
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialEnum
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 class PermissionNotificationInterstitial :
     PermissionInterstitial<PermissionInterstitialViewModel>() {
 

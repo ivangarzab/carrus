@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -13,13 +12,12 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.lang.ref.WeakReference
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class ContentResolverHelperImpl@Inject constructor(
-    @ApplicationContext context: Context
+class ContentResolverHelperImpl(
+    context: Context
 ) : ContentResolverHelper {
 
     private val weakContext = WeakReference(context)

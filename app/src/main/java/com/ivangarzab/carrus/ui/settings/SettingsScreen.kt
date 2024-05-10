@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
@@ -42,13 +41,14 @@ import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.ui.settings.data.SettingsStatePreview
 import com.ivangarzab.carrus.ui.settings.dialogs.PickerDialog
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @Composable
 fun SettingsScreenStateful(
-    viewModel: SettingsViewModel = viewModel(),
+    viewModel: SettingsViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
     onNavMapPressed: () -> Unit,

@@ -29,6 +29,7 @@ robolectricVersion = "4.11.1"
 secretsGradlePluginVersion = "2.0.1"
 timber = "5.0.1"
 hilt = "2.49"
+koin-bom = "3.5.0"
 junit = "4.13.2"
 androidxJunit = "1.1.5"
 espresso = "3.5.1"
@@ -91,6 +92,13 @@ volley = { module = "com.android.volley:volley", version.ref = "volleyVersion" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+
+# https://insert-koin.io/
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-android-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-test = { module = "io.insert-koin:koin-test" }
+koin-test-junit = { module = "io.insert-koin:koin-test-junit4" }
 
 # https://firebase.google.com/support/release-notes/android
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }

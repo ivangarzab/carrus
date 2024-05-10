@@ -1,10 +1,6 @@
 package com.ivangarzab.carrus.data.di
 
 import android.os.Build
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import javax.inject.Inject
 
 /**
@@ -20,6 +16,7 @@ class BuildVersionProviderImpl @Inject constructor() : BuildVersionProvider {
     }
 }
 
+/*
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class BuildVersionProviderModule {
@@ -27,4 +24,4 @@ abstract class BuildVersionProviderModule {
     abstract fun bindBuildVersionProvider(
         buildVersionProvider: BuildVersionProviderImpl
     ) : BuildVersionProvider
-}
+}*/
