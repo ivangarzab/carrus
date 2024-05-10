@@ -22,7 +22,7 @@ import timber.log.Timber
  */
 class AlarmBroadcastReceiver : BroadcastReceiver() {
 
-    lateinit var context: Context
+    val context: Context by inject(Context::class.java)
     val notificationController: NotificationController by inject(NotificationController::class.java)
     val carRepository: CarRepository by inject(CarRepository::class.java)
     val alarmsRepository: AlarmsRepository by inject(AlarmsRepository::class.java)
@@ -31,7 +31,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-        this.context = context
         intent?.let {
             Timber.d("We got an alarm intent with action: ${it.action}")
             when (it.action) {
