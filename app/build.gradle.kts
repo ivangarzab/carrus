@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.androidx.nav.safeargs)
     alias(libs.plugins.android.mapsplatform.secrets)
-//    alias(libs.plugins.hilt.gradle)
 }
 
 android {
