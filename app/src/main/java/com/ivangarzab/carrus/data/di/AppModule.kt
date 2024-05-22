@@ -28,6 +28,8 @@ import com.ivangarzab.carrus.util.managers.AlarmSchedulerImpl
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.carrus.util.managers.NotificationController
+import com.ivangarzab.carrus.util.managers.NotificationControllerImpl
 import com.ivangarzab.carrus.util.managers.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +46,9 @@ val AppModule = module {
     }
     single {
         Analytics(get())
+    }
+    single<NotificationController> {
+        NotificationControllerImpl(get())
     }
     single<AnalyticsRepository> {
         AnalyticsRepositoryImpl()
@@ -70,7 +75,7 @@ val AppModule = module {
         AlarmSchedulerImpl(get(), get())
     }
     single<AlarmSettingsRepository> {
-        AlarmSettingsRepositoryImpl(get(), get())
+        AlarmSettingsRepositoryImpl(get(), get(), get())
     }
     single {
         MessageQueueRepository()

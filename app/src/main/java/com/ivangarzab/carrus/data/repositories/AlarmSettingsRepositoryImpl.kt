@@ -1,9 +1,7 @@
 package com.ivangarzab.carrus.data.repositories
 
 import android.app.AlarmManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,7 +10,9 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
 import com.ivangarzab.carrus.data.states.AlarmSettingsState
 import com.ivangarzab.carrus.util.extensions.isAbleToScheduleExactAlarms
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.Preferences
+import com.ivangarzab.carrus.util.receivers.AlarmPermissionStateChangedReceiver
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +23,8 @@ import timber.log.Timber
  */
 class AlarmSettingsRepositoryImpl(
     context: Context,
-    private val prefs: Preferences
+    private val prefs: Preferences,
+    private val analytics: Analytics
 ) : AlarmSettingsRepository {
 
     private val _alarmSettingsFlow = MutableStateFlow(AlarmSettingsState())
@@ -50,7 +51,10 @@ class AlarmSettingsRepositoryImpl(
     override fun listenForAlarmPermissionChanges(context: Context) {
         ContextCompat.registerReceiver(
             context,
-            AlarmPermissionStateChangedReceiver(),
+            AlarmPermissionStateChangedReceiver {
+                analytics.logAlarmsPermissionResult(it)
+                setIsAlarmPermissionGranted(it)
+            },
             IntentFilter(
                 AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
             ),
@@ -104,7 +108,7 @@ class AlarmSettingsRepositoryImpl(
     }
 
     //TODO: Move out of this class
-    inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
+    /*inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
         //TODO: How do we test a broadcast receiver?
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -116,6 +120,6 @@ class AlarmSettingsRepositoryImpl(
                 }
             }
         }
-    }
+    }*/
 }
 const val DEFAULT_ALARM_TIME: Int = 7

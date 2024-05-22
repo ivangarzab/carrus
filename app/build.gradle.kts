@@ -105,13 +105,6 @@ dependencies {
     implementation(libs.android.maps.compose)
     implementation(libs.volley)
 
-    /*implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
-    testImplementation(libs.hilt.testing)
-    kaptTest(libs.hilt.compiler)
-    androidTestImplementation(libs.hilt.testing)
-    kaptAndroidTest(libs.hilt.compiler)*/
-
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)

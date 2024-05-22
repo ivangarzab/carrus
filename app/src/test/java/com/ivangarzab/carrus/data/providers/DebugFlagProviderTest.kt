@@ -78,18 +78,4 @@ class DebugFlagProviderTest {
         Truth.assertThat(result)
             .isEqualTo(BuildConfig.DEBUG)
     }
-
-    @Test
-    fun test_module_bind() {
-        val module = object : DebugFlagProviderModule() {
-            override fun bindDebugFlagProvider(debugFlagProvider: DebugFlagProviderImpl): DebugFlagProvider {
-                return implProvider
-            }
-
-        }
-        val provider = module.bindDebugFlagProvider(implProvider)
-        val result = provider.isDebugEnabled()
-        Truth.assertThat(result)
-            .isEqualTo(BuildConfig.DEBUG)
-    }
 }

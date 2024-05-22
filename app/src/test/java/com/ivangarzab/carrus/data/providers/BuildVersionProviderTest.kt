@@ -23,17 +23,4 @@ class BuildVersionProviderTest {
         assertThat(result)
             .isEqualTo(Build.VERSION.SDK_INT)
     }
-
-    @Test
-    fun test_module_bind() {
-        val module = object : BuildVersionProviderModule() {
-            override fun bindBuildVersionProvider(buildVersionProvider: BuildVersionProviderImpl): BuildVersionProvider {
-                return implProvider
-            }
-        }
-        val provider = module.bindBuildVersionProvider(implProvider)
-        val result = provider.getSdkVersionInt()
-        assertThat(result)
-            .isEqualTo(Build.VERSION.SDK_INT)
-    }
 }
