@@ -17,7 +17,7 @@ import javax.inject.Inject
 /**
  * Created by Ivan Garza Bermea.
  */
-@Deprecated("Moved into Compose inside the OverviewScreen")
+@Deprecated("Moved into Compose: See ServiceModalSheet")
 @AndroidEntryPoint
 class ServiceModalFragment : BottomSheetDialogFragment() {
 

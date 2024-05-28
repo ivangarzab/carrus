@@ -35,6 +35,7 @@ import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.modal_service.ServiceBottomSheet
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -64,6 +65,10 @@ fun OverviewScreenStateful(
         .servicePanelState
         .observeAsState(initial = ServicePanelState())
 
+    val serviceModalState: ServiceModalState by viewModel
+        .serviceModalState
+        .observeAsState(initial = ServiceModalState())
+
     val queueState: MessageQueueState by viewModel
         .queueState
         .observeAsState(initial = MessageQueueState())
@@ -73,15 +78,19 @@ fun OverviewScreenStateful(
             staticState = staticState,
             detailsPanelState = detailsPanelState,
             servicePanelState = servicePanelState,
+            serviceModalState = serviceModalState,
             messageQueue = queueState.messageQueue,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onMapButtonClicked = onMapButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
+            onServiceCreateButtonClicked = { viewModel.onServiceCreate() },
+            onServiceEditButtonClicked = { viewModel.onServiceEdit(it) },
+            onServiceRescheduleClicked = { viewModel.onServiceReschedule(it) },
             onServiceCompleteClicked = { viewModel.onServiceCompleted(it) },
-            onServiceRescheduleClicked = { /* TODO */  },
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
+            onServiceModalDismissed = { viewModel.onServiceModalDismissed() },
             onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
@@ -97,15 +106,19 @@ private fun OverviewScreen(
     staticState: OverviewStaticState,
     detailsPanelState: DetailsPanelState,
     servicePanelState: ServicePanelState,
+    serviceModalState: ServiceModalState,
     messageQueue: MessageQueue = MessageQueue.test,
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onMapButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingType) -> Unit = { },
-    onServiceCompleteClicked: (Service) -> Unit = { },
+    onServiceCreateButtonClicked: () -> Unit = { },
+    onServiceEditButtonClicked: (Service) -> Unit = { },
     onServiceRescheduleClicked: (Service) -> Unit = { },
+    onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    onServiceModalDismissed: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { },
     addTestMessage: () -> Unit = { },
@@ -115,10 +128,6 @@ private fun OverviewScreen(
         .exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val systemUiController = rememberSystemUiController()
-
-    var serviceModalState: Pair<Boolean, Service?> by rememberSaveable {
-        mutableStateOf(Pair(false, null))
-    }
 
     var showServiceScheduledConfirmation: Boolean by rememberSaveable {
         mutableStateOf(false)
@@ -153,8 +162,8 @@ private fun OverviewScreen(
                         onSortRequest = onSortRequest,
                         onEditCarClicked = onEditCarButtonClicked,
                         onServiceCompleteClicked = onServiceCompleteClicked,
+                        onServiceEditButtonClicked = onServiceEditButtonClicked,
                         onServiceRescheduleClicked = onServiceRescheduleClicked,
-                        onServiceEditButtonClicked = { service -> serviceModalState = Pair(true, service) },
                         onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
                         addServiceList = addServiceList,
                         onMessageContentClicked = { onMessageContentClicked(it) },
@@ -180,7 +189,7 @@ private fun OverviewScreen(
                         } else {
                             MaterialTheme.colorScheme.onPrimary
                         },
-                        onClick = { serviceModalState = Pair(true, null) }
+                        onClick = onServiceCreateButtonClicked
                     ) {
                         Icon(
                             modifier = Modifier.size(48.dp),
@@ -191,22 +200,29 @@ private fun OverviewScreen(
                 }
             )
             // Dialog
-            when {
-                serviceModalState.first -> ServiceBottomSheet(
-                    modifier = Modifier,
-                    inputData = serviceModalState.second,
-                    onDismissed = { success ->
-                        if (success) {
-                            when (serviceModalState.second == null) {
-                                true -> showServiceScheduledConfirmation = true
-                                false -> showServiceUpdatedConfirmation = true
+            serviceModalState.let {
+                when {
+                    it.mode != ServiceModalState.Mode.NULL -> {
+                        ServiceBottomSheet(
+                            modifier = Modifier,
+                            inputData = it,
+                            onDismissed = { success ->
+                                if (success) {
+                                    when (it.mode) {
+                                        ServiceModalState.Mode.CREATE -> {
+                                            showServiceScheduledConfirmation = true
+                                        }
+                                        else -> showServiceUpdatedConfirmation = true
+                                    }
+                                }
+                                // dismiss service modal and clear data
+                                onServiceModalDismissed()
                             }
-                        }
-                        // dismiss service modal and clear data
-                        serviceModalState = Pair(false, null)
+                        )
                     }
-                )
+                }
             }
+
             // Confirmation scrims
             AnimatedVisibility(
                 visible = showServiceScheduledConfirmation,
@@ -256,6 +272,7 @@ private fun OverviewScreenPreview() {
         ),
         detailsPanelState = DetailsPanelState(),
         servicePanelState = ServicePanelState(),
+        serviceModalState = ServiceModalState(),
         messageQueue = MessageQueue.test,
         onEditCarButtonClicked = { },
         onSettingsButtonClicked = { },

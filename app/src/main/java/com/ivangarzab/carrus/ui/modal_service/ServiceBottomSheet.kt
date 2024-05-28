@@ -12,9 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarDialog
@@ -47,7 +43,7 @@ import java.util.Calendar
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: ServiceModalViewModel = viewModel(),
-    inputData: Service?,
+    inputData: ServiceModalState,
     onDismissed: (success: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
@@ -56,8 +52,19 @@ fun ServiceBottomSheet(
         .state
         .observeAsState(initial = ServiceModalState())
 
+    val showRepairDateDialog: Boolean by viewModel
+        .isShowingRepairDateDialog
+        .observeAsState(initial = false)
+
+    val showDueDateDialog: Boolean by viewModel
+        .isShowingDueDateDialog
+        .observeAsState(initial = false)
+
     viewModel.apply {
-        setArgsData(inputData)
+        // Only update initial state when state.mode == NULL
+        if (state.mode == ServiceModalState.Mode.NULL) {
+            setInitialState(inputData)
+        }
         onSubmission.observe(LocalLifecycleOwner.current) { success ->
             when (success) {
                 true -> onDismissed(true)
@@ -70,25 +77,22 @@ fun ServiceBottomSheet(
         }
     }
 
-    var showRepairDateDialog: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var showDueDateDialog: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
 
     AppTheme {
         BottomSheet(
             modifier = modifier,
-            onDismissed = { onDismissed(false) }
+            onDismissed = {
+                viewModel.onClearState()
+                onDismissed(false)
+            }
         ) {
             ServiceBottomSheetContent(
                 modifier = modifier,
                 state = state,
                 onActionButtonClicked = { viewModel.onActionButtonClicked() },
                 onUpdateState = { viewModel.onUpdateServiceModalState(it) },
-                onRepairDateFieldClicked = { showRepairDateDialog = true },
-                onDueDateFieldClicked = { showDueDateDialog = true }
+                onRepairDateFieldClicked = { viewModel.onShowRepairDateDialog() },
+                onDueDateFieldClicked = { viewModel.onShowDueDateDialog() }
             )
         }
     }
@@ -97,17 +101,11 @@ fun ServiceBottomSheet(
         showRepairDateDialog -> {
             CalendarDialog(
                 title = "Repair Date",
-                onDismissed = { showRepairDateDialog = false },
+                onDismissed = { viewModel.onHideRepairDateDialog() },
                 onValueSelected = {
                     viewModel.onUpdateServiceModalState(
-                        state.copy(
-                            repairDate = it.getShortenedDate()
-                        )
+                        state.copy(repairDate = it.getShortenedDate())
                     )
-                    // Trigger the next Calendar dialog, as needed
-                    if (state.dueDate.isNullOrBlank()) {
-                        showDueDateDialog = true
-                    }
                 }
             )
         }
@@ -118,12 +116,10 @@ fun ServiceBottomSheet(
                 date = Calendar.getInstance().apply {
                     add(Calendar.DAY_OF_MONTH, ServiceModalViewModel.DEFAULT_DUE_DATE_ADDITION)
                 },
-                onDismissed = { showDueDateDialog = false },
+                onDismissed = { viewModel.onHideDueDateDialog() },
                 onValueSelected = {
                     viewModel.onUpdateServiceModalState(
-                        state.copy(
-                            dueDate = it.getShortenedDate()
-                        )
+                        state.copy(dueDate = it.getShortenedDate())
                     )
                 }
             )

@@ -31,7 +31,6 @@ fun ServiceModalScreenStateful(
     args: ServiceModalFragmentArgs,
     onSubmissionSuccess: (Boolean) -> Unit,
 ) {
-    viewModel.setArgsData(args.service)
     val state: ServiceModalState by viewModel
         .state
         .observeAsState(initial = ServiceModalState())

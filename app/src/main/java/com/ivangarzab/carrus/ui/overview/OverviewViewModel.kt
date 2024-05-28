@@ -17,6 +17,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -52,6 +53,7 @@ class OverviewViewModel @Inject constructor(
     val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
     val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
     val servicePanelState: LiveState<ServicePanelState> = LiveState(ServicePanelState())
+    val serviceModalState: LiveState<ServiceModalState> = LiveState(ServiceModalState())
 
     val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
 
@@ -188,6 +190,29 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    fun onServiceCreate() {
+        Timber.d("Creating a new service")
+        serviceModalState.setState {
+            ServiceModalState(
+                ServiceModalState.Mode.CREATE
+            )
+        }
+    }
+
+    fun onServiceEdit(service: Service) {
+        Timber.d("Editing service: $service")
+        serviceModalState.setState {
+            ServiceModalState.fromService(service, ServiceModalState.Mode.EDIT)
+        }
+    }
+
+    fun onServiceReschedule(service: Service) {
+        Timber.d("Rescheduling service: $service")
+        serviceModalState.setState {
+            ServiceModalState.fromService(service, ServiceModalState.Mode.RESCHEDULE)
+        }
+    }
+
     fun onServiceCompleted(service: Service) {
         Timber.d("Service completed: $service")
         analytics.logServiceCompleted(service.id, service.name)
@@ -199,6 +224,11 @@ class OverviewViewModel @Inject constructor(
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
         analytics.logServiceDeleted(service.id, service.name)
+    }
+
+    fun onServiceModalDismissed() {
+//        Timber.v("Service modal dismissed")
+        serviceModalState.setState { ServiceModalState() }
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -359,6 +389,11 @@ class OverviewViewModel @Inject constructor(
         if (debugFlagProvider.isDebugEnabled()) {
             carRepository.saveCarData(Car.default)
         }
+    }
+
+    override fun onCleared() {
+        Timber.v("Clearing OverviewViewModel")
+        super.onCleared()
     }
 }
 
