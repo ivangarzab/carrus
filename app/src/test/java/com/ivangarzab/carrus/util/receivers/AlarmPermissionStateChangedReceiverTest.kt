@@ -15,7 +15,7 @@ class AlarmPermissionStateChangedReceiverTest {
     private val receiver: AlarmPermissionStateChangedReceiver = AlarmPermissionStateChangedReceiver {
         listenedState = it
     }.apply {
-        analytics = mockk(relaxed = true)
+//        analytics = mockk(relaxed = true)
     }
 
     private lateinit var mockIntent: Intent

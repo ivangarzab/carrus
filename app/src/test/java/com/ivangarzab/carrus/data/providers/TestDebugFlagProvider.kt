@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data.di
+package com.ivangarzab.carrus.data.providers
 
 class TestDebugFlagProvider : DebugFlagProvider {
 

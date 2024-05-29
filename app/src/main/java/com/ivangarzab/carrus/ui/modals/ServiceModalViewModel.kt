@@ -11,17 +11,14 @@ import com.ivangarzab.carrus.util.extensions.getCalendarFromShortenedDate
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.parseIntoMoney
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import java.util.Calendar
 import java.util.UUID
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class ServiceModalViewModel @Inject constructor(
+class ServiceModalViewModel(
     private val carRepository: CarRepository,
     private val analytics: Analytics
 ) : ViewModel() {

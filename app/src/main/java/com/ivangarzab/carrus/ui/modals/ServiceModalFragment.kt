@@ -10,19 +10,16 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 class ServiceModalFragment : BottomSheetDialogFragment() {
 
     private val args: ServiceModalFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,

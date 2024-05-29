@@ -23,7 +23,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.BaseDialog
 import com.ivangarzab.carrus.ui.compose.NegativeButton
@@ -34,6 +33,7 @@ import com.ivangarzab.carrus.ui.compose.theme.Typography
 import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel.Companion.DEFAULT_DUE_DATE_ADDITION
 import com.ivangarzab.carrus.ui.overview.ServiceBottomSheetContent
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -45,7 +45,7 @@ import java.util.TimeZone
  */
 @Composable
 fun ServiceModalScreenStateful(
-    viewModel: ServiceModalViewModel = viewModel(),
+    viewModel: ServiceModalViewModel = koinViewModel(),
     args: ServiceModalFragmentArgs,
     onSubmissionSuccess: (Boolean) -> Unit,
 ) {
@@ -173,24 +173,29 @@ fun CalendarDialog(
             DatePicker(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTagsAsResourceId = true }.testTag("Date Picker")
+                    .semantics { testTagsAsResourceId = true }
+                    .testTag("Date Picker")
                     .combinedClickable(
                         onClick = {
                             //TODO: Debug check
                             onValueSelected(
-                                Calendar.getInstance().apply {
-                                    add(Calendar.MONTH, -1)
-                                }
+                                Calendar
+                                    .getInstance()
+                                    .apply {
+                                        add(Calendar.MONTH, -1)
+                                    }
                             )
                             onDismissed()
                         },
                         onLongClick = {
                             //TODO: Debug check
                             onValueSelected(
-                                Calendar.getInstance().apply {
-                                    add(Calendar.MONTH, -1)
-                                    add(Calendar.DAY_OF_MONTH, 1)
-                                }
+                                Calendar
+                                    .getInstance()
+                                    .apply {
+                                        add(Calendar.MONTH, -1)
+                                        add(Calendar.DAY_OF_MONTH, 1)
+                                    }
                             )
                             onDismissed()
                         }

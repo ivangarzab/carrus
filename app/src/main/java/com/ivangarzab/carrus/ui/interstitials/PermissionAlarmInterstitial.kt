@@ -9,12 +9,10 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.ivangarzab.carrus.ui.interstitials.data.PermissionInterstitialEnum
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.S)
 class PermissionAlarmInterstitial :
     PermissionInterstitial<PermissionInterstitialViewModel>() {

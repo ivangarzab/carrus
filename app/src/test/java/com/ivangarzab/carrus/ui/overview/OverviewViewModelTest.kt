@@ -3,9 +3,9 @@ package com.ivangarzab.carrus.ui.overview
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.data.di.BuildVersionProvider
-import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.models.Message
+import com.ivangarzab.carrus.data.providers.BuildVersionProvider
+import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
 import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository

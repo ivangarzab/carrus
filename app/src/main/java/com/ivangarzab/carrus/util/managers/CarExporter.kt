@@ -3,14 +3,11 @@ package com.ivangarzab.carrus.util.managers
 import com.google.gson.Gson
 import com.ivangarzab.carrus.data.models.Car
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class CarExporter @Inject constructor() {
+class CarExporter {
 
     /**
      * With the [Car] data received as a parameter, use [Gson] to convert the model class into a

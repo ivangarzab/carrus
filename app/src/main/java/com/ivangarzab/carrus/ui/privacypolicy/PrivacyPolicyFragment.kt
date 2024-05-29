@@ -9,17 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 class PrivacyPolicyFragment : Fragment() {
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
