@@ -1,5 +1,6 @@
 package com.ivangarzab.carrus.ui.modal_service
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
@@ -74,7 +75,7 @@ class ServiceModalViewModel @Inject constructor(
                         ServiceModalState.Mode.CREATE -> onServiceCreated(it)
                         ServiceModalState.Mode.EDIT -> onServiceUpdate(it)
                         ServiceModalState.Mode.RESCHEDULE -> onServiceReschedule(it)
-                        ServiceModalState.Mode.NULL -> Timber.wtf("Action button clicked on a NULL service")
+                        else -> { /* No-op */ }
                     }
                     // reset for next use
                     onClearState()
@@ -108,14 +109,17 @@ class ServiceModalViewModel @Inject constructor(
                     verifyStringDate(dueDate)
         } else false
 
-    private fun verifyStringDate(stringDate: String): Boolean {
-        stringDate.takeIf {
-            it.isNotBlank()
-        }?.getCalendarFromShortenedDate().let { date ->
-            if (date?.timeInMillis != 0L) {
-                return true
+    @VisibleForTesting
+    fun verifyStringDate(stringDate: String): Boolean {
+        stringDate
+            .takeIf { it.isNotBlank() }
+            ?.getCalendarFromShortenedDate().let { date ->
+                date?.let {
+                    if (it.timeInMillis != 0L) {
+                        return true
+                    }
+                }
             }
-        }
         return false
     }
 
@@ -150,7 +154,7 @@ class ServiceModalViewModel @Inject constructor(
                 Timber.v("Validation successful")
                 setValidatedService(it)
             } else Timber.v("Validation failed")
-        }
+        } //TODO: Not handling the null state case
     }
 
     private fun setValidatedService(data: ServiceModalState) {
