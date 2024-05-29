@@ -35,7 +35,7 @@ import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.modal_service.ServiceBottomSheet
-import com.ivangarzab.carrus.ui.modal_service.ServiceModalInputData
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState

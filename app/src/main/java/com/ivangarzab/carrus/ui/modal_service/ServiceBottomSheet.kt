@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
-import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarDialog
@@ -33,6 +32,7 @@ import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import java.util.Calendar
@@ -40,10 +40,6 @@ import java.util.Calendar
 /**
  * Created by Ivan Garza Bermea.
  */
-data class ServiceModalInputData(
-    val mode: ServiceModalState.Mode = ServiceModalState.Mode.NULL,
-    val service: Service? = null
-)
 @Composable
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,

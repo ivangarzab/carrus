@@ -17,7 +17,7 @@ import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
-import com.ivangarzab.carrus.ui.modal_service.ServiceModalInputData
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
