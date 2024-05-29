@@ -56,7 +56,12 @@ class ServiceModalViewModel(
                     }
                 )
             }
-        } ?: setState(ServiceModalState(mode = mode))
+        } ?: setState(
+            ServiceModalState(
+                mode = mode,
+                title = "Create Service"
+            )
+        )
     }
 
     fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)

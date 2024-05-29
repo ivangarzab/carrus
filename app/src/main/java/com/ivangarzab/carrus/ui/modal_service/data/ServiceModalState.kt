@@ -22,7 +22,11 @@ data class ServiceModalState(
         fun fromService(service: Service, mode: Mode): ServiceModalState {
             return ServiceModalState(
                 mode = mode,
-                title = "Update Service",
+                title = when (mode) {
+                    Mode.CREATE -> "Create Service"
+                    Mode.EDIT, Mode.RESCHEDULE -> "Update Service"
+                    else -> "Strange Service"
+                },
                 name = service.name,
                 repairDate = service.repairDate.getShortenedDate(),
                 dueDate = service.dueDate.getShortenedDate(),
