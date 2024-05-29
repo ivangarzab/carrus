@@ -68,24 +68,29 @@ fun CalendarDialog(
             DatePicker(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTagsAsResourceId = true }.testTag("Date Picker")
+                    .semantics { testTagsAsResourceId = true }
+                    .testTag("Date Picker")
                     .combinedClickable(
                         onClick = {
                             //TODO: Debug check
                             onValueSelected(
-                                Calendar.getInstance().apply {
-                                    add(Calendar.MONTH, -1)
-                                }
+                                Calendar
+                                    .getInstance()
+                                    .apply {
+                                        add(Calendar.MONTH, -1)
+                                    }
                             )
                             onDismissed()
                         },
                         onLongClick = {
                             //TODO: Debug check
                             onValueSelected(
-                                Calendar.getInstance().apply {
-                                    add(Calendar.MONTH, -1)
-                                    add(Calendar.DAY_OF_MONTH, 1)
-                                }
+                                Calendar
+                                    .getInstance()
+                                    .apply {
+                                        add(Calendar.MONTH, -1)
+                                        add(Calendar.DAY_OF_MONTH, 1)
+                                    }
                             )
                             onDismissed()
                         }

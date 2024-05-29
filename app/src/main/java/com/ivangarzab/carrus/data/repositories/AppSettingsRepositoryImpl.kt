@@ -9,20 +9,16 @@ import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.states.AppSettingsState
 import com.ivangarzab.carrus.util.managers.Preferences
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class AppSettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context,
+class AppSettingsRepositoryImpl(
+    context: Context,
     private val prefs: Preferences
 ) : AppSettingsRepository {
 

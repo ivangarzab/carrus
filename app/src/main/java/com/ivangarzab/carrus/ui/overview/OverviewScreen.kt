@@ -27,7 +27,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Service
@@ -42,13 +41,14 @@ import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
 import com.ivangarzab.carrus.ui.overview.data.ServicePanelState
 import com.ivangarzab.carrus.ui.overview.data.SortingType
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @Composable
 fun OverviewScreenStateful(
-    viewModel: OverviewViewModel = viewModel(),
+    viewModel: OverviewViewModel = koinViewModel(),
     onCarEditButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,

@@ -1,21 +1,21 @@
 package com.ivangarzab.carrus
 
 import android.app.Application
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
+import com.ivangarzab.carrus.data.di.AppModule
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.util.managers.Coiler
 import com.ivangarzab.carrus.util.managers.LeakUploader
-import dagger.hilt.android.HiltAndroidApp
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltAndroidApp
 open class App : Application() {
 
-    @Inject
-    lateinit var debugFlagProvider: DebugFlagProvider
+    val debugFlagProvider: DebugFlagProvider by inject()
 
     open val leakUploader: LeakUploader = LeakUploader()
 
@@ -23,12 +23,20 @@ open class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setupKoin()
         if (debugFlagProvider.isDebugEnabled()) {
             Timber.plant(Timber.DebugTree())
             Timber.v("Timber seed has been planted")
             setupLeakCanary()
         }
         setupCoil()
+    }
+
+    private fun setupKoin() {
+        startKoin {
+            androidContext(this@App)
+            modules(AppModule)
+        }
     }
 
     open fun setupLeakCanary() {

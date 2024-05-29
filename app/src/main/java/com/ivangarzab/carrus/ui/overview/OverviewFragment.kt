@@ -10,27 +10,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 class OverviewFragment : Fragment() {
 
-    private val viewModel: OverviewViewModel by viewModels()
+    private val viewModel: OverviewViewModel by viewModel()
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject()
 
     private val notificationPermissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()

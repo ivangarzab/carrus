@@ -1,4 +1,4 @@
-package com.ivangarzab.carrus.data.di
+package com.ivangarzab.carrus.data.providers
 
 import com.google.common.truth.Truth
 import com.ivangarzab.carrus.BuildConfig
@@ -75,20 +75,6 @@ class DebugFlagProviderTest {
     fun test_isDebugEnabled_base_with_forceDebug_true_from_impl_class() {
         implProvider.forceDebug = true
         val result = implProvider.isDebugEnabled()
-        Truth.assertThat(result)
-            .isEqualTo(BuildConfig.DEBUG)
-    }
-
-    @Test
-    fun test_module_bind() {
-        val module = object : DebugFlagProviderModule() {
-            override fun bindDebugFlagProvider(debugFlagProvider: DebugFlagProviderImpl): DebugFlagProvider {
-                return implProvider
-            }
-
-        }
-        val provider = module.bindDebugFlagProvider(implProvider)
-        val result = provider.isDebugEnabled()
         Truth.assertThat(result)
             .isEqualTo(BuildConfig.DEBUG)
     }

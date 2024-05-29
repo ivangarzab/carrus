@@ -9,14 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class CarRepositoryImpl @Inject constructor(
+class CarRepositoryImpl(
     private val appScope: CoroutineScope,
     private val prefs: Preferences
 ) : CarRepository {

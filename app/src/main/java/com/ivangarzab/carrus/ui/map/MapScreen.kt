@@ -9,7 +9,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -21,10 +20,11 @@ import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.map.MapViewModel.Companion.DEFAULT_LOCATION
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MapScreen(
-    viewModel: MapViewModel = viewModel(),
+    viewModel: MapViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
     onNavHomePressed: () -> Unit,

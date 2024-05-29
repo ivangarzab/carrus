@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
@@ -32,6 +31,7 @@ import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
+import org.koin.androidx.compose.koinViewModel
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
@@ -43,7 +43,7 @@ import java.util.Calendar
 @Composable
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
-    viewModel: ServiceModalViewModel = viewModel(),
+    viewModel: ServiceModalViewModel = koinViewModel(),
     inputData: ServiceModalInputData,
     onDismissed: (success: Boolean) -> Unit,
 ) {

@@ -47,12 +47,8 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
-    implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
-    testImplementation(libs.hilt.testing)
-    kaptTest(libs.hilt.compiler)
-    androidTestImplementation(libs.hilt.testing)
-    kaptAndroidTest(libs.hilt.compiler)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

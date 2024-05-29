@@ -11,18 +11,16 @@ import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmSchedulingData
 import com.ivangarzab.carrus.data.repositories.DEFAULT_ALARM_TIME
 import com.ivangarzab.carrus.util.receivers.AlarmBroadcastReceiver
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-class AlarmSchedulerImpl @Inject constructor(
-    @ApplicationContext context: Context,
+class AlarmSchedulerImpl(
+    context: Context,
     private val prefs: Preferences
 ) : AlarmScheduler {
     private val weakContext: WeakReference<Context> = WeakReference(context)

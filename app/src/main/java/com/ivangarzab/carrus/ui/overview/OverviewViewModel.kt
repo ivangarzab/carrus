@@ -5,12 +5,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.data.di.BuildVersionProvider
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.data.providers.BuildVersionProvider
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
@@ -28,20 +28,17 @@ import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class OverviewViewModel @Inject constructor(
+class OverviewViewModel(
     private val buildVersionProvider: BuildVersionProvider,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,

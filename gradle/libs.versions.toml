@@ -28,7 +28,7 @@ playServicesMapsVersion = "18.2.0"
 robolectricVersion = "4.11.1"
 secretsGradlePluginVersion = "2.0.1"
 timber = "5.0.1"
-hilt = "2.49"
+koin-bom = "3.5.0"
 junit = "4.13.2"
 androidxJunit = "1.1.5"
 espresso = "3.5.1"
@@ -87,10 +87,12 @@ android-maps-compose = { module = "com.google.maps.android:maps-compose", versio
 android-maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtilsVersion" }
 volley = { module = "com.android.volley:volley", version.ref = "volleyVersion" }
 
-# https://github.com/google/dagger/tree/master/java/dagger/hilt
-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+# https://insert-koin.io/
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-android-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-test = { module = "io.insert-koin:koin-test" }
+koin-test-junit = { module = "io.insert-koin:koin-test-junit4" }
 
 # https://firebase.google.com/support/release-notes/android
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
@@ -146,7 +148,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kgp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kgp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kgp" }
 androidx-nav-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNav" }
-hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }
 android-mapsplatform-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePluginVersion" }
