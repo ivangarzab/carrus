@@ -230,7 +230,7 @@ private fun OverviewScreen(
                 enter = fadeIn(),
                 exit = fadeOut(
                     animationSpec = TweenSpec(
-                        delay = 600
+                        delay = SCHEDULE_ACTION_SCRIM_DURATION_MS
                     )
                 )
             ) {
@@ -245,7 +245,7 @@ private fun OverviewScreen(
                 enter = fadeIn(),
                 exit = fadeOut(
                     animationSpec = TweenSpec(
-                        delay = 600
+                        delay = SCHEDULE_ACTION_SCRIM_DURATION_MS
                     )
                 )
             ) {
@@ -287,3 +287,5 @@ private fun OverviewScreenPreview() {
         addServiceList = { }
     )
 }
+
+private const val SCHEDULE_ACTION_SCRIM_DURATION_MS = 450
