@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ivangarzab.carrus.R
+import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
 import com.ivangarzab.carrus.ui.compose.CalendarDialog
@@ -39,11 +40,15 @@ import java.util.Calendar
 /**
  * Created by Ivan Garza Bermea.
  */
+data class ServiceModalInputData(
+    val mode: ServiceModalState.Mode = ServiceModalState.Mode.NULL,
+    val service: Service? = null
+)
 @Composable
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: ServiceModalViewModel = viewModel(),
-    inputData: ServiceModalState,
+    inputData: ServiceModalInputData,
     onDismissed: (success: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
@@ -63,7 +68,7 @@ fun ServiceBottomSheet(
     viewModel.apply {
         // Only update initial state when state.mode == NULL
         if (state.mode == ServiceModalState.Mode.NULL) {
-            setInitialState(inputData)
+            setInitialData(inputData.service, inputData.mode)
         }
         onSubmission.observe(LocalLifecycleOwner.current) { success ->
             when (success) {

@@ -35,6 +35,7 @@ import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.modal_service.ServiceBottomSheet
+import com.ivangarzab.carrus.ui.modal_service.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
@@ -65,9 +66,9 @@ fun OverviewScreenStateful(
         .servicePanelState
         .observeAsState(initial = ServicePanelState())
 
-    val serviceModalState: ServiceModalState by viewModel
-        .serviceModalState
-        .observeAsState(initial = ServiceModalState())
+    val serviceModalData: ServiceModalInputData by viewModel
+        .serviceModalData
+        .observeAsState(initial = ServiceModalInputData())
 
     val queueState: MessageQueueState by viewModel
         .queueState
@@ -78,7 +79,7 @@ fun OverviewScreenStateful(
             staticState = staticState,
             detailsPanelState = detailsPanelState,
             servicePanelState = servicePanelState,
-            serviceModalState = serviceModalState,
+            serviceModalData = serviceModalData,
             messageQueue = queueState.messageQueue,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
@@ -106,7 +107,7 @@ private fun OverviewScreen(
     staticState: OverviewStaticState,
     detailsPanelState: DetailsPanelState,
     servicePanelState: ServicePanelState,
-    serviceModalState: ServiceModalState,
+    serviceModalData: ServiceModalInputData,
     messageQueue: MessageQueue = MessageQueue.test,
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
@@ -200,7 +201,7 @@ private fun OverviewScreen(
                 }
             )
             // Dialog
-            serviceModalState.let {
+            serviceModalData.let {
                 when {
                     it.mode != ServiceModalState.Mode.NULL -> {
                         ServiceBottomSheet(
@@ -272,7 +273,7 @@ private fun OverviewScreenPreview() {
         ),
         detailsPanelState = DetailsPanelState(),
         servicePanelState = ServicePanelState(),
-        serviceModalState = ServiceModalState(),
+        serviceModalData = ServiceModalInputData(),
         messageQueue = MessageQueue.test,
         onEditCarButtonClicked = { },
         onSettingsButtonClicked = { },

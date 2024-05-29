@@ -42,18 +42,23 @@ class ServiceModalViewModel @Inject constructor(
     /**
      * Only call once. This call is necessary under the current design.
      */
-    fun setInitialState(initialState: ServiceModalState) {
-        Timber.d("Setting initial state for a ${initialState.mode} modal")
-        setState(
-            if (initialState.mode == ServiceModalState.Mode.RESCHEDULE) {
-                // Show repair date and nullify due date for update.
-                isShowingRepairDateDialog.setState { true }
-                initialState.copy(dueDate = null)
-            } else {
-                // Use initialState as provided.
-                initialState
+    fun setInitialData(service: Service?, mode: ServiceModalState.Mode) {
+        Timber.d("Setting initial data for a $mode modal")
+        this.validatedService = service
+        service?.let {
+            ServiceModalState.fromService(it, mode).let { initialState ->
+                setState(
+                    if (initialState.mode == ServiceModalState.Mode.RESCHEDULE) {
+                        // Show repair date dialog and nullify due date for reschedule flow.
+                        isShowingRepairDateDialog.setState { true }
+                        initialState.copy(dueDate = null)
+                    } else {
+                        // Use initialState as provided.
+                        initialState
+                    }
+                )
             }
-        )
+        } ?: setState(ServiceModalState(mode = mode))
     }
 
     fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)

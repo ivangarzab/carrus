@@ -58,16 +58,16 @@ class ServiceModalViewModelTest {
 
     @Test
     fun test_setArgsData_base() {
-        viewModel.setArgsData(null)
-        assertThat(viewModel.modalType)
-            .isSameInstanceAs(ServiceModalViewModel.Type.CREATE)
+        viewModel.setInitialState(ServiceModalState())
+        assertThat(viewModel.modalMode)
+            .isSameInstanceAs(ServiceModalState.Mode.NULL)
     }
 
     @Test
     fun test_setArgsData_with_data() {
         setArgsData()
-        assertThat(viewModel.modalType)
-            .isSameInstanceAs(ServiceModalViewModel.Type.EDIT)
+        assertThat(viewModel.modalMode)
+            .isSameInstanceAs(ServiceModalState.Mode.EDIT)
     }
 
     @Test
