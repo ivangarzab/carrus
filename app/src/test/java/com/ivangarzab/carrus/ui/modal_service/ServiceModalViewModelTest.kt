@@ -58,7 +58,7 @@ class ServiceModalViewModelTest {
 
     @Test
     fun test_setArgsData_base() {
-        viewModel.setInitialState(ServiceModalState())
+        viewModel.setInitialData(SERVICE_EMPTY, ServiceModalState.Mode.NULL)
         assertThat(viewModel.modalMode)
             .isSameInstanceAs(ServiceModalState.Mode.NULL)
     }
@@ -119,8 +119,8 @@ class ServiceModalViewModelTest {
             .isTrue()
     }
 
-    private fun setEmptyArgsData() = viewModel.setArgsData(SERVICE_EMPTY)
-    private fun setArgsData() = viewModel.setArgsData(SERVICE_TEST_1)
+    private fun setEmptyArgsData() = viewModel.setInitialData(SERVICE_EMPTY, ServiceModalState.Mode.NULL)
+    private fun setArgsData() = viewModel.setInitialData(SERVICE_TEST_1, ServiceModalState.Mode.EDIT)
 
     companion object {
         private val SERVICE_MODAL_STATE_INVALID = ServiceModalState(
