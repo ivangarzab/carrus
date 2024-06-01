@@ -62,6 +62,7 @@ class ServiceModalViewModel(
                 title = "Create Service"
             )
         )
+        analytics.logServiceModalScreenView("ServiceModalScreen")
     }
 
     fun onUpdateServiceModalState(update: ServiceModalState) = setState(update)
