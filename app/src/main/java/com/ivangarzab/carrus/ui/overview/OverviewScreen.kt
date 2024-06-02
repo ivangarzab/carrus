@@ -91,6 +91,7 @@ fun OverviewScreenStateful(
             onServiceRescheduleClicked = { viewModel.onServiceReschedule(it) },
             onServiceCompleteClicked = { viewModel.onServiceCompleted(it) },
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
+            onShopPanelClicked = { viewModel.onShopPanelClicked(it) },
             onServiceModalDismissed = { viewModel.onServiceModalDismissed() },
             onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
@@ -119,6 +120,7 @@ private fun OverviewScreen(
     onServiceRescheduleClicked: (Service) -> Unit = { },
     onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    onShopPanelClicked: (Service) -> Unit = { },
     onServiceModalDismissed: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { },
@@ -166,6 +168,7 @@ private fun OverviewScreen(
                         onServiceEditButtonClicked = onServiceEditButtonClicked,
                         onServiceRescheduleClicked = onServiceRescheduleClicked,
                         onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
+                        onShopDetailsClicked = onShopPanelClicked,
                         addServiceList = addServiceList,
                         onMessageContentClicked = { onMessageContentClicked(it) },
                         onMessageDismissClicked = onMessageDismissClicked

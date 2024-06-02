@@ -61,6 +61,7 @@ fun OverviewServiceItem(
     onCompleteClicked: (Service) -> Unit,
     onRescheduleClicked: (Service) -> Unit,
     onDeleteClicked: (Service) -> Unit,
+    onShopDetailsClicked: (Service) -> Unit,
     onExpandOrShrinkRequest: (index: Int, expand: Boolean) -> Unit
 ) {
     fun onExpandOrShrinkClicked() = onExpandOrShrinkRequest(index, isExpanded.not())
@@ -170,7 +171,7 @@ fun OverviewServiceItem(
                         data.data.shop?.let { shop: Shop ->
                             OverviewServiceItemShopRow(
                                 data = shop,
-                                onShopDetailsClicked = { }
+                                onShopDetailsClicked = { onShopDetailsClicked(data.data) }
                             )
                             Divider(
                                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
@@ -199,7 +200,7 @@ private fun OverviewServiceItemShopRow(
     onShopDetailsClicked: () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clickable { onShopDetailsClicked() },
@@ -284,7 +285,38 @@ private fun OverviewServiceItemActionRow(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun OverviewServiceItemPreview() {
+private fun OverviewServiceItemPreviewNoShop() {
+    AppTheme {
+        OverviewServiceItem(
+            modifier = Modifier,
+            index = -1,
+            data = Service.serviceList[2].let {
+                ServiceItemState(
+                    index = 1,
+                    name = it.name,
+                    details = "No deets",
+                    price = NumberFormat.getCurrencyInstance().format(it.cost),
+                    repairDate = "on 9/12/1992",
+                    dueDateFormatted = "DUE",
+                    isPastDue = true,
+                    data = it
+                )
+            },
+            isExpanded = true,
+            onEditClicked = { },
+            onCompleteClicked = { },
+            onRescheduleClicked = { },
+            onDeleteClicked = { },
+            onExpandOrShrinkRequest = { _: Int, _: Boolean -> },
+            onShopDetailsClicked = { }
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun OverviewServiceItemPreviewWithShop() {
     AppTheme {
         OverviewServiceItem(
             modifier = Modifier,
@@ -306,7 +338,8 @@ private fun OverviewServiceItemPreview() {
             onCompleteClicked = { },
             onRescheduleClicked = { },
             onDeleteClicked = { },
-            onExpandOrShrinkRequest = { _: Int, _: Boolean -> }
+            onExpandOrShrinkRequest = { _: Int, _: Boolean -> },
+            onShopDetailsClicked = { }
         )
     }
 }

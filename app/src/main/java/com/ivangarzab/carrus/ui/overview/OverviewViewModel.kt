@@ -231,6 +231,11 @@ class OverviewViewModel(
         analytics.logServiceDeleted(service.id, service.name)
     }
 
+    fun onShopPanelClicked(service: Service) {
+        Timber.d("Service's shop data clicked: $service")
+        //TODO: Do something about it!
+    }
+
     fun onServiceModalDismissed() {
 //        Timber.v("Service modal dismissed")
         serviceModalData.setState { ServiceModalInputData() }

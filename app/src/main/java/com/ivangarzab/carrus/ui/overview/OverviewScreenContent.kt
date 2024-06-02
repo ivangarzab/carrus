@@ -60,6 +60,7 @@ fun OverviewScreenContent(
     onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceRescheduleClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    onShopDetailsClicked: (Service) -> Unit = { },
     addServiceList: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { }
@@ -155,7 +156,8 @@ fun OverviewScreenContent(
                             } else {
                                 NO_ITEM_EXPANDED
                             }
-                        }
+                        },
+                        onShopDetailsClicked = onShopDetailsClicked
                     )
                 }
             } else {
