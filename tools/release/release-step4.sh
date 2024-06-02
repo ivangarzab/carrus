@@ -4,20 +4,19 @@
 # followed by simply pushing all changes up to the 'origin,' including the newly created tag.
 
 VERSION_NAME="$1"
-SED_OPTION=
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  SED_OPTION="-i ''"
-else
-  SED_OPTION="-i"
-fi
 
 
+echo "Merging master >> develop"
 # Finish updating 'develop' and push to 'origin'
 git checkout develop
 git merge --no-ff master
+echo "Pushing develop branch"
 git push
 # Checkout 'master' and push to 'origin'
+echo "Pushing master branch"
 git checkout master
 git push
 # Push new tag as well
+echo "Pushing all tags"
 git push origin "$VERSION_NAME"
+echo "All changes have been pushed to origin"

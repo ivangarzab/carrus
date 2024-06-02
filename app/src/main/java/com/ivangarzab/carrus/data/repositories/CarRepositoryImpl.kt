@@ -9,14 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class CarRepositoryImpl @Inject constructor(
+class CarRepositoryImpl(
     private val appScope: CoroutineScope,
     private val prefs: Preferences
 ) : CarRepository {
@@ -66,7 +63,7 @@ class CarRepositoryImpl @Inject constructor(
     } ?: Timber.w("There's no car data to update")
 
     override fun updateCarService(service: Service) = fetchCarData()?.let { car ->
-        Timber.d("Updating car service ${service.name} to: \n$service")
+        Timber.d("Updating car service '${service.name}' to: \n$service")
         saveCarData(
             car.copy(
                 services = car.services.map {

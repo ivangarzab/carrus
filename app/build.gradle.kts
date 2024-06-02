@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.androidx.nav.safeargs)
     alias(libs.plugins.android.mapsplatform.secrets)
-    alias(libs.plugins.hilt.gradle)
 }
 
 android {
@@ -18,8 +17,8 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 34
-        versionCode = 16
-        versionName = "1.0.0-beta01"
+        versionCode = 18
+        versionName = "1.0.0-beta03"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -108,12 +107,11 @@ dependencies {
     implementation(libs.android.maps.compose)
     implementation(libs.volley)
 
-    implementation(libs.hilt)
-    kapt(libs.hilt.compiler)
-    testImplementation(libs.hilt.testing)
-    kaptTest(libs.hilt.compiler)
-    androidTestImplementation(libs.hilt.testing)
-    kaptAndroidTest(libs.hilt.compiler)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.android.compose)
+    implementation(libs.koin.test)
+    implementation(libs.koin.test.junit)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)

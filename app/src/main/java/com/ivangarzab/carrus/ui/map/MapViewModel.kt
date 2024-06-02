@@ -21,17 +21,13 @@ import com.google.maps.android.SphericalUtil
 import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.models.PlaceData
 import com.ivangarzab.carrus.data.structures.LiveState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class MapViewModel @Inject constructor(
-    @ApplicationContext context: Context
+class MapViewModel(
+    context: Context
 ) : ViewModel(), LifecycleEventObserver {
 
     val state: LiveState<MapState> = LiveState(initialValue = MapState())

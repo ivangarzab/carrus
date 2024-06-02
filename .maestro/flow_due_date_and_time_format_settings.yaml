@@ -1,0 +1,44 @@
+# The purpose of this script is to go over the clock and time format settings, as well as
+# testing the due date format on the Overview screen.
+appId: com.ivangarzab.carrus.debug
+---
+- tapOn: "Settings"
+- tapOn: "Alarm time"
+- tapOn: "PM"
+- tapOn: "4 o'clock"
+- tapOn: "Submit"
+- assertVisible: "4 PM"
+- assertVisible: "Value should be between 1 – 12"
+- tapOn: "Clock time format"
+- swipe:
+    start: "50%,43%"
+    end: "50%,37%"
+    duration: 1500
+- tapOn: "Submit"
+- assertNotVisible: "4 PM"
+- assertVisible: "16:00"
+- assertNotVisible: "Value should be between 1 – 12"
+- assertVisible: "Value should be between 0 – 23"
+- tapOn: "Due date format"
+- swipe:
+    start: "50%,43%"
+    end: "50%,37%"
+    duration: 1500
+- tapOn: "Submit"
+- assertNotVisible: "days"
+- assertVisible: "weeks"
+- "back"
+- assertNotVisible: "6 days"
+- assertNotVisible: "30 days"
+- tapOn: "Settings"
+- tapOn: "weeks"
+- swipe:
+    start: "50%,43%"
+    end: "50%,48%"
+    duration: 1500
+- tapOn: "Submit"
+- assertVisible: "days"
+- "back"
+#TODO: Uncomment once we figure this out
+#- assertVisible: "6 days"
+#- assertVisible: "30 days"

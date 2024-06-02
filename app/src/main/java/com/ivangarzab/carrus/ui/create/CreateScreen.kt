@@ -49,7 +49,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -63,13 +62,14 @@ import com.ivangarzab.carrus.ui.compose.TopBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.create.data.CarModalState
 import com.ivangarzab.carrus.ui.create.data.CarModalStatePreview
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Ivan Garza Bermea.
  */
 @Composable
 fun CreateScreenStateful(
-    viewModel: CreateViewModel = viewModel(),
+    viewModel: CreateViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onNavSettingsPressed: () -> Unit,
     onNavHomePressed: () -> Unit,

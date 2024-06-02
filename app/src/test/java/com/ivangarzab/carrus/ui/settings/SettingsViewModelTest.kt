@@ -4,10 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
 import com.ivangarzab.carrus.data.alarm.AlarmTime
-import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
+import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository

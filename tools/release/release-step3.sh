@@ -4,12 +4,6 @@
 # same branch into both 'master' & 'develop'.
 
 VERSION_NAME="$1"
-SED_OPTION=
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  SED_OPTION="-i ''"
-else
-  SED_OPTION="-i"
-fi
 
 
 # Publish release branch into 'origin'

@@ -1,0 +1,16 @@
+# The purpose of this script is to serve as the main flow to execute all the main flow 'steps'
+# in order as to test the application exhaustively.
+appId: com.ivangarzab.carrus.debug
+---
+- launchApp:
+    appId: "com.ivangarzab.carrus.debug"
+    stopApp: true
+    clearState: true
+- runFlow: "flow_creation_quick.yaml"
+- runFlow: "flow_notification_permission_full.yaml"
+- runFlow: "flow_service_list_create_quick.yaml"
+- runFlow: "flow_edit_car_image.yaml"
+- runFlow: "flow_alarm_permission_and_settings.yaml"
+- runFlow: "flow_service_list_sorting_identify.yaml"
+- runFlow: "flow_import_export_and_data_delete.yaml"
+- runFlow: "flow_due_date_and_time_format_settings.yaml"

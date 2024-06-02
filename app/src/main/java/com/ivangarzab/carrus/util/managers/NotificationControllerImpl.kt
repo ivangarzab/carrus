@@ -12,17 +12,13 @@ import androidx.core.app.NotificationCompat
 import com.ivangarzab.carrus.MainActivity
 import com.ivangarzab.carrus.MainActivity.Companion.REQUEST_CODE
 import com.ivangarzab.carrus.R
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@Singleton
-class NotificationControllerImpl @Inject constructor(
-    @ApplicationContext val context: Context,
+class NotificationControllerImpl(
+    val context: Context,
 ) : NotificationController {
     private val notificationManager: NotificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
