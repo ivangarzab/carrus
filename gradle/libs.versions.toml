@@ -38,7 +38,7 @@ androidxNav = "2.7.6"
 googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
 truth = "1.1.5"
-mockk = "1.13.8"
+mockk = "1.13.11"
 volleyVersion = "1.2.1"
 
 
