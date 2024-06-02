@@ -1,9 +1,9 @@
-android-pixel-5:
+android-pixel-8:
   type: instrumentation
   app: app-debug/app-debug.apk
   test: app-debug-androidTest/app-debug-androidTest.apk
   device:
-    - model: redfin
-      version: 30
+    - model: shiba
+      version: 34
       locale: 'en'
       orientation: portrait
