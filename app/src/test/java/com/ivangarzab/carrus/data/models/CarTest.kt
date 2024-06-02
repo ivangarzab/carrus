@@ -36,15 +36,15 @@ class CarTest {
                 "\nnickname='Shaq'" +
                 "\nmake='Chevrolet'" +
                 "\nmodel='Malibu'" +
-                "\nyear='2006'" +
+                "\nyear='2009'" +
                 "\nlicenseState='Texas'" +
-                "\nlicenseNo='IGB066'" +
-                "\nvinNo='4Y1SL65848Z411439'" +
-                "\ntirePressure='35'" +
-                "\ntotalMiles='99,999'" +
+                "\nlicenseNo='IGB123'" +
+                "\nvinNo='123ABC456HIJ78Z'" +
+                "\ntirePressure='32'" +
+                "\ntotalMiles='100,000'" +
                 "\nmi/gal-City='26'" +
-                "\nmi/gal-Highway='31'" +
-                "\nservices='${Service.serviceList}'" +
+                "\nmi/gal-Highway='30'" +
+                "\nservices='${defaultCar.services}'" +
                 "\nimageUri=null" +
                 "\n)"
         val carToString = defaultCar.toStringVerbose()
@@ -89,14 +89,14 @@ class CarTest {
             nickname = "Shaq",
             make = "Chevrolet",
             model = "Malibu",
-            year = "2006",
+            year = "2009",
             licenseState = "Texas",
-            licenseNo = "IGB066",
-            vinNo = "4Y1SL65848Z411439",
-            tirePressure = "35",
-            totalMiles = "99,999",
+            licenseNo = "IGB123",
+            vinNo = "123ABC456HIJ78Z",
+            tirePressure = "32",
+            totalMiles = "100,000",
             milesPerGalCity = "26",
-            milesPerGalHighway = "31",
+            milesPerGalHighway = "30",
             services = Service.serviceList
         )
 

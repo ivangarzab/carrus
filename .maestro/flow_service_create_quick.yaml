@@ -1,0 +1,19 @@
+# The purpose of this script is to go over the entire Service modal and try out all of the
+## failing scenarios, before culminating in the creation of our 'omega' past DUE Service.
+appId: com.ivangarzab.carrus.debug
+---
+- runFlow: # make sure the create service modal is open
+    when:
+      notVisible: "Create Service"
+    commands:
+      - tapOn: "Add Service"
+- tapOn: "Service name*"
+- inputText: "omega"
+- pressKey: "enter"
+- assertVisible: "Repair Date"
+- tapOn:
+    point: "50%,15%"
+- assertVisible: "Due Date"
+- longPressOn:
+    point: "50%,15%"
+- tapOn: "Submit"

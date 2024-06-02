@@ -5,18 +5,20 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
-import com.ivangarzab.carrus.data.di.BuildVersionProvider
-import com.ivangarzab.carrus.data.di.DebugFlagProvider
 import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.data.providers.BuildVersionProvider
+import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -26,20 +28,17 @@ import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.carrus.util.extensions.getShortenedDate
 import com.ivangarzab.carrus.util.extensions.isPastDue
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@HiltViewModel
-class OverviewViewModel @Inject constructor(
+class OverviewViewModel(
     private val buildVersionProvider: BuildVersionProvider,
     private val carRepository: CarRepository,
     private val appSettingsRepository: AppSettingsRepository,
@@ -52,6 +51,7 @@ class OverviewViewModel @Inject constructor(
     val staticState: LiveState<OverviewStaticState> = LiveState(OverviewStaticState())
     val detailsPanelState: LiveState<DetailsPanelState> = LiveState(DetailsPanelState())
     val servicePanelState: LiveState<ServicePanelState> = LiveState(ServicePanelState())
+    val serviceModalData: LiveState<ServiceModalInputData> = LiveState(ServiceModalInputData())
 
     val queueState: LiveState<MessageQueueState> = LiveState(MessageQueueState())
 
@@ -76,7 +76,10 @@ class OverviewViewModel @Inject constructor(
         }
         viewModelScope.launch {
             appSettingsRepository.observeAppSettingsStateData().collect {
-                dueDateFormat = it.dueDateFormat
+                if (dueDateFormat != it.dueDateFormat) {
+                    dueDateFormat = it.dueDateFormat
+                    updateServiceListWithNewDueDateFormat()
+                }
             }
         }
         viewModelScope.launch {
@@ -185,10 +188,52 @@ class OverviewViewModel @Inject constructor(
         }
     }
 
+    fun onServiceCreate() {
+        Timber.d("Creating a new service")
+        serviceModalData.setState {
+            ServiceModalInputData(
+                mode = ServiceModalState.Mode.CREATE,
+                service = null
+            )
+        }
+    }
+
+    fun onServiceEdit(service: Service) {
+        Timber.d("Editing service: $service")
+        serviceModalData.setState {
+            ServiceModalInputData(
+                mode = ServiceModalState.Mode.EDIT,
+                service = service
+            )
+        }
+    }
+
+    fun onServiceReschedule(service: Service) {
+        Timber.d("Rescheduling service: $service")
+        serviceModalData.setState {
+            ServiceModalInputData(
+                mode = ServiceModalState.Mode.RESCHEDULE,
+                service = service
+            )
+        }
+    }
+
+    fun onServiceCompleted(service: Service) {
+        Timber.d("Service completed: $service")
+        analytics.logServiceCompleted(service.id, service.name)
+        //TODO: Update services completed count property
+        onServiceDeleted(service)
+    }
+
     fun onServiceDeleted(service: Service) {
         Timber.d("Service being deleted: $service")
         carRepository.removeCarService(service)
         analytics.logServiceDeleted(service.id, service.name)
+    }
+
+    fun onServiceModalDismissed() {
+//        Timber.v("Service modal dismissed")
+        serviceModalData.setState { ServiceModalInputData() }
     }
 
     fun onNotificationPermissionActivityResult(isGranted: Boolean) {
@@ -337,10 +382,23 @@ class OverviewViewModel @Inject constructor(
         onSortingByType(type)
     }
 
+    private fun updateServiceListWithNewDueDateFormat() {
+        carDataInternal?.let {
+            servicePanelState.setState {
+                copy(serviceItemList = generateServiceItemStateList(it.services))
+            }
+        }
+    }
+
     fun setupEasterEggForTesting() {
         if (debugFlagProvider.isDebugEnabled()) {
             carRepository.saveCarData(Car.default)
         }
+    }
+
+    override fun onCleared() {
+        Timber.v("Clearing OverviewViewModel")
+        super.onCleared()
     }
 }
 

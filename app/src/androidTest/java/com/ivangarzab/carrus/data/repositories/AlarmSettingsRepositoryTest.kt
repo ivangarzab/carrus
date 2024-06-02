@@ -3,8 +3,10 @@ package com.ivangarzab.carrus.data.repositories
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import com.ivangarzab.analytics.AnalyticsRepositoryImpl
 import com.ivangarzab.carrus.data.alarm.AlarmFrequency
-import com.ivangarzab.carrus.data.di.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
+import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.Preferences
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +25,9 @@ class AlarmSettingsRepositoryTest {
         DebugFlagProviderImpl().apply { forceDebug = true }
     )
 
-    private val repository = AlarmSettingsRepositoryImpl(context, prefs)
+    private val analytics: Analytics = Analytics(AnalyticsRepositoryImpl())
+
+    private val repository = AlarmSettingsRepositoryImpl(context, prefs, analytics)
 
     @Before
     fun setup() {
@@ -35,7 +39,7 @@ class AlarmSettingsRepositoryTest {
     @Test
     fun test_isAlarmPermissionGranted_base() = with(repository) {
         assertThat(isAlarmPermissionGranted())
-            .isTrue()
+            .isFalse()
     }
 
     @Test

@@ -9,22 +9,19 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 
-@AndroidEntryPoint
 class MapFragment : Fragment() {
 
-    private val viewModel: MapViewModel by viewModels()
+    private val viewModel: MapViewModel by viewModel()
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject()
 
     @SuppressLint("MissingPermission")
     private val locationPermissionRequestLauncher = registerForActivityResult(

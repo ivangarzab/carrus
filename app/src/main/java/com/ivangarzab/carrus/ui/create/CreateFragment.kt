@@ -8,29 +8,26 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.settings.DEFAULT_FILE_MIME_TYPE
 import com.ivangarzab.carrus.util.extensions.toast
 import com.ivangarzab.carrus.util.managers.Analytics
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Created by Ivan Garza Bermea.
  */
-@AndroidEntryPoint
 class CreateFragment : Fragment() {
 
-    private val viewModel: CreateViewModel by viewModels()
+    private val viewModel: CreateViewModel by viewModel()
 
     private val args: CreateFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var analytics: Analytics
+    val analytics: Analytics by inject()
 
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
         //TODO: Move null check to VM
