@@ -14,6 +14,7 @@ coreSplashscreen = "1.0.1"
 coreTestingVersion = "2.2.0"
 firebaseBom = "32.7.0"
 composeBom = "2023.10.01"
+compose-compiler = "1.5.4"
 fragmentKtxVersion = "1.6.2"
 gsonVersion = "2.10.1"
 leakCanaryVersion = "2.12"
@@ -33,7 +34,7 @@ junit = "4.13.2"
 androidxJunit = "1.1.5"
 espresso = "3.5.1"
 agp = "8.2.0"
-kgp = "1.8.10"
+kgp = "1.9.20"
 androidxNav = "2.7.6"
 googleServices = "4.4.0"
 firebaseCrashlyticsGradle = "2.9.9"
@@ -147,6 +148,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kgp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kgp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kgp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kgp" }
 androidx-nav-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNav" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsGradle" }

@@ -19,6 +19,7 @@ import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.data.structures.asUniqueMessageQueue
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
 import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
+import com.ivangarzab.carrus.shared.Greeting
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -66,6 +67,7 @@ class OverviewViewModel(
     private var serviceSortingType: SortingType = SortingType.NONE
 
     init {
+        Greeting().greet()
         viewModelScope.launch {
             carRepository.observeCarData()
                 .catch { Timber.w("Something went wrong collecting the car data") }

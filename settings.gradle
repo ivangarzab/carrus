@@ -5,8 +5,9 @@ pluginManagement {
         mavenCentral()
     }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         gradlePluginPortal()
         google()
@@ -17,3 +18,4 @@ rootProject.name = "Carrus"
 include ':app'
 include ':analytics'
 include ':test-data'
+include ':shared'

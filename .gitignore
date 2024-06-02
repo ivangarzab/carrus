@@ -75,6 +75,9 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+# DS_Store files
+*/.DS_Store
+
 # Rule exclusion
 !.idea/codeStyles
 !.idea/dictionaries/carrus_dictionary.xml

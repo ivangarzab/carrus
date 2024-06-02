@@ -22,7 +22,19 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        viewBinding = true //TODO: Remove once Activity is migrated into Compose
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -43,22 +55,13 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        viewBinding = true //TODO: Remove once Activity is migrated into Compose
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
-    }
-    packaging {
-        resources.excludes.add("META-INF/*")
-    }
     secrets {
         defaultPropertiesFileName = "default.properties"
     }
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation(project(":analytics"))
     testImplementation(project(":test-data"))
     androidTestImplementation(project(":test-data"))
