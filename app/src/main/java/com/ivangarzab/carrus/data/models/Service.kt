@@ -8,7 +8,7 @@ import java.util.Calendar
 /**
  * Created by Ivan Garza Bermea.
  */
-const val VERSION_SERVICE: Int = 1
+const val VERSION_SERVICE: Int = 2
 @Parcelize
 data class Service(
     val version: Int = VERSION_SERVICE,
@@ -18,7 +18,8 @@ data class Service(
     val dueDate: Calendar,
     val brand: String? = null,
     val type: String? = null,
-    val cost: Float = 0.00f
+    val cost: Float = 0.00f,
+    val shop: Shop? = null
 ): Parcelable, Comparable<Service> {
 
     override fun compareTo(other: Service): Int = compareValuesBy(this, other,
@@ -59,7 +60,17 @@ data class Service(
                 },
                 brand = "the brand",
                 type = "type & spec",
-                cost = 99.99f
+                cost = 99.99f,
+                shop = Shop(
+                    name = "DaShop",
+                    phoneNumber = "854, 542-4659",
+                    address = Address(
+                        street = "Somewhere in",
+                        city = "San Francisco",
+                        state = "CA",
+                        postalCode = "94107"
+                    )
+                )
             ),
             Service(
                 id = "2",
@@ -72,7 +83,17 @@ data class Service(
                 },
                 brand = "brand",
                 type = "type/spec",
-                cost = 150.00f
+                cost = 150.00f,
+                shop = Shop(
+                    name = "My Shop",
+                    phoneNumber = "854, 542-4659",
+                    address = Address(
+                        street = "My shop's street",
+                        city = "San Francisco",
+                        state = "CA",
+                        postalCode = "94107"
+                    )
+                )
             ),
             Service(
                 id = "3",

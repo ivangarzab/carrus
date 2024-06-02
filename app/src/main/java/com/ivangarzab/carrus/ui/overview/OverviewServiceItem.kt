@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,11 +35,13 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.data.models.Service
+import com.ivangarzab.carrus.data.models.Shop
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.overview.data.ServiceItemState
 import java.text.NumberFormat
@@ -71,8 +74,8 @@ fun OverviewServiceItem(
         ) {
             Column(
                 modifier = modifier
-                     .semantics { testTagsAsResourceId = true }
-                     .testTag("Service ${data.name} index ${data.index}")
+                    .semantics { testTagsAsResourceId = true }
+                    .testTag("Service ${data.name} index ${data.index}")
                     .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
             ) {
                 Row {
@@ -163,56 +166,116 @@ fun OverviewServiceItem(
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.outline
                         )
-                        Box(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterStart),
-                            ) {
-                                IconButton(
-                                    onClick = { onDeleteClicked(data.data) }
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(6.dp),
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
-                                        contentDescription = "Delete icon button"
-                                    )
-                                }
-                            }
-                            Row(
-                                modifier = Modifier.align(Alignment.CenterEnd),
-                            ) {
-                                IconButton(
-                                    onClick = { onRescheduleClicked(data.data) }
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(6.dp),
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_repeat),
-                                        contentDescription = "Reschedule icon button"
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { onCompleteClicked(data.data) }
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(6.dp),
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
-                                        contentDescription = "Complete icon button"
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { onEditClicked(data.data) }
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.padding(6.dp),
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
-                                        contentDescription = "Edit icon button"
-                                    )
-                                }
-                            }
+                        // Only show shop row if there's enough information available
+                        data.data.shop?.let { shop: Shop ->
+                            OverviewServiceItemShopRow(
+                                data = shop,
+                                onShopDetailsClicked = { }
+                            )
+                            Divider(
+                                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                                thickness = 1.dp,
+                                color = MaterialTheme.colorScheme.outline
+                            )
                         }
+                        OverviewServiceItemActionRow(
+                            data = data,
+                            onEditClicked = onEditClicked,
+                            onCompleteClicked = onCompleteClicked,
+                            onRescheduleClicked = onRescheduleClicked,
+                            onDeleteClicked = onDeleteClicked
+                        )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OverviewServiceItemShopRow(
+    modifier: Modifier = Modifier,
+    data: Shop,
+    onShopDetailsClicked: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .clickable { onShopDetailsClicked() },
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically),
+            text = data.name + " at: " + data.address.getShortString(),
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Icon(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_navigate),
+            contentDescription = "Shop map icon"
+        )
+    }
+}
+
+@Composable
+private fun OverviewServiceItemActionRow(
+    modifier: Modifier = Modifier,
+    data: ServiceItemState,
+    onEditClicked: (Service) -> Unit,
+    onCompleteClicked: (Service) -> Unit,
+    onRescheduleClicked: (Service) -> Unit,
+    onDeleteClicked: (Service) -> Unit,
+) {
+    Box(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.align(Alignment.CenterStart),
+        ) {
+            IconButton(
+                onClick = { onDeleteClicked(data.data) }
+            ) {
+                Icon(
+                    modifier = Modifier.padding(6.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
+                    contentDescription = "Delete icon button"
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.align(Alignment.CenterEnd),
+        ) {
+            IconButton(
+                onClick = { onRescheduleClicked(data.data) }
+            ) {
+                Icon(
+                    modifier = Modifier.padding(6.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_repeat),
+                    contentDescription = "Reschedule icon button"
+                )
+            }
+            IconButton(
+                onClick = { onCompleteClicked(data.data) }
+            ) {
+                Icon(
+                    modifier = Modifier.padding(6.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
+                    contentDescription = "Complete icon button"
+                )
+            }
+            IconButton(
+                onClick = { onEditClicked(data.data) }
+            ) {
+                Icon(
+                    modifier = Modifier.padding(6.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                    contentDescription = "Edit icon button"
+                )
             }
         }
     }
