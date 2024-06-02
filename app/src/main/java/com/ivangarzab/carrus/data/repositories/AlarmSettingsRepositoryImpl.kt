@@ -106,20 +106,5 @@ class AlarmSettingsRepositoryImpl(
             frequency = frequency
         ))
     }
-
-    //TODO: Move out of this class
-    /*inner class AlarmPermissionStateChangedReceiver : BroadcastReceiver() {
-        //TODO: How do we test a broadcast receiver?
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
-                    Timber.d("Received alarm permission state changed broadcast")
-                    setIsAlarmPermissionGranted(true)
-                    //TODO: Continue listening until we're ready to exit the app
-                    context?.unregisterReceiver(this)
-                }
-            }
-        }
-    }*/
 }
 const val DEFAULT_ALARM_TIME: Int = 7
