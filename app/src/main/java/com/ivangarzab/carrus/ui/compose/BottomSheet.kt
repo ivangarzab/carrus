@@ -30,7 +30,7 @@ fun BottomSheet(
             modifier = modifier,
             onDismissRequest = onDismissed,
             sheetState = modalBottomSheetState,
-            dragHandle = { BottomSheetDefaults.DragHandle() },
+            dragHandle = { BottomSheetDefaults.DragHandle(height = 2.dp) },
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
         ) { content() }
     }

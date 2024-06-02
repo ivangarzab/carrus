@@ -1,6 +1,8 @@
 package com.ivangarzab.carrus.util.managers
 
 import com.ivangarzab.analytics.AnalyticsRepository
+import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import java.util.Calendar
 
 /**
  * Created by Ivan Garza Bermea.
@@ -94,6 +96,20 @@ class Analytics(
             Pair("service_id", id),
             Pair("service_name", name)
         )
+    }
+
+    fun logServiceCompleted(id: String, name: String) {
+        logEvent(
+            "service_completed",
+            Pair("service_id", id),
+            Pair("service_name", name),
+            Pair("date", Calendar.getInstance().getShortenedDate())
+        )
+    }
+
+    fun logServiceRescheduled(id: String, name: String) {
+        logServiceCompleted(id, name)
+        logServiceCreated(id, name)
     }
 
     fun logServiceDeleted(id: String, name: String) {

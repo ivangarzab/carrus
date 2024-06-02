@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.util.extensions.areNotificationsEnabled
 import com.ivangarzab.carrus.util.extensions.canScheduleExactAlarms
@@ -49,17 +48,9 @@ class OverviewFragment : Fragment() {
         setContent {
             AppTheme {
                 OverviewScreenStateful(
-                    onFloatingActionButtonClicked = {
-                        navigateToNewServiceBottomSheet()
-                        analytics.logAddNewServiceClicked()
-                    },
                     onCarEditButtonClicked = {
                         navigateToEditFragment()
                         analytics.logEditCarClicked()
-                    },
-                    onServiceEditButtonClicked = {
-                        navigateToEditServiceBottomSheet(it)
-                        analytics.logEditServiceClicked()
                     },
                     onSettingsButtonClicked = {
                         navigateToSettingsFragment()
@@ -130,16 +121,6 @@ class OverviewFragment : Fragment() {
             Timber.v("Alarms permission already granted!")
         }
     }
-
-    private fun navigateToNewServiceBottomSheet() = findNavController().navigate(
-        OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal()
-    )
-
-    private fun navigateToEditServiceBottomSheet(service: Service) = findNavController().navigate(
-        OverviewFragmentDirections.actionOverviewFragmentToNewServiceModal(
-            service = service
-        )
-    )
 
     private fun navigateToCreateFragment() = findNavController().navigate(
         OverviewFragmentDirections.actionOverviewFragmentToCreateFragment()

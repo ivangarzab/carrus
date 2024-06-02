@@ -1,6 +1,10 @@
 package com.ivangarzab.carrus.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,6 +33,9 @@ import com.ivangarzab.carrus.data.models.Service
 import com.ivangarzab.carrus.data.structures.MessageQueue
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBar
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
+import com.ivangarzab.carrus.ui.modal_service.ServiceBottomSheet
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 import com.ivangarzab.carrus.ui.overview.data.DetailsPanelState
 import com.ivangarzab.carrus.ui.overview.data.MessageQueueState
 import com.ivangarzab.carrus.ui.overview.data.OverviewStaticState
@@ -42,11 +49,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun OverviewScreenStateful(
     viewModel: OverviewViewModel = koinViewModel(),
-    onFloatingActionButtonClicked: () -> Unit,
     onCarEditButtonClicked: () -> Unit,
     onSettingsButtonClicked: () -> Unit,
     onMapButtonClicked: () -> Unit,
-    onServiceEditButtonClicked: (Service) -> Unit,
     onAddCarClicked: () -> Unit
 ) {
     val staticState: OverviewStaticState by viewModel
@@ -61,6 +66,10 @@ fun OverviewScreenStateful(
         .servicePanelState
         .observeAsState(initial = ServicePanelState())
 
+    val serviceModalData: ServiceModalInputData by viewModel
+        .serviceModalData
+        .observeAsState(initial = ServiceModalInputData())
+
     val queueState: MessageQueueState by viewModel
         .queueState
         .observeAsState(initial = MessageQueueState())
@@ -70,15 +79,19 @@ fun OverviewScreenStateful(
             staticState = staticState,
             detailsPanelState = detailsPanelState,
             servicePanelState = servicePanelState,
+            serviceModalData = serviceModalData,
             messageQueue = queueState.messageQueue,
-            onFloatingActionButtonClicked = onFloatingActionButtonClicked,
             onEditCarButtonClicked = onCarEditButtonClicked,
             onSettingsButtonClicked = onSettingsButtonClicked,
             onMapButtonClicked = onMapButtonClicked,
             onAddCarClicked = onAddCarClicked,
             onSortRequest = { viewModel.onSort(it) },
-            onServiceEditButtonClicked = onServiceEditButtonClicked,
+            onServiceCreateButtonClicked = { viewModel.onServiceCreate() },
+            onServiceEditButtonClicked = { viewModel.onServiceEdit(it) },
+            onServiceRescheduleClicked = { viewModel.onServiceReschedule(it) },
+            onServiceCompleteClicked = { viewModel.onServiceCompleted(it) },
             onServiceDeleteButtonClicked = { viewModel.onServiceDeleted(it) },
+            onServiceModalDismissed = { viewModel.onServiceModalDismissed() },
             onMessageContentClicked = { viewModel.onMessageClicked(it) },
             onMessageDismissClicked = { viewModel.onMessageDismissed() },
             //Easter eggs for testing
@@ -94,15 +107,19 @@ private fun OverviewScreen(
     staticState: OverviewStaticState,
     detailsPanelState: DetailsPanelState,
     servicePanelState: ServicePanelState,
+    serviceModalData: ServiceModalInputData,
     messageQueue: MessageQueue = MessageQueue.test,
-    onFloatingActionButtonClicked: () -> Unit = { },
     onEditCarButtonClicked: () -> Unit = { },
     onSettingsButtonClicked: () -> Unit = { },
     onMapButtonClicked: () -> Unit = { },
     onAddCarClicked: () -> Unit = { },
     onSortRequest: (SortingType) -> Unit = { },
+    onServiceCreateButtonClicked: () -> Unit = { },
     onServiceEditButtonClicked: (Service) -> Unit = { },
+    onServiceRescheduleClicked: (Service) -> Unit = { },
+    onServiceCompleteClicked: (Service) -> Unit = { },
     onServiceDeleteButtonClicked: (Service) -> Unit = { },
+    onServiceModalDismissed: () -> Unit = { },
     onMessageDismissClicked: () -> Unit = { },
     onMessageContentClicked: (String) -> Unit = { },
     addTestMessage: () -> Unit = { },
@@ -113,9 +130,13 @@ private fun OverviewScreen(
 
     val systemUiController = rememberSystemUiController()
 
-    var showServiceModal: Boolean by rememberSaveable {
+    var showServiceScheduledConfirmation: Boolean by rememberSaveable {
         mutableStateOf(false)
-    } //TODO: Start using this variables instead of the BottomSheetDialogFragment
+    }
+
+    var showServiceUpdatedConfirmation: Boolean by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     AppTheme {
         if (staticState.isDataEmpty.not()) {
@@ -141,7 +162,9 @@ private fun OverviewScreen(
                         detailsState = detailsPanelState,
                         onSortRequest = onSortRequest,
                         onEditCarClicked = onEditCarButtonClicked,
+                        onServiceCompleteClicked = onServiceCompleteClicked,
                         onServiceEditButtonClicked = onServiceEditButtonClicked,
+                        onServiceRescheduleClicked = onServiceRescheduleClicked,
                         onServiceDeleteButtonClicked = onServiceDeleteButtonClicked,
                         addServiceList = addServiceList,
                         onMessageContentClicked = { onMessageContentClicked(it) },
@@ -167,7 +190,7 @@ private fun OverviewScreen(
                         } else {
                             MaterialTheme.colorScheme.onPrimary
                         },
-                        onClick = onFloatingActionButtonClicked
+                        onClick = onServiceCreateButtonClicked
                     ) {
                         Icon(
                             modifier = Modifier.size(48.dp),
@@ -178,11 +201,59 @@ private fun OverviewScreen(
                 }
             )
             // Dialog
-            when {
-                showServiceModal -> ServiceBottomSheet(
-                    modifier = Modifier,
-                    onDismissed = { showServiceModal = false }
-                ) //TODO: Start using this!
+            serviceModalData.let {
+                when {
+                    it.mode != ServiceModalState.Mode.NULL -> {
+                        ServiceBottomSheet(
+                            modifier = Modifier,
+                            inputData = it,
+                            onDismissed = { success ->
+                                if (success) {
+                                    when (it.mode) {
+                                        ServiceModalState.Mode.CREATE -> {
+                                            showServiceScheduledConfirmation = true
+                                        }
+                                        else -> showServiceUpdatedConfirmation = true
+                                    }
+                                }
+                                // dismiss service modal and clear data
+                                onServiceModalDismissed()
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Confirmation scrims
+            AnimatedVisibility(
+                visible = showServiceScheduledConfirmation,
+                enter = fadeIn(),
+                exit = fadeOut(
+                    animationSpec = TweenSpec(
+                        delay = SCHEDULE_ACTION_SCRIM_DURATION_MS
+                    )
+                )
+            ) {
+                OverviewServiceScheduledScrim(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "Service scheduled",
+                    onFinishWaiting = { showServiceScheduledConfirmation = false }
+                )
+            }
+            AnimatedVisibility(
+                visible = showServiceUpdatedConfirmation,
+                enter = fadeIn(),
+                exit = fadeOut(
+                    animationSpec = TweenSpec(
+                        delay = SCHEDULE_ACTION_SCRIM_DURATION_MS
+                    )
+                )
+            ) {
+                OverviewServiceScheduledScrim(
+                    modifier = Modifier.fillMaxSize(),
+                    text = "Service updated",
+                    onFinishWaiting = { showServiceUpdatedConfirmation = false }
+                )
             }
         } else {
             systemUiController.statusBarDarkContentEnabled = isSystemInDarkTheme().not()
@@ -202,14 +273,13 @@ private fun OverviewScreenPreview() {
         ),
         detailsPanelState = DetailsPanelState(),
         servicePanelState = ServicePanelState(),
+        serviceModalData = ServiceModalInputData(),
         messageQueue = MessageQueue.test,
-        onFloatingActionButtonClicked = { },
         onEditCarButtonClicked = { },
         onSettingsButtonClicked = { },
         onMapButtonClicked = { },
         onAddCarClicked = { },
         onSortRequest = { },
-        onServiceEditButtonClicked = { },
         onServiceDeleteButtonClicked = { },
         onMessageDismissClicked = { },
         onMessageContentClicked = { },
@@ -217,3 +287,5 @@ private fun OverviewScreenPreview() {
         addServiceList = { }
     )
 }
+
+private const val SCHEDULE_ACTION_SCRIM_DURATION_MS = 450

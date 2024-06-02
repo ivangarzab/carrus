@@ -18,7 +18,7 @@ import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.ui.compose.NavigationBottomBarViewModel
 import com.ivangarzab.carrus.ui.create.CreateViewModel
 import com.ivangarzab.carrus.ui.map.MapViewModel
-import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
+import com.ivangarzab.carrus.ui.modal_service.ServiceModalViewModel
 import com.ivangarzab.carrus.ui.overview.OverviewViewModel
 import com.ivangarzab.carrus.ui.settings.SettingsViewModel
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper

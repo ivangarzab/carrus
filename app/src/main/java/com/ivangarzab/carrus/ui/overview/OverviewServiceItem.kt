@@ -55,6 +55,8 @@ fun OverviewServiceItem(
     data: ServiceItemState,
     isExpanded: Boolean = true,
     onEditClicked: (Service) -> Unit,
+    onCompleteClicked: (Service) -> Unit,
+    onRescheduleClicked: (Service) -> Unit,
     onDeleteClicked: (Service) -> Unit,
     onExpandOrShrinkRequest: (index: Int, expand: Boolean) -> Unit
 ) {
@@ -164,25 +166,49 @@ fun OverviewServiceItem(
                         Box(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            IconButton(
+                            Row(
                                 modifier = Modifier.align(Alignment.CenterStart),
-                                onClick = { onEditClicked(data.data) }
                             ) {
-                                Icon(
-                                    modifier = Modifier.padding(6.dp),
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
-                                    contentDescription = "Edit icon button"
-                                )
+                                IconButton(
+                                    onClick = { onDeleteClicked(data.data) }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(6.dp),
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
+                                        contentDescription = "Delete icon button"
+                                    )
+                                }
                             }
-                            IconButton(
+                            Row(
                                 modifier = Modifier.align(Alignment.CenterEnd),
-                                onClick = { onDeleteClicked(data.data) }
                             ) {
-                                Icon(
-                                    modifier = Modifier.padding(6.dp),
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
-                                    contentDescription = "Delete icon button"
-                                )
+                                IconButton(
+                                    onClick = { onRescheduleClicked(data.data) }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(6.dp),
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_repeat),
+                                        contentDescription = "Reschedule icon button"
+                                    )
+                                }
+                                IconButton(
+                                    onClick = { onCompleteClicked(data.data) }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(6.dp),
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
+                                        contentDescription = "Complete icon button"
+                                    )
+                                }
+                                IconButton(
+                                    onClick = { onEditClicked(data.data) }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.padding(6.dp),
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                                        contentDescription = "Edit icon button"
+                                    )
+                                }
                             }
                         }
                     }
@@ -214,6 +240,8 @@ private fun OverviewServiceItemPreview() {
             },
             isExpanded = true,
             onEditClicked = { },
+            onCompleteClicked = { },
+            onRescheduleClicked = { },
             onDeleteClicked = { },
             onExpandOrShrinkRequest = { _: Int, _: Boolean -> }
         )

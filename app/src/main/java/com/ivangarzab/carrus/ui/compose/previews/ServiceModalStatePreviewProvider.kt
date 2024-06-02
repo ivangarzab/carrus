@@ -1,7 +1,7 @@
 package com.ivangarzab.carrus.ui.compose.previews
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.ivangarzab.carrus.ui.modals.ServiceModalState
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
 
 /**
  * Created by Ivan Garza Bermea.

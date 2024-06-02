@@ -63,7 +63,7 @@ class CarRepositoryImpl(
     } ?: Timber.w("There's no car data to update")
 
     override fun updateCarService(service: Service) = fetchCarData()?.let { car ->
-        Timber.d("Updating car service ${service.name} to: \n$service")
+        Timber.d("Updating car service '${service.name}' to: \n$service")
         saveCarData(
             car.copy(
                 services = car.services.map {

@@ -1,10 +1,10 @@
-package com.ivangarzab.carrus.ui.overview
+package com.ivangarzab.carrus.ui.modal_service
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,24 +14,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.carrus.R
 import com.ivangarzab.carrus.ui.compose.BigPositiveButton
 import com.ivangarzab.carrus.ui.compose.BottomSheet
+import com.ivangarzab.carrus.ui.compose.CalendarDialog
 import com.ivangarzab.carrus.ui.compose.CalendarInputField
 import com.ivangarzab.carrus.ui.compose.MoneyInputField
 import com.ivangarzab.carrus.ui.compose.TextInputField
 import com.ivangarzab.carrus.ui.compose.previews.ServiceModalStatePreviewProvider
 import com.ivangarzab.carrus.ui.compose.theme.AppTheme
 import com.ivangarzab.carrus.ui.compose.theme.Typography
-import com.ivangarzab.carrus.ui.modals.ServiceModalState
-import com.ivangarzab.carrus.ui.modals.ServiceModalViewModel
 import org.koin.androidx.compose.koinViewModel
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalInputData
+import com.ivangarzab.carrus.ui.modal_service.data.ServiceModalState
+import com.ivangarzab.carrus.util.extensions.getShortenedDate
+import java.util.Calendar
 
 /**
  * Created by Ivan Garza Bermea.
@@ -40,45 +44,103 @@ import org.koin.androidx.compose.koinViewModel
 fun ServiceBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: ServiceModalViewModel = koinViewModel(),
-    onDismissed: () -> Unit = { },
+    inputData: ServiceModalInputData,
+    onDismissed: (success: Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
+
     val state: ServiceModalState by viewModel
         .state
         .observeAsState(initial = ServiceModalState())
 
+    val showRepairDateDialog: Boolean by viewModel
+        .isShowingRepairDateDialog
+        .observeAsState(initial = false)
+
+    val showDueDateDialog: Boolean by viewModel
+        .isShowingDueDateDialog
+        .observeAsState(initial = false)
+
+    viewModel.apply {
+        // Only update initial state when state.mode == NULL
+        if (state.mode == ServiceModalState.Mode.NULL) {
+            setInitialData(inputData.service, inputData.mode)
+        }
+        onSubmission.observe(LocalLifecycleOwner.current) { success ->
+            when (success) {
+                true -> onDismissed(true)
+                false -> Toast.makeText(
+                    context,
+                    "Missing required field(s) or wrong data",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+
     AppTheme {
         BottomSheet(
             modifier = modifier,
-            onDismissed = onDismissed
+            onDismissed = {
+                viewModel.onClearState()
+                onDismissed(false)
+            }
         ) {
             ServiceBottomSheetContent(
-                modifier = Modifier,
-                state = state
+                modifier = modifier,
+                state = state,
+                onActionButtonClicked = { viewModel.onActionButtonClicked() },
+                onUpdateState = { viewModel.onUpdateServiceModalState(it) },
+                onRepairDateFieldClicked = { viewModel.onShowRepairDateDialog() },
+                onDueDateFieldClicked = { viewModel.onShowDueDateDialog() }
+            )
+        }
+    }
+
+    when {
+        showRepairDateDialog -> {
+            CalendarDialog(
+                title = "Repair Date",
+                onDismissed = { viewModel.onHideRepairDateDialog() },
+                onValueSelected = {
+                    viewModel.onUpdateServiceModalState(
+                        state.copy(repairDate = it.getShortenedDate())
+                    )
+                }
+            )
+        }
+
+        showDueDateDialog -> {
+            CalendarDialog(
+                title = "Due Date",
+                date = Calendar.getInstance().apply {
+                    add(Calendar.DAY_OF_MONTH, ServiceModalViewModel.DEFAULT_DUE_DATE_ADDITION)
+                },
+                onDismissed = { viewModel.onHideDueDateDialog() },
+                onValueSelected = {
+                    viewModel.onUpdateServiceModalState(
+                        state.copy(dueDate = it.getShortenedDate())
+                    )
+                }
             )
         }
     }
 }
 
-@Preview
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun ServiceBottomSheetContent(
     modifier: Modifier = Modifier,
-    @PreviewParameter(ServiceModalStatePreviewProvider::class) state: ServiceModalState,
-    onUpdateState: (ServiceModalState) -> Unit = { },
-    onRepairDateFieldClicked: () -> Unit = { },
-    onDueDateFieldClicked: () -> Unit = { },
-    onActionButtonClicked: () -> Unit = { }
+    state: ServiceModalState,
+    onUpdateState: (ServiceModalState) -> Unit,
+    onRepairDateFieldClicked: () -> Unit,
+    onDueDateFieldClicked: () -> Unit,
+    onActionButtonClicked: () -> Unit
 ) {
     AppTheme {
-        Surface(
-            modifier = modifier,
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
-        ) {
+        Surface(modifier = modifier) {
             Column(
                 modifier = Modifier.padding(
-                    top = 24.dp,
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 24.dp
@@ -182,4 +244,17 @@ fun ServiceBottomSheetContent(
             }
         }
     }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ServiceBottomSheetContentPreview() {
+    ServiceBottomSheetContent(
+        state = ServiceModalStatePreviewProvider().values.first(),
+        onUpdateState = { },
+        onRepairDateFieldClicked = { },
+        onDueDateFieldClicked = { },
+        onActionButtonClicked = { }
+    )
 }
