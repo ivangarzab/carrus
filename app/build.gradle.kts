@@ -124,6 +124,9 @@ dependencies {
 
     implementation(libs.live.event)
 
+    implementation(libs.androidx.datastore.preferences)
+    testImplementation(libs.androidx.datastore.preferences)
+
     // Unit & instrumented testing
     testImplementation(libs.junit)
     testImplementation(libs.gson)
