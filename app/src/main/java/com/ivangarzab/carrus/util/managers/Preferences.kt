@@ -105,7 +105,7 @@ class Preferences(
     }
 
     companion object {
-        private const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carrus.preferences"
+        const val DEFAULT_SHARED_PREFS = "com.ivangarzab.carrus.preferences"
         private const val TEST_SHARED_PREFS = "com.ivangarzab.carrus.preferences-test"
         private const val KEY_DEFAULT_CAR = "default-car"
         // App Settings

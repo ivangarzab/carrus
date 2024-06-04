@@ -75,9 +75,9 @@ class OverviewViewModel(
                 }
         }
         viewModelScope.launch {
-            appSettingsRepository.observeAppSettingsStateData().collect {
+            appSettingsRepository.appSettingsFlow.collect {
                 if (dueDateFormat != it.dueDateFormat) {
-                    dueDateFormat = it.dueDateFormat
+                    this@OverviewViewModel.dueDateFormat = it.dueDateFormat
                     updateServiceListWithNewDueDateFormat()
                 }
             }

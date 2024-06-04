@@ -8,5 +8,6 @@ import com.ivangarzab.carrus.data.models.TimeFormat
  */
 data class AppSettingsState(
     val timeFormat: TimeFormat = TimeFormat.HR12,
-    val dueDateFormat: DueDateFormat = DueDateFormat.DATE
+    val dueDateFormat: DueDateFormat = DueDateFormat.DATE,
+    val leftHandedMode: Boolean = false
 )

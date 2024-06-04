@@ -58,10 +58,9 @@ class SettingsViewModel(
             }
         }
         viewModelScope.launch {
-            appSettingsRepository.observeAppSettingsStateData().collect {
+            appSettingsRepository.appSettingsFlow.collect {
                 processAppSettingsStateUpdates(it.dueDateFormat, it.timeFormat)
             }
-
         }
         viewModelScope.launch {
             alarmSettingsRepository.observeAlarmSettingsData().collect {
@@ -145,8 +144,10 @@ class SettingsViewModel(
         analytics.logDueDateFormatClicked()
         DueDateFormat.get(option).let { dueDateFormat ->
             Timber.d("Due Date format changed to: '$dueDateFormat'")
-            appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
-            analytics.logDueDateFormatChanged(option)
+            viewModelScope.launch {
+                appSettingsRepository.setDueDateFormatSetting(dueDateFormat)
+                analytics.logDueDateFormatChanged(option)
+            }
         }
 
     }
@@ -155,8 +156,10 @@ class SettingsViewModel(
         analytics.logTimeFormatClicked()
         TimeFormat.get(option).let { timeFormat ->
             Timber.d("Clock Time format changed to: '$timeFormat'")
-            appSettingsRepository.setTimeFormatSetting(timeFormat)
-            analytics.logTimeFormatChanged(option)
+            viewModelScope.launch {
+                appSettingsRepository.setTimeFormatSetting(timeFormat)
+                analytics.logTimeFormatChanged(option)
+            }
         }
     }
 

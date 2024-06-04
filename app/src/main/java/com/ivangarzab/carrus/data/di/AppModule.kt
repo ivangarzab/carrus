@@ -2,6 +2,7 @@ package com.ivangarzab.carrus.data.di
 
 import com.ivangarzab.analytics.AnalyticsRepository
 import com.ivangarzab.analytics.AnalyticsRepositoryImpl
+import com.ivangarzab.carrus.data.datastore.appSettingsDataStore
 import com.ivangarzab.carrus.data.providers.BuildVersionProvider
 import com.ivangarzab.carrus.data.providers.BuildVersionProviderImpl
 import com.ivangarzab.carrus.data.providers.DebugFlagProvider
@@ -30,10 +31,10 @@ import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
 import com.ivangarzab.carrus.util.managers.NotificationController
 import com.ivangarzab.carrus.util.managers.NotificationControllerImpl
-import com.ivangarzab.carrus.util.managers.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -41,8 +42,8 @@ val AppModule = module {
     factory<CoroutineScope> {
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
-    single {
-        Preferences(get(), get())
+    single<com.ivangarzab.carrus.util.managers.Preferences> {
+        com.ivangarzab.carrus.util.managers.Preferences(get(), get())
     }
     single {
         Analytics(get())
@@ -81,7 +82,7 @@ val AppModule = module {
         MessageQueueRepository()
     }
     single<AppSettingsRepository> {
-        AppSettingsRepositoryImpl(get(), get())
+        AppSettingsRepositoryImpl(androidApplication().appSettingsDataStore)
     }
     single<ContentResolverHelper> {
         ContentResolverHelperImpl(get())

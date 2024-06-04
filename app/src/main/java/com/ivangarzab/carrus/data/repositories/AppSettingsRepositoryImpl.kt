@@ -1,58 +1,62 @@
 package com.ivangarzab.carrus.data.repositories
 
-import android.content.Context
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
-import com.google.android.gms.common.util.VisibleForTesting
-import com.ivangarzab.carrus.BuildConfig
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.IOException
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.states.AppSettingsState
-import com.ivangarzab.carrus.util.managers.Preferences
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 /**
  * Created by Ivan Garza Bermea.
  */
 class AppSettingsRepositoryImpl(
-    context: Context,
-    private val prefs: Preferences
+    private val dataStore: DataStore<Preferences>
 ) : AppSettingsRepository {
 
-    private val _appSettingsStateFlow = MutableStateFlow(AppSettingsState())
-    override val appSettingsStateFlow: StateFlow<AppSettingsState>
-        get() = _appSettingsStateFlow
+    override val appSettingsFlow: Flow<AppSettingsState> = dataStore.data
+        .catch { exception ->
+            // dataStore.data throws an IOException when an error is encountered when reading data
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map { preferences ->
+            val timeFormat = TimeFormat.get(preferences[TIME_FORMAT] ?: TimeFormat.HR12.name)
+            val dueDateFormat = DueDateFormat.get(
+                preferences[DUE_DATE_FORMAT] ?: DueDateFormat.DAYS.name
+            )
+            val leftHandedMode = preferences[LEFT_HANDED_MODE] ?: false
+            AppSettingsState(timeFormat, dueDateFormat, leftHandedMode)
+        }
 
-    //TODO: Arguably, the leftHandedMode would deserve their own Repository class or join with state
-    private val _leftHandedModeFlow = MutableStateFlow(false)
-    override val leftHandedModeFlow: StateFlow<Boolean>
-        get() = _leftHandedModeFlow
+    //TODO: Convert into provider class
+    // override fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
 
-    init {
-        setNightThemeSetting(fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context))
-        setDueDateFormatSetting(fetchDueDateFormatSetting())
-        setTimeFormatSetting(fetchTimeFormatSetting())
-        setLeftHandedSetting(fetchLeftHandedSetting())
-    }
-
-    override fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
-
-    override fun observeAppSettingsStateData(): Flow<AppSettingsState> = appSettingsStateFlow
+//    override fun observeAppSettingsStateData(): Flow<AppSettingsState> = appSettingsStateFlow
 
     /** Night Theme/Dark Mode **/
-    @VisibleForTesting
-    fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
+    //TODO:
+    // @VisibleForTesting
+    // fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
-    override fun setNightThemeSetting(isNight: Boolean) {
-        Timber.d("Setting night theme to: $isNight")
-        prefs.darkMode = isNight
-        setAppDefaultNightTheme(isNight)
-    }
+    //TODO: Consider moving night theme code to a separate class
+//    override fun setNightThemeSetting(isNight: Boolean) {
+//        Timber.d("Setting night theme to: $isNight")
+//        prefs.darkMode = isNight
+//        setAppDefaultNightTheme(isNight)
+//    }
 
-    private fun setAppDefaultNightTheme(isNight: Boolean) = when (isNight) {
+    /*private fun setAppDefaultNightTheme(isNight: Boolean) = when (isNight) {
         true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
@@ -64,54 +68,32 @@ class AppSettingsRepositoryImpl(
             else -> false
         }.also { result ->
             Timber.i("Night theme set to: $result")
-        }
+        }*/
 
-    /** Due Date Format functions **/
-    @VisibleForTesting
-    fun fetchDueDateFormatSetting(): DueDateFormat = prefs.dueDateFormat
-
-    override fun setDueDateFormatSetting(format: DueDateFormat) {
+    override suspend fun setDueDateFormatSetting(format: DueDateFormat) {
         Timber.v("Setting due date format setting: ${format.value}")
-        prefs.dueDateFormat = format
-        updateDueDateFormatFlow(format)
-    }
-
-    private fun updateDueDateFormatFlow(format: DueDateFormat) {
-        appSettingsStateFlow.value.let {
-            _appSettingsStateFlow.value = it.copy(
-                dueDateFormat = format
-            )
+        dataStore.edit { preferences ->
+            preferences[DUE_DATE_FORMAT] = format.value
         }
     }
 
-    /** Time Format functions **/
-    @VisibleForTesting
-    fun fetchTimeFormatSetting(): TimeFormat = prefs.timeFormat.also {
-        Timber.v("Got time format: ${it.name}")
-    }
-
-    override fun setTimeFormatSetting(format: TimeFormat) {
+    override suspend fun setTimeFormatSetting(format: TimeFormat) {
         Timber.v("Setting due date format setting: ${format.value}")
-        prefs.timeFormat = format
-        updateTimeFormatFlow(format)
-    }
-
-    private fun updateTimeFormatFlow(format: TimeFormat) {
-        appSettingsStateFlow.value.let {
-            _appSettingsStateFlow.value = it.copy(
-                timeFormat = format
-            )
+        dataStore.edit { preferences ->
+            preferences[TIME_FORMAT] = format.value
         }
     }
 
-    /** Left-handed Mode functions **/
-    @VisibleForTesting
-    fun fetchLeftHandedSetting(): Boolean = prefs.leftHandedMode
-
-    override fun setLeftHandedSetting(isLeftHanded: Boolean) {
-        Timber.v("Setting left-handed mode: $isLeftHanded")
-        prefs.leftHandedMode = isLeftHanded
+    override suspend fun setLeftHandedSetting(isLeftHanded: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[LEFT_HANDED_MODE] = isLeftHanded
+        }
     }
 
-    override fun observeLeftHandedData(): Flow<Boolean> = leftHandedModeFlow
+    companion object AppSettingsPreferences {
+        const val NAME = "app-settings-preferences"
+        val TIME_FORMAT = stringPreferencesKey("format-time")
+        val DUE_DATE_FORMAT = stringPreferencesKey("format-due-date")
+        val LEFT_HANDED_MODE = booleanPreferencesKey("left-handed-mode")
+    }
 }
