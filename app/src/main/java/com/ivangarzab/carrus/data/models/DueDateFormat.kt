@@ -13,6 +13,7 @@ enum class DueDateFormat(
     ;
 
     companion object {
+        val DEFAULT = DAYS
         fun get(value: String): DueDateFormat = when (value) {
             WEEKS.value -> WEEKS
             MONTHS.value -> MONTHS

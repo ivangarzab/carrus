@@ -31,9 +31,9 @@ class AppSettingsRepositoryImpl(
                 throw exception
             }
         }.map { preferences ->
-            val timeFormat = TimeFormat.get(preferences[TIME_FORMAT] ?: TimeFormat.HR12.name)
+            val timeFormat = TimeFormat.get(preferences[TIME_FORMAT] ?: TimeFormat.DEFAULT.name)
             val dueDateFormat = DueDateFormat.get(
-                preferences[DUE_DATE_FORMAT] ?: DueDateFormat.DAYS.name
+                preferences[DUE_DATE_FORMAT] ?: DueDateFormat.DEFAULT.name
             )
             val leftHandedMode = preferences[LEFT_HANDED_MODE] ?: false
             AppSettingsState(timeFormat, dueDateFormat, leftHandedMode)

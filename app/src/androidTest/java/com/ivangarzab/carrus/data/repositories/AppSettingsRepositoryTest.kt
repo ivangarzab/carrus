@@ -1,180 +1,119 @@
 package com.ivangarzab.carrus.data.repositories
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.ivangarzab.carrus.BuildConfig
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
-import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
-import com.ivangarzab.carrus.util.managers.Preferences
+import com.ivangarzab.carrus.data.states.AppSettingsState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineExceptionHandler
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.createTestCoroutineScope
+import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 /**
  * Created by Ivan Garza Bermea.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class AppSettingsRepositoryTest {
 
-    private val context: Context = InstrumentationRegistry.getInstrumentation().context
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    private val prefs: Preferences = Preferences(
-        context,
-        DebugFlagProviderImpl().apply { forceDebug = true }
-    )
+    private val testCoroutineDispatcher: TestCoroutineDispatcher =
+        TestCoroutineDispatcher()
+    private val testCoroutineScope =
+        createTestCoroutineScope(TestCoroutineDispatcher() + TestCoroutineExceptionHandler() + (testCoroutineDispatcher + Job()))
 
-    private val repository = AppSettingsRepositoryImpl(context, prefs)
+    private lateinit var testDataStore: DataStore<Preferences>
+
+    private lateinit var repository: AppSettingsRepositoryImpl
 
     @Before
     fun setup() {
-        prefs.darkMode = null
-        prefs.dueDateFormat = DueDateFormat.DAYS
-        prefs.timeFormat = TimeFormat.HR12
-        prefs.leftHandedMode = false
+        testDataStore = PreferenceDataStoreFactory.create(
+            scope = testCoroutineScope,
+            produceFile = { context.preferencesDataStoreFile(DATA_STORE_NAME) }
+        )
+        repository = AppSettingsRepositoryImpl(testDataStore)
+    }
+
+    @After
+    fun teardown() {
+        context.preferencesDataStoreFile(DATA_STORE_NAME).deleteRecursively()
+        testCoroutineScope.cancel()
     }
 
     @Test
-    fun test_setNightThemeSetting_base() {
-        assertThat(prefs.darkMode)
-            .isNull()
+    fun test_base_state() = testCoroutineScope.runTest {
+        val defaultState: AppSettingsState = repository.appSettingsFlow.first()
+        assertThat(defaultState)
+            .isEqualTo(AppSettingsState())
     }
 
     @Test
-    fun test_setNightThemeSetting_true() = with(repository) {
-        setNightThemeSetting(true)
-        assertThat(prefs.darkMode)
-            .isTrue()
+    fun test_setDueDateFormatSetting_base() = testCoroutineScope.runTest {
+        val result: DueDateFormat = repository.appSettingsFlow.first().dueDateFormat
+        assertThat(result)
+            .isEqualTo(DueDateFormat.DEFAULT)
     }
 
     @Test
-    fun test_setNightThemeSetting_false() = with(repository) {
-        setNightThemeSetting(false)
-        assertThat(prefs.darkMode)
+    fun test_setDueDateFormatSetting_months_success() = testCoroutineScope.runTest {
+        with(repository) {
+            setDueDateFormatSetting(DueDateFormat.MONTHS)
+            val result: DueDateFormat = appSettingsFlow.first().dueDateFormat
+            assertThat(result).isEqualTo(DueDateFormat.MONTHS)
+            assertThat(result).isNotEqualTo(DueDateFormat.WEEKS)
+        }
+    }
+
+    @Test
+    fun test_setTimeFormatSetting_base() = testCoroutineScope.runTest {
+        val result: TimeFormat = repository.appSettingsFlow.first().timeFormat
+        assertThat(result)
+            .isEqualTo(TimeFormat.DEFAULT)
+    }
+
+    @Test
+    fun test_setTimeFormatSetting_hr24_success() = testCoroutineScope.runTest {
+        with(repository) {
+            setTimeFormatSetting(TimeFormat.HR24)
+            val result: TimeFormat = appSettingsFlow.first().timeFormat
+            assertThat(result)
+                .isEqualTo(TimeFormat.HR24)
+        }
+    }
+
+    @Test
+    fun test_setLeftHandedSetting_base() = testCoroutineScope.runTest {
+        val result: Boolean = repository.appSettingsFlow.first().leftHandedMode
+        assertThat(result)
             .isFalse()
     }
 
     @Test
-    fun test_fetchNightThemeSettings_null_base() = with(repository) {
-        assertThat(fetchNightThemeSetting())
-            .isNull()
+    fun test_setLeftHandedSetting_true() = testCoroutineScope.runTest {
+        with(repository) {
+            setLeftHandedSetting(true)
+            val result: Boolean = appSettingsFlow.first().leftHandedMode
+            assertThat(result)
+                .isTrue()
+        }
     }
 
-    @Test
-    fun test_fetchNightThemeSettings_true() = with(repository) {
-        setNightThemeSetting(true)
-        assertThat(fetchNightThemeSetting())
-            .isTrue()
-    }
-
-    @Test
-    fun test_fetchNightThemeSettings_false() = with(repository) {
-        setNightThemeSetting(false)
-        assertThat(fetchNightThemeSetting())
-            .isFalse()
-    }
-
-    @Test
-    fun test_getVersionNumber() = with(repository) {
-        assertThat(getVersionNumber())
-            .matches("v${BuildConfig.VERSION_NAME}")
-    }
-
-    @Test
-    fun test_setDueDateFormatSetting_base() {
-        assertThat(prefs.dueDateFormat)
-            .isSameInstanceAs(DueDateFormat.DAYS)
-    }
-
-    @Test
-    fun test_setDueDateFormatSetting_months_success() = with(repository) {
-        setDueDateFormatSetting(DueDateFormat.MONTHS)
-        assertThat(prefs.dueDateFormat)
-            .isSameInstanceAs(DueDateFormat.MONTHS)
-    }
-
-    @Test
-    fun test_setDueDateFormatSetting_months_fail() = with(repository) {
-        setDueDateFormatSetting(DueDateFormat.MONTHS)
-        assertThat(prefs.dueDateFormat)
-            .isNotSameInstanceAs(DueDateFormat.WEEKS)
-    }
-
-    @Test
-    fun test_fetchDueDateFormatSetting_days_base() = with(repository) {
-        assertThat(fetchDueDateFormatSetting())
-            .isSameInstanceAs(DueDateFormat.DAYS)
-    }
-
-    @Test
-    fun test_fetchDueDateFormatSetting_months_success() = with(repository) {
-        setDueDateFormatSetting(DueDateFormat.MONTHS)
-        assertThat(fetchDueDateFormatSetting())
-            .isSameInstanceAs(DueDateFormat.MONTHS)
-    }
-
-    @Test
-    fun test_setTimeFormatSetting_base() {
-        assertThat(prefs.timeFormat)
-            .isSameInstanceAs(TimeFormat.HR12)
-    }
-
-    @Test
-    fun test_setTimeFormatSetting_hr24_success() = with(repository) {
-        setTimeFormatSetting(TimeFormat.HR24)
-        assertThat(prefs.timeFormat)
-            .isSameInstanceAs(TimeFormat.HR24)
-    }
-
-    @Test
-    fun test_setTimeFormatSetting_hr24_fail() = with(repository) {
-        setTimeFormatSetting(TimeFormat.HR24)
-        assertThat(prefs.timeFormat)
-            .isNotSameInstanceAs(TimeFormat.HR12)
-    }
-
-    @Test
-    fun test_fetchTimeFormatSetting_hr12_base() = with(repository) {
-        assertThat(fetchTimeFormatSetting())
-            .isSameInstanceAs(TimeFormat.HR12)
-    }
-
-    @Test
-    fun test_fetchTimeFormatSetting_hr24_success() = with(repository) {
-        setTimeFormatSetting(TimeFormat.HR24)
-        assertThat(fetchTimeFormatSetting())
-            .isSameInstanceAs(TimeFormat.HR24)
-    }
-
-    @Test
-    fun test_setLeftHandedSetting_base() =
-        assertThat(prefs.leftHandedMode)
-            .isFalse()
-
-    @Test
-    fun test_setLeftHandedSetting_true() = with(repository) {
-        setLeftHandedSetting(true)
-        assertThat(prefs.leftHandedMode)
-            .isTrue()
-    }
-
-    @Test
-    fun test_setLeftHandedSetting_false() = with(repository) {
-        setLeftHandedSetting(false)
-        assertThat(prefs.leftHandedMode)
-            .isFalse()
-    }
-
-    @Test
-    fun test_fetchLeftHandedSettings_true() = with(repository) {
-        setLeftHandedSetting(true)
-        assertThat(fetchLeftHandedSetting())
-            .isTrue()
-    }
-
-    @Test
-    fun test_fetchLeftHandedSettings_false() = with(repository) {
-        setLeftHandedSetting(false)
-        assertThat(fetchLeftHandedSetting())
-            .isFalse()
+    companion object {
+        private const val DATA_STORE_NAME: String = "test"
     }
 }

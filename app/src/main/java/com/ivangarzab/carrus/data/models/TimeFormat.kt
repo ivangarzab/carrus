@@ -12,6 +12,7 @@ enum class TimeFormat(
     ;
 
     companion object {
+        val DEFAULT = HR12
         fun get(value: String): TimeFormat = when (value) {
             HR24.value -> HR24
             else -> HR12
