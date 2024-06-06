@@ -6,9 +6,10 @@ import com.google.common.truth.Truth.assertThat
 import com.ivangarzab.carrus.data.models.Message
 import com.ivangarzab.carrus.data.providers.BuildVersionProvider
 import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
+import com.ivangarzab.carrus.data.repositories.AppSettingsRepositoryImpl
 import com.ivangarzab.carrus.data.repositories.MessageQueueRepository
 import com.ivangarzab.carrus.data.repositories.TestAlarmsRepository
-import com.ivangarzab.carrus.data.repositories.TestAppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.TestCarRepository
 import com.ivangarzab.carrus.ui.overview.data.SortingType
 import com.ivangarzab.test_data.CAR_TEST
@@ -36,7 +37,7 @@ class OverviewViewModelTest {
     private lateinit var viewModel: OverviewViewModel
 
     private lateinit var carRepository: TestCarRepository
-    private lateinit var appSettingsRepository: TestAppSettingsRepository
+    private lateinit var appSettingsRepository: AppSettingsRepository
     private lateinit var alarmsRepository: TestAlarmsRepository
     private lateinit var messageQueueRepository: MessageQueueRepository
     private lateinit var buildVersionProvider: BuildVersionProvider
@@ -44,7 +45,7 @@ class OverviewViewModelTest {
     @Before
     fun setup() {
         carRepository = TestCarRepository()
-        appSettingsRepository = TestAppSettingsRepository()
+        appSettingsRepository = AppSettingsRepositoryImpl(mockk(relaxed = true))
         alarmsRepository = TestAlarmsRepository()
         messageQueueRepository = MessageQueueRepository()
         buildVersionProvider = mockk(relaxed = true)
