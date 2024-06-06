@@ -17,4 +17,3 @@ interface AppSettingsRepository {
 }
 
 //    fun getVersionNumber(): String
-//    fun setNightThemeSetting(isNight: Boolean)

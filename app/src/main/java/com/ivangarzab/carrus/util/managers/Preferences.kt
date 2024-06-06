@@ -31,7 +31,7 @@ class Preferences(
         },
         Context.MODE_PRIVATE
     )
-
+    // TODO: Migrated
     var darkMode: Boolean?
         get() = when (sharedPreferences.contains(KEY_DARK_MODE)) {
             true -> sharedPreferences.get(KEY_DARK_MODE, false)
@@ -68,19 +68,19 @@ class Preferences(
             AlarmFrequency.get(it)
         }
         set(value) = sharedPreferences.set(KEY_ALARM_PAST_FREQUENCY, value)
-
+    // TODO: Migrated
     var dueDateFormat: DueDateFormat
         get() = sharedPreferences.get(KEY_FORMAT_DUE_DATE, DueDateFormat.DAYS.name).let {
             DueDateFormat.get(it)
         }
         set(value) = sharedPreferences.set(KEY_FORMAT_DUE_DATE, value)
-
+    // TODO: Migrated
     var timeFormat: TimeFormat
         get() = sharedPreferences.get(KEY_FORMAT_TIME, TimeFormat.HR12.value).let {
             TimeFormat.get(it)
         }
         set(value) = sharedPreferences.set(KEY_FORMAT_TIME, value)
-
+    // TODO: Migrated
     var leftHandedMode: Boolean
         get() = sharedPreferences.get(KEY_LEFTY, false)
         set(value) = sharedPreferences.set(KEY_LEFTY, value)

@@ -3,6 +3,7 @@ package com.ivangarzab.carrus.data.di
 import com.ivangarzab.analytics.AnalyticsRepository
 import com.ivangarzab.analytics.AnalyticsRepositoryImpl
 import com.ivangarzab.carrus.data.datastore.appSettingsDataStore
+import com.ivangarzab.carrus.data.datastore.nightThemeDataStore
 import com.ivangarzab.carrus.data.providers.BuildVersionProvider
 import com.ivangarzab.carrus.data.providers.BuildVersionProviderImpl
 import com.ivangarzab.carrus.data.providers.DebugFlagProvider
@@ -29,6 +30,7 @@ import com.ivangarzab.carrus.util.managers.AlarmSchedulerImpl
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.carrus.util.managers.NightThemeManager
 import com.ivangarzab.carrus.util.managers.NotificationController
 import com.ivangarzab.carrus.util.managers.NotificationControllerImpl
 import kotlinx.coroutines.CoroutineScope
@@ -84,6 +86,9 @@ val AppModule = module {
     single<AppSettingsRepository> {
         AppSettingsRepositoryImpl(androidApplication().appSettingsDataStore)
     }
+    single {
+        NightThemeManager(androidApplication().nightThemeDataStore, get(), get())
+    }
     single<ContentResolverHelper> {
         ContentResolverHelperImpl(get())
     }
@@ -95,7 +100,7 @@ val AppModule = module {
         OverviewViewModel(get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
-        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
         ServiceModalViewModel(get(), get())

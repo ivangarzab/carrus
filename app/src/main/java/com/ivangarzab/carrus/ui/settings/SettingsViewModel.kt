@@ -24,6 +24,7 @@ import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
 import com.ivangarzab.carrus.util.managers.CarExporter
 import com.ivangarzab.carrus.util.managers.CarImporter
+import com.ivangarzab.carrus.util.managers.NightThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -38,6 +39,7 @@ class SettingsViewModel(
     private val alarmSettingsRepository: AlarmSettingsRepository,
     private val analytics: Analytics,
     private val debugFlagProvider: DebugFlagProvider,
+    private val nightThemeManager: NightThemeManager,
     private val contentResolverHelper: ContentResolverHelper,
     private val carExporter: CarExporter,
     private val carImporter: CarImporter
@@ -70,10 +72,12 @@ class SettingsViewModel(
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
-        analytics.logDarkModeToggleClicked()
-        Timber.v("Dark mode toggle was checked to: $checked")
-        appSettingsRepository.setNightThemeSetting(checked)
-        analytics.logNightThemeChanged(checked)
+        viewModelScope.launch {
+            analytics.logDarkModeToggleClicked()
+            Timber.v("Dark mode toggle was checked to: $checked")
+            nightThemeManager.setNightThemeSetting(checked)
+            analytics.logNightThemeChanged(checked)
+        }
     }
 
     fun onDeleteCarDataClicked() {

@@ -47,7 +47,7 @@ class AppSettingsRepositoryTest {
         repository = AppSettingsRepositoryImpl(testDataStore)
     }
 
-    @Test()
+    @Test
     fun test_flow_catch_empty_state() = runTest {
         val mockDataStore: DataStore<Preferences> = mockk(relaxed = true)
         coEvery { mockDataStore.data} returns flow { throw IOException() }
@@ -66,7 +66,7 @@ class AppSettingsRepositoryTest {
         coEvery { mockDataStore.data} returns flow { throw NullPointerException() }
         val failureRepository = AppSettingsRepositoryImpl(mockDataStore)
 
-        val failureState: AppSettingsState = failureRepository.appSettingsFlow.first()
+        failureRepository.appSettingsFlow.first()
     }
 
     @Test

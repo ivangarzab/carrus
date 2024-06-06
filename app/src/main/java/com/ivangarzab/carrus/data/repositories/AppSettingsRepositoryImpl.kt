@@ -42,34 +42,6 @@ class AppSettingsRepositoryImpl(
     //TODO: Convert into provider class
     // override fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
 
-//    override fun observeAppSettingsStateData(): Flow<AppSettingsState> = appSettingsStateFlow
-
-    /** Night Theme/Dark Mode **/
-    //TODO:
-    // @VisibleForTesting
-    // fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
-
-    //TODO: Consider moving night theme code to a separate class
-//    override fun setNightThemeSetting(isNight: Boolean) {
-//        Timber.d("Setting night theme to: $isNight")
-//        prefs.darkMode = isNight
-//        setAppDefaultNightTheme(isNight)
-//    }
-
-    /*private fun setAppDefaultNightTheme(isNight: Boolean) = when (isNight) {
-        true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-    }
-
-    private fun getNightThemeSettingFromSystem(context: Context): Boolean =
-        when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> true
-            Configuration.UI_MODE_NIGHT_NO -> false
-            else -> false
-        }.also { result ->
-            Timber.i("Night theme set to: $result")
-        }*/
-
     override suspend fun setDueDateFormatSetting(format: DueDateFormat) {
         Timber.v("Setting due date format setting: ${format.value}")
         dataStore.edit { preferences ->
