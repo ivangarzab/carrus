@@ -8,6 +8,8 @@ import com.ivangarzab.carrus.data.providers.BuildVersionProvider
 import com.ivangarzab.carrus.data.providers.BuildVersionProviderImpl
 import com.ivangarzab.carrus.data.providers.DebugFlagProvider
 import com.ivangarzab.carrus.data.providers.DebugFlagProviderImpl
+import com.ivangarzab.carrus.data.providers.VersionNumberProvider
+import com.ivangarzab.carrus.data.providers.VersionNumberProviderImpl
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepositoryImpl
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
@@ -92,6 +94,9 @@ val AppModule = module {
     single<ContentResolverHelper> {
         ContentResolverHelperImpl(get())
     }
+    single<VersionNumberProvider> {
+        VersionNumberProviderImpl()
+    }
 
     viewModel {
         CreateViewModel(get(), get(), get(), get(), get())
@@ -100,7 +105,7 @@ val AppModule = module {
         OverviewViewModel(get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
-        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        SettingsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
     viewModel {
         ServiceModalViewModel(get(), get())

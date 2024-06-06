@@ -1,8 +1,6 @@
 package com.ivangarzab.carrus.ui.settings
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
@@ -14,11 +12,13 @@ import com.ivangarzab.carrus.data.models.Car
 import com.ivangarzab.carrus.data.models.DueDateFormat
 import com.ivangarzab.carrus.data.models.TimeFormat
 import com.ivangarzab.carrus.data.providers.DebugFlagProvider
+import com.ivangarzab.carrus.data.providers.VersionNumberProvider
 import com.ivangarzab.carrus.data.repositories.AlarmSettingsRepository
 import com.ivangarzab.carrus.data.repositories.AlarmsRepository
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepository
 import com.ivangarzab.carrus.data.repositories.CarRepository
 import com.ivangarzab.carrus.data.states.AlarmSettingsState
+import com.ivangarzab.carrus.data.structures.LiveState
 import com.ivangarzab.carrus.ui.settings.data.SettingsState
 import com.ivangarzab.carrus.util.helpers.ContentResolverHelper
 import com.ivangarzab.carrus.util.managers.Analytics
@@ -39,14 +39,14 @@ class SettingsViewModel(
     private val alarmSettingsRepository: AlarmSettingsRepository,
     private val analytics: Analytics,
     private val debugFlagProvider: DebugFlagProvider,
+    private val versionNumberProvider: VersionNumberProvider,
     private val nightThemeManager: NightThemeManager,
     private val contentResolverHelper: ContentResolverHelper,
     private val carExporter: CarExporter,
     private val carImporter: CarImporter
 ) : ViewModel() {
 
-    private val _state: MutableLiveData<SettingsState> = MutableLiveData(SettingsState())
-    val state: LiveData<SettingsState> = _state
+    val state: LiveState<SettingsState> = LiveState(SettingsState())
 
     private var isAlarmPermissionGranted = false
     val onRequestAlarmPermission: LiveEvent<Any> = LiveEvent()
@@ -54,6 +54,7 @@ class SettingsViewModel(
     private var carData: Car? = null
 
     init {
+        state.setState { copy(versionNumber = versionNumberProvider.getVersionNumber()) }
         viewModelScope.launch {
             carRepository.observeCarData().collect {
                 updateCarState(it)
@@ -72,7 +73,7 @@ class SettingsViewModel(
     }
 
     fun onDarkModeToggleClicked(checked: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             analytics.logDarkModeToggleClicked()
             Timber.v("Dark mode toggle was checked to: $checked")
             nightThemeManager.setNightThemeSetting(checked)
@@ -207,17 +208,19 @@ class SettingsViewModel(
     private fun updateCarState(car: Car?) {
         Timber.v("Updating car state")
         this.carData = car
-        _state.value = state.value?.copy(
-            isThereCarData = car != null,
-            isThereCarServicesData = car?.services?.isNotEmpty() ?: false
-        )
+        state.setState {
+            copy(
+                isThereCarData = car != null,
+                isThereCarServicesData = car?.services?.isNotEmpty() ?: false
+            )
+        }
     }
 
     private fun processAlarmSettingsStateUpdate(data: AlarmSettingsState) {
         isAlarmPermissionGranted = data.isAlarmPermissionGranted
         Timber.v("Updating alarm settings state changes")
-        state.value?.let { state ->
-            _state.value = state.copy(
+        state.setState {
+            copy(
                 alarmsOn = data.isAlarmPermissionGranted && data.isAlarmFeatureEnabled,
                 alarmTime = data.alarmTime,
                 alarmFrequency = data.frequency
@@ -230,14 +233,16 @@ class SettingsViewModel(
         clockTimeFormat: TimeFormat
     ) {
         Timber.v("Updating app settings state changes")
-        _state.value = state.value?.copy(
-            dueDateFormat = dueDateFormat,
-            clockTimeFormat = clockTimeFormat,
-            alarmTimeSubtitle = when (clockTimeFormat) {
-                TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
-                TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
-            },
-            alarmTimeOptions = clockTimeFormat.range.map { it.toString() }
-        )
+        state.setState {
+            copy(
+                dueDateFormat = dueDateFormat,
+                clockTimeFormat = clockTimeFormat,
+                alarmTimeSubtitle = when (clockTimeFormat) {
+                    TimeFormat.HR24 -> R.string.setting_alarm_time_subtitle_24
+                    TimeFormat.HR12 -> R.string.setting_alarm_time_subtitle_12
+                },
+                alarmTimeOptions = clockTimeFormat.range.map { it.toString() }
+            )
+        }
     }
 }

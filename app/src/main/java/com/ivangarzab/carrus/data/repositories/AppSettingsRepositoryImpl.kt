@@ -39,9 +39,6 @@ class AppSettingsRepositoryImpl(
             AppSettingsState(timeFormat, dueDateFormat, leftHandedMode)
         }
 
-    //TODO: Convert into provider class
-    // override fun getVersionNumber(): String = "v${BuildConfig.VERSION_NAME}"
-
     override suspend fun setDueDateFormatSetting(format: DueDateFormat) {
         Timber.v("Setting due date format setting: ${format.value}")
         dataStore.edit { preferences ->

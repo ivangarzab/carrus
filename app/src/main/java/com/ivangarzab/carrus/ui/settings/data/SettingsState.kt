@@ -26,6 +26,7 @@ data class SettingsState(
     val alarmTimeOptions: List<String> = clockTimeFormat.range.map { it.toString() },
     val alarmFrequency: AlarmFrequency = AlarmFrequency.DAILY,
     val alarmFrequencyOptions: List<String> = pickerOptionsAlarmFrequency,
+    val versionNumber: String = "x.x.x",
 ) : Parcelable
 
 private val pickerOptionsTimeFormat = listOf(

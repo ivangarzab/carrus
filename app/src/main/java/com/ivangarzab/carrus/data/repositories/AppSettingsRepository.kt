@@ -6,7 +6,7 @@ import com.ivangarzab.carrus.data.states.AppSettingsState
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Created by Ivan Garza Bermea.
+ * The purpose of this class is to serve as the main interface contract for the app settings repository.
  */
 interface AppSettingsRepository {
 
@@ -15,5 +15,3 @@ interface AppSettingsRepository {
     suspend fun setLeftHandedSetting(isLeftHanded: Boolean)
     suspend fun setDueDateFormatSetting(format: DueDateFormat)
 }
-
-//    fun getVersionNumber(): String

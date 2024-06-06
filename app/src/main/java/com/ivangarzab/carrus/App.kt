@@ -15,7 +15,7 @@ import timber.log.Timber
  */
 open class App : Application() {
 
-    val debugFlagProvider: DebugFlagProvider by inject()
+    private val debugFlagProvider: DebugFlagProvider by inject()
 
     open val leakUploader: LeakUploader = LeakUploader()
 
