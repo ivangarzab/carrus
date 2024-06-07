@@ -354,6 +354,7 @@ class SettingsViewModelTest {
             debugFlagProvider = DebugFlagProviderImpl().apply { forceDebug = true },
             nightThemeManager = nightThemeManager,
             contentResolverHelper = contentResolverHelper,
+            versionNumberProvider = mockk(relaxed = true),
             carExporter = carExporter,
             carImporter = carImporter
         )

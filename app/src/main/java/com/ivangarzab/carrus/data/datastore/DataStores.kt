@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import com.ivangarzab.carrus.data.repositories.AppSettingsRepositoryImpl.AppSettingsPreferences
-import com.ivangarzab.carrus.util.managers.NightThemeManager.NightThemePreferences
 import com.ivangarzab.carrus.util.managers.Preferences
 
 /**
@@ -13,14 +12,6 @@ import com.ivangarzab.carrus.util.managers.Preferences
 
 val Context.appSettingsDataStore by preferencesDataStore(
     name = AppSettingsPreferences.NAME,
-    produceMigrations = { context ->
-        // SharedPreferences migration code -- TODO: Remove in 2 versions or so
-        listOf(SharedPreferencesMigration(context, Preferences.DEFAULT_SHARED_PREFS))
-    }
-)
-
-val Context.nightThemeDataStore by preferencesDataStore(
-    name = NightThemePreferences.NAME,
     produceMigrations = { context ->
         // SharedPreferences migration code -- TODO: Remove in 2 versions or so
         listOf(SharedPreferencesMigration(context, Preferences.DEFAULT_SHARED_PREFS))

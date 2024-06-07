@@ -2,6 +2,7 @@ package com.ivangarzab.carrus
 
 import com.ivangarzab.carrus.util.managers.Coiler
 import com.ivangarzab.carrus.util.managers.LeakUploader
+import com.ivangarzab.carrus.util.managers.NightThemeManager
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Before
@@ -21,11 +22,18 @@ class AppTest {
 
     private lateinit var mockCoiler: Coiler
 
+    private lateinit var nightThemeManager: NightThemeManager
+
     @Before
     fun setup() {
         mockLeakUploader = spyk()
         mockCoiler = spyk()
-        app = TestApp(lu = mockLeakUploader, c = mockCoiler)
+        nightThemeManager = spyk()
+        app = TestApp(
+            lu = mockLeakUploader,
+            c = mockCoiler,
+            ntm = nightThemeManager
+        )
     }
 
     @Test
@@ -45,5 +53,6 @@ class AppTest {
         app.onCreate()
         verify { mockCoiler.setImageLoader(any()) }
         verify { mockLeakUploader.setupCrashlyticsLeakUploader() }
+        verify { nightThemeManager.fetchNightThemeSetting() }
     }
 }

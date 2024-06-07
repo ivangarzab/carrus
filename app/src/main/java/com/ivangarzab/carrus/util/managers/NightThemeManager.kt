@@ -4,43 +4,39 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
  * The purpose of this class is to manage the night theme state for the application.
  */
-class NightThemeManager(
-    @get:VisibleForTesting val dataStore: DataStore<Preferences>,
+interface NightThemeManager {
+    fun setNightThemeSetting(isNight: Boolean)
+    fun fetchNightThemeSetting(): Boolean?
+}
+
+/**
+ *
+ */
+class NightThemeManagerImpl(
     context: Context,
-    coroutineScope: CoroutineScope
-) {
+    private val prefs: Preferences
+): NightThemeManager {
 
     init {
-        coroutineScope.launch(Dispatchers.IO) {
-            setNightThemeSetting(
-                fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context)
-            )
-        }
+        setNightThemeSetting(
+            fetchNightThemeSetting() ?: getNightThemeSettingFromSystem(context)
+        )
     }
 
-    suspend fun setNightThemeSetting(isNight: Boolean) {
+    override fun setNightThemeSetting(isNight: Boolean) {
         Timber.d("Setting night theme to: $isNight")
         setAppDefaultNightTheme(isNight)
-        dataStore.edit { preferences ->
-            preferences[NIGHT_THEME] = isNight
-        }
+        prefs.darkMode = isNight
     }
 
     @VisibleForTesting
-    suspend fun fetchNightThemeSetting(): Boolean? = dataStore.data.firstOrNull()?.get(NIGHT_THEME)
+    override fun fetchNightThemeSetting(): Boolean? = prefs.darkMode
 
     private fun setAppDefaultNightTheme(isNight: Boolean) = when (isNight) {
         true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
