@@ -17,7 +17,7 @@ android {
         applicationId = "com.ivangarzab.carrus"
         minSdk = 26
         targetSdk = 34
-        versionCode = 22
+        versionCode = 24
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -124,7 +124,6 @@ dependencies {
 
     implementation(libs.live.event)
 
-    // Unit & instrumented testing
     testImplementation(libs.junit)
     testImplementation(libs.gson)
     testImplementation(libs.androidx.core.testing)
