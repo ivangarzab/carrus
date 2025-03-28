@@ -72,11 +72,11 @@ jobs:
    steps:
      - run: echo "👾 Time to create the release!"
      - name: Download AAB from build
-       uses: actions/download-artifact@v1
+       uses: actions/download-artifact@v4
        with:
          name: aab
      - name: Download Change Log
-       uses: actions/download-artifact@v1
+       uses: actions/download-artifact@v4
        with:
          name: changelog
          
