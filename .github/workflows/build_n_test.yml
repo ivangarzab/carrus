@@ -36,7 +36,7 @@ jobs:
       #    - run: echo "Uploading Unit Tests Results."
       #    - name: Upload Test Results
       #      if: ${{ always() }}
-      #      uses: actions/upload-artifact@v1
+      #      uses: actions/upload-artifact@v4
       #     with:
       #        name: debug-test-results
       #        path: app/build/reports/tests/testDebugUnitTest
@@ -51,7 +51,7 @@ jobs:
 
       - run: echo "🦋 Uploading Debug APK."
       - name: Upload App APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
@@ -62,7 +62,7 @@ jobs:
 
       - run: echo "Uploading 🦋 Android Test APK."
       - name: Upload Android Test APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug-androidTest
           path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk

@@ -41,7 +41,7 @@ jobs:
       run: ./.github/scripts/changelog_generation.sh
       shell: bash
     - name: Upload Change Log
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: changelog
         path: app/build/outputs/changelog/changelog.txt
@@ -60,7 +60,7 @@ jobs:
     - run: echo "Build status report=${{ job.status }}."
 
     - name: Upload App Bundle
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: aab
         path: ${{steps.sign_aab.outputs.signedReleaseFile}}
