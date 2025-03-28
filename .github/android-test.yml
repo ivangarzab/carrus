@@ -1,7 +1,7 @@
 android-pixel-8:
   type: instrumentation
-  app: app-debug/app-debug.apk
-  test: app-debug-androidTest/app-debug-androidTest.apk
+  app: app-debug.apk
+  test: app-debug-androidTest.apk
   device:
     - model: shiba
       version: 34
